@@ -1,0 +1,55 @@
+//
+//  quad.cpp
+//  lines
+//
+//  Created by Joe on 2017/7/12.
+//  Copyright © 2017年 joe. All rights reserved.
+//
+
+#include "quad.h"
+#include <GLUT/glut.h>
+#include "error.h"
+
+void drawQuad(){
+    GLint p1[]={1,1};
+    GLint p2[]={200,1};
+    GLint p3[]={200,200};
+    GLint p4[]={180,240};
+    GLint p5[]={100,240};
+    GLint p6[]={50,230};
+    GLint p7[]={50,180};
+    GLint p8[]={80,180};
+    glColor3f (1, 0, 0);
+    
+    /*
+    //每四个点画出一个四边形
+    glBegin(GL_QUADS);
+    glVertex2iv(p1);
+    glVertex2iv(p2);
+    glVertex2iv(p3);
+    glVertex2iv(p4);
+    glVertex2iv(p5);
+    glVertex2iv(p6);
+    glVertex2iv(p7);
+    glVertex2iv(p8);
+    glEnd();
+    */
+    
+    //p1,p2,p4,p3组成第一个四边形
+    //p3,p4,p6,p5组成第二个四边形
+    //p5,p6,p8,p7组成第三个四边形
+    glBegin(GL_QUAD_STRIP);
+    glVertex2iv(p1);
+    glVertex2iv(p2);
+    glVertex2iv(p3);
+    glVertex2iv(p4);
+    glVertex2iv(p5);
+    glVertex2iv(p6);
+    glVertex2iv(p7);
+    glVertex2iv(p8);
+    glEnd();
+    
+    
+    glFlush();
+    errorCheck();
+}

@@ -1,0 +1,44 @@
+//
+//  flyEngine.h
+//  flyEngine
+//
+//  Created by joe on 01/07/2020.
+//  Copyright © 2020 joe. All rights reserved.
+//
+
+#ifndef flyEngine_h
+#define flyEngine_h
+
+#include "defines.h"
+
+//render
+#include "render.h"
+
+//base
+#include "node.h"
+#include "matrix.h"
+
+//ui
+#include "ui.h"
+
+//texture
+#include "bmpUtil.h"
+#include "textureMgr.h"
+
+//2d
+#include "2DTrans.h"
+
+//3d
+#include "3DTrans.h"
+
+//platform utils
+#include "platformUtil.h"
+
+using namespace flyEngine;
+
+
+extern textureMgr* g_textureMgr;
+
+void engineInit();
+
+#endif /* flyEngine_h */
