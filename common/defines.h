@@ -22,7 +22,4 @@
 using namespace flyEngine;
 
 
-
-
-
 #endif /* defines_hpp */

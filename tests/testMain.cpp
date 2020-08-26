@@ -16,10 +16,11 @@
 #include "test3DPolyhedra.h"
 #include "testCurve.h"
 #include "testTexXD.h"
+#include "testShader.h"
 
 void testMainBegin(){
     engineInit();
-    setCurrentWorkDir("/Users/joe/Documents/work_OpenGL/lines/");
+    setCurrentWorkDir("/Users/joe/Documents/work_OpenGL/flyEngine/");
 //        testPrimitive();
 //    testBMP();
 //    test2dTrans();
@@ -27,5 +28,9 @@ void testMainBegin(){
 //    testAniBySwapBuffer();
 //    test3DPolyhedra();
 //    testCurve();
-    testTex1D();
+//    testTex2D();
+//    testTex2DJpg();
+//    testTex2DPng();
+//    testTex3DPng();
+    testShaderNormal();
 }

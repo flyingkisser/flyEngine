@@ -13,6 +13,7 @@
 const char* getGPUBrand();
 const char* getGPUVender();
 const char* getGLVersion();
+const char* getGLSLVersion();
 const char* getGPUSupportExtensions();
 bool isSupportETC1();
 bool isSupportPVR();

@@ -23,6 +23,8 @@
 
 //texture
 #include "bmpUtil.h"
+#include "pngUtil.h"
+#include "jpgUtil.h"
 #include "textureMgr.h"
 
 //2d
@@ -30,6 +32,9 @@
 
 //3d
 #include "3DTrans.h"
+
+//shader
+#include "shader.h"
 
 //platform utils
 #include "platformUtil.h"

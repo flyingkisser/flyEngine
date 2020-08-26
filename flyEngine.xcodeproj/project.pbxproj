@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D809EE1324F3D2190067189D /* testShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D809EE1224F3D2190067189D /* testShader.cpp */; };
 		D81EF3601EAFA0070003604F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81EF35F1EAFA0070003604F /* main.cpp */; };
 		D81EF37C1EAFA0E60003604F /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D81EF37A1EAFA0E60003604F /* GLUT.framework */; };
 		D81EF37D1EAFA0E60003604F /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D81EF37B1EAFA0E60003604F /* OpenGL.framework */; };
@@ -41,6 +42,12 @@
 		D853B5FB1F15063300226235 /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853B5F91F15063300226235 /* triangle.cpp */; };
 		D853B5FF1F159F6600226235 /* quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853B5FD1F159F6600226235 /* quad.cpp */; };
 		D853B6031F16757600226235 /* vertexArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853B6011F16757600226235 /* vertexArray.cpp */; };
+		D856FED624E15DB7005A0760 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D856FED524E15DB7005A0760 /* shader.cpp */; };
+		D881DEEF24D80E2E0011F7B8 /* pngUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D881DEEE24D80E2E0011F7B8 /* pngUtil.cpp */; };
+		D881DEF124D820210011F7B8 /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D881DEF024D820210011F7B8 /* libpng16.a */; };
+		D881DEF324D8216A0011F7B8 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D881DEF224D8216A0011F7B8 /* libz.tbd */; };
+		D881DEF924DA8D180011F7B8 /* jpgUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D881DEF824DA8D180011F7B8 /* jpgUtil.cpp */; };
+		D881DEFB24DA98C80011F7B8 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D881DEFA24DA98C80011F7B8 /* libjpeg.a */; };
 		D89600E924C8541400DF6FD3 /* testAniBySwapBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89600E824C8541400DF6FD3 /* testAniBySwapBuffer.cpp */; };
 		D89600EC24CEC36400DF6FD3 /* test3DPolyhedra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89600EB24CEC36400DF6FD3 /* test3DPolyhedra.cpp */; };
 		D89600F024D1686400DF6FD3 /* curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89600EF24D1686400DF6FD3 /* curve.cpp */; };
@@ -63,6 +70,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D809EE1124F3D2190067189D /* testShader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testShader.h; sourceTree = "<group>"; };
+		D809EE1224F3D2190067189D /* testShader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testShader.cpp; sourceTree = "<group>"; };
+		D809EE1524F3D3930067189D /* basic.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.vs; sourceTree = "<group>"; };
+		D809EE1624F3D3A80067189D /* basic.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.fs; sourceTree = "<group>"; };
 		D81EF35C1EAFA0070003604F /* flyEngine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = flyEngine; sourceTree = BUILT_PRODUCTS_DIR; };
 		D81EF35F1EAFA0070003604F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		D81EF37A1EAFA0E60003604F /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
@@ -132,6 +143,16 @@
 		D853B5FE1F159F6600226235 /* quad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = quad.h; sourceTree = "<group>"; };
 		D853B6011F16757600226235 /* vertexArray.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = vertexArray.cpp; sourceTree = "<group>"; };
 		D853B6021F16757600226235 /* vertexArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vertexArray.h; sourceTree = "<group>"; };
+		D856FED424E15DB7005A0760 /* shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shader.h; sourceTree = "<group>"; };
+		D856FED524E15DB7005A0760 /* shader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = shader.cpp; sourceTree = "<group>"; };
+		D881DEED24D80E2D0011F7B8 /* pngUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pngUtil.h; sourceTree = "<group>"; };
+		D881DEEE24D80E2E0011F7B8 /* pngUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pngUtil.cpp; sourceTree = "<group>"; };
+		D881DEF024D820210011F7B8 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = external/libpng16.a; sourceTree = "<group>"; };
+		D881DEF224D8216A0011F7B8 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		D881DEF624DA8CB20011F7B8 /* baseImg.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = baseImg.h; sourceTree = "<group>"; };
+		D881DEF724DA8D180011F7B8 /* jpgUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jpgUtil.h; sourceTree = "<group>"; };
+		D881DEF824DA8D180011F7B8 /* jpgUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = jpgUtil.cpp; sourceTree = "<group>"; };
+		D881DEFA24DA98C80011F7B8 /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libjpeg.a; path = external/libjpeg.a; sourceTree = "<group>"; };
 		D89600E724C8541400DF6FD3 /* testAniBySwapBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testAniBySwapBuffer.h; sourceTree = "<group>"; };
 		D89600E824C8541400DF6FD3 /* testAniBySwapBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testAniBySwapBuffer.cpp; sourceTree = "<group>"; };
 		D89600EA24CEC36400DF6FD3 /* test3DPolyhedra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test3DPolyhedra.h; sourceTree = "<group>"; };
@@ -153,6 +174,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D881DEFB24DA98C80011F7B8 /* libjpeg.a in Frameworks */,
+				D881DEF324D8216A0011F7B8 /* libz.tbd in Frameworks */,
+				D881DEF124D820210011F7B8 /* libpng16.a in Frameworks */,
 				D81EF3831EAFA4A20003604F /* Cocoa.framework in Frameworks */,
 				D81EF37C1EAFA0E60003604F /* GLUT.framework in Frameworks */,
 				D81EF37D1EAFA0E60003604F /* OpenGL.framework in Frameworks */,
@@ -162,6 +186,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D809EE1724F502240067189D /* shader */ = {
+			isa = PBXGroup;
+			children = (
+				D809EE1524F3D3930067189D /* basic.vs */,
+				D809EE1624F3D3A80067189D /* basic.fs */,
+			);
+			path = shader;
+			sourceTree = "<group>";
+		};
 		D81EF3531EAFA0070003604F = {
 			isa = PBXGroup;
 			children = (
@@ -174,6 +207,7 @@
 				D825DB8724AAEE8600C494E7 /* primitives */,
 				D825DB8024AAEDD600C494E7 /* 2D */,
 				D827953324BC613400261C44 /* 3D */,
+				D856FED324E15D8A005A0760 /* shader */,
 				D825DB9324AB1A3300C494E7 /* tests */,
 				D81EF35F1EAFA0070003604F /* main.cpp */,
 				D81EF35D1EAFA0070003604F /* Products */,
@@ -192,6 +226,9 @@
 		D81EF3791EAFA0E60003604F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D881DEFA24DA98C80011F7B8 /* libjpeg.a */,
+				D881DEF224D8216A0011F7B8 /* libz.tbd */,
+				D881DEF024D820210011F7B8 /* libpng16.a */,
 				D81EF3821EAFA4A20003604F /* Cocoa.framework */,
 				D81EF37A1EAFA0E60003604F /* GLUT.framework */,
 				D81EF37B1EAFA0E60003604F /* OpenGL.framework */,
@@ -220,6 +257,7 @@
 		D825DB77249CD2D900C494E7 /* res */ = {
 			isa = PBXGroup;
 			children = (
+				D809EE1724F502240067189D /* shader */,
 				D825DB78249CD2D900C494E7 /* test.bmp */,
 			);
 			path = res;
@@ -383,6 +421,8 @@
 				D89600F224D169D700DF6FD3 /* testCurve.cpp */,
 				D89600F424D2E10200DF6FD3 /* testTexXD.h */,
 				D89600F524D2E10200DF6FD3 /* testTexXD.cpp */,
+				D809EE1124F3D2190067189D /* testShader.h */,
+				D809EE1224F3D2190067189D /* testShader.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -419,8 +459,13 @@
 		D825DBC524AED55300C494E7 /* img */ = {
 			isa = PBXGroup;
 			children = (
+				D881DEF624DA8CB20011F7B8 /* baseImg.h */,
 				D825DBC224AED54B00C494E7 /* bmpUtil.h */,
 				D825DBC324AED54B00C494E7 /* bmpUtil.cpp */,
+				D881DEED24D80E2D0011F7B8 /* pngUtil.h */,
+				D881DEEE24D80E2E0011F7B8 /* pngUtil.cpp */,
+				D881DEF724DA8D180011F7B8 /* jpgUtil.h */,
+				D881DEF824DA8D180011F7B8 /* jpgUtil.cpp */,
 			);
 			path = img;
 			sourceTree = "<group>";
@@ -432,6 +477,15 @@
 				D827953524BC614800261C44 /* 3DTrans.cpp */,
 			);
 			path = 3D;
+			sourceTree = "<group>";
+		};
+		D856FED324E15D8A005A0760 /* shader */ = {
+			isa = PBXGroup;
+			children = (
+				D856FED424E15DB7005A0760 /* shader.h */,
+				D856FED524E15DB7005A0760 /* shader.cpp */,
+			);
+			path = shader;
 			sourceTree = "<group>";
 		};
 		D89600ED24D1684A00DF6FD3 /* curve */ = {
@@ -509,6 +563,7 @@
 				D81EF38F1EBCD0490003604F /* rectangular.cpp in Sources */,
 				D89600F024D1686400DF6FD3 /* curve.cpp in Sources */,
 				D825DB9D24AC6BA900C494E7 /* testPixel.cpp in Sources */,
+				D881DEEF24D80E2E0011F7B8 /* pngUtil.cpp in Sources */,
 				D825DB9A24AB2A5300C494E7 /* test2D.cpp in Sources */,
 				D825DBAC24AC82FF00C494E7 /* textureMgr.cpp in Sources */,
 				D825DB7B24A0C4FA00C494E7 /* dirUtil.cpp in Sources */,
@@ -519,10 +574,12 @@
 				D81EF38B1EB253FF0003604F /* points.cpp in Sources */,
 				D827953224BC5FB400261C44 /* matrix.cpp in Sources */,
 				D853B5FF1F159F6600226235 /* quad.cpp in Sources */,
+				D881DEF924DA8D180011F7B8 /* jpgUtil.cpp in Sources */,
 				D825DBB024AC8F3600C494E7 /* flyEngine.cpp in Sources */,
 				D89600E924C8541400DF6FD3 /* testAniBySwapBuffer.cpp in Sources */,
 				D81EF3601EAFA0070003604F /* main.cpp in Sources */,
 				D825DB9624AB1A5200C494E7 /* testPrimitive.cpp in Sources */,
+				D809EE1324F3D2190067189D /* testShader.cpp in Sources */,
 				D89600F924D40EE100DF6FD3 /* gpuUtil.cpp in Sources */,
 				D825DBC824B4911100C494E7 /* test3D.cpp in Sources */,
 				D825DBBB24ACA32F00C494E7 /* render.cpp in Sources */,
@@ -534,6 +591,7 @@
 				D81EF3811EAFA1A10003604F /* line.cpp in Sources */,
 				D81EF3871EB01E950003604F /* error.cpp in Sources */,
 				D827953624BC614800261C44 /* 3DTrans.cpp in Sources */,
+				D856FED624E15DB7005A0760 /* shader.cpp in Sources */,
 				D825DBB724AC950800C494E7 /* image.cpp in Sources */,
 				D825DBC424AED54B00C494E7 /* bmpUtil.cpp in Sources */,
 				D89600F624D2E10200DF6FD3 /* testTexXD.cpp in Sources */,
@@ -585,6 +643,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include/;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -626,6 +686,8 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = /usr/local/include/;
+				LIBRARY_SEARCH_PATHS = /usr/local/lib;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = macosx;
@@ -635,6 +697,10 @@
 		D81EF3641EAFA0070003604F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/external",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -642,6 +708,10 @@
 		D81EF3651EAFA0070003604F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/external",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

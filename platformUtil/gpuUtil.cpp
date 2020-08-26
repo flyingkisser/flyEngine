@@ -23,6 +23,10 @@ const char* getGLVersion(){
     return (const char*)glGetString(GL_VERSION);
 }
 
+const char* getGLSLVersion(){
+    return (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
+}
+
 
 const char* getGPUSupportExtensions(){
     return (const char*)glGetString(GL_EXTENSIONS);

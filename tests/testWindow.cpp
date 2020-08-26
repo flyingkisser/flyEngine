@@ -156,10 +156,11 @@ static void menuCallback(GLint menuID){
 }
 
 void printGpuInfo(){
-    fprintf(stdout,"gpu brand:%s\ngpu vender:%s\nGL version:%s\nsupport etc:%d\nsupport pvr:%d\ngpu extension:\n%s\n",
+    fprintf(stdout,"gpu brand:%s\ngpu vender:%s\nGL version:%s\nGLSL version:%s\nsupport etc:%d\nsupport pvr:%d\ngpu extension:\n%s\n",
            getGPUBrand(),
            getGPUVender(),
            getGLVersion(),
+            getGLSLVersion(),
            isSupportETC1(),
            isSupportPVR(),
            getGPUSupportExtensions()

@@ -11,4 +11,7 @@
 
 #include <stdio.h>
 void testTex1D();
+void testTex2DJpg();
+void testTex2DPng();
+void testTex3DPng();
 #endif /* testTex1D_h */
