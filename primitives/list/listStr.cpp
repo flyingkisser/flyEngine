@@ -7,7 +7,7 @@
 //
 
 #include "listStr.h"
-#include <GLUT/GLUT.h>
+#include "defines.h"
 
 #include <string.h>
   

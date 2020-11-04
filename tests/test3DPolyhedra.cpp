@@ -45,9 +45,9 @@ static void drawPolyhedraWithRotate(float rotateX,float rotateY){
     glShadeModel(GL_FLAT);
 //    glShadeModel(GL_SMOOTH);
     
-    gluLookAt(s_cameraPos.x, s_cameraPos.y, s_cameraPos.z,
-                        s_lookatPos.x, s_lookatPos.y, s_lookatPos.z,
-                         s_direction.x, s_direction.y, s_direction.z);
+//    gluLookAt(s_cameraPos.x, s_cameraPos.y, s_cameraPos.z,
+//                        s_lookatPos.x, s_lookatPos.y, s_lookatPos.z,
+//                         s_direction.x, s_direction.y, s_direction.z);
     s_rx=s_rx+rotateX;
     s_ry=s_ry+rotateY;
     
@@ -55,100 +55,100 @@ static void drawPolyhedraWithRotate(float rotateX,float rotateY){
     glTranslatef(0, 0, z);
     glRotatef(s_rx, 1, 0, 0);
     glRotatef(s_ry, 0, 1, 0);
-    glutWireCube(1);    //立方体
+//    glutWireCube(1);    //立方体
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(-3, 0, z);
     glRotatef(s_rx, 1, 0, 0);
     glRotatef(s_ry, 0, 1, 0);
-    glutWireDodecahedron();
+//    glutWireDodecahedron();
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(3, 0, z);
     glRotatef(s_rx, 1, 0, 0);
        glRotatef(s_ry, 0, 1, 0);
-    glutWireTetrahedron();  //三棱锥
+//    glutWireTetrahedron();  //三棱锥
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(-3, 3, z);
     glRotatef(s_rx, 1, 0, 0);
        glRotatef(s_ry, 0, 1, 0);
-    glutWireOctahedron();
+//    glutWireOctahedron();
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(0, 3, z);
     glRotatef(s_rx, 1, 0, 0);
        glRotatef(s_ry, 0, 1, 0);
-    glutWireIcosahedron();
+//    glutWireIcosahedron();
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(3, 3,z);
     glRotatef(s_rx, 1, 0, 0);
        glRotatef(s_ry, 0, 1, 0);
-    glutWireTeapot(0.5);      //茶杯
+//    glutWireTeapot(0.5);      //茶杯
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(-8, 6,z);
     glRotatef(s_rx, 1, 0, 0);
        glRotatef(s_ry, 0, 1, 0);
-    glutWireSphere(1, 10, 10);      //球面
+//    glutWireSphere(1, 10, 10);      //球面
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(-4, 6, z);
     glRotatef(s_rx, 1, 0, 0);
     glRotatef(s_ry, 0, 1, 0);
-    glutSolidSphere(1, 10, 10);      //球面
+//    glutSolidSphere(1, 10, 10);      //球面
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(0, 6, z);
     glRotatef(s_rx, 1, 0, 0);
     glRotatef(s_ry, 0, 1, 0);
-    glutWireCone(1,3, 10, 10);      //圆锥面
+//    glutWireCone(1,3, 10, 10);      //圆锥面
     glPopMatrix();
     
     glPushMatrix();
     glRotatef(s_rx, 1, 0, 0);
     glRotatef(s_ry, 0, 1, 0);
     glTranslatef(4, 6, z);
-    glutSolidCone(1, 3,10, 10);      //圆锥面
+//    glutSolidCone(1, 3,10, 10);      //圆锥面
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(-6, -6,z);
     glRotatef(s_rx, 1, 0, 0);
     glRotatef(s_ry, 0, 1, 0);
-    GLUquadricObj* obj1;
-    obj1=gluNewQuadric();
-    gluQuadricDrawStyle(obj1, GLU_LINE);
-    gluSphere(obj1,1,10,10);            //二次曲面的球面线框图
+//    GLUquadricObj* obj1;
+//    obj1=gluNewQuadric();
+//    gluQuadricDrawStyle(obj1, GLU_LINE);
+//    gluSphere(obj1,1,10,10);            //二次曲面的球面线框图
     glPopMatrix();
  
     glPushMatrix();
     glTranslatef(-3, -6,z);
     glRotatef(s_rx, 1, 0, 0);
     glRotatef(s_ry, 0, 1, 0);
-    GLUquadricObj* obj2;
-    obj2=gluNewQuadric();
-    gluQuadricDrawStyle(obj2, GLU_LINE);
-    gluCylinder(obj2,1,1,3,10,10);            //二次曲面的圆柱体线框图
+//    GLUquadricObj* obj2;
+//    obj2=gluNewQuadric();
+//    gluQuadricDrawStyle(obj2, GLU_LINE);
+//    gluCylinder(obj2,1,1,3,10,10);            //二次曲面的圆柱体线框图
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(0, -6,z);
     glRotatef(s_rx, 1, 0, 0);
     glRotatef(s_ry, 0, 1, 0);
-    GLUquadricObj* obj3;
-    obj3=gluNewQuadric();
-    gluQuadricDrawStyle(obj3, GLU_LINE);
-    gluDisk(obj3,0.3,1,10,10);            //二次曲面的圆柱体线框图
+//    GLUquadricObj* obj3;
+//    obj3=gluNewQuadric();
+//    gluQuadricDrawStyle(obj3, GLU_LINE);
+//    gluDisk(obj3,0.3,1,10,10);            //二次曲面的圆柱体线框图
     glPopMatrix();
     
     
@@ -173,8 +173,8 @@ static int s_intMouseMiddleOriginX;
 static int s_intMouseMiddleOriginY;
 
 static void onMouseClick(int button,int action,int x,int y){
-    if(button==GLUT_LEFT_BUTTON){
-        if(action==GLUT_DOWN){
+    if(button==GLFW_MOUSE_BUTTON_LEFT){
+        if(action==GLFW_PRESS){
             s_bLeftDown=true;
             s_intMouseLeftOriginX=x;
             s_intMouseLeftOriginY=y;
@@ -185,8 +185,8 @@ static void onMouseClick(int button,int action,int x,int y){
             s_intMouseLeftOriginY=0;
             printf("onMouseLeftClick:reset\n");
         }
-    }else if(button==GLUT_RIGHT_BUTTON){
-        if(action==GLUT_DOWN){
+    }else if(button==GLFW_MOUSE_BUTTON_RIGHT){
+        if(action==GLFW_PRESS){
             s_bRightDown=true;
             s_intMouseRightOriginX=x;
             s_intMouseRightOriginY=y;
@@ -197,8 +197,8 @@ static void onMouseClick(int button,int action,int x,int y){
             s_intMouseRightOriginY=0;
             printf("onMouseRightClick:reset\n");
         }
-    }else if(button==GLUT_MIDDLE_BUTTON){
-        if(action==GLUT_DOWN){
+    }else if(button==GLFW_MOUSE_BUTTON_MIDDLE){
+        if(action==GLFW_PRESS){
             s_bMiddleDown=true;
             s_intMouseMiddleOriginX=x;
             s_intMouseMiddleOriginY=y;

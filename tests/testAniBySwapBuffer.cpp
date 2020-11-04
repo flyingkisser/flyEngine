@@ -47,7 +47,7 @@ static void rotateCircle(){
     s_rotateTheta+=0.5;
     if(s_rotateTheta>360)
         s_rotateTheta-=360;
-    glutPostRedisplay();
+//    glutPostRedisplay();
 }
 
 static void drawAniBySwapBuffer(){
@@ -56,20 +56,20 @@ static void drawAniBySwapBuffer(){
     glClearColor(1,1,1,0);
     glClear(GL_COLOR_BUFFER_BIT);
     glCallList(s_listID);
-    glutSwapBuffers();
+//    glutSwapBuffers();
     glFlush();
 }
 
 static void onMouseClick(int button,int action,int x,int y){
-    if(button==GLUT_LEFT_BUTTON){
-        if(action==GLUT_DOWN){
-            glutIdleFunc(NULL);
+    if(button==GLFW_MOUSE_BUTTON_LEFT){
+        if(action==GLFW_PRESS){
+//            glutIdleFunc(NULL);
         }else{
           
         }
-    }else if(button==GLUT_MIDDLE_BUTTON){
-        if(action==GLUT_DOWN){
-            glutIdleFunc(rotateCircle);
+    }else if(button==GLFW_MOUSE_BUTTON_MIDDLE){
+        if(action==GLFW_PRESS){
+//            glutIdleFunc(rotateCircle);
         }else{
            
         }
@@ -77,8 +77,7 @@ static void onMouseClick(int button,int action,int x,int y){
 }
 
 void testAniBySwapBuffer(){
-    testInitWindow2D("openGL ani swapBuffers test", drawAniBySwapBuffer,GLUT_DOUBLE|GLUT_RGB);
-//    testInitWindow2D("openGL ani swapBuffers test", drawAniBySwapBuffer,GLUT_SINGLE|GLUT_RGB);
+    testInitWindow2D("openGL ani swapBuffers test", drawAniBySwapBuffer);
     std::function<void(int,int,int,int)> mouseClick=onMouseClick;
     testRegMouseClick(mouseClick);
     windowLoop();

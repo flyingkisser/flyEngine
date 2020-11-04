@@ -7,7 +7,7 @@
 //
 
 #include "2dTrans.h"
-#include <GLUT/GLUT.h>
+#include "defines.h"
 
 
 

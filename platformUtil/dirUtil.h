@@ -16,4 +16,4 @@ void getCurrentWorkDir(char *szBuf,int bufSize);
 void setCurrentWorkDir(const char* szBuf);
 
 
-#endif /* dirUtil_hpp */
+#endif /* dirUtil_h */

@@ -7,7 +7,7 @@
 //
 
 #include "curve.h"
-#include <GLUT/glut.h>
+#include "defines.h"
 
 void drawBezierLine(){
     GLfloat ctrlPts[4][3]={{-40,40,0},{-10,200,0},{10,-200,0},{40,40,0}};

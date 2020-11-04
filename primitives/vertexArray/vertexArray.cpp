@@ -7,7 +7,7 @@
 //
 
 #include "vertexArray.h"
-#include <GLUT/glut.h>
+#include "defines.h"
 #include "error.h"
 typedef GLint vertex3 [3];
 GLint width=200;
@@ -49,5 +49,5 @@ void drawElementsByVertexArr(){
 
 void draw(){
     glFlush();
-    errorCheck();
+    checkGLError();
 }

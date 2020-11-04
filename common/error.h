@@ -10,7 +10,6 @@
 #define error_hpp
 
 #include <stdio.h>
-#include <GLUT/GLUT.h>
 
 #endif /* error_hpp */
-GLenum errorCheck ();
+int checkGLError ();

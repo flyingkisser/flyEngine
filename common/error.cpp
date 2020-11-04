@@ -7,18 +7,24 @@
 //
 
 #include "error.h"
-#include <stdio.h>
+#include "defines.h"
 
 
-GLenum errorCheck ()
+int checkGLError()
 {
-    GLenum code;
-    const GLubyte *string;
-    code = glGetError ();
-    if (code != GL_NO_ERROR)
-    {
-        string = gluErrorString (code);
-        fprintf( stderr, "OpenGL error: %s\n", string );
+//    GLenum code;
+//    const GLubyte *string;
+//    code = glGetError ();
+//    if (code != GL_NO_ERROR)
+//    {
+//        string = gluErrorString (code);
+//        fprintf( stderr, "OpenGL error: %s\n", string );
+//    }
+//    return code;
+    const char *strError;
+    int error=(int)glfwGetError(&strError);
+    if(error!=GL_NO_ERROR){
+        fprintf( stderr, "OpenGL error: %s\n", strError );
     }
-    return code;
+    return error;
 }

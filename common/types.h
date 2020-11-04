@@ -9,6 +9,8 @@
 #ifndef types_h
 #define types_h
 
+
+
 namespace flyEngine {
 
 
@@ -166,18 +168,18 @@ public:
     }
 };
 
-class size{
-public:
-    GLfloat width,height;
-    size(){
-        width=0;
-        height=0;
-    }
-    size(float v1,float v2){
-        width=v1;
-        height=v2;
-    }
-};
+//class size{
+//public:
+//    GLfloat width,height;
+//    size(){
+//        width=0;
+//        height=0;
+//    }
+//    size(float v1,float v2){
+//        width=v1;
+//        height=v2;
+//    }
+//};
 
 //class color{
 //public:
@@ -202,6 +204,7 @@ struct structPos2{
     float y;
 };
 
+
 struct structPos3{
     float x;
     float y;
@@ -215,11 +218,14 @@ struct structPos4{
     float w;
 };
 
+struct size{
+    float width;
+    float height;
+};
+
 typedef float Matrix4x4 [4][4];
 
 }
-
-
 
 #ifdef __cplusplus
 extern "C" {

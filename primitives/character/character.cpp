@@ -7,7 +7,7 @@
 //
 
 #include "character.h"
-#include <GLUT/GLUT.h>
+#include "defines.h"
 #include <string.h>
 
 void drawStringByBitmap(const char* szBuf){
@@ -18,7 +18,7 @@ void drawStringByBitmap(const char* szBuf){
         //GLUT_BITMAP_9_BY_15
         //GLUT_BITMAP_TIMES_ROMAN_10
         //GLUT_BITMAP_HELVETICA_10
-        glutBitmapCharacter(GLUT_BITMAP_8_BY_13, szBuf[i]);
+//        glutBitmapCharacter(GLUT_BITMAP_8_BY_13, szBuf[i]);
     }
     glFlush();
 }
@@ -30,7 +30,7 @@ void drawStringByStroke(const char* szBuf){
     for(int i=0;i<len;i++){
         //GLUT_STROKE_ROMAN
         //GLUT_STROKE_MONO_ROMAN
-        glutStrokeCharacter(GLUT_STROKE_ROMAN, szBuf[i]);
+//        glutStrokeCharacter(GLUT_STROKE_ROMAN, szBuf[i]);
     }
     glFlush();
 }

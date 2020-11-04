@@ -7,9 +7,11 @@
 //
 
 #include "polygon.h"
-#include <GLUT/glut.h>
+#include "defines.h"
 #include "error.h"
-void drawPolygon(){
+#include "flyEngine.h"
+
+static void drawPolygonImm(){
     GLint p1[]={1,1};
     GLint p2[]={200,1};
     GLint p3[]={200,200};
@@ -39,5 +41,20 @@ void drawPolygon(){
     glEnd();
     
     glFlush();
-    errorCheck();
+    checkGLError();
+}
+
+//GL_POLYGON从3.1开始被移除
+std::function<void(void)> drawPolygon(){
+   float vertices[]={
+       -0.5f,  0.5f, 0.0f,
+        -0.5f, -0.5f, 0.0f,
+         0.5f, -0.5f, 0.0f,
+         0.5f,  0.5f, 0.0f
+    };
+    unsigned int vao=flyEngine::VAOMgr::createVAO(vertices, sizeof(vertices), 3, 3*sizeof(float),false);
+    return [vao](){
+        VAOMgr::drawPrimitive(vao, GL_POLYGON, 4);
+        checkGLError();
+    };
 }

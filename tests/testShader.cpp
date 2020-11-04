@@ -44,9 +44,9 @@ static void beginDraw3DByPng(float rotateX,float rotateY){
        rotateX=0;
     if(!rotateY)
        rotateY=0;
-    
-    struct_texture* structTex=pngUtil::loadFile("./res/fire.png");
-    if(!structTex)
+    struct_texture structTex={0};
+
+    if(!pngUtil::loadFile("./res/fire.png",&structTex))
         return;
     
     s_shader->use();
@@ -57,9 +57,9 @@ static void beginDraw3DByPng(float rotateX,float rotateY){
     glLoadIdentity();
     glShadeModel(GL_FLAT);
     //    glShadeModel(GL_SMOOTH);
-    gluLookAt(s_cameraPos.x, s_cameraPos.y, s_cameraPos.z,
-                       s_lookatPos.x, s_lookatPos.y, s_lookatPos.z,
-                        s_direction.x, s_direction.y, s_direction.z);
+//    gluLookAt(s_cameraPos.x, s_cameraPos.y, s_cameraPos.z,
+//                       s_lookatPos.x, s_lookatPos.y, s_lookatPos.z,
+//                        s_direction.x, s_direction.y, s_direction.z);
     
     glTranslatef(0, 0, -10);
     s_rx=s_rx+rotateX;
@@ -71,7 +71,7 @@ static void beginDraw3DByPng(float rotateX,float rotateY){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);  //当纹理需要缩小时，使用线性混合纹理颜色
     glEnable(GL_TEXTURE_2D);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, structTex->width, structTex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, structTex->buf);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, structTex.width, structTex.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, structTex.buf);
     glBegin(GL_QUADS);
     
     //前面
@@ -108,13 +108,12 @@ static void beginDraw3DByPng(float rotateX,float rotateY){
     glEnd();
     glFlush();
     
-    free(structTex->buf);
-    free(structTex);
+    free(structTex.buf);
 }
 
 static void onMouseClick(int button,int action,int x,int y){
-    if(button==GLUT_LEFT_BUTTON){
-        if(action==GLUT_DOWN){
+    if(button==GLFW_MOUSE_BUTTON_LEFT){
+        if(action==GLFW_PRESS){
             s_bLeftDown=true;
             s_intMouseLeftOriginX=x;
             s_intMouseLeftOriginY=y;
@@ -125,8 +124,8 @@ static void onMouseClick(int button,int action,int x,int y){
             s_intMouseLeftOriginY=0;
             printf("onMouseLeftClick:reset\n");
         }
-    }else if(button==GLUT_RIGHT_BUTTON){
-        if(action==GLUT_DOWN){
+    }else if(button==GLFW_MOUSE_BUTTON_RIGHT){
+        if(action==GLFW_PRESS){
             s_bRightDown=true;
             s_intMouseRightOriginX=x;
             s_intMouseRightOriginY=y;
@@ -137,8 +136,8 @@ static void onMouseClick(int button,int action,int x,int y){
             s_intMouseRightOriginY=0;
             printf("onMouseRightClick:reset\n");
         }
-    }else if(button==GLUT_MIDDLE_BUTTON){
-        if(action==GLUT_DOWN){
+    }else if(button==GLFW_MOUSE_BUTTON_MIDDLE){
+        if(action==GLFW_PRESS){
             s_bMiddleDown=true;
             s_intMouseMiddleOriginX=x;
             s_intMouseMiddleOriginY=y;

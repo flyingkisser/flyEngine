@@ -16,3 +16,5 @@ void engineInit(){
     g_render=render::getInstance();
     g_render->start();
 }
+
+

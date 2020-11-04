@@ -10,13 +10,13 @@
 #define pngUtil_h
 
 #include <stdio.h>
-#include <GLUT/GLUT.h>
 #include "baseImg.h"
 
 namespace flyEngine{
 class pngUtil{
 public:
-    static struct_texture* loadFile(const char* szFile);
+    static bool loadFile(const char* szFile,struct_texture* texinfo);
+    static bool isPng(const char* szFile);
 };
 
 }

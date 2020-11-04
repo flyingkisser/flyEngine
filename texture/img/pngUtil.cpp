@@ -42,9 +42,25 @@ static void GetPNGtextureInfo(int color_type,  struct_texture *texinfo)
     }
 }
  
-struct_texture *pngUtil::loadFile(const char *filename)
+bool pngUtil::isPng(const char *filename)
 {
-    struct_texture *texinfo;
+    png_byte magic[8];
+    FILE *fp = NULL;
+    fp = fopen(filename, "rb");
+    if (!fp){
+        fprintf(stderr, "error: couldn't open \"%s\"!\n", filename);
+        return false;
+    }
+    fread(magic, 1, sizeof(magic), fp);
+    fclose(fp);
+    if (!png_check_sig(magic, sizeof(magic)))
+        return false;
+    return true;
+}
+
+
+ bool pngUtil::loadFile(const char *filename,struct_texture* texinfo)
+{
     png_byte magic[8];
     png_structp png_ptr;
     png_infop info_ptr;
@@ -55,40 +71,35 @@ struct_texture *pngUtil::loadFile(const char *filename)
     int i;
     /* Open image file */
     fp = fopen(filename, "rb");
-    if (!fp)
-    {
+    if (!fp){
         fprintf(stderr, "error: couldn't open \"%s\"!\n", filename);
-        return NULL;
+        return false;
     }
     /* Read magic number */
     fread(magic, 1, sizeof(magic), fp);
     /* Check for valid magic number */
-    if (!png_check_sig(magic, sizeof(magic)))
-    {
+    if (!png_check_sig(magic, sizeof(magic))){
         fprintf(stderr, "error: \"%s\" is not a valid PNG image!\n", filename);
         fclose(fp);
-        return NULL;
+        return false;
     }
     /* Create a png read struct */
     png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
-    if (!png_ptr)
-    {
+    if (!png_ptr){
         fclose(fp);
-        return NULL;
+        return false;
     }
     /* Create a png info struct */
     info_ptr = png_create_info_struct(png_ptr);
-    if (!info_ptr)
-    {
+    if (!info_ptr){
         fclose(fp);
         png_destroy_read_struct(&png_ptr, NULL, NULL);
-        return NULL;
+        return false;
     }
     /* Create our OpenGL texture object */
-    texinfo = (struct_texture *)malloc(sizeof(struct_texture));
+//    texinfo = (struct_texture *)malloc(sizeof(struct_texture));
     /* Initialize the setjmp for returning properly after a libpng error occured */
-    if (setjmp(png_jmpbuf(png_ptr)))
-    {
+    if (setjmp(png_jmpbuf(png_ptr))){
         fclose(fp);
         png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
         if (row_pointers) free(row_pointers);
@@ -97,7 +108,7 @@ struct_texture *pngUtil::loadFile(const char *filename)
                 free(texinfo->buf);
             free(texinfo);
         }
-        return NULL;
+        return false;
     }
     /* Setup libpng for using standard C fread() function with our FILE pointer */
     png_init_io(png_ptr, fp);
@@ -117,8 +128,10 @@ struct_texture *pngUtil::loadFile(const char *filename)
     
     if (png_get_valid(png_ptr, info_ptr, PNG_INFO_tRNS))
         png_set_tRNS_to_alpha(png_ptr);
-    if (bit_depth == 16) png_set_strip_16(png_ptr);
-    else if (bit_depth < 8) png_set_packing(png_ptr);
+    if (bit_depth == 16)
+        png_set_strip_16(png_ptr);
+    else if (bit_depth < 8)
+        png_set_packing(png_ptr);
     /* Update info structure to apply transformations */
     png_read_update_info(png_ptr, info_ptr);
     /* Retrieve updated information */
@@ -132,9 +145,7 @@ struct_texture *pngUtil::loadFile(const char *filename)
     /* Setup a pointer array. Each one points at the begening of a row. */
     row_pointers = (png_bytep *)malloc(sizeof(png_bytep) * texinfo->height);
     for (i = 0; i < texinfo->height; ++i)
-    {
         row_pointers[i] = (png_bytep)(texinfo->buf + ((texinfo->height - (i + 1)) * texinfo->width * texinfo->internalFormat));
-    }
     /* Read pixel data using row pointers */
     png_read_image(png_ptr, row_pointers);
     /* Finish decompression and release memory */
@@ -143,5 +154,5 @@ struct_texture *pngUtil::loadFile(const char *filename)
     /* We don't need row pointers anymore */
     free(row_pointers);
     fclose(fp);
-    return texinfo;
+    return true;
 }

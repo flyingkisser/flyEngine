@@ -13,8 +13,8 @@
 using namespace ui;
 
 image::image(const char *szFileName){
-    _buf=g_textureMgr->getTexture(szFileName);
-    _initBMP(_buf);
+//    _buf=g_textureMgr->getTextureBuf(szFileName);
+//    _initBMP(_buf);
                                      
 }
 

@@ -11,11 +11,19 @@
 
 #include <stdio.h>
 #include <functional>
+#include "defines.h"
 
-void testInitWindow2D(const char* szTitle,void (*displayCB)(void));
-void testInitWindow2D(const char* szTitle,void (*displayCB)(void),int displayMode);
+void initWindow();
 
-void testInitWindow3D(const char* szTitle,void (*displayCB)(void));
+//void testInitWindow2D(const char* szTitle,void (*drawCall)(void));
+
+//void testInitWindow2D(const char* szTitle,void (*drawCall)(void),int displayMode);
+
+void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall,unsigned int shaderID);
+void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall);
+
+
+void testInitWindow3D(const char* szTitle,void (*drawCall)(void));
 
 void testRegMenu(const char* szMenuName,std::function<void(void)>cb);
 void testRegKeyboard(std::function<void(unsigned char,int,int)>cb);
@@ -24,5 +32,6 @@ void testRegMouseClickWithMove(std::function<void(int,int)>cb);
 void testRegMouseMove(std::function<void(int,int)>cb);
 
 void windowLoop();
+size getWindowSize();
 
 #endif /* testMain_h */

@@ -7,7 +7,7 @@
 //
 
 #include "rectangular.h"
-#include <GLUT/glut.h>
+#include "defines.h"
 
 void drawRectangular(){
     int v1[]={300,300};

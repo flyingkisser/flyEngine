@@ -1,17 +1,19 @@
 //
-//  testTex1D.h
+//  testTexXD.h
 //  flyEngine
 //
-//  Created by joe on 30/07/2020.
+//  Created by joe on 15/09/2020.
 //  Copyright © 2020 joe. All rights reserved.
 //
 
-#ifndef testTex1D_h
-#define testTex1D_h
+#ifndef testTexXD_h
+#define testTexXD_h
 
 #include <stdio.h>
+
 void testTex1D();
 void testTex2DJpg();
 void testTex2DPng();
 void testTex3DPng();
-#endif /* testTex1D_h */
+
+#endif /* testTexXD_h */

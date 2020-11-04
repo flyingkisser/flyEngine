@@ -6,12 +6,12 @@
 //  Copyright © 2020 joe. All rights reserved.
 //
 
-#ifndef fileUtil_hpp
-#define fileUtil_hpp
+#ifndef fileUtil_h
+#define fileUtil_h
 
 
 
 unsigned char* readFile(const char* szFileName);
 int writeFile(const char*szFileName,unsigned char* buf,int size);
 
-#endif /* fileUtil_hpp */
+#endif /* fileUtil_h */

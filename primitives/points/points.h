@@ -6,9 +6,12 @@
 //  Copyright © 2017年 joe. All rights reserved.
 //
 
-#ifndef points_hpp
-#define points_hpp
+#ifndef points_h
+#define points_h
 
 #include <stdio.h>
-void drawPoints();
-#endif /* points_hpp */
+#include <functional>
+
+std::function<void(void)> drawPoints();
+
+#endif /* points_h */

@@ -13,6 +13,7 @@
 
 //render
 #include "render.h"
+#include "VAOMgr.h"
 
 //base
 #include "node.h"
@@ -38,6 +39,9 @@
 
 //platform utils
 #include "platformUtil.h"
+
+//events
+#include "keyboardEventMgr.h"
 
 using namespace flyEngine;
 

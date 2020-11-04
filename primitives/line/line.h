@@ -12,11 +12,13 @@
 #include <stdio.h>
 #include "defines.h"
 
-void drawLineByPosArr(structPos2* pointArr,int num,structColor* color);
+void drawLineByPosArrImm(structPos2* pointArr,int num,structColor* color);
 
-void drawLine();
-void drawLineStrip();
-void drawLineLoop();
+
+void drawLineStripImm();
+void drawLineLoopImm();
+
+std::function<void(void)> drawLines();
 
 
 #endif /* lines_hpp */

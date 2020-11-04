@@ -15,7 +15,7 @@ static void beginDrawLineByEvalMesh(){
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-400,400,-400,400);
+    glViewport(-400,400,-400,400);
     glMatrixMode(GL_MODELVIEW);
     
     GLfloat ctrlPts[4][3]={{-40,40,0},{-10,200,0},{10,-200,0},{40,40,0}};
@@ -43,7 +43,7 @@ static void beginDrawLineByEvalCoord(){
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-400,400,-400,400);
+    glViewport(-400,400,-400,400);
     glMatrixMode(GL_MODELVIEW);
     
     GLfloat ctrlPts[4][3]={{-40,40,0},{-10,200,0},{10,-200,0},{40,40,0}};
@@ -74,7 +74,7 @@ static void beginDrawMeshByEvalCoord(){
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-400,400,-400,400);
+    glViewport(-400,400,-400,400);
     glMatrixMode(GL_MODELVIEW);
     
     GLfloat ctrlPts[4][4][3]={
@@ -107,17 +107,17 @@ static void beginDrawLineByNurbs(){
     glClear(GL_COLOR_BUFFER_BIT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-400,400,-400,400);
+    glViewport(-400,400,-400,400);
     glMatrixMode(GL_MODELVIEW);
     
     GLfloat knotVector[8]={0,0,0,0,1,1,1,1};
     GLfloat ctrlPts[4][3]={{-40,40,0},{-10,200,0},{10,-200,0},{40,40,0}};
-    GLUnurbsObj* curbicBezCurve;
-    curbicBezCurve=gluNewNurbsRenderer();
+//    GLUnurbsObj* curbicBezCurve;
+//    curbicBezCurve=gluNewNurbsRenderer();
     glColor3f(1, 0, 0);
-    gluBeginCurve(curbicBezCurve);
-    gluNurbsCurve(curbicBezCurve, 8, knotVector, 3, &ctrlPts[0][0], 4, GL_MAP1_VERTEX_3);
-    gluEndCurve(curbicBezCurve);
+//    gluBeginCurve(curbicBezCurve);
+//    gluNurbsCurve(curbicBezCurve, 8, knotVector, 3, &ctrlPts[0][0], 4, GL_MAP1_VERTEX_3);
+//    gluEndCurve(curbicBezCurve);
     glFlush();
 }
 

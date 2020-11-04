@@ -13,5 +13,12 @@
 #include "randUtil.h"
 #include "fileUtil.h"
 #include "dirUtil.h"
+#include "threadUtil.h"
+#include "gpuUtil.h"
+#include "stringUtil.h"
+
+
+
+
 
 #endif /* platformUtil_h */

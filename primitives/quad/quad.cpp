@@ -7,10 +7,11 @@
 //
 
 #include "quad.h"
-#include <GLUT/glut.h>
+#include "defines.h"
 #include "error.h"
+#include "flyEngine.h"
 
-void drawQuad(){
+void drawQuadImm(){
     GLint p1[]={1,1};
     GLint p2[]={200,1};
     GLint p3[]={200,200};
@@ -51,5 +52,19 @@ void drawQuad(){
     
     
     glFlush();
-    errorCheck();
+    checkGLError();
+}
+
+//GL_QUADS在3.0版本中标为过时，在3.1版本中已经完全移除
+std::function<void(void)> drawQuad(){
+        float vertices[]={
+            -0.5f, -0.5f, 0.0f,
+            0.5f, -0.5f, 0.0f,
+            0.0f,  0.5f, 0.0f,
+            -0.5f,  0.5f, 0.0f
+       };
+    unsigned int vao=flyEngine::VAOMgr::createVAO(vertices, sizeof(vertices), 3, 3*sizeof(float),false);
+    return [vao](){
+        VAOMgr::drawPrimitive(vao, GL_QUADS, 4);
+    };
 }

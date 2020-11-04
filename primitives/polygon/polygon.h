@@ -10,5 +10,8 @@
 #define pologon_hpp
 
 #include <stdio.h>
-void drawPolygon();
+#include <functional>
+
+//void drawPolygon();
+std::function<void(void)> drawPolygon();
 #endif /* pologon_hpp */

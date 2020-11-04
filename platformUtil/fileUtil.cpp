@@ -17,13 +17,14 @@ unsigned char* readFile(const char* szFileName){
         return NULL;
     fseek(fFile,0,SEEK_END);
     long fileSize=ftell(fFile);
+    long bufSize=fileSize+1;
     fseek(fFile,0,SEEK_SET);
-    unsigned char* buf=(unsigned char*)malloc(fileSize);
+    unsigned char* buf=(unsigned char*)malloc(bufSize);
     if(buf==NULL){
         fclose(fFile);
         return NULL;
     }
-    memset(buf,0,fileSize);
+    memset(buf,0,bufSize);
     if(!fread(buf,1,fileSize,fFile)){
         fclose(fFile);
         free(buf);

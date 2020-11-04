@@ -12,13 +12,13 @@
 #include <stdio.h>
 
 #include <stdio.h>
-#include <GLUT/GLUT.h>
 #include "baseImg.h"
 
 namespace flyEngine{
 class jpgUtil{
 public:
-    static struct_texture* loadFile(const char* szFile);
+    static bool loadFile(const char* szFile,struct_texture* texinfo);
+    static bool isJpg(const char* szFile);
 };
 
 }

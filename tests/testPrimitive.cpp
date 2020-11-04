@@ -8,6 +8,8 @@
 
 #include "testPrimitive.h"
 #include "defines.h"
+#include "shader.h"
+#include "VAOMgr.h"
 
 #include "testWindow.h"
 
@@ -33,41 +35,47 @@ static void menuCallback(GLint menuID){
     }
 }
 
-static void beginDraw(void) {
-//    initOtho2D();
-    drawPoints();
-//    drawLine();
-
-//    drawLineLoop();
-//    drawPolygon();
-//    drawTriangle();
-   
-//    drawRectangular();
-//    drawQuad();
-//    drawCube();
-
-//     drawElementsByVertexArr();
-//     drawBitmapByListString();
-
-//    pixelDrawPixels();
-//    pixelReadPixels();
-//    pixelCopyPixels();
-    
-    //pixcel的基本操作
-//    drawBMP("/Users/joe/Documents/work_OpenGL/lines/res/test.bmp");
-//    pixelDrawBitmap();
-//    pixelCopyPixels();
-    
-    //字体的操作
-//    drawStringByBitmap("hello,world! by joe:)");
-//    drawStringByStroke("hello,world! by joe:)");
-   
-}
 
 void testPrimitive() {
-    testInitWindow2D("openGL primitive test", beginDraw);
+//polygon,quad从3.1开始被移除
+//    std::function<void(void)> drawCall=drawPolygon();
+//    std::function<void(void)> drawCall=drawQuad();
+    
+//    std::function<void(void)> drawCall=drawPoints();
+//    std::function<void(void)> drawCall=drawLines();
+    std::function<void(void)> drawCall=drawTriangle();
+    
+    testInitWindow2D("openGL primitive test",drawCall,0);
+    
     testRegMenu("snapshot", [](){
          snapsBMP("./save.bmp");
     });
+    
     windowLoop();
 }
+
+
+//static void initDraw(void) {
+////    initOtho2D();
+////    drawPoints();
+////    drawLine();
+////    drawLineLoop();
+////    drawPolygon();
+////    drawTriangle();
+//
+////    drawRectangular();
+////    drawQuad();
+////    drawCube();
+////     drawElementsByVertexArr();
+////     drawBitmapByListString();
+////    pixelDrawPixels();
+////    pixelReadPixels();
+////    pixelCopyPixels();
+//    //pixcel的基本操作
+////    drawBMP("/Users/joe/Documents/work_OpenGL/lines/res/test.bmp");
+////    pixelDrawBitmap();
+////    pixelCopyPixels();
+//    //字体的操作
+////    drawStringByBitmap("hello,world! by joe:)");
+////    drawStringByStroke("hello,world! by joe:)");
+//}

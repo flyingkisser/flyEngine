@@ -7,7 +7,7 @@
 //
 
 #include "gpuUtil.h"
-#include <GLUT/glut.h>
+#include "defines.h"
 #include <string>
 
 const char* getGPUBrand(){
@@ -33,13 +33,19 @@ const char* getGPUSupportExtensions(){
 }
 
 bool isSupportETC1(){
-    std::string extStr=(const char*)glGetString(GL_EXTENSIONS);
+    const char* extStrBuf=(const char*)glGetString(GL_EXTENSIONS);
+    if(!extStrBuf)
+        return false;
+    std::string extStr=extStrBuf;
     return extStr.find("GL_OES_compressed_ETC1_RGB8_texture")!=std::string::npos;
     
 }
 
 bool isSupportPVR(){
-    std::string extStr=(const char*)glGetString(GL_EXTENSIONS);
+    const char* extStrBuf=(const char*)glGetString(GL_EXTENSIONS);
+    if(!extStrBuf)
+           return false;
+       std::string extStr=extStrBuf;
     return extStr.find("GL_IMG_texture_compression_pvrtc")!=std::string::npos;
 }
 

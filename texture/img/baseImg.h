@@ -8,15 +8,19 @@
 
 #ifndef base_h
 #define base_h
+#include <tuple>
+
+ //width,height,format,internalFormat,id,buf
+using textureTuple=std::tuple<int,int,unsigned int,int,unsigned int,unsigned char*>;
 
 struct struct_texture
 {
-    GLsizei width;
-    GLsizei height;
-    GLenum format;
-    GLint internalFormat;
-    GLuint id;
-    GLubyte *buf;
+    int width;
+    int height;
+    int format;
+    int internalFormat;
+    unsigned int id;
+    unsigned char *buf;
 };
 
 

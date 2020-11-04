@@ -6,8 +6,8 @@
 //  Copyright © 2020 joe. All rights reserved.
 //
 
-#ifndef randUtil_hpp
-#define randUtil_hpp
+#ifndef randUtil_h
+#define randUtil_h
 
 #include <stdio.h>
 #include <iostream>
@@ -15,4 +15,4 @@
 
 int getRand(int begin,int end);
 
-#endif /* randUtil_hpp */
+#endif /* randUtil_h */

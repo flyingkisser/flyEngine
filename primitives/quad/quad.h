@@ -10,5 +10,7 @@
 #define quad_hpp
 
 #include <stdio.h>
-void drawQuad();
+#include <functional>
+
+std::function<void(void)> drawQuad();
 #endif /* quad_hpp */

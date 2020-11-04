@@ -11,25 +11,31 @@
 
 #include <stdio.h>
 #include <map>
+#include <tuple>
+#include "defines.h"
+#include "baseImg.h"
 
 using namespace std;
 
 namespace flyEngine{
 
 class textureMgr{
-
-private:
-    map<string,unsigned char*> _mapTextureCache;
     
-    unsigned char* _loadTexture(const char* szName);
+private:
+    //width,height,format,internalFormat,id,buf
+    map<string,textureTuple> _mapTextureCache;
+    
+    bool _loadTexture(const char* szName);
     
 public:
-     static textureMgr* getInstance();
+    static textureMgr* getInstance();
     textureMgr();
      ~textureMgr();
-    unsigned char* getTexture(const char* szName);
     void clear();
     
+    textureTuple getTextureTuple(const char* szName);
+    unsigned int getTextureID(const char *szName,unsigned int texRGBType);
+    size getTextureSize(const char* szName);
 };
 
 }
