@@ -312,7 +312,7 @@ static void onKeyboard(unsigned char c,int x,int y){
 
 void test3DPolyhedra()
 {
-    testInitWindow3D("openGL 3D polyhedra test", drawPolyhedra);
+//    testInitWindow3D("openGL 3D polyhedra test", drawPolyhedra);
     std::function<void(int,int,int,int)> mouseClick=onMouseClick;
     testRegMouseClick(mouseClick);
     std::function<void(int,int)> mouseClickWithMove=onMouseClickWithMove;

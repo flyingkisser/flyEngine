@@ -30,7 +30,6 @@ void keyboardEventMgr::init(GLFWwindow* window){
 };
 
 void keyboardEventMgr::addEvent(std::string name,keyboardEvent* eventObj){
-    //s_eventChainMap[name]=eventObj;
     s_eventChainMap.insert(pair<string,keyboardEvent*>(name,eventObj));
     cout<<"s_eventChainMap size is "<<s_eventChainMap.size()<<endl;
 };

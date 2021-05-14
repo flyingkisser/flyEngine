@@ -84,6 +84,23 @@ unsigned int VAOMgr::createVAO(void* verticeBuf,int sizeOfVertice,int numPerVert
     return vao;
 }
 
+unsigned int VAOMgr::createVAO(void* verticeBuf,int sizeOfVertice,int numPerVertex,int numPerTexture,
+                               int stride,int offsetVertex,int offsetTexture){
+    unsigned int vao,vbo;
+    glGenVertexArrays(1,&vao);
+    glBindVertexArray(vao);
+    glGenBuffers(1,&vbo);
+    glBindBuffer(GL_ARRAY_BUFFER,vbo);
+    glBufferData(GL_ARRAY_BUFFER,sizeOfVertice,verticeBuf,GL_STATIC_DRAW);
+    glVertexAttribPointer(0,numPerVertex,GL_FLOAT,GL_FALSE,stride,(void*)offsetVertex);
+    glVertexAttribPointer(1,numPerTexture,GL_FLOAT,GL_FALSE,stride,(void*)offsetTexture);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindVertexArray(0);
+    return vao;
+}
+
 unsigned int VAOMgr::createVAO(void* verticeBuf,int sizeOfVertice,void* verticeIndexBuf,int sizeOfVerticeIndex,int numPerVertex,int numPerColor,int numPerTexture,int stride,int offsetVertex,int offsetColor,int offsetTexture,bool transPos){
     unsigned int vao,vbo,ebo;
     glGenVertexArrays(1,&vao);
@@ -118,13 +135,28 @@ unsigned int VAOMgr::createVAO(void* verticeBuf,int sizeOfVertice,void* verticeI
         glVertexAttribPointer(2,numPerTexture,GL_FLOAT,GL_FALSE,stride,(void*)offsetTexture);
         glEnableVertexAttribArray(2);
     }
-       
-//    glBindBuffer(GL_ARRAY_BUFFER,0);
-//    glBindVertexArray(0);
-
     return vao;
 }
-
+unsigned int VAOMgr::createVAO(void* verticeBuf,int sizeOfVertice,void* verticeIndexBuf,int sizeOfVerticeIndex,int numPerVertex,int numPerTexture,int stride,int offsetVertex,int offsetTexture){
+    unsigned int vao,vbo,ebo;
+    glGenVertexArrays(1,&vao);
+    glBindVertexArray(vao);
+    
+    glGenBuffers(1,&vbo);
+    glGenBuffers(1,&ebo);
+    
+    glBindBuffer(GL_ARRAY_BUFFER,vbo);
+    glBufferData(GL_ARRAY_BUFFER,sizeOfVertice,verticeBuf,GL_STATIC_DRAW);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeOfVerticeIndex,verticeIndexBuf,GL_STATIC_DRAW);
+    
+    glVertexAttribPointer(0,numPerVertex,GL_FLOAT,GL_FALSE,stride,(void*)offsetVertex);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1,numPerTexture,GL_FLOAT,GL_FALSE,stride,(void*)offsetTexture);
+    glEnableVertexAttribArray(1);
+    return vao;
+}
 
 //参数1:VAO对象id
 //参数2:要绘制的图元类型，如GL_TRIANGLES

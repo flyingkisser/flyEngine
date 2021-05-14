@@ -23,7 +23,7 @@ void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall,uns
 void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall);
 
 
-void testInitWindow3D(const char* szTitle,void (*drawCall)(void));
+//void testInitWindow3D(const char* szTitle,void (*drawCall)(void));
 
 void testRegMenu(const char* szMenuName,std::function<void(void)>cb);
 void testRegKeyboard(std::function<void(unsigned char,int,int)>cb);

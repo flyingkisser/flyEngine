@@ -59,9 +59,16 @@ void testMainBegin(){
 //    test2dViewTransPng();
 //    test2dViewTransPng2();
 //     test2dViewTransPng3();
-     test2dViewTransPng4();
+//     test2dViewTransPng4();
 
 //    test3dView();
+//    test3dViewRotate();
+//    test3dViewControl();
+    test3dViewControlCamera();
+//    test3dViewMoreCube();
+//    test3dViewMoreCubeCamera();
+//    test3dViewMoreCubeCameraFPS();
+    
 //    testAniBySwapBuffer();
 //    test3DPolyhedra();
 //    testCurve();

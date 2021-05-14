@@ -456,7 +456,6 @@ static std::function<void(void)> beginBasicViewMixPng5(){
     glUniform1f(glGetUniformLocation(shaderID, "mixValue"), s_mixValue);
     keyboardEvent* eventObj=new keyboardEvent();
     
-    //必须要把shaderID放进capture list中，否则栈变量shaderID已经为0
     eventObj->regEvent('w', [=](){
         cout<<"w mixValue is "<<s_mixValue<<endl;
         s_mixValue+=s_mixValueInner;
@@ -474,6 +473,7 @@ static std::function<void(void)> beginBasicViewMixPng5(){
       });
     keyboardEventMgr::addEvent("test2D_beginBasicViewMixPng5", eventObj);
   
+    //必须要把shaderID放进capture list中，否则栈变量shaderID已经为0
     return [vao,texID1,texID2,shaderID](){
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -823,38 +823,3 @@ void test2dTrans() {
     testInitWindow2D("openGL 2D trans test",drawCall,0);
     windowLoop();
 }
-
-//static void beginBasicView(){
-//    glClearColor(1, 1, 1, 0);
-//    glClear(GL_COLOR_BUFFER_BIT);
-//    glMatrixMode(GL_PROJECTION);
-//    glLoadIdentity();
-//    glViewport(-201,201,-201,201);
-//    glMatrixMode(GL_MODELVIEW);
-//
-//    structColor colorLine={255,0,0,255};
-//    structPos2 posArr1[4]={{-200,-200},{200,-200},{200,200},{-200,200}};
-//    structPos2 posArr2[2]={{-200,0},{200,0}};
-//    structPos2 posArr3[2]={{0,-200},{0,200}};
-//    structPos2 posArr10[4]={{-100,-100},{100,-100},{100,100},{-100,100}};
-//
-//    structColor color1={210,210,210,255};
-//    structPos2 p1={-50,-25};
-//    structPos2 p2={50,-25};
-//    structPos2 p3={0,25};
-//    glViewport(0, 0, 300, 300);
-//
-//    drawLineByPosArrImm(posArr1,4,&colorLine);
-//    drawLineByPosArrImm(posArr2,2,&colorLine);
-//    drawLineByPosArrImm(posArr3,2,&colorLine);
-//    drawLineByPosArrImm(posArr10,4,&colorLine);
-//    drawTriangleImm(&p1,&p2,&p3,&color1);
-//
-//    glViewport(400, 0, 300, 300);
-//
-//    drawLineByPosArrImm(posArr1,4,&colorLine);
-//    drawLineByPosArrImm(posArr2,2,&colorLine);
-//    drawLineByPosArrImm(posArr3,2,&colorLine);
-//    drawLineByPosArrImm(posArr10,4,&colorLine);
-//    drawTriangleImm(&p1,&p2,&p3,&color1);
-//}

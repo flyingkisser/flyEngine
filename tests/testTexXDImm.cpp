@@ -404,7 +404,7 @@ static void draw3DCubePng(){
 
 
 void testTex1D() {
-    testInitWindow3D("openGL TexImage1D test", beginDrawTex1D);
+//    testInitWindow3D("openGL TexImage1D test", beginDrawTex1D);
     windowLoop();
 }
 
@@ -414,14 +414,14 @@ void testTex2DJpg() {
 }
 
 void testTex2DPng() {
-    testInitWindow3D("openGL TexImage2D 2d quad test", beginDraw2DByPng);
+//    testInitWindow3D("openGL TexImage2D 2d quad test", beginDraw2DByPng);
     windowLoop();
 }
 
 
 void testTex3DPng()
 {
-    testInitWindow3D("openGL TexImage2D 3d quad test", draw3DCubePng);
+//    testInitWindow3D("openGL TexImage2D 3d quad test", draw3DCubePng);
     drawCall=beginDraw3DByPng;
     std::function<void(int,int,int,int)> mouseClick=onMouseClick;
     testRegMouseClick(mouseClick);

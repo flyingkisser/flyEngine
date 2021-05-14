@@ -13,3 +13,9 @@
 
 #endif /* test3D_h */
 void test3dView();
+void test3dViewRotate();
+void test3dViewControl();
+void test3dViewControlCamera();
+void test3dViewMoreCube();
+void test3dViewMoreCubeCamera();
+void test3dViewMoreCubeCameraFPS();

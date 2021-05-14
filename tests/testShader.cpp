@@ -255,7 +255,7 @@ static void draw3DCubePng(){
 
 void testShaderNormal()
 {
-    testInitWindow3D("openGL shader 3d quad test", draw3DCubePng);
+//    testInitWindow3D("openGL shader 3d quad test", draw3DCubePng);
     drawCall=beginDraw3DByPng;
     std::function<void(int,int,int,int)> mouseClick=onMouseClick;
     testRegMouseClick(mouseClick);

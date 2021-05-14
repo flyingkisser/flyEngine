@@ -28,6 +28,8 @@
 #include "jpgUtil.h"
 #include "textureMgr.h"
 
+
+
 //2d
 #include "2DTrans.h"
 
@@ -42,6 +44,11 @@
 
 //events
 #include "keyboardEventMgr.h"
+#include "mouseEventMgr.h"
+#include "kbmControl.h"
+
+//camera
+#include "camera.h"
 
 using namespace flyEngine;
 

@@ -9,9 +9,6 @@
 #ifndef keyboardEvent_h
 #define keyboardEvent_h
 
-
-
-
 #include <stdio.h>
 #include <map>
 #include <tuple>

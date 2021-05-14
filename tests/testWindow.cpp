@@ -330,7 +330,8 @@ void initWindow(){
        return;
     }
     keyboardEventMgr::init(window);
-     printGpuInfo();
+    mouseEventMgr::init(window);
+    printGpuInfo();
 }
 
 void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall) {
@@ -357,38 +358,38 @@ void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall,uns
 }
 
 
-void testInitWindow3D(const char* szTitle,void (*drawCall)(void)) {
-    printGpuInfo();
-    
-    GLFWwindow* window=glfwCreateWindow(s_intWidth, s_intHeight, szTitle, NULL, NULL);
-    if(!window){
-        std::cout<<"glfwCreateWindow failed!"<<std::endl;
-        glfwTerminate();
-        return;
-    }
-    s_window=window;
-    glfwSetWindowPos(window,500,800);
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, reshape3D);
-    if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
-        std::cout<<"gladLoadGLLoader failed!"<<std::endl;
-        glfwTerminate();
-        return;
-    }
-    
-    initPerspective3D();
-    
-    drawCall();
-    
-    glfwSwapBuffers(s_window);
-    
-//    while(!glfwWindowShouldClose(window)){
-//        glfwPollEvents();
-//        glfwSwapBuffers(window);
+//void testInitWindow3D(const char* szTitle,void (*drawCall)(void)) {
+//    printGpuInfo();
+//
+//    GLFWwindow* window=glfwCreateWindow(s_intWidth, s_intHeight, szTitle, NULL, NULL);
+//    if(!window){
+//        std::cout<<"glfwCreateWindow failed!"<<std::endl;
+//        glfwTerminate();
+//        return;
+//    }
+//    s_window=window;
+//    glfwSetWindowPos(window,500,800);
+//    glfwMakeContextCurrent(window);
+//    glfwSetFramebufferSizeCallback(window, reshape3D);
+//    if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
+//        std::cout<<"gladLoadGLLoader failed!"<<std::endl;
+//        glfwTerminate();
+//        return;
 //    }
 //
-//    glfwTerminate();
-}
+//    initPerspective3D();
+//
+//    drawCall();
+//
+//    glfwSwapBuffers(s_window);
+//
+////    while(!glfwWindowShouldClose(window)){
+////        glfwPollEvents();
+////        glfwSwapBuffers(window);
+////    }
+////
+////    glfwTerminate();
+//}
 
 void windowLoop(){
    while(!glfwWindowShouldClose(s_window)){
