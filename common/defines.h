@@ -15,13 +15,19 @@
 #include <vector>
 #include <math.h>
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+//#include <glad/glad.h>
+#include "glad/glad.h"
+
+//#include <GLFW/glfw3.h>
+#include "GLFW/glfw3.h"
 
 //#include <glm/glm.hpp>
-#include <glm.hpp>
-#include <gtc/matrix_transform.hpp>
-#include <gtc/type_ptr.hpp>"
+#include "glm/glm.hpp"
+//#include <glm.hpp>
+//#include <gtc/matrix_transform.hpp>
+#include "glm/gtc/matrix_transform.hpp"
+//#include <gtc/type_ptr.hpp>"
+#include "glm/gtc/type_ptr.hpp"
 
 //#include "glm/glm.hpp"
 //#include "external/glm/glm.hpp"
