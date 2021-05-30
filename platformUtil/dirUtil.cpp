@@ -8,9 +8,19 @@
 
 #include "dirUtil.h"
 #include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
 
 void getCurrentWorkDir(char *szBuf,int bufSize){
     getcwd(szBuf,bufSize);
+}
+
+void getHomeDir(char* szBuf,int bufSize){
+    char *home_path = getenv("HOME");
+    int strLen=(int)strlen(home_path);
+    if(strLen>bufSize)
+        strLen=bufSize;
+    strncpy(szBuf,home_path,strLen);
 }
 
 void setCurrentWorkDir(const char* szBuf){

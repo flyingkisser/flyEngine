@@ -12,6 +12,7 @@
 #include <stdio.h>
 
 void getCurrentWorkDir(char *szBuf,int bufSize);
+void getHomeDir(char *szBuf,int bufSize);
 
 void setCurrentWorkDir(const char* szBuf);
 
