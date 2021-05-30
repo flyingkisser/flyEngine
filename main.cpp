@@ -31,7 +31,12 @@
 
 
 int main(int argc, char **argv) {
-    setCurrentWorkDir("/Users/joe/Documents/work_OpenGL/flyEngine/");
+    char szHomeDir[1024]={0};
+    getHomeDir(szHomeDir,sizeof(szHomeDir));
+    strcat(szHomeDir,"/Documents/flyEngine/");
+    setCurrentWorkDir(szHomeDir);
+    printf("main:set current work dir %s\n",szHomeDir);
+    
     if(!glfwInit()){
         std::cout<<"glfw init error!"<<std::endl;
         return -1;
