@@ -26,6 +26,7 @@
 		8E27642826512F7A00993B0B /* libpng.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E27641C26512F7A00993B0B /* libpng.dylib */; };
 		8E27642926512F7A00993B0B /* libpng16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E27641D26512F7A00993B0B /* libpng16.dylib */; };
 		8E2764322651333800993B0B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 8E2764312651333800993B0B /* glad.c */; };
+		8E86C9C326638480004B3BB7 /* testPhong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E86C9C126638480004B3BB7 /* testPhong.cpp */; };
 		D809EE1324F3D2190067189D /* testShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D809EE1224F3D2190067189D /* testShader.cpp */; };
 		D81EF3601EAFA0070003604F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81EF35F1EAFA0070003604F /* main.cpp */; };
 		D81EF3811EAFA1A10003604F /* line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81EF37F1EAFA1A10003604F /* line.cpp */; };
@@ -1521,6 +1522,10 @@
 		8E27642D2651333800993B0B /* khrplatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = khrplatform.h; sourceTree = "<group>"; };
 		8E27642F2651333800993B0B /* glad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glad.h; sourceTree = "<group>"; };
 		8E2764312651333800993B0B /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
+		8E86C9C126638480004B3BB7 /* testPhong.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testPhong.cpp; sourceTree = "<group>"; };
+		8E86C9C226638480004B3BB7 /* testPhong.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testPhong.h; sourceTree = "<group>"; };
+		8E86C9C42663A089004B3BB7 /* light_normal.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = light_normal.vs; sourceTree = "<group>"; };
+		8E86C9C52663A0AE004B3BB7 /* light_ambient.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = light_ambient.fs; sourceTree = "<group>"; };
 		D809EE1124F3D2190067189D /* testShader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testShader.h; sourceTree = "<group>"; };
 		D809EE1224F3D2190067189D /* testShader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testShader.cpp; sourceTree = "<group>"; };
 		D809EE1524F3D3930067189D /* basic.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.vs; sourceTree = "<group>"; };
@@ -3583,6 +3588,22 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		8E86C9BF26638426004B3BB7 /* light */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = light;
+			sourceTree = "<group>";
+		};
+		8E86C9C02663844F004B3BB7 /* light */ = {
+			isa = PBXGroup;
+			children = (
+				8E86C9C126638480004B3BB7 /* testPhong.cpp */,
+				8E86C9C226638480004B3BB7 /* testPhong.h */,
+			);
+			path = light;
+			sourceTree = "<group>";
+		};
 		D809EE1724F502240067189D /* shader */ = {
 			isa = PBXGroup;
 			children = (
@@ -3603,6 +3624,8 @@
 				D8C7A0A52546DF7C007573B3 /* 2dTextureAphaTrans.vs */,
 				D8BB1B9425592C4E00AF9FD5 /* 3dTextureApha.vs */,
 				D8BB1B9525592C7300AF9FD5 /* 3dTextureApha.fs */,
+				8E86C9C42663A089004B3BB7 /* light_normal.vs */,
+				8E86C9C52663A0AE004B3BB7 /* light_ambient.fs */,
 			);
 			path = shader;
 			sourceTree = "<group>";
@@ -3610,6 +3633,7 @@
 		D81EF3531EAFA0070003604F = {
 			isa = PBXGroup;
 			children = (
+				8E86C9BF26638426004B3BB7 /* light */,
 				D8BED728253EB965006974D3 /* learnC++ */,
 				D825DB77249CD2D900C494E7 /* res */,
 				D8BED71E253D70ED006974D3 /* book */,
@@ -3834,6 +3858,7 @@
 		D825DB9324AB1A3300C494E7 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				8E86C9C02663844F004B3BB7 /* light */,
 				D825DB9424AB1A5200C494E7 /* testPrimitive.cpp */,
 				D825DB9524AB1A5200C494E7 /* testPrimitive.h */,
 				D825DB9824AB2A5300C494E7 /* test2D.cpp */,
@@ -4069,6 +4094,7 @@
 				D81EF3931EBCD5A00003604F /* polygon.cpp in Sources */,
 				D825DB6724976F3800C494E7 /* listStr.cpp in Sources */,
 				D8BB1B98255A6A0E00AF9FD5 /* mouseEvent.cpp in Sources */,
+				8E86C9C326638480004B3BB7 /* testPhong.cpp in Sources */,
 				D825DBA524AC6F0100C494E7 /* testWindow.cpp in Sources */,
 				D825DB8624AAEE5100C494E7 /* defines.cpp in Sources */,
 				D825DBA824AC7F7300C494E7 /* testMain.cpp in Sources */,

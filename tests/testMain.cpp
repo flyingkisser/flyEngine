@@ -18,6 +18,7 @@
 #include "testTexXD.h"
 #include "testShader.h"
 #include "testWindow.h"
+#include "testPhong.h"
 
 #include "std_move_forward.h"
 
@@ -64,7 +65,7 @@ void testMainBegin(){
 //    test3dView();
 //    test3dViewRotate();
 //    test3dViewControl();
-    test3dViewControlCamera();
+//    test3dViewControlCamera();
 //    test3dViewMoreCube();
 //    test3dViewMoreCubeCamera();
 //    test3dViewMoreCubeCameraFPS();
@@ -74,4 +75,6 @@ void testMainBegin(){
 //    testCurve();
 //    testTex3DPng();
 //    testShaderNormal();
+    
+    testPhongAmbient();
 }
