@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
-#include <jpeglib.h>
+#include "jpeglib.h"
 #include "defines.h"
 #include "jpgUtil.h"
 using namespace flyEngine;

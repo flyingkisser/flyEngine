@@ -6,7 +6,7 @@
 //  Copyright © 2020 joe. All rights reserved.
 //
 
-#include <png.h>
+#include "png.h"
 #include "defines.h"
 
 #include "pngUtil.h"
