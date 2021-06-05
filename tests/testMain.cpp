@@ -66,7 +66,7 @@ void testMainBegin(){
 //    test3dViewRotate();
 //    test3dViewControl();
 //    test3dViewControlCamera();
-//    test3dViewMoreCube();
+    test3dViewMoreCube();
 //    test3dViewMoreCubeCamera();
 //    test3dViewMoreCubeCameraFPS();
     
@@ -76,5 +76,5 @@ void testMainBegin(){
 //    testTex3DPng();
 //    testShaderNormal();
     
-    testPhongAmbient();
+//    testPhongAmbient();
 }

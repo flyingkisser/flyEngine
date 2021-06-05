@@ -13,9 +13,6 @@
 		8E27575D265123A100993B0B /* m1_libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2757582651237600993B0B /* m1_libglfw.3.3.dylib */; };
 		8E27575E265123A100993B0B /* m1_libglfw.3.3.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 8E2757582651237600993B0B /* m1_libglfw.3.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		8E275762265124BE00993B0B /* m1_libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2757602651249A00993B0B /* m1_libjpeg.a */; };
-		8E27578326512D9700993B0B /* libglfw.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E27578026512D9700993B0B /* libglfw.dylib */; };
-		8E27578426512D9700993B0B /* libglfw.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E27578126512D9700993B0B /* libglfw.3.dylib */; };
-		8E27578526512D9700993B0B /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E27578226512D9700993B0B /* libglfw.3.3.dylib */; };
 		8E2763DB26512E9F00993B0B /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E275F7A26512E9E00993B0B /* glm.cpp */; };
 		8E2763FB26512F5B00993B0B /* libjpeg.9.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2763F026512F5B00993B0B /* libjpeg.9.dylib */; };
 		8E2763FC26512F5B00993B0B /* libjpeg.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2763F126512F5B00993B0B /* libjpeg.dylib */; };
@@ -58,6 +55,7 @@
 		D8273E802510D3EC00D2BC59 /* testTexXD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8273E7F2510D3EC00D2BC59 /* testTexXD.cpp */; };
 		D827953224BC5FB400261C44 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D827953124BC5FB400261C44 /* matrix.cpp */; };
 		D827953624BC614800261C44 /* 3DTrans.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D827953524BC614800261C44 /* 3DTrans.cpp */; };
+		D84FB806266B1D0E003FDDE1 /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E27578226512D9700993B0B /* libglfw.3.3.dylib */; };
 		D853B5FB1F15063300226235 /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853B5F91F15063300226235 /* triangle.cpp */; };
 		D853B5FF1F159F6600226235 /* quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853B5FD1F159F6600226235 /* quad.cpp */; };
 		D853B6031F16757600226235 /* vertexArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853B6011F16757600226235 /* vertexArray.cpp */; };
@@ -1684,11 +1682,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D84FB806266B1D0E003FDDE1 /* libglfw.3.3.dylib in Frameworks */,
 				8E27642726512F7A00993B0B /* libpng16.16.dylib in Frameworks */,
-				8E27578526512D9700993B0B /* libglfw.3.3.dylib in Frameworks */,
 				8E27642526512F7A00993B0B /* libpng16.a in Frameworks */,
-				8E27578326512D9700993B0B /* libglfw.dylib in Frameworks */,
-				8E27578426512D9700993B0B /* libglfw.3.dylib in Frameworks */,
 				D881DEF324D8216A0011F7B8 /* libz.tbd in Frameworks */,
 				8E27575D265123A100993B0B /* m1_libglfw.3.3.dylib in Frameworks */,
 				8E2763FD26512F5B00993B0B /* libjpeg.a in Frameworks */,

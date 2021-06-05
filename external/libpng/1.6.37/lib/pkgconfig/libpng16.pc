@@ -1,4 +1,4 @@
-prefix=/opt/homebrew/Cellar/libpng/1.6.37
+prefix=/usr/local/Cellar/libpng/1.6.37
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include/libpng16
