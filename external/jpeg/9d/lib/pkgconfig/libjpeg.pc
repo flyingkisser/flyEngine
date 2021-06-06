@@ -1,4 +1,4 @@
-prefix=/usr/local/Cellar/jpeg/9d
+prefix=/opt/homebrew/Cellar/jpeg/9d
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
 includedir=${prefix}/include
