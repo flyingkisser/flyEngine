@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8E02F628266CB8A500CD3521 /* logUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E02F626266CB8A500CD3521 /* logUtil.cpp */; };
+		8E02F62B266CDF0B00CD3521 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E02F629266CDF0B00CD3521 /* light.cpp */; };
 		8E2757592651238600993B0B /* m1_libGLEW.2.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2757572651237600993B0B /* m1_libGLEW.2.2.0.dylib */; };
 		8E27575A2651238600993B0B /* m1_libGLEW.2.2.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 8E2757572651237600993B0B /* m1_libGLEW.2.2.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		8E27575C2651239300993B0B /* m1_libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2757562651237600993B0B /* m1_libGLEW.a */; };
@@ -109,6 +111,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		8E02F626266CB8A500CD3521 /* logUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = logUtil.cpp; sourceTree = "<group>"; };
+		8E02F627266CB8A500CD3521 /* logUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = logUtil.h; sourceTree = "<group>"; };
+		8E02F629266CDF0B00CD3521 /* light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = light.cpp; sourceTree = "<group>"; };
+		8E02F62A266CDF0B00CD3521 /* light.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = light.h; sourceTree = "<group>"; };
 		8E2757562651237600993B0B /* m1_libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = m1_libGLEW.a; path = lib/m1_libGLEW.a; sourceTree = "<group>"; };
 		8E2757572651237600993B0B /* m1_libGLEW.2.2.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = m1_libGLEW.2.2.0.dylib; path = lib/m1_libGLEW.2.2.0.dylib; sourceTree = "<group>"; };
 		8E2757582651237600993B0B /* m1_libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = m1_libglfw.3.3.dylib; path = lib/m1_libglfw.3.3.dylib; sourceTree = "<group>"; };
@@ -3587,6 +3593,8 @@
 		8E86C9BF26638426004B3BB7 /* light */ = {
 			isa = PBXGroup;
 			children = (
+				8E02F629266CDF0B00CD3521 /* light.cpp */,
+				8E02F62A266CDF0B00CD3521 /* light.h */,
 			);
 			path = light;
 			sourceTree = "<group>";
@@ -3699,6 +3707,8 @@
 				D89600F824D40EE100DF6FD3 /* gpuUtil.cpp */,
 				D8EF622D2519E32500B8588F /* stringUtil.h */,
 				D8EF622E2519E32500B8588F /* stringUtil.cpp */,
+				8E02F626266CB8A500CD3521 /* logUtil.cpp */,
+				8E02F627266CB8A500CD3521 /* logUtil.h */,
 			);
 			path = platformUtil;
 			sourceTree = "<group>";
@@ -4124,6 +4134,7 @@
 				D809EE1324F3D2190067189D /* testShader.cpp in Sources */,
 				D8BB1BA525625D7D00AF9FD5 /* camera.cpp in Sources */,
 				D89600F924D40EE100DF6FD3 /* gpuUtil.cpp in Sources */,
+				8E02F62B266CDF0B00CD3521 /* light.cpp in Sources */,
 				D825DBC824B4911100C494E7 /* test3D_old.cpp in Sources */,
 				D825DBBB24ACA32F00C494E7 /* render.cpp in Sources */,
 				D825DBB324AC929B00C494E7 /* node.cpp in Sources */,
@@ -4131,6 +4142,7 @@
 				D89B2B6024937E7800DA6873 /* pixel.cpp in Sources */,
 				D825DBC124AED03300C494E7 /* threadUtil.cpp in Sources */,
 				D89600F324D169D700DF6FD3 /* testCurve.cpp in Sources */,
+				8E02F628266CB8A500CD3521 /* logUtil.cpp in Sources */,
 				D825DB71249CB3EB00C494E7 /* randUtil.cpp in Sources */,
 				D81EF3811EAFA1A10003604F /* line.cpp in Sources */,
 				D81EF3871EB01E950003604F /* error.cpp in Sources */,

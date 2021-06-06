@@ -80,13 +80,8 @@ static std::function<void(void)> drawCubeAmbient(int shaderID){
     int vao=VAOMgr::createVAO(s_verticeArr,sizeof(s_verticeArr),3,2,5*sizeof(float),0,3*sizeof(float));
     
     glm::mat4 mat_model=glm::translate(glm::mat4(1.0),glm::vec3(0,0,-3));
-//    glm::mat4 mat_proj=glm::perspective(glm::radians(60.0), 800.0/600.0, 0.1, 100.0);
-    
     glm::vec3 cameraPos=glm::vec3(0,0,3);
-//    glm::vec3 cameraFront=glm::vec3(0,0,-1);
     glm::vec3 cameraUp=glm::vec3(0,1,0);
- 
-    
     camera* cameraObj=new camera(shaderID,
                                       std::string("matModel"),mat_model,
                                       std::string("matView"),cameraPos,cameraUp,
@@ -97,14 +92,7 @@ static std::function<void(void)> drawCubeAmbient(int shaderID){
     glUniform1i(glGetUniformLocation(shaderID, "texture1"), 0);
     glUniform1i(glGetUniformLocation(shaderID, "texture2"), 1);
     glUniform1f(glGetUniformLocation(shaderID, "mixValue"), 0.2);
-    
-//    glUniformMatrix4fv(glGetUniformLocation(shaderID, "matModel"), 1,GL_FALSE,glm::value_ptr(mat_model));
-//    glUniformMatrix4fv(glGetUniformLocation(shaderID, "matProjection"), 1,GL_FALSE,glm::value_ptr(mat_proj));
-  
     glEnable(GL_DEPTH_TEST);
-    
-    cameraObj->print();
-    cameraObj->updateCamera();
     
     return [vao,texID1,texID2,shaderID,cameraObj](){
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);

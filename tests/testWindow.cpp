@@ -94,64 +94,6 @@ static void initPerspective3D(){
     glCullFace(GL_BACK);        //剔除后向面 GL_FRONT_AND_BACK 消除场景中的所有多边形面，只观察点和直线段
 }
 
-
-
-//void onKeyboard(unsigned char c,int x,int y){
-//    switch (c) {
-//        case 'T':
-//            break;
-//
-//        default:
-//            break;
-//    }
-//    s_keyboard_callback(c,x,y);
-//}
-//void onMouseClick(int button,int action,int x,int y){
-//    switch (button) {
-//        case GLUT_LEFT_BUTTON:
-//            break;
-//        case GLUT_RIGHT_BUTTON:
-//                  break;
-//        case GLUT_MIDDLE_BUTTON:
-//                  break;
-//        default:
-//            break;
-//    }
-//    switch (action) {
-//       case GLUT_DOWN:
-//           break;
-//       case GLUT_UP:
-//            break;
-//       default:
-//           break;
-//      }
-//    s_mouse_click_callback(button,action,x,s_intHeight-y);
-//}
-//void onMouseMoveClick(GLFWwindow* window,double x,double y){
-//    s_mouse_clickmove_callback((int)x,(int)(s_intHeight-y));
-//}
-//void testRegKeyboard(std::function<void(unsigned char,int,int)>cb){
-//    s_keyboard_callback=cb;
-//    glutKeyboardFunc (onKeyboard);
-//}
-//void testRegMouseClick(std::function<void(int,int,int,int)>cb){
-//    s_mouse_click_callback=cb;
-//    glutMouseFunc(onMouseClick);
-//}
-//void testRegMouseClickWithMove(std::function<void(int,int)>cb){
-//    s_mouse_clickmove_callback=cb;
-//    glutMotionFunc(onMouseMoveClick);
-//}
-//void testRegMouseMove(std::function<void(int,int)>cb){
-//    s_mouse_move_callback=cb;
-//    glutPassiveMotionFunc(onMouseMove);
-//}
-//static void menuCallback(GLint menuID){
-//    if(!s_mapMenuCallback[menuID])
-//        return;
-//    s_mapMenuCallback[menuID]();
-//}
-
 void onKeyboard(GLFWwindow* window, int key, int scancode, int action, int mods){
     if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
         glfwSetWindowShouldClose(s_window, GL_TRUE);
@@ -244,74 +186,6 @@ void printGpuInfo(){
            );
 }
 
-//void testInitWindow2D(const char* szTitle,void (*drawCall)(void)) {
-////    glutInitDisplayMode(displayMode);
-////    glutInitWindowPosition(500,800);
-////    glutInitWindowSize(s_intWidth,s_intHeight);
-////    glutCreateWindow(szTitle);
-////
-////    printGpuInfo();
-////
-////    //init menu
-////    glutCreateMenu(menuCallback);
-////    glutAttachMenu(GLUT_RIGHT_BUTTON);
-////
-////    //register callbacks
-////    glutDisplayFunc(displayCB);
-////    glutReshapeFunc(reshape2D);
-////
-////    initOtho2D();
-//
-//    GLFWwindow* window=glfwCreateWindow(s_intWidth, s_intHeight, szTitle, NULL, NULL);
-//    if(!window){
-//       std::cout<<"glfwCreateWindow failed!"<<std::endl;
-//       glfwTerminate();
-//       return;
-//    }
-//    s_window=window;
-//    glfwSetWindowPos(window,500,800);
-//    glfwMakeContextCurrent(window);
-//    glfwSetFramebufferSizeCallback(window, reshape2D);
-//    if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
-//       std::cout<<"gladLoadGLLoader failed!"<<std::endl;
-//       glfwTerminate();
-//       return;
-//    }
-//    printGpuInfo();
-//    initOtho2D();
-////    drawCall();
-////    glfwSwapBuffers(s_window);
-//}
-
-//void testInitWindow2DNotUse(const char* szTitle,void (*drawCall)(void)) {
-//    GLFWwindow* window=glfwCreateWindow(s_intWidth, s_intHeight, szTitle, NULL, NULL);
-//    if(!window){
-//       std::cout<<"glfwCreateWindow failed!"<<std::endl;
-//       glfwTerminate();
-//       return;
-//    }
-//    s_window=window;
-//    glfwSetWindowPos(window,500,800);
-//    glfwMakeContextCurrent(window);
-//    glfwSetFramebufferSizeCallback(window, reshape2D);
-//    if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
-//       std::cout<<"gladLoadGLLoader failed!"<<std::endl;
-//       glfwTerminate();
-//       return;
-//    }
-//    printGpuInfo();
-//    initOtho2D();
-//
-//    while (!glfwWindowShouldClose(window)){
-//       glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-//       glClear(GL_COLOR_BUFFER_BIT);
-//
-//       drawCall();
-//
-//       glfwSwapBuffers(window);
-//       glfwPollEvents();
-//    }
-//}
 
 void initWindow(){
     GLFWwindow* window=glfwCreateWindow(s_intWidth, s_intHeight, "openGL test", NULL, NULL);
@@ -356,40 +230,6 @@ void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall,uns
         glfwPollEvents();
     }
 }
-
-
-//void testInitWindow3D(const char* szTitle,void (*drawCall)(void)) {
-//    printGpuInfo();
-//
-//    GLFWwindow* window=glfwCreateWindow(s_intWidth, s_intHeight, szTitle, NULL, NULL);
-//    if(!window){
-//        std::cout<<"glfwCreateWindow failed!"<<std::endl;
-//        glfwTerminate();
-//        return;
-//    }
-//    s_window=window;
-//    glfwSetWindowPos(window,500,800);
-//    glfwMakeContextCurrent(window);
-//    glfwSetFramebufferSizeCallback(window, reshape3D);
-//    if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
-//        std::cout<<"gladLoadGLLoader failed!"<<std::endl;
-//        glfwTerminate();
-//        return;
-//    }
-//
-//    initPerspective3D();
-//
-//    drawCall();
-//
-//    glfwSwapBuffers(s_window);
-//
-////    while(!glfwWindowShouldClose(window)){
-////        glfwPollEvents();
-////        glfwSwapBuffers(window);
-////    }
-////
-////    glfwTerminate();
-//}
 
 void windowLoop(){
    while(!glfwWindowShouldClose(s_window)){

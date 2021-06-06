@@ -16,7 +16,7 @@
 #include "threadUtil.h"
 #include "gpuUtil.h"
 #include "stringUtil.h"
-
+#include "logUtil.h"
 
 
 

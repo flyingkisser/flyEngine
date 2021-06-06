@@ -63,37 +63,43 @@ camera::camera(int shaderID,
     
     keyboardEvent* kbEventObj=new keyboardEvent();
     kbEventObj->regEvent('w', [=,this](){
-        cout<<"_move_d is "<<this->_move_d<<endl;
         //_cameraPos.z-=_move_d;
         this->_cameraPos.z-=0.2;
+        cout<<"_cameraPos.z is "<<this->_cameraPos.z<<endl;
 //        _matCamera=glm::translate(_matCamera, glm::vec3(0,0,_move_d));
         this->updateCamera();
     });
     
     kbEventObj->regEvent('s', [&](){
         _cameraPos.z+=_move_d;
+        cout<<"_cameraPos.z is "<<this->_cameraPos.z<<endl;
 //        _matCamera=glm::translate(_matCamera, glm::vec3(0,0,-_move_d));
         updateCamera();
     });
     kbEventObj->regEvent('a', [&](){
 //         _cameraPos.x-=_move_d;
+
         _cameraPos.x-=0.2;
+        cout<<"_cameraPos.x is "<<this->_cameraPos.x<<endl;
 //         _matCamera=glm::translate(_matCamera, glm::vec3(-_move_d,0,0));
          updateCamera();
       });
     kbEventObj->regEvent('d', [&](){
 //         _cameraPos.x+=_move_d;
         _cameraPos.x+=0.2;
+        cout<<"_cameraPos.x is "<<this->_cameraPos.x<<endl;
 //         _matCamera=glm::translate(_matCamera, glm::vec3(_move_d,0,0));
         updateCamera();
     });
     kbEventObj->regEvent('z', [&](){
          _cameraPos.y+=_move_d;
+        cout<<"_cameraPos.y is "<<this->_cameraPos.y<<endl;
 //         _matCamera=glm::translate(_matCamera, glm::vec3(0,_move_d,0));
         updateCamera();
     });
     kbEventObj->regEvent('x', [&](){
          _cameraPos.y-=_move_d;
+        cout<<"_cameraPos.y is "<<this->_cameraPos.y<<endl;
 //        _matCamera=glm::translate(_matCamera, glm::vec3(0,-_move_d,0));
         updateCamera();
     });
@@ -117,7 +123,7 @@ camera::camera(int shaderID,
         _mouseRightOriginY=0;
     });
     msEventObj->regOnMiddleClick([&](){
-             cout<<"middle click!"<<endl;
+        cout<<"middle click!"<<endl;
     });
     //move camera
     msEventObj->regOnMoveWithLeftClick([&](float x,float y){
