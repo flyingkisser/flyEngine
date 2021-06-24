@@ -25,9 +25,9 @@
 		8E27642726512F7A00993B0B /* libpng16.16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E27641B26512F7A00993B0B /* libpng16.16.dylib */; };
 		8E27642826512F7A00993B0B /* libpng.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E27641C26512F7A00993B0B /* libpng.dylib */; };
 		8E27642926512F7A00993B0B /* libpng16.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E27641D26512F7A00993B0B /* libpng16.dylib */; };
-		8E2764322651333800993B0B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = 8E2764312651333800993B0B /* glad.c */; };
 		8E86C9C326638480004B3BB7 /* testPhong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E86C9C126638480004B3BB7 /* testPhong.cpp */; };
 		D809EE1324F3D2190067189D /* testShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D809EE1224F3D2190067189D /* testShader.cpp */; };
+		D810AEAD26835232009B774B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = D810AEAC26835232009B774B /* glad.c */; };
 		D81EF3601EAFA0070003604F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81EF35F1EAFA0070003604F /* main.cpp */; };
 		D81EF3811EAFA1A10003604F /* line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81EF37F1EAFA1A10003604F /* line.cpp */; };
 		D81EF3831EAFA4A20003604F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D81EF3821EAFA4A20003604F /* Cocoa.framework */; };
@@ -1521,7 +1521,6 @@
 		8E27642426512F7A00993B0B /* libpngpf.3 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libpngpf.3; sourceTree = "<group>"; };
 		8E27642D2651333800993B0B /* khrplatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = khrplatform.h; sourceTree = "<group>"; };
 		8E27642F2651333800993B0B /* glad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glad.h; sourceTree = "<group>"; };
-		8E2764312651333800993B0B /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 		8E86C9C126638480004B3BB7 /* testPhong.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testPhong.cpp; sourceTree = "<group>"; };
 		8E86C9C226638480004B3BB7 /* testPhong.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testPhong.h; sourceTree = "<group>"; };
 		8E86C9C42663A089004B3BB7 /* light_normal.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = light_normal.vs; sourceTree = "<group>"; };
@@ -1530,6 +1529,7 @@
 		D809EE1224F3D2190067189D /* testShader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testShader.cpp; sourceTree = "<group>"; };
 		D809EE1524F3D3930067189D /* basic.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.vs; sourceTree = "<group>"; };
 		D809EE1624F3D3A80067189D /* basic.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.fs; sourceTree = "<group>"; };
+		D810AEAC26835232009B774B /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 		D81EF35C1EAFA0070003604F /* flyEngine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = flyEngine; sourceTree = BUILT_PRODUCTS_DIR; };
 		D81EF35F1EAFA0070003604F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		D81EF37A1EAFA0E60003604F /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
@@ -3549,8 +3549,9 @@
 		8E27642A2651333800993B0B /* glad */ = {
 			isa = PBXGroup;
 			children = (
+				8E27642F2651333800993B0B /* glad.h */,
+				D810AEAC26835232009B774B /* glad.c */,
 				8E27642B2651333800993B0B /* include */,
-				8E2764302651333800993B0B /* src */,
 			);
 			path = glad;
 			sourceTree = "<group>";
@@ -3559,7 +3560,6 @@
 			isa = PBXGroup;
 			children = (
 				8E27642C2651333800993B0B /* KHR */,
-				8E27642E2651333800993B0B /* glad */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -3570,22 +3570,6 @@
 				8E27642D2651333800993B0B /* khrplatform.h */,
 			);
 			path = KHR;
-			sourceTree = "<group>";
-		};
-		8E27642E2651333800993B0B /* glad */ = {
-			isa = PBXGroup;
-			children = (
-				8E27642F2651333800993B0B /* glad.h */,
-			);
-			path = glad;
-			sourceTree = "<group>";
-		};
-		8E2764302651333800993B0B /* src */ = {
-			isa = PBXGroup;
-			children = (
-				8E2764312651333800993B0B /* glad.c */,
-			);
-			path = src;
 			sourceTree = "<group>";
 		};
 		8E86C9BF26638426004B3BB7 /* light */ = {
@@ -4133,6 +4117,7 @@
 				D825DBB324AC929B00C494E7 /* node.cpp in Sources */,
 				D8EF622F2519E32500B8588F /* stringUtil.cpp in Sources */,
 				D89B2B6024937E7800DA6873 /* pixel.cpp in Sources */,
+				D810AEAD26835232009B774B /* glad.c in Sources */,
 				D825DBC124AED03300C494E7 /* threadUtil.cpp in Sources */,
 				D89600F324D169D700DF6FD3 /* testCurve.cpp in Sources */,
 				D825DB71249CB3EB00C494E7 /* randUtil.cpp in Sources */,
@@ -4147,7 +4132,6 @@
 				D89600F624D2E10200DF6FD3 /* testTexXDImm.cpp in Sources */,
 				D853B6031F16757600226235 /* vertexArray.cpp in Sources */,
 				D825DB8324AAEE0900C494E7 /* 2DTrans.cpp in Sources */,
-				8E2764322651333800993B0B /* glad.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

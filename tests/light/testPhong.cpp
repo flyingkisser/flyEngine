@@ -115,6 +115,9 @@ static std::function<void(void)> drawCubeAmbient(int shaderID){
         glBindTexture(GL_TEXTURE_2D,texID2);
         glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLES,0,36);
+        
+        
+        
         cameraObj->updateCamera();
     };
 }
