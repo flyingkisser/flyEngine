@@ -28,6 +28,8 @@
 		8E86C9C326638480004B3BB7 /* testPhong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E86C9C126638480004B3BB7 /* testPhong.cpp */; };
 		D809EE1324F3D2190067189D /* testShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D809EE1224F3D2190067189D /* testShader.cpp */; };
 		D810AEAD26835232009B774B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = D810AEAC26835232009B774B /* glad.c */; };
+		D810AEB026849DCE009B774B /* 3DNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEAF26849DCE009B774B /* 3DNode.cpp */; };
+		D810AEB32684A1AF009B774B /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEB22684A1AF009B774B /* texture.cpp */; };
 		D81EF3601EAFA0070003604F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81EF35F1EAFA0070003604F /* main.cpp */; };
 		D81EF3811EAFA1A10003604F /* line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81EF37F1EAFA1A10003604F /* line.cpp */; };
 		D81EF3831EAFA4A20003604F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D81EF3821EAFA4A20003604F /* Cocoa.framework */; };
@@ -1530,6 +1532,10 @@
 		D809EE1524F3D3930067189D /* basic.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.vs; sourceTree = "<group>"; };
 		D809EE1624F3D3A80067189D /* basic.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.fs; sourceTree = "<group>"; };
 		D810AEAC26835232009B774B /* glad.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
+		D810AEAE26849DCE009B774B /* 3DNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 3DNode.h; sourceTree = "<group>"; };
+		D810AEAF26849DCE009B774B /* 3DNode.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = 3DNode.cpp; sourceTree = "<group>"; };
+		D810AEB12684A1AF009B774B /* texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = texture.h; sourceTree = "<group>"; };
+		D810AEB22684A1AF009B774B /* texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = texture.cpp; sourceTree = "<group>"; };
 		D81EF35C1EAFA0070003604F /* flyEngine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = flyEngine; sourceTree = BUILT_PRODUCTS_DIR; };
 		D81EF35F1EAFA0070003604F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		D81EF37A1EAFA0E60003604F /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
@@ -3879,6 +3885,8 @@
 				D825DBC524AED55300C494E7 /* img */,
 				D825DBAA24AC82FF00C494E7 /* textureMgr.h */,
 				D825DBAB24AC82FF00C494E7 /* textureMgr.cpp */,
+				D810AEB12684A1AF009B774B /* texture.h */,
+				D810AEB22684A1AF009B774B /* texture.cpp */,
 			);
 			path = texture;
 			sourceTree = "<group>";
@@ -3923,6 +3931,8 @@
 			children = (
 				D827953424BC614800261C44 /* 3DTrans.h */,
 				D827953524BC614800261C44 /* 3DTrans.cpp */,
+				D810AEAE26849DCE009B774B /* 3DNode.h */,
+				D810AEAF26849DCE009B774B /* 3DNode.cpp */,
 			);
 			path = 3D;
 			sourceTree = "<group>";
@@ -4083,6 +4093,7 @@
 				D825DB8624AAEE5100C494E7 /* defines.cpp in Sources */,
 				D825DBA824AC7F7300C494E7 /* testMain.cpp in Sources */,
 				D81EF38F1EBCD0490003604F /* rectangular.cpp in Sources */,
+				D810AEB32684A1AF009B774B /* texture.cpp in Sources */,
 				D89600F024D1686400DF6FD3 /* curve.cpp in Sources */,
 				D825DB9D24AC6BA900C494E7 /* testPixel.cpp in Sources */,
 				D881DEEF24D80E2E0011F7B8 /* pngUtil.cpp in Sources */,
@@ -4104,6 +4115,7 @@
 				D81EF38B1EB253FF0003604F /* points.cpp in Sources */,
 				D827953224BC5FB400261C44 /* matrix.cpp in Sources */,
 				D853B5FF1F159F6600226235 /* quad.cpp in Sources */,
+				D810AEB026849DCE009B774B /* 3DNode.cpp in Sources */,
 				D881DEF924DA8D180011F7B8 /* jpgUtil.cpp in Sources */,
 				D825DBB024AC8F3600C494E7 /* flyEngine.cpp in Sources */,
 				D89600E924C8541400DF6FD3 /* testAniBySwapBuffer.cpp in Sources */,
