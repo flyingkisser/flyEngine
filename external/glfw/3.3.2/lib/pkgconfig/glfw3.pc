@@ -1,7 +1,7 @@
-prefix=/opt/homebrew/Cellar/glfw/3.3.2
+prefix=/usr/local/Cellar/glfw/3.3.2
 exec_prefix=${prefix}
-includedir=/opt/homebrew/Cellar/glfw/3.3.2/include
-libdir=/opt/homebrew/Cellar/glfw/3.3.2/lib
+includedir=/usr/local/Cellar/glfw/3.3.2/include
+libdir=/usr/local/Cellar/glfw/3.3.2/lib
 
 Name: GLFW
 Description: A multi-platform library for OpenGL, window and input
