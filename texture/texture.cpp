@@ -18,7 +18,7 @@ texture::~texture(){
         free(_dataBuf);
 }
 
-texture::texture(char* szPath){
+texture::texture(const char* szPath){
     _strPath=szPath;
     struct_texture st={0};
    if(pngUtil::isPng(szPath)){

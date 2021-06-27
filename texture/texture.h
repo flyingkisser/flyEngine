@@ -17,7 +17,7 @@ using namespace std;
 
 class texture{
 public:
-    texture(char* szPath);
+    texture(const char* szPath);
     ~texture();
     bool init();
     flyEngine::size getSize(){return flyEngine::size{_width,_height}};

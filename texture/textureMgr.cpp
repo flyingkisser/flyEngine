@@ -5,11 +5,9 @@
 //  Created by joe on 01/07/2020.
 //  Copyright © 2020 joe. All rights reserved.
 //
-
 #include <map>
 #include <string>
 #include <iostream>
-
 
 #include "textureMgr.h"
 #include "platformUtil.h"
@@ -17,8 +15,6 @@
 #include "bmpUtil.h"
 #include "pngUtil.h"
 #include "jpgUtil.h"
-
-
 
 using namespace std;
 
@@ -48,6 +44,32 @@ void textureMgr::clear(){
     _mapTextureCache.clear();
 }
 
+texture* textureMgr::getTexture(const char *szFileName){
+    auto it=_mapTextureCache.find(szFileName);
+    if(it!=_mapTextureCache.end())
+        return it->second;
+    texture* texObj=new texture(szFileName);
+    if(!texObj->init())
+        return NULL;
+    _mapTextureCache[szFileName]=texObj;
+    return texObj;
+}
+
+flyEngine::size textureMgr::getTextureSize(const char* szName){
+    auto it=_mapTextureCache.find(szName);
+    if(it!=_mapTextureCache.end())
+        return it->second->getSize();
+    return flyEngine::size{0,0};
+}
+
+//textureTuple textureMgr::getTextureTuple(const char *szName){
+//    auto it=_mapTextureCache.find(szName);
+//    if(it!=_mapTextureCache.end())
+//        return it->second;
+//    if(_loadTexture(szName))
+//        return _mapTextureCache.find(szName)->second;
+//    return textureTuple{0,0,0,0,0,0};
+//}
 //bool textureMgr::_loadTexture(const char *szFileName){
 //    struct_texture st={0};
 //    if(pngUtil::isPng(szFileName)){
@@ -60,31 +82,3 @@ void textureMgr::clear(){
 //    _mapTextureCache[szFileName]=textureTuple{st.width,st.height,st.format,st.internalFormat,st.id,st.buf};
 //    return true;
 //}
-
-Texture* textureMgr::getTexture(const char *szFileName){
-    auto it=_mapTextureCache.find(szFileName);
-    if(it!=_mapTextureCache.end())
-        return it->second;
-    Texture* texObj=new Texture(szFileName);
-    if(!texObj->load())
-        return std::nullptr;
-    _mapTextureCache[szFileName]=texObj;
-    return texObj;
-}
-
-//textureTuple textureMgr::getTextureTuple(const char *szName){
-//    auto it=_mapTextureCache.find(szName);
-//    if(it!=_mapTextureCache.end())
-//        return it->second;
-//    if(_loadTexture(szName))
-//        return _mapTextureCache.find(szName)->second;
-//    return textureTuple{0,0,0,0,0,0};
-//}
-
-flyEngine::size textureMgr::getTextureSize(const char* szName){
-    auto it=_mapTextureCache.find(szName);
-    if(it!=_mapTextureCache.end())
-        return it->second->getSize();
-    return flyEngine::size{0,0};
-}
-
