@@ -14,6 +14,7 @@
 #include <tuple>
 #include "defines.h"
 #include "baseImg.h"
+#include "texture.h"
 
 using namespace std;
 
@@ -22,10 +23,7 @@ namespace flyEngine{
 class textureMgr{
     
 private:
-    //width,height,format,internalFormat,id,buf
-    map<string,textureTuple> _mapTextureCache;
-    
-    bool _loadTexture(const char* szName);
+    map<string,Texutre> _mapTextureCache;
     
 public:
     static textureMgr* getInstance();
@@ -33,9 +31,12 @@ public:
      ~textureMgr();
     void clear();
     
-    textureTuple getTextureTuple(const char* szName);
-    unsigned int getTextureID(const char *szName,unsigned int texRGBType);
+    texture* getTexture(const char* szName);
     size getTextureSize(const char* szName);
+    
+
+    unsigned int getTextureID(const char *szName);
+    
 };
 
 }
