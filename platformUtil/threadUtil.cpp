@@ -11,13 +11,13 @@
 #include <chrono>
 #include <math.h>
 
-void sleep(float s){
+void threadUtil::sleep(float sec){
     int ms=floor(s*1000);
     std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 }
 
 //线程在自己的线程空间立即执行，当前线程不阻塞
-void runThread(std::function<void(void)> cb){
+void threadUtil::createThread(std::function<void(void)> cb){
     std::thread newThread(cb);
     newThread.detach();
 }
