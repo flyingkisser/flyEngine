@@ -10,8 +10,14 @@
 #define threadUtil_h
 
 #include <stdio.h>
+#include <functional>
 
-void sleep(float sec);
+//void sleep(float sec);
 
+class threadUtil{
+public:
+    static void sleep(float sec);
+    static void createThread(std::function<void(void)> cb);
+};
 
 #endif /* threadUtil_h */

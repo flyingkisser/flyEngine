@@ -25,9 +25,7 @@ public:
     int getWidth(){return _width};
     int getHeight(){return _height};
     unsigned char* getBuf(){return _dataBuf};
-    void setTexID(){
-        
-    }
+    unsigned int getTextureID(){return _textureID;};
     
 private:
     int _width;
