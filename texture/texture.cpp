@@ -13,12 +13,12 @@
 
 using namespace flyEngine;
 
-texture::~texture(){
+flyEngine::texture::~texture(){
     if(_dataBuf)
         free(_dataBuf);
 }
 
-texture::texture(const char* szPath){
+flyEngine::texture::texture(const char* szPath){
     _strPath=szPath;
     struct_texture st={0};
    if(pngUtil::isPng(szPath)){
@@ -36,7 +36,7 @@ texture::texture(const char* szPath){
 }
 
 
-bool texture::init(){
+bool flyEngine::texture::init(){
     char* szPath=(char*)_strPath.c_str();
     struct_texture st={0};
    if(pngUtil::isPng(szPath)){
@@ -57,7 +57,7 @@ bool texture::init(){
     return true;
 }
 
-void texture::_glInit(){
+void flyEngine::texture::_glInit(){
     glGenTextures(1,&_textureID);
     glBindTexture(GL_TEXTURE_2D,_textureID);
     //GL_TEXTURE_WRAP_S表示纹理坐标的横向方向
@@ -98,3 +98,7 @@ void texture::_glInit(){
        
 //  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, structTex.width, structTex.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, structTex.buf);
 }
+
+  flyEngine::size flyEngine::texture::getSize(){
+      return flyEngine::size{(float)_width,(float)_height};
+  };

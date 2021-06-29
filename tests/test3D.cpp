@@ -13,6 +13,7 @@
 #include "defines.h"
 
 #include "testWindow.h"
+#include "texture.h"
 #include "textureMgr.h"
 #include "VAOMgr.h"
 #include "shader.h"
@@ -22,50 +23,6 @@
 #include "cameraFPS.h"
 
 using namespace flyEngine;
-static float s_verticeArr[]={
-      -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-      0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-
-      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-      0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-      -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-      -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-      -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-      -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-      0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-      0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-      0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-      -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-      -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-      0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-      0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-      -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-      -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-};
-
 
 static std::function<void(void)> drawPlane(int shaderID){
     float verticeArr[]={
@@ -79,29 +36,51 @@ static std::function<void(void)> drawPlane(int shaderID){
         1,2,3       //second triangle
     };
     
-    int texID1=textureMgr::getInstance()->getTextureID("res/fire.png",GL_RGBA);
+    texture* texObj=textureMgr::getInstance()->getTexture("res/fire.png");
+    int texID1=texObj->getTextureID();
     if(!texID1)
         return nullptr;
-    int texID2=textureMgr::getInstance()->getTextureID("res/smile.png",GL_RGBA);
+    int texID2=textureMgr::getInstance()->getTexture("res/smile.png")->getTextureID();
     if(!texID2)
        return nullptr;
-    size texSize=textureMgr::getInstance()->getTextureSize("res/fire.png");
+    size texSize=texObj->getSize("res/fire.png");
     size winSize=getWindowSize();
-    float winWith=winSize.width;
+    
+    float winWidth=winSize.width;
     float winHeight=winSize.height;
     float width=texSize.width;
     float height=texSize.height;
-    verticeArr[0]=width/winWith;
+    verticeArr[0]=width/winWidth;
     verticeArr[1]=height/winHeight;
-    verticeArr[0+5*1]=width/winWith;
+    verticeArr[0+5*1]=winWidth/winWith;
     verticeArr[1+5*1]=-height/winHeight;
-    verticeArr[0+5*2]=-width/winWith;
+    verticeArr[0+5*2]=-width/winWidth;
     verticeArr[1+5*2]=-height/winHeight;
-    verticeArr[0+5*3]=-width/winWith;
+    verticeArr[0+5*3]=-width/winWidth;
     verticeArr[1+5*3]=height/winHeight;
       
-//  void* verticeBuf,int sizeOfVertice,void* verticeIndexBuf,int sizeOfVerticeIndex,int numPerVertex,int numPerTexture,int stride,int offsetVertex,int offsetTexture
-    int vao=VAOMgr::createVAO(verticeArr,sizeof(verticeArr),verticeIndexArr,sizeof(verticeIndexArr),3,2,5*sizeof(float),0,3*sizeof(float));
+    
+    unsigned int vao,vbo,ebo;
+    int stride=5*sizeof(float);
+    int offsetVertex=0;
+    int offsetTexture=0;
+    glGenVertexArrays(1,&vao);
+    glBindVertexArray(vao);
+
+    glGenBuffers(1,&vbo);
+    glGenBuffers(1,&ebo);
+
+    glBindBuffer(GL_ARRAY_BUFFER,vbo);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(verticeArr),verticeArr,GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(verticeIndexArr),verticeIndexArr,GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,stride,(void*)offsetVertex);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,stride,(void*)offsetTexture);
+    glEnableVertexAttribArray(1);
+    
 
     glm::mat4 matModel=glm::mat4(1.0);
     matModel=glm::rotate(matModel,glm::radians(-55.0f),glm::vec3(1,0,0));
@@ -119,20 +98,33 @@ static std::function<void(void)> drawPlane(int shaderID){
     glUniformMatrix4fv(glGetUniformLocation(shaderID, "matView"), 1,GL_FALSE,glm::value_ptr(matView));
     glUniformMatrix4fv(glGetUniformLocation(shaderID, "matProjection"), 1,GL_FALSE,glm::value_ptr(matProjection));
   
-    return [vao,texID1,texID2,shaderID](){
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D,texID1);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D,texID2);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D,texID1);
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D,texID2);
+   
+    glViewport(0,0,winWidth,winHeight);
+    shaderMgr::useShader(shaderID);
+    
+    while (!glfwWindowShouldClose(s_window)){
+        usleep(17*1000);   //1000 means 1ms
+
+        glClearColor(1.0,1.0,1.0,0);   //指定背影色为白色
+        glClear(GL_COLOR_BUFFER_BIT);   //指定颜色缓存，该缓存使用glClearColor指定的背影色
         glBindVertexArray(vao);
-        
         glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
-    };
+        
+        glfwSwapBuffers(s_window);
+        glfwPollEvents();
+    }
 }
 
+void test3dView() {
+    int shaderID=shaderMgr::createShader("res/shader/3dTextureApha.vs","res/shader/3dTextureApha.fs");
+    drawPlane(shaderID);
+}
+
+/*
 static std::function<void(void)> drawCubeRotate(int shaderID){
     int texID1=textureMgr::getInstance()->getTextureID("res/fire.png",GL_RGBA);
     if(!texID1)
@@ -451,14 +443,11 @@ static std::function<void(void)> drawCubeMoreByCameraFPS(int shaderID){
         }
     };
 }
+*/
 
-void test3dView() {
-    int shaderID=shaderMgr::createShader("res/shader/3dTextureApha.vs","res/shader/3dTextureApha.fs");
-    std::function<void(void)> drawCall=drawPlane(shaderID);
-    testInitWindow2D("openGL 3D png test",drawCall,shaderID);
-    windowLoop();
-}
 
+
+/*
 void test3dViewRotate() {
     int shaderID=shaderMgr::createShader("res/shader/3dTextureApha.vs","res/shader/3dTextureApha.fs");
     std::function<void(void)> drawCall=drawCubeRotate(shaderID);
@@ -500,3 +489,4 @@ void test3dViewMoreCubeCameraFPS() {
     testInitWindow2D("openGL 3D png more cube camera fps",drawCall,shaderID);
     windowLoop();
 }
+*/

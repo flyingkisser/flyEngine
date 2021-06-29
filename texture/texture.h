@@ -15,16 +15,18 @@
 
 using namespace std;
 
+namespace flyEngine{
+
 class texture{
 public:
     texture(const char* szPath);
     ~texture();
     bool init();
-    flyEngine::size getSize(){return flyEngine::size{_width,_height}};
+    flyEngine::size getSize();
     
-    int getWidth(){return _width};
-    int getHeight(){return _height};
-    unsigned char* getBuf(){return _dataBuf};
+    int getWidth(){return _width;};
+    int getHeight(){return _height;};
+    unsigned char* getBuf(){return _dataBuf;};
     unsigned int getTextureID(){return _textureID;};
     
 private:
@@ -41,5 +43,5 @@ private:
     
 };
 
-
+}
 #endif /* texture_h */

@@ -26,6 +26,7 @@
 #include "bmpUtil.h"
 #include "pngUtil.h"
 #include "jpgUtil.h"
+#include "texture.h"
 #include "textureMgr.h"
 
 
