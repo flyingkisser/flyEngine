@@ -14,8 +14,8 @@
 #include "testWindow.h"
 #include "flyEngine.h"
 #include "gpuUtil.h"
-
-
+#include "shader.h"
+#include "shaderMgr.h"
 
 using namespace flyEngine;
 using namespace std;
@@ -346,8 +346,9 @@ void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall) {
 void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall,unsigned int shaderID) {
     initOtho2D();
     if(!shaderID)
-        shaderID=shaderMgr::getDefaultShader();
-    shaderMgr::useShader(shaderID);
+        shaderID=flyEngine::shaderMgr::getDefaultShader();
+    flyEngine::shaderMgr::useShader(shaderID);
+    
     while (!glfwWindowShouldClose(s_window)){
 //        shaderMgr::useShader(shaderID);
         usleep(17*1000);   //1000 means 1ms

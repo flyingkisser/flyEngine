@@ -15,8 +15,10 @@
 #include "bmpUtil.h"
 #include "pngUtil.h"
 #include "jpgUtil.h"
+#include "texture.h"
 
 using namespace std;
+using namespace flyEngine;
 
 static textureMgr* s_instance;
 
@@ -38,13 +40,13 @@ textureMgr::~textureMgr(){
 void textureMgr::clear(){
     for(auto f : _mapTextureCache){
         auto texObj=f.second;
-        delete texObj;
+//        delete texObj;
 //        free(std::get<5>(line));
     }
     _mapTextureCache.clear();
 }
 
-texture* textureMgr::getTexture(const char *szFileName){
+flyEngine::texture* textureMgr::getTexture(const char *szFileName){
     auto it=_mapTextureCache.find(szFileName);
     if(it!=_mapTextureCache.end())
         return it->second;

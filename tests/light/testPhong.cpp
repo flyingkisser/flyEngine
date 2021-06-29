@@ -69,7 +69,7 @@ static float s_verticeArr[]={
       -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 };
 
-static std::function<void(void)> drawCubeAmbient(int shaderID){
+//static std::function<void(void)> drawCubeAmbient(int shaderID){
 //    int texID1=textureMgr::getInstance()->getTextureID("res/fire.png",GL_RGBA);
 //    if(!texID1)
 //        return nullptr;
@@ -120,7 +120,7 @@ static std::function<void(void)> drawCubeAmbient(int shaderID){
 //
 //        cameraObj->updateCamera();
 //    };
-}
+//}
 
 void testPhongAmbient() {
 //    int shaderID=shaderMgr::createShader("res/shader/light_normal.vs","res/shader/light_ambient.fs");

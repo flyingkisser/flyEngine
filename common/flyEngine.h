@@ -53,9 +53,6 @@
 
 using namespace flyEngine;
 
-
-extern textureMgr* g_textureMgr;
-
 void engineInit();
 
 #endif /* flyEngine_h */

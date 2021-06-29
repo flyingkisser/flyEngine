@@ -7,6 +7,8 @@
 //
 
 #include "world.h"
+world* s_instance;
+
 world::world(){
     _camera=NULL;
 }

@@ -12,9 +12,9 @@
 #include <stdio.h>
 #include <string>
 #include "flyEngine.h"
-#inlcude "shader.h"
 
 namespace flyEngine {
+
 class shaderMgr{
 public:
     static unsigned int createShaderWithoutCache(const char* szVertFileName,const char* szFragFileName);

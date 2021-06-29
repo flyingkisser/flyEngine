@@ -24,7 +24,7 @@ namespace flyEngine{
 class textureMgr{
     
 private:
-    map<string,texture> _mapTextureCache;
+    map<string,texture*> _mapTextureCache;
     
 public:
     static textureMgr* getInstance();
