@@ -12,7 +12,7 @@
 
 static int s_frame_rate=60;
 
-render* s_instance;
+static render* s_instance;
 
 render* render::getInstance(){
     if(s_instance)
@@ -24,7 +24,7 @@ render* render::getInstance(){
 void render::loopThread(){
     float s_renderSleep=1/s_frame_rate;
     while(true){
-        sleep(s_renderSleep);
+        threadUtil::sleep(s_renderSleep);
 //        std::cout<<"render thread"<<std::endl;
     }
 }

@@ -17,14 +17,16 @@
 #include "textureMgr.h"
 #include "VAOMgr.h"
 #include "shader.h"
+#include "shaderMgr.h"
 #include "keyboardEventMgr.h"
 #include "mouseEventMgr.h"
 #include "cameraBase.h"
 #include "cameraFPS.h"
+#include "threadUtil.h"
 
 using namespace flyEngine;
 
-static std::function<void(void)> drawPlane(int shaderID){
+static void drawPlane(int shaderID) {
     float verticeArr[]={
         0.5,0.5,0,    1,1,
         0.5,-0.5,0,   1,0,
@@ -36,14 +38,15 @@ static std::function<void(void)> drawPlane(int shaderID){
         1,2,3       //second triangle
     };
     
-    texture* texObj=textureMgr::getInstance()->getTexture("res/fire.png");
-    int texID1=texObj->getTextureID();
+    flyEngine::texture* texFireObj=(flyEngine::texture*)flyEngine::textureMgr::getInstance()->getTexture("res/fire.png");
+    flyEngine::texture* texSmailObj=(flyEngine::texture*)flyEngine::textureMgr::getInstance()->getTexture("res/smile.png");
+    int texID1=texSmailObj->getTextureID();
     if(!texID1)
-        return nullptr;
-    int texID2=textureMgr::getInstance()->getTexture("res/smile.png")->getTextureID();
+        return;
+    int texID2=texSmailObj->getTextureID();
     if(!texID2)
-       return nullptr;
-    size texSize=texObj->getSize("res/fire.png");
+        return;
+    size texSize=texFireObj->getSize();
     size winSize=getWindowSize();
     
     float winWidth=winSize.width;
@@ -52,7 +55,7 @@ static std::function<void(void)> drawPlane(int shaderID){
     float height=texSize.height;
     verticeArr[0]=width/winWidth;
     verticeArr[1]=height/winHeight;
-    verticeArr[0+5*1]=winWidth/winWith;
+    verticeArr[0+5*1]=winWidth/winWidth;
     verticeArr[1+5*1]=-height/winHeight;
     verticeArr[0+5*2]=-width/winWidth;
     verticeArr[1+5*2]=-height/winHeight;
@@ -104,17 +107,17 @@ static std::function<void(void)> drawPlane(int shaderID){
     glBindTexture(GL_TEXTURE_2D,texID2);
    
     glViewport(0,0,winWidth,winHeight);
-    shaderMgr::useShader(shaderID);
+    flyEngine::shaderMgr::useShader(shaderID);
     
-    while (!glfwWindowShouldClose(s_window)){
-        usleep(17*1000);   //1000 means 1ms
+    while(!glfwWindowShouldClose(g_window)){
+        threadUtil::sleep(17);   //1000 means 1ms
 
         glClearColor(1.0,1.0,1.0,0);   //指定背影色为白色
         glClear(GL_COLOR_BUFFER_BIT);   //指定颜色缓存，该缓存使用glClearColor指定的背影色
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
         
-        glfwSwapBuffers(s_window);
+        glfwSwapBuffers(g_window);
         glfwPollEvents();
     }
 }

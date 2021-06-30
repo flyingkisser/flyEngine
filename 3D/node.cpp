@@ -34,7 +34,7 @@ bool node::init(const char* texPath){
     _matModel=glm::translate(glm::mat4(1.0),glm::vec3(0,0,-3));
     _matModelOrigin=_matModel;
     glUniformMatrix4fv(glGetUniformLocation(_gl_program,"matView"), 1,GL_FALSE,glm::value_ptr(_matModel));
-
+    return true;
 }
 
 void node::_glInit(){

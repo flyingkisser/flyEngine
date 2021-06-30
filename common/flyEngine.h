@@ -55,4 +55,6 @@ using namespace flyEngine;
 
 void engineInit();
 
+extern float g_verticeArr[180];
+
 #endif /* flyEngine_h */

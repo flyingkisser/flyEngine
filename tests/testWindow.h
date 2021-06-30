@@ -13,6 +13,8 @@
 #include <functional>
 #include "defines.h"
 
+extern GLFWwindow* g_window;
+
 void initWindow();
 
 //void testInitWindow2D(const char* szTitle,void (*drawCall)(void));

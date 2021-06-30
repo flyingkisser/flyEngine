@@ -20,13 +20,13 @@
 using namespace flyEngine;
 using namespace std;
 
-GLFWwindow* s_window;
-
 static int s_intWidth=800;
 static int s_intHeight=800;
 static int s_menuID=1;
 static int s_near=1;
 static int s_far=1000;
+
+GLFWwindow* g_window;
 
 //static std::map<int,function<void(void)>> s_mapMenuCallback;
 
@@ -154,7 +154,7 @@ static void initPerspective3D(){
 
 void onKeyboard(GLFWwindow* window, int key, int scancode, int action, int mods){
     if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
-        glfwSetWindowShouldClose(s_window, GL_TRUE);
+        glfwSetWindowShouldClose(g_window, GL_TRUE);
         return;
     }
     const char* keyName = glfwGetKeyName(key, scancode);
@@ -171,7 +171,7 @@ void onKeyboard(GLFWwindow* window, int key, int scancode, int action, int mods)
 
 void testRegKeyboard(std::function<void(unsigned char, int,int)>cb){
     s_keyboard_callback=cb;
-    glfwSetKeyCallback(s_window, onKeyboard);
+    glfwSetKeyCallback(g_window, onKeyboard);
 }
 
 void onMouseClick(GLFWwindow* window,int button,int action,int mods){
@@ -212,17 +212,17 @@ void onMouseClickMove(GLFWwindow* window,double x,double y){
 
 void testRegMouseClick(std::function<void(int,int,int,int)>cb){
     s_mouse_click_callback=cb;
-    glfwSetMouseButtonCallback(s_window, onMouseClick);
+    glfwSetMouseButtonCallback(g_window, onMouseClick);
 }
 
 void testRegMouseMove(std::function<void(int,int)>cb){
     s_mouse_move_callback=cb;
-    glfwSetCursorPosCallback(s_window,onMouseClickMove);
+    glfwSetCursorPosCallback(g_window,onMouseClickMove);
 }
 
 void testRegMouseClickWithMove(std::function<void(int,int)>cb){
     s_mouse_clickmove_callback=cb;
-    glfwSetCursorPosCallback(s_window,onMouseClickMove);
+    glfwSetCursorPosCallback(g_window,onMouseClickMove);
 }
 
 
@@ -243,6 +243,64 @@ void printGpuInfo(){
            getGPUSupportExtensions()
            );
 }
+
+
+void initWindow(){
+    GLFWwindow* window=glfwCreateWindow(s_intWidth, s_intHeight, "openGL test", NULL, NULL);
+    if(!window){
+       std::cout<<"glfwCreateWindow failed!"<<std::endl;
+       glfwTerminate();
+       return;
+    }
+    g_window=window;
+    glfwSetWindowPos(window,500,800);
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, reshape2D);
+    if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
+       std::cout<<"gladLoadGLLoader failed!"<<std::endl;
+       glfwTerminate();
+       return;
+    }
+    keyboardEventMgr::init(window);
+    mouseEventMgr::init(window);
+    printGpuInfo();
+}
+
+void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall) {
+    initOtho2D();
+    while (!glfwWindowShouldClose(g_window)){
+        drawCall();
+        glfwSwapBuffers(g_window);
+        glfwPollEvents();
+    }
+}
+
+void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall,unsigned int shaderID) {
+    initOtho2D();
+    if(!shaderID)
+        shaderID=flyEngine::shaderMgr::getDefaultShader();
+    flyEngine::shaderMgr::useShader(shaderID);
+    
+    while (!glfwWindowShouldClose(g_window)){
+//        shaderMgr::useShader(shaderID);
+        usleep(17*1000);   //1000 means 1ms
+        drawCall();
+        glfwSwapBuffers(g_window);
+        glfwPollEvents();
+    }
+}
+
+void windowLoop(){
+   while(!glfwWindowShouldClose(g_window)){
+        usleep(3000);
+        glfwSwapBuffers(g_window);
+        glfwPollEvents();
+    }
+    std::cout<<"window loop end"<<std::endl;
+    glfwTerminate();
+}
+
+
 
 //void testInitWindow2D(const char* szTitle,void (*drawCall)(void)) {
 ////    glutInitDisplayMode(displayMode);
@@ -313,52 +371,6 @@ void printGpuInfo(){
 //    }
 //}
 
-void initWindow(){
-    GLFWwindow* window=glfwCreateWindow(s_intWidth, s_intHeight, "openGL test", NULL, NULL);
-    if(!window){
-       std::cout<<"glfwCreateWindow failed!"<<std::endl;
-       glfwTerminate();
-       return;
-    }
-    s_window=window;
-    glfwSetWindowPos(window,500,800);
-    glfwMakeContextCurrent(window);
-    glfwSetFramebufferSizeCallback(window, reshape2D);
-    if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
-       std::cout<<"gladLoadGLLoader failed!"<<std::endl;
-       glfwTerminate();
-       return;
-    }
-    keyboardEventMgr::init(window);
-    mouseEventMgr::init(window);
-    printGpuInfo();
-}
-
-void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall) {
-    initOtho2D();
-    while (!glfwWindowShouldClose(s_window)){
-        drawCall();
-        glfwSwapBuffers(s_window);
-        glfwPollEvents();
-    }
-}
-
-void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall,unsigned int shaderID) {
-    initOtho2D();
-    if(!shaderID)
-        shaderID=flyEngine::shaderMgr::getDefaultShader();
-    flyEngine::shaderMgr::useShader(shaderID);
-    
-    while (!glfwWindowShouldClose(s_window)){
-//        shaderMgr::useShader(shaderID);
-        usleep(17*1000);   //1000 means 1ms
-        drawCall();
-        glfwSwapBuffers(s_window);
-        glfwPollEvents();
-    }
-}
-
-
 //void testInitWindow3D(const char* szTitle,void (*drawCall)(void)) {
 //    printGpuInfo();
 //
@@ -391,14 +403,3 @@ void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall,uns
 ////
 ////    glfwTerminate();
 //}
-
-void windowLoop(){
-   while(!glfwWindowShouldClose(s_window)){
-        usleep(3000);
-        glfwSwapBuffers(s_window);
-        glfwPollEvents();
-    }
-    
-    std::cout<<"window loop end"<<std::endl;
-    glfwTerminate();
-}

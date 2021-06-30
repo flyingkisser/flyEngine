@@ -7,7 +7,13 @@
 //
 
 #include "world.h"
-world* s_instance;
+static world* s_instance;
+
+world* world::getInstance(){
+    if(s_instance==NULL)
+        s_instance=new world();
+    return s_instance;
+}
 
 world::world(){
     _camera=NULL;
@@ -36,8 +42,9 @@ void world::draw(){
 }
 
 void world::main_loop(){
+    world* worldObj=world::getInstance();
     while (true) {
-        world::draw();
+        worldObj->draw();
         threadUtil::sleep(1);
     }
 }

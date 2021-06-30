@@ -22,6 +22,7 @@ private:
 public:
     world();
     ~world();
+    static world* getInstance();
     void addChild(node* node);
     void setCamera(camera* c);
     void start();
