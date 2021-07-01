@@ -7,8 +7,16 @@
 //
 
 #include "world.h"
+static world* s_instance;
+
+world* world::getInstance(){
+    if(s_instance==NULL)
+        s_instance=new world();
+    return s_instance;
+}
+
 world::world(){
-    
+    _camera=NULL;
 }
 
 void world::addChild(node *node){
@@ -19,17 +27,25 @@ void world::start(){
     threadUtil::createThread(world::main_loop);
 }
 
+void world::setCamera(camera* c){
+    _camera=c;
+}
+
 void world::draw(){
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
+    
     for(auto c : _vector_child){
         node* nodeObj=c;
-        nodeObj->draw(NULL);
+        nodeObj->draw(_camera);
     }
 }
 
 void world::main_loop(){
+    world* worldObj=world::getInstance();
     while (true) {
-        world::draw();
-        threadUtil::sleep(0.01);
+        worldObj->draw();
+        threadUtil::sleep(1);
     }
 }
 

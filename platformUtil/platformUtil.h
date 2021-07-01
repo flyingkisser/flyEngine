@@ -19,6 +19,4 @@
 #include "logUtil.h"
 
 
-
-
 #endif /* platformUtil_h */

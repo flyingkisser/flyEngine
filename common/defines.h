@@ -39,6 +39,10 @@
 
 using namespace flyEngine;
 
+//#ifndef g_verticeArr
+//float g_verticeArr[180];
+//#endif
+
 
 float g_verticeArr[]={
       -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,

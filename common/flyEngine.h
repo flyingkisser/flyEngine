@@ -26,6 +26,7 @@
 #include "bmpUtil.h"
 #include "pngUtil.h"
 #include "jpgUtil.h"
+#include "texture.h"
 #include "textureMgr.h"
 
 
@@ -52,9 +53,8 @@
 
 using namespace flyEngine;
 
-
-extern textureMgr* g_textureMgr;
-
 void engineInit();
+
+extern float g_verticeArr[180];
 
 #endif /* flyEngine_h */

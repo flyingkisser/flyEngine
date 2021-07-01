@@ -17,13 +17,14 @@
 #include "texture.h"
 
 using namespace std;
+class texture;
 
 namespace flyEngine{
 
 class textureMgr{
     
 private:
-    map<string,Texutre> _mapTextureCache;
+    map<string,texture*> _mapTextureCache;
     
 public:
     static textureMgr* getInstance();

@@ -7,8 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8E02F628266CB8A500CD3521 /* logUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E02F626266CB8A500CD3521 /* logUtil.cpp */; };
-		8E02F62B266CDF0B00CD3521 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E02F629266CDF0B00CD3521 /* light.cpp */; };
 		8E2757592651238600993B0B /* m1_libGLEW.2.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2757572651237600993B0B /* m1_libGLEW.2.2.0.dylib */; };
 		8E27575A2651238600993B0B /* m1_libGLEW.2.2.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 8E2757572651237600993B0B /* m1_libGLEW.2.2.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		8E27575C2651239300993B0B /* m1_libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2757562651237600993B0B /* m1_libGLEW.a */; };
@@ -31,6 +29,8 @@
 		D810AEAD26835232009B774B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = D810AEAC26835232009B774B /* glad.c */; };
 		D810AEB026849DCE009B774B /* node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEAF26849DCE009B774B /* node.cpp */; };
 		D810AEB32684A1AF009B774B /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEB22684A1AF009B774B /* texture.cpp */; };
+		D810AEB6268B3BE3009B774B /* logUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEB5268B3BE3009B774B /* logUtil.cpp */; };
+		D810AEB9268B3F1F009B774B /* test3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEB8268B3F1F009B774B /* test3D.cpp */; };
 		D81EF3601EAFA0070003604F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81EF35F1EAFA0070003604F /* main.cpp */; };
 		D81EF3811EAFA1A10003604F /* line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81EF37F1EAFA1A10003604F /* line.cpp */; };
 		D81EF3831EAFA4A20003604F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D81EF3821EAFA4A20003604F /* Cocoa.framework */; };
@@ -85,7 +85,7 @@
 		D8BED724253DACDE006974D3 /* keyboardEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED723253DACDE006974D3 /* keyboardEvent.cpp */; };
 		D8BED727253E9062006974D3 /* keyboardEventMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED726253E9062006974D3 /* keyboardEventMgr.cpp */; };
 		D8BED72B253EB9F0006974D3 /* std_move_forward.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED72A253EB9F0006974D3 /* std_move_forward.cpp */; };
-		D8C7A1AF2549875F007573B3 /* test3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C7A1AE2549875F007573B3 /* test3D.cpp */; };
+		D8C7A1AF2549875F007573B3 /* test3D_old_2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C7A1AE2549875F007573B3 /* test3D_old_2.cpp */; };
 		D8EF622F2519E32500B8588F /* stringUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EF622E2519E32500B8588F /* stringUtil.cpp */; };
 		D8F0B7FE25652BCD0034E7B7 /* cameraBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0B7FD25652BCD0034E7B7 /* cameraBase.cpp */; };
 /* End PBXBuildFile section */
@@ -115,8 +115,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		8E02F626266CB8A500CD3521 /* logUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = logUtil.cpp; sourceTree = "<group>"; };
-		8E02F627266CB8A500CD3521 /* logUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = logUtil.h; sourceTree = "<group>"; };
 		8E02F629266CDF0B00CD3521 /* light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = light.cpp; sourceTree = "<group>"; };
 		8E02F62A266CDF0B00CD3521 /* light.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = light.h; sourceTree = "<group>"; };
 		8E2757562651237600993B0B /* m1_libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = m1_libGLEW.a; path = lib/m1_libGLEW.a; sourceTree = "<group>"; };
@@ -1546,6 +1544,10 @@
 		D810AEAF26849DCE009B774B /* node.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = node.cpp; sourceTree = "<group>"; };
 		D810AEB12684A1AF009B774B /* texture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = texture.h; sourceTree = "<group>"; };
 		D810AEB22684A1AF009B774B /* texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = texture.cpp; sourceTree = "<group>"; };
+		D810AEB4268B3BE3009B774B /* logUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = logUtil.h; sourceTree = "<group>"; };
+		D810AEB5268B3BE3009B774B /* logUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = logUtil.cpp; sourceTree = "<group>"; };
+		D810AEB7268B3F1F009B774B /* test3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test3D.h; sourceTree = "<group>"; };
+		D810AEB8268B3F1F009B774B /* test3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test3D.cpp; sourceTree = "<group>"; };
 		D81EF35C1EAFA0070003604F /* flyEngine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = flyEngine; sourceTree = BUILT_PRODUCTS_DIR; };
 		D81EF35F1EAFA0070003604F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		D81EF37A1EAFA0E60003604F /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
@@ -1675,8 +1677,8 @@
 		D8BED72D253ED102006974D3 /* 2dTextureAphaMixReverseX.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 2dTextureAphaMixReverseX.fs; sourceTree = "<group>"; };
 		D8BED72E253ED393006974D3 /* 2dTextureAphaMixControl.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 2dTextureAphaMixControl.fs; sourceTree = "<group>"; };
 		D8C7A0A52546DF7C007573B3 /* 2dTextureAphaTrans.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 2dTextureAphaTrans.vs; sourceTree = "<group>"; };
-		D8C7A1AD2549875F007573B3 /* test3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test3D.h; sourceTree = "<group>"; };
-		D8C7A1AE2549875F007573B3 /* test3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test3D.cpp; sourceTree = "<group>"; };
+		D8C7A1AD2549875F007573B3 /* test3D_old_2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test3D_old_2.h; sourceTree = "<group>"; };
+		D8C7A1AE2549875F007573B3 /* test3D_old_2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test3D_old_2.cpp; sourceTree = "<group>"; };
 		D8CFDE6425359EF000C3334F /* 2dTextureApha.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 2dTextureApha.fs; sourceTree = "<group>"; };
 		D8CFDE6525359EF000C3334F /* 2dTextureApha.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 2dTextureApha.vs; sourceTree = "<group>"; };
 		D8CFDE6625359F2B00C3334F /* wall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wall.jpg; sourceTree = "<group>"; };
@@ -3703,8 +3705,8 @@
 				D89600F824D40EE100DF6FD3 /* gpuUtil.cpp */,
 				D8EF622D2519E32500B8588F /* stringUtil.h */,
 				D8EF622E2519E32500B8588F /* stringUtil.cpp */,
-				8E02F626266CB8A500CD3521 /* logUtil.cpp */,
-				8E02F627266CB8A500CD3521 /* logUtil.h */,
+				D810AEB4268B3BE3009B774B /* logUtil.h */,
+				D810AEB5268B3BE3009B774B /* logUtil.cpp */,
 			);
 			path = platformUtil;
 			sourceTree = "<group>";
@@ -3885,8 +3887,10 @@
 				D809EE1224F3D2190067189D /* testShader.cpp */,
 				D8273E7E2510D3EC00D2BC59 /* testTexXD.h */,
 				D8273E7F2510D3EC00D2BC59 /* testTexXD.cpp */,
-				D8C7A1AD2549875F007573B3 /* test3D.h */,
-				D8C7A1AE2549875F007573B3 /* test3D.cpp */,
+				D8C7A1AD2549875F007573B3 /* test3D_old_2.h */,
+				D8C7A1AE2549875F007573B3 /* test3D_old_2.cpp */,
+				D810AEB7268B3F1F009B774B /* test3D.h */,
+				D810AEB8268B3F1F009B774B /* test3D.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -4123,11 +4127,13 @@
 				D825DB76249CC6C900C494E7 /* fileUtil.cpp in Sources */,
 				D8BED72B253EB9F0006974D3 /* std_move_forward.cpp in Sources */,
 				D825DB7F24A360DB00C494E7 /* character.cpp in Sources */,
-				D8C7A1AF2549875F007573B3 /* test3D.cpp in Sources */,
+				D8C7A1AF2549875F007573B3 /* test3D_old_2.cpp in Sources */,
 				D853B5FB1F15063300226235 /* triangle.cpp in Sources */,
 				D8F0B7FE25652BCD0034E7B7 /* cameraBase.cpp in Sources */,
 				8E2763DB26512E9F00993B0B /* glm.cpp in Sources */,
 				D89600EC24CEC36400DF6FD3 /* test3DPolyhedra.cpp in Sources */,
+				D810AEB9268B3F1F009B774B /* test3D.cpp in Sources */,
+				D810AEB6268B3BE3009B774B /* logUtil.cpp in Sources */,
 				D81EF38B1EB253FF0003604F /* points.cpp in Sources */,
 				D827953224BC5FB400261C44 /* matrix.cpp in Sources */,
 				D853B5FF1F159F6600226235 /* quad.cpp in Sources */,
@@ -4141,7 +4147,6 @@
 				D809EE1324F3D2190067189D /* testShader.cpp in Sources */,
 				D8BB1BA525625D7D00AF9FD5 /* camera.cpp in Sources */,
 				D89600F924D40EE100DF6FD3 /* gpuUtil.cpp in Sources */,
-				8E02F62B266CDF0B00CD3521 /* light.cpp in Sources */,
 				8ECA452B26882E3C00FDFC7A /* shaderMgr.cpp in Sources */,
 				D825DBC824B4911100C494E7 /* test3D_old.cpp in Sources */,
 				D825DBBB24ACA32F00C494E7 /* render.cpp in Sources */,
@@ -4151,7 +4156,6 @@
 				D810AEAD26835232009B774B /* glad.c in Sources */,
 				D825DBC124AED03300C494E7 /* threadUtil.cpp in Sources */,
 				D89600F324D169D700DF6FD3 /* testCurve.cpp in Sources */,
-				8E02F628266CB8A500CD3521 /* logUtil.cpp in Sources */,
 				D825DB71249CB3EB00C494E7 /* randUtil.cpp in Sources */,
 				D81EF3811EAFA1A10003604F /* line.cpp in Sources */,
 				D81EF3871EB01E950003604F /* error.cpp in Sources */,

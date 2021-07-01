@@ -15,7 +15,7 @@
 
 namespace ui {
 
-class image : node{
+class image{
 private:
     unsigned char* _buf;
     

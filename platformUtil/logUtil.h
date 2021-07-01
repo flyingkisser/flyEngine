@@ -10,6 +10,10 @@
 #define logUtil_h
 
 #include <stdio.h>
-void log(const char* fmt,...);
+
+class logUtil{
+    static void log(const char* szFmt,...);
+};
+
 
 #endif /* logUtil_h */

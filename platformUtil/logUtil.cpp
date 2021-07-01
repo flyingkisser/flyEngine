@@ -5,12 +5,11 @@
 //  Created by wu mingzhou on 2021/6/6.
 //  Copyright © 2021 joe. All rights reserved.
 //
-#include <stdarg.h>
-#include <string.h>
-#include "logUtil.h"
 
-void log(const char* fmt,...)
-{
+#include "logUtil.h"
+#include<stdarg.h>
+
+void logUtil::log(const char* szFmt,...){
     va_list argList;
     char szFmt[1024*10]={0};
     va_start(argList, fmt);  //将ap指向fmt后的第一个参数
@@ -22,5 +21,5 @@ void log(const char* fmt,...)
     }else{
         vfprintf(stdout,fmt,argList);
     }
-    va_end(argList);//将ap置为NULL
+    va_end(argList);//将ap置空
 }

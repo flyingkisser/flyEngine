@@ -11,15 +11,14 @@
 
 #include <stdio.h>
 
-#endif /* bmpUtil_h */
 namespace flyEngine{
 
 class bmpUtil{
-
-    
 public:
     static void drawBMP(float x,float y,unsigned char* szBuf);
-    
 };
 
 }
+
+#endif /* bmpUtil_h */
+

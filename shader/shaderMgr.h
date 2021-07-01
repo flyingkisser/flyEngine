@@ -12,7 +12,8 @@
 #include <stdio.h>
 #include <string>
 #include "flyEngine.h"
-#inlcude "shader.h"
+
+namespace flyEngine {
 
 class shaderMgr{
 public:
@@ -25,6 +26,8 @@ public:
     static void setInt(unsigned int id,const char* name,int v);
     static void setFloat(unsigned int id,const char* name,float v);
 };
+
+}
 
 
 #endif /* shaderMgr_h */

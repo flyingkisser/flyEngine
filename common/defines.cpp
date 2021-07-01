@@ -7,3 +7,4 @@
 //
 
 #include "defines.h"
+//float g_verticeArr[180];

@@ -9,7 +9,7 @@
 #include "testMain.h"
 #include "flyEngine.h"
 #include "testPrimitive.h"
-#include "test2d.h"
+#include "test2D.h"
 #include "testPixel.h"
 #include "test3D.h"
 #include "testAniBySwapBuffer.h"
@@ -62,7 +62,7 @@ void testMainBegin(){
 //     test2dViewTransPng3();
 //     test2dViewTransPng4();
 
-//    test3dView();
+    test3dView();
 //    test3dViewRotate();
 //    test3dViewControl();
 //    test3dViewControlCamera();

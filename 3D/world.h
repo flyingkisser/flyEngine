@@ -13,13 +13,18 @@
 #include "node.h"
 
 namespace flyEngine {
+
 class world{
 private:
     std::vector<node*> _vector_child;
+    camera* _camera;
+    
 public:
     world();
     ~world();
+    static world* getInstance();
     void addChild(node* node);
+    void setCamera(camera* c);
     void start();
     void pause();
     void end();

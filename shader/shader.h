@@ -11,6 +11,7 @@
 
 #include "flyEngine.h"
 
+namespace flyEngine {
 class shader{
 private:
     unsigned int _idProgram;
@@ -23,4 +24,7 @@ public:
     void setFloat(const char* name,float v);
 };
  
+}
+
+
 #endif /* shader_h */
