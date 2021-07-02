@@ -20,37 +20,29 @@ flyEngine::texture::~texture(){
 
 flyEngine::texture::texture(const char* szPath){
     _strPath=szPath;
-    struct_texture st={0};
-   if(pngUtil::isPng(szPath)){
-       if(!pngUtil::loadFile(szPath,&st))
-           return;
-   }else if(jpgUtil::isJpg(szPath)){
-       if(!jpgUtil::loadFile(szPath, &st))
-           return;
-   }
-    _width=st.width;
-    _height=st.height;
-    _format=st.format;
-    _width=st.width;
-    _dataBuf=st.buf;
 }
 
 
 bool flyEngine::texture::init(){
     char* szPath=(char*)_strPath.c_str();
     struct_texture st={0};
-   if(pngUtil::isPng(szPath)){
-       if(!pngUtil::loadFile(szPath,&st))
-           return false;
-       _colorType=GL_RGBA;
-   }else if(jpgUtil::isJpg(szPath)){
-       if(!jpgUtil::loadFile(szPath, &st))
-           return false;
-       _colorType=GL_RGB;
-   }
+    if(pngUtil::isPng(szPath)){
+        if(!pngUtil::loadFile(szPath,&st)){
+            flylog("texture.init:png loadFile %s failed",szPath);
+            return false;
+        }
+//       _colorType=GL_RGBA;
+    }else if(jpgUtil::isJpg(szPath)){
+        if(!jpgUtil::loadFile(szPath, &st)){
+            flylog("texture.init:jpg loadFile %s failed",szPath);
+            return false;
+        }
+//       _colorType=GL_RGB;
+    }
     _width=st.width;
     _height=st.height;
     _format=st.format;
+    //_internalFormat=st.internalFormat;
     _width=st.width;
     _dataBuf=st.buf;
     _glInit();
@@ -94,7 +86,7 @@ void flyEngine::texture::_glInit(){
     //参数7:纹理图案中的颜色值类型，GL_RGBA
     //参数8:数据格式
     //参数9:纹理内存
-    glTexImage2D(GL_TEXTURE_2D,0,0,_width,_height,0,_colorType,GL_UNSIGNED_BYTE,_dataBuf);
+    glTexImage2D(GL_TEXTURE_2D,0,_format,_width,_height,0,_format,GL_UNSIGNED_BYTE,_dataBuf);
        
 //  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, structTex.width, structTex.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, structTex.buf);
 }

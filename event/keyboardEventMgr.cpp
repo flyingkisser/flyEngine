@@ -7,6 +7,7 @@
 //
 
 #include "keyboardEventMgr.h"
+#include "logUtil.h"
 
 static map<std::string,keyboardEvent*> s_eventChainMap;
 
@@ -21,16 +22,18 @@ static map<std::string,keyboardEvent*> s_eventChainMap;
 void keyboardEventMgr::init(GLFWwindow* window){
     glfwSetKeyCallback(window,[](GLFWwindow* window, int key, int scancode, int action, int mods){
         const char* keyName = glfwGetKeyName(key, scancode);
-        if(keyName==nullptr || !keyName[0])
+        if(keyName==nullptr || !keyName[0] || action==0)
             return;
         for(auto it : s_eventChainMap){
-           it.second->onKeyPress((char)keyName[0]);
+            flylog("glfwSetKeyCallback: call onKeyPress for %c",char(keyName[0]));
+            it.second->onKeyPress((char)keyName[0]);
         }
     });
 };
 
 void keyboardEventMgr::addEvent(std::string name,keyboardEvent* eventObj){
     s_eventChainMap.insert(pair<string,keyboardEvent*>(name,eventObj));
+    flylog("keyboardEventMgr.addEvent:%s add!",name.c_str());
     cout<<"s_eventChainMap size is "<<s_eventChainMap.size()<<endl;
 };
 

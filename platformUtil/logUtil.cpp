@@ -2,17 +2,40 @@
 //  logUtil.cpp
 //  flyEngine
 //
-//  Created by joe on 29/06/2021.
+//  Created by wu mingzhou on 2021/6/6.
 //  Copyright © 2021 joe. All rights reserved.
 //
 
 #include "logUtil.h"
-#include<stdarg.h>
+#include <stdarg.h>
+#include <string>
 
-void logUtil::log(const char* szFmt,...){
-    va_list args;
-    va_start(args,szFmt);
-    char szBuf[1024]={0};
-    vsprintf(szBuf,szFmt,args);
-    printf(szBuf);
+void logUtil::log(const char* fmt,...){
+    va_list argList;
+    char szFmt[1024*10]={0};
+    va_start(argList, fmt);  //将ap指向fmt后的第一个参数
+    int strLen=(int)strlen(fmt);
+    if(strLen<=1024*10-2 &&fmt[strLen-1]!='\n'){
+        strcpy(szFmt,fmt);
+        szFmt[strLen]='\n';
+        vfprintf(stdout,szFmt,argList);
+    }else{
+        vfprintf(stdout,fmt,argList);
+    }
+    va_end(argList);//将ap置空
+}
+
+void flylog(const char* fmt,...){
+    va_list argList;
+    char szFmt[1024*10]={0};
+    va_start(argList, fmt);  //将ap指向fmt后的第一个参数
+    int strLen=(int)strlen(fmt);
+    if(strLen<=1024*10-2 &&fmt[strLen-1]!='\n'){
+        strcpy(szFmt,fmt);
+        szFmt[strLen]='\n';
+        vfprintf(stdout,szFmt,argList);
+    }else{
+        vfprintf(stdout,fmt,argList);
+    }
+    va_end(argList);//将ap置空
 }

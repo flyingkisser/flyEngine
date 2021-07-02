@@ -154,5 +154,6 @@ bool pngUtil::isPng(const char *filename)
     /* We don't need row pointers anymore */
     free(row_pointers);
     fclose(fp);
+    texinfo->format=GL_RGBA;
     return true;
 }

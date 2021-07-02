@@ -5,9 +5,9 @@ layout (location=1) in vec2 aTexCoord;
 
 out vec2 texCoord;
 
-uniform mat4 matModel;
-uniform mat4 matView;
-uniform mat4 matProjection;
+//uniform mat4 matModel;
+//uniform mat4 matView;
+//uniform mat4 matProjection;
 
 void main(){
     //gl_Position = matProjection * matView * matModel * vec4(aPos, 1);

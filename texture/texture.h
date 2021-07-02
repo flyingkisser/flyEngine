@@ -34,6 +34,7 @@ private:
     int _height;
     int _type;
     int _format;
+    int _internalFormat;
     int _colorType;
     unsigned int _textureID;
     unsigned char* _dataBuf;
