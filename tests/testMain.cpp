@@ -76,5 +76,5 @@ void testMainBegin(){
 //    testTex3DPng();
 //    testShaderNormal();
     
-    testPhongAmbient();
+//    testPhongAmbient();
 }

@@ -25,7 +25,7 @@ void keyboardEventMgr::init(GLFWwindow* window){
         if(keyName==nullptr || !keyName[0] || action==0)
             return;
         for(auto it : s_eventChainMap){
-            log("glfwSetKeyCallback: call onKeyPress for %c",char(keyName[0]));
+            flylog("glfwSetKeyCallback: call onKeyPress for %c",char(keyName[0]));
             it.second->onKeyPress((char)keyName[0]);
         }
     });
@@ -33,7 +33,7 @@ void keyboardEventMgr::init(GLFWwindow* window){
 
 void keyboardEventMgr::addEvent(std::string name,keyboardEvent* eventObj){
     s_eventChainMap.insert(pair<string,keyboardEvent*>(name,eventObj));
-    log("keyboardEventMgr.addEvent:%s add!",name.c_str());
+    flylog("keyboardEventMgr.addEvent:%s add!",name.c_str());
     cout<<"s_eventChainMap size is "<<s_eventChainMap.size()<<endl;
 };
 

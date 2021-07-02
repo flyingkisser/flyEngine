@@ -15,5 +15,6 @@ class logUtil{
     static void log(const char* szFmt,...);
 };
 
+void flylog(const char* szFmt,...);
 
 #endif /* logUtil_h */

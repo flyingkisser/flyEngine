@@ -91,5 +91,6 @@ bool jpgUtil::loadFile(const char *filename,struct_texture* texinfo)
     //释放资源
     jpeg_destroy_decompress(&cinfo);
     fclose(fp);
+    texinfo->format=GL_RGB;
     return true;
 }

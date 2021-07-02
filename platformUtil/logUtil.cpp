@@ -7,9 +7,25 @@
 //
 
 #include "logUtil.h"
-#include<stdarg.h>
+#include <stdarg.h>
+#include <string>
 
-void logUtil::log(const char* szFmt,...){
+void logUtil::log(const char* fmt,...){
+    va_list argList;
+    char szFmt[1024*10]={0};
+    va_start(argList, fmt);  //将ap指向fmt后的第一个参数
+    int strLen=(int)strlen(fmt);
+    if(strLen<=1024*10-2 &&fmt[strLen-1]!='\n'){
+        strcpy(szFmt,fmt);
+        szFmt[strLen]='\n';
+        vfprintf(stdout,szFmt,argList);
+    }else{
+        vfprintf(stdout,fmt,argList);
+    }
+    va_end(argList);//将ap置空
+}
+
+void flylog(const char* fmt,...){
     va_list argList;
     char szFmt[1024*10]={0};
     va_start(argList, fmt);  //将ap指向fmt后的第一个参数
