@@ -20,6 +20,8 @@
 using namespace flyEngine;
 using namespace std;
 
+int g_winWidth=0;
+int g_winHeight=0;
 static int s_intWidth=800;
 static int s_intHeight=800;
 static int s_menuID=1;
@@ -246,6 +248,16 @@ void printGpuInfo(){
 
 
 void initWindow(){
+    int monitorCount=0;
+    //获取第一个屏幕的大小
+    GLFWmonitor** pMonitor=glfwGetMonitors(&monitorCount);
+    for(int i=0;i<monitorCount;i++){
+        GLFWvidmode* mode=(GLFWvidmode*)glfwGetVideoMode(pMonitor[i]);
+        g_winWidth=mode->width;
+        g_winHeight=mode->height;
+        break;
+    }
+    
     GLFWwindow* window=glfwCreateWindow(s_intWidth, s_intHeight, "openGL test", NULL, NULL);
     if(!window){
        std::cout<<"glfwCreateWindow failed!"<<std::endl;
@@ -253,7 +265,8 @@ void initWindow(){
        return;
     }
     g_window=window;
-    glfwSetWindowPos(window,500,800);
+    
+    glfwSetWindowPos(window,(g_winWidth-s_intWidth)/2,(g_winHeight-s_intHeight)/2);
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, reshape2D);
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){

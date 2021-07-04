@@ -45,6 +45,9 @@ void testMainBegin(){
     engineInit();
     
     initWindow();
+//    drawPlane2();
+    drawCube();
+    
 //    std_move_forward_test();
 //    testBasic();
     
@@ -62,7 +65,7 @@ void testMainBegin(){
 //     test2dViewTransPng3();
 //     test2dViewTransPng4();
 
-    test3dView();
+   // test3dView();
 //    test3dViewRotate();
 //    test3dViewControl();
 //    test3dViewControlCamera();

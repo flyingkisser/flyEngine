@@ -25,6 +25,8 @@
 		8E86C9C326638480004B3BB7 /* testPhong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E86C9C126638480004B3BB7 /* testPhong.cpp */; };
 		8ECA452B26882E3C00FDFC7A /* shaderMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA452926882E3C00FDFC7A /* shaderMgr.cpp */; };
 		8ECA452E2688776400FDFC7A /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA452C2688776400FDFC7A /* world.cpp */; };
+		8ECA45372691588900FDFC7A /* test2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA45362691588900FDFC7A /* test2D.cpp */; };
+		8ECA453A26916C3E00FDFC7A /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA453926916C3E00FDFC7A /* camera.cpp */; };
 		D809EE1324F3D2190067189D /* testShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D809EE1224F3D2190067189D /* testShader.cpp */; };
 		D810AEAD26835232009B774B /* glad.c in Sources */ = {isa = PBXBuildFile; fileRef = D810AEAC26835232009B774B /* glad.c */; };
 		D810AEB026849DCE009B774B /* node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEAF26849DCE009B774B /* node.cpp */; };
@@ -46,7 +48,6 @@
 		D825DB8324AAEE0900C494E7 /* 2DTrans.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D825DB8124AAEE0900C494E7 /* 2DTrans.cpp */; };
 		D825DB8624AAEE5100C494E7 /* defines.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D825DB8424AAEE5100C494E7 /* defines.cpp */; };
 		D825DB9624AB1A5200C494E7 /* testPrimitive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D825DB9424AB1A5200C494E7 /* testPrimitive.cpp */; };
-		D825DB9A24AB2A5300C494E7 /* test2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D825DB9824AB2A5300C494E7 /* test2D.cpp */; };
 		D825DB9D24AC6BA900C494E7 /* testPixel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D825DB9B24AC6BA900C494E7 /* testPixel.cpp */; };
 		D825DBA524AC6F0100C494E7 /* testWindow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D825DBA424AC6F0100C494E7 /* testWindow.cpp */; };
 		D825DBA824AC7F7300C494E7 /* testMain.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D825DBA724AC7F7300C494E7 /* testMain.cpp */; };
@@ -57,7 +58,6 @@
 		D825DBBB24ACA32F00C494E7 /* render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D825DBBA24ACA32F00C494E7 /* render.cpp */; };
 		D825DBC124AED03300C494E7 /* threadUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D825DBC024AED03300C494E7 /* threadUtil.cpp */; };
 		D825DBC424AED54B00C494E7 /* bmpUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D825DBC324AED54B00C494E7 /* bmpUtil.cpp */; };
-		D825DBC824B4911100C494E7 /* test3D_old.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D825DBC724B4911100C494E7 /* test3D_old.cpp */; };
 		D8273E802510D3EC00D2BC59 /* testTexXD.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8273E7F2510D3EC00D2BC59 /* testTexXD.cpp */; };
 		D827953224BC5FB400261C44 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D827953124BC5FB400261C44 /* matrix.cpp */; };
 		D827953624BC614800261C44 /* 3DTrans.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D827953524BC614800261C44 /* 3DTrans.cpp */; };
@@ -80,12 +80,9 @@
 		D8BB1B98255A6A0E00AF9FD5 /* mouseEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B97255A6A0E00AF9FD5 /* mouseEvent.cpp */; };
 		D8BB1B9B255A6D1500AF9FD5 /* mouseEventMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B9A255A6D1500AF9FD5 /* mouseEventMgr.cpp */; };
 		D8BB1B9E255BE08000AF9FD5 /* kbmControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B9D255BE08000AF9FD5 /* kbmControl.cpp */; };
-		D8BB1BA525625D7D00AF9FD5 /* camera.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1BA425625D7D00AF9FD5 /* camera.cpp */; };
-		D8BB1BA82563DB9C00AF9FD5 /* cameraFPS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1BA72563DB9C00AF9FD5 /* cameraFPS.cpp */; };
 		D8BED724253DACDE006974D3 /* keyboardEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED723253DACDE006974D3 /* keyboardEvent.cpp */; };
 		D8BED727253E9062006974D3 /* keyboardEventMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED726253E9062006974D3 /* keyboardEventMgr.cpp */; };
 		D8BED72B253EB9F0006974D3 /* std_move_forward.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED72A253EB9F0006974D3 /* std_move_forward.cpp */; };
-		D8C7A1AF2549875F007573B3 /* test3D_old_2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C7A1AE2549875F007573B3 /* test3D_old_2.cpp */; };
 		D8EF622F2519E32500B8588F /* stringUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EF622E2519E32500B8588F /* stringUtil.cpp */; };
 		D8F0B7FE25652BCD0034E7B7 /* cameraBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0B7FD25652BCD0034E7B7 /* cameraBase.cpp */; };
 /* End PBXBuildFile section */
@@ -1539,6 +1536,10 @@
 		8ECA4532268DB15400FDFC7A /* 2tex.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 2tex.vs; sourceTree = "<group>"; };
 		8ECA4533268DB6E000FDFC7A /* 1tex.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 1tex.fs; sourceTree = "<group>"; };
 		8ECA4534268DB6E000FDFC7A /* 1tex.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 1tex.vs; sourceTree = "<group>"; };
+		8ECA45352691588900FDFC7A /* test2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test2D.h; sourceTree = "<group>"; };
+		8ECA45362691588900FDFC7A /* test2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test2D.cpp; sourceTree = "<group>"; };
+		8ECA453826916C3E00FDFC7A /* camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
+		8ECA453926916C3E00FDFC7A /* camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
 		D809EE1124F3D2190067189D /* testShader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testShader.h; sourceTree = "<group>"; };
 		D809EE1224F3D2190067189D /* testShader.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testShader.cpp; sourceTree = "<group>"; };
 		D809EE1524F3D3930067189D /* basic.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = basic.vs; sourceTree = "<group>"; };
@@ -1585,8 +1586,8 @@
 		D825DB9424AB1A5200C494E7 /* testPrimitive.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testPrimitive.cpp; sourceTree = "<group>"; };
 		D825DB9524AB1A5200C494E7 /* testPrimitive.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testPrimitive.h; sourceTree = "<group>"; };
 		D825DB9724AB283800C494E7 /* types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = types.h; sourceTree = "<group>"; };
-		D825DB9824AB2A5300C494E7 /* test2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test2D.cpp; sourceTree = "<group>"; };
-		D825DB9924AB2A5300C494E7 /* test2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test2D.h; sourceTree = "<group>"; };
+		D825DB9824AB2A5300C494E7 /* test2D_old.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test2D_old.cpp; sourceTree = "<group>"; };
+		D825DB9924AB2A5300C494E7 /* test2D_old.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test2D_old.h; sourceTree = "<group>"; };
 		D825DB9B24AC6BA900C494E7 /* testPixel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testPixel.cpp; sourceTree = "<group>"; };
 		D825DB9C24AC6BA900C494E7 /* testPixel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testPixel.h; sourceTree = "<group>"; };
 		D825DBA324AC6F0100C494E7 /* testWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testWindow.h; sourceTree = "<group>"; };
@@ -1661,8 +1662,8 @@
 		D8BB1B9A255A6D1500AF9FD5 /* mouseEventMgr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mouseEventMgr.cpp; sourceTree = "<group>"; };
 		D8BB1B9C255BE08000AF9FD5 /* kbmControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kbmControl.h; sourceTree = "<group>"; };
 		D8BB1B9D255BE08000AF9FD5 /* kbmControl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = kbmControl.cpp; sourceTree = "<group>"; };
-		D8BB1BA325625D7D00AF9FD5 /* camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
-		D8BB1BA425625D7D00AF9FD5 /* camera.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = camera.cpp; sourceTree = "<group>"; };
+		D8BB1BA325625D7D00AF9FD5 /* camera_old.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = camera_old.h; sourceTree = "<group>"; };
+		D8BB1BA425625D7D00AF9FD5 /* camera_old.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = camera_old.cpp; sourceTree = "<group>"; };
 		D8BB1BA62563DB9C00AF9FD5 /* cameraFPS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cameraFPS.h; sourceTree = "<group>"; };
 		D8BB1BA72563DB9C00AF9FD5 /* cameraFPS.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cameraFPS.cpp; sourceTree = "<group>"; };
 		D8BED71A25399499006974D3 /* smile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = smile.png; sourceTree = "<group>"; };
@@ -3873,8 +3874,10 @@
 				8E86C9C02663844F004B3BB7 /* light */,
 				D825DB9424AB1A5200C494E7 /* testPrimitive.cpp */,
 				D825DB9524AB1A5200C494E7 /* testPrimitive.h */,
-				D825DB9824AB2A5300C494E7 /* test2D.cpp */,
-				D825DB9924AB2A5300C494E7 /* test2D.h */,
+				D825DB9824AB2A5300C494E7 /* test2D_old.cpp */,
+				D825DB9924AB2A5300C494E7 /* test2D_old.h */,
+				8ECA45352691588900FDFC7A /* test2D.h */,
+				8ECA45362691588900FDFC7A /* test2D.cpp */,
 				D825DB9B24AC6BA900C494E7 /* testPixel.cpp */,
 				D825DB9C24AC6BA900C494E7 /* testPixel.h */,
 				D825DBA324AC6F0100C494E7 /* testWindow.h */,
@@ -3966,12 +3969,14 @@
 		D85253F22638113700D6E4B9 /* camera */ = {
 			isa = PBXGroup;
 			children = (
-				D8BB1BA325625D7D00AF9FD5 /* camera.h */,
-				D8BB1BA425625D7D00AF9FD5 /* camera.cpp */,
+				D8BB1BA325625D7D00AF9FD5 /* camera_old.h */,
+				D8BB1BA425625D7D00AF9FD5 /* camera_old.cpp */,
 				D8BB1BA62563DB9C00AF9FD5 /* cameraFPS.h */,
 				D8BB1BA72563DB9C00AF9FD5 /* cameraFPS.cpp */,
 				D8F0B7FC25652BCD0034E7B7 /* cameraBase.h */,
 				D8F0B7FD25652BCD0034E7B7 /* cameraBase.cpp */,
+				8ECA453826916C3E00FDFC7A /* camera.h */,
+				8ECA453926916C3E00FDFC7A /* camera.cpp */,
 			);
 			path = camera;
 			sourceTree = "<group>";
@@ -4112,7 +4117,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8BB1BA82563DB9C00AF9FD5 /* cameraFPS.cpp in Sources */,
 				D81EF3931EBCD5A00003604F /* polygon.cpp in Sources */,
 				D825DB6724976F3800C494E7 /* listStr.cpp in Sources */,
 				D8BB1B98255A6A0E00AF9FD5 /* mouseEvent.cpp in Sources */,
@@ -4128,14 +4132,13 @@
 				D8BB1B9E255BE08000AF9FD5 /* kbmControl.cpp in Sources */,
 				D8BB1B9B255A6D1500AF9FD5 /* mouseEventMgr.cpp in Sources */,
 				D8BED724253DACDE006974D3 /* keyboardEvent.cpp in Sources */,
-				D825DB9A24AB2A5300C494E7 /* test2D.cpp in Sources */,
 				D825DBAC24AC82FF00C494E7 /* textureMgr.cpp in Sources */,
 				D825DB7B24A0C4FA00C494E7 /* dirUtil.cpp in Sources */,
 				D8BED727253E9062006974D3 /* keyboardEventMgr.cpp in Sources */,
 				D825DB76249CC6C900C494E7 /* fileUtil.cpp in Sources */,
 				D8BED72B253EB9F0006974D3 /* std_move_forward.cpp in Sources */,
 				D825DB7F24A360DB00C494E7 /* character.cpp in Sources */,
-				D8C7A1AF2549875F007573B3 /* test3D_old_2.cpp in Sources */,
+				8ECA45372691588900FDFC7A /* test2D.cpp in Sources */,
 				D853B5FB1F15063300226235 /* triangle.cpp in Sources */,
 				D8F0B7FE25652BCD0034E7B7 /* cameraBase.cpp in Sources */,
 				8E2763DB26512E9F00993B0B /* glm.cpp in Sources */,
@@ -4153,10 +4156,8 @@
 				D81EF3601EAFA0070003604F /* main.cpp in Sources */,
 				D825DB9624AB1A5200C494E7 /* testPrimitive.cpp in Sources */,
 				D809EE1324F3D2190067189D /* testShader.cpp in Sources */,
-				D8BB1BA525625D7D00AF9FD5 /* camera.cpp in Sources */,
 				D89600F924D40EE100DF6FD3 /* gpuUtil.cpp in Sources */,
 				8ECA452B26882E3C00FDFC7A /* shaderMgr.cpp in Sources */,
-				D825DBC824B4911100C494E7 /* test3D_old.cpp in Sources */,
 				D825DBBB24ACA32F00C494E7 /* render.cpp in Sources */,
 				D825DBB324AC929B00C494E7 /* node.cpp in Sources */,
 				D8EF622F2519E32500B8588F /* stringUtil.cpp in Sources */,
@@ -4169,6 +4170,7 @@
 				D81EF3871EB01E950003604F /* error.cpp in Sources */,
 				D827953624BC614800261C44 /* 3DTrans.cpp in Sources */,
 				D856FED624E15DB7005A0760 /* shader.cpp in Sources */,
+				8ECA453A26916C3E00FDFC7A /* camera.cpp in Sources */,
 				D8273E802510D3EC00D2BC59 /* testTexXD.cpp in Sources */,
 				D825DBB724AC950800C494E7 /* image.cpp in Sources */,
 				D825DBC424AED54B00C494E7 /* bmpUtil.cpp in Sources */,

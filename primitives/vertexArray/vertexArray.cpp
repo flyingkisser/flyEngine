@@ -25,7 +25,7 @@ void _drawQuad(GLint n1,GLint n2,GLint n3,GLint n4){
     glEnd();
 }
 
-void drawCube(){
+void _drawCube(){
     glColor3f (1, 1, 0);
     //draw六个四边形
     _drawQuad(6, 2, 3, 7);

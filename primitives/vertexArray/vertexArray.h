@@ -10,6 +10,6 @@
 #define vertexArray_hpp
 
 #include <stdio.h>
-void drawCube();
+void _drawCube();
 void drawElementsByVertexArr();
 #endif /* vertexArray_hpp */
