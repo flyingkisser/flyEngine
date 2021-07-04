@@ -9,8 +9,10 @@ uniform sampler2D texture1;
 void main(){
     //first*(1-mixValue)+second*mixValue
     vec4 color=texture(texture1,texCoord);
-    if(color.a<=0.0)
-        color.r=1.0;
+//    if(color.a<=0.0){
+//        color.rgb=vec3(1.0,1.0,1.0);
+//    }
+        
     //color.a=0.5;
     FragColor=color;
 //    FragColor=texture(texture1,texCoord);

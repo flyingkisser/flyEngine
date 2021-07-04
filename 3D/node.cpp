@@ -68,8 +68,8 @@ void node::draw(camera* cameraObj){
     glEnable(GL_DEPTH_TEST);
     shaderMgr::useShader(_gl_program);
     
-    if(cameraObj)
-        cameraObj->updateCamera();
+//    if(cameraObj)
+//        cameraObj->updateCamera();
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,_gl_texture0);

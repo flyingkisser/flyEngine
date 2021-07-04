@@ -26,47 +26,26 @@
 
 using namespace flyEngine;
 
+void test3dView() {
+    //drawPlane1();
+}
 
-static void drawPlane2() {
-    float verticeArr[]={
-        0.5,0.5,0,    1,1,
-        0.5,-0.5,0,   1,0,
-        -0.5,-0.5,0,  0,0,
-        -0.5,0.5,0,   0,1
-    };
-    unsigned int verticeIndexArr[]={
-        0,1,3,      //first triangle
-        1,2,3       //second triangle
-    };
-    
-    int shaderID=shaderMgr::createShader("res/shader/2tex.vs","res/shader/2tex.fs");
-    
-    flyEngine::texture* texObj1=(flyEngine::texture*)flyEngine::textureMgr::getInstance()->getTexture("res/wall.jpg");
-    flyEngine::texture* texObj2=(flyEngine::texture*)flyEngine::textureMgr::getInstance()->getTexture("res/smile.png");
-    int texID1=texObj1->getTextureID();
-    int texID2=texObj2->getTextureID();
-    if(!texID2 || !texID2)
-        return;
-    size texSize=texObj1->getSize();
-    size winSize=getWindowSize();
-    
-    float winWidth=winSize.width;
-    float winHeight=winSize.height;
-    float width=texSize.width;
-    float height=texSize.height;
-//    verticeArr[0]=width/winWidth;
-//    verticeArr[1]=height/winHeight;
-//    verticeArr[0+5*1]=winWidth/winWidth;
-//    verticeArr[1+5*1]=-height/winHeight;
-//    verticeArr[0+5*2]=-width/winWidth;
-//    verticeArr[1+5*2]=-height/winHeight;
-//    verticeArr[0+5*3]=-width/winWidth;
-//    verticeArr[1+5*3]=height/winHeight;
-      
-    
+
+void drawCube(){
     unsigned int vao,vbo,ebo;
+    int texID1,texID2;
     int stride=5*sizeof(float);
-    
+
+    flyEngine::texture* texObj1=(flyEngine::texture*)textureMgr::getInstance()->getTexture("res/fire.png");
+    flyEngine::texture* texObj2=(flyEngine::texture*)textureMgr::getInstance()->getTexture("res/smile.png");
+    if(texObj1==NULL || texObj2==NULL)
+       return;
+
+    texID1=texObj1->getTextureID();
+    texID2=texObj2->getTextureID();
+   
+    int shaderID=shaderMgr::createShader("res/shader/3dTextureApha.vs","res/shader/3dTextureApha.fs");
+ 
     glGenVertexArrays(1,&vao);
     glBindVertexArray(vao);
 
@@ -74,134 +53,48 @@ static void drawPlane2() {
     glGenBuffers(1,&ebo);
 
     glBindBuffer(GL_ARRAY_BUFFER,vbo);
-    glBufferData(GL_ARRAY_BUFFER,sizeof(verticeArr),verticeArr,GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(verticeIndexArr),verticeIndexArr,GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(g_verticeArr),g_verticeArr,GL_STATIC_DRAW);
 
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,stride,(void*)0);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,stride,(void*)(3*sizeof(float)));
     glEnableVertexAttribArray(1);
-    
-
-//    glm::mat4 matModel=glm::mat4(1.0);
-//    matModel=glm::rotate(matModel,glm::radians(-55.0f),glm::vec3(1,0,0));
-//
-//    glm::mat4 matView=glm::mat4(1.0);
-//    matView=glm::translate(matView,glm::vec3(0,0,-3.0));
-//
-////    glm::mat4 matProjection=glm::perspective(glm::radians(45.0), 800.0/600.0, 0.1, 100.0);
-//    glm::mat4 matProjection=glm::ortho(0, 800, 0, 800);
-    
+        
     glUniform1i(glGetUniformLocation(shaderID, "texture1"), 0); //0号纹理GL_TEXTURE0
     glUniform1i(glGetUniformLocation(shaderID, "texture2"), 1); //1号纹理GL_TEXTURE1
-   // glUniform1f(glGetUniformLocation(shaderID, "mixValue"), 0.2);
+    glUniform1f(glGetUniformLocation(shaderID, "mixValue"), 0.7);
+   
+    glm::mat4 matModel=glm::translate(glm::mat4(1.0),glm::vec3(0,0,-3));
+    camera* cameraObj=new camera(shaderID);
+    glUniformMatrix4fv(glGetUniformLocation(shaderID,"matModel"),1,GL_FALSE,glm::value_ptr(matModel));
     
-//    glUniformMatrix4fv(glGetUniformLocation(shaderID, "matModel"), 1,GL_FALSE,glm::value_ptr(matModel));
-//    glUniformMatrix4fv(glGetUniformLocation(shaderID, "matView"), 1,GL_FALSE,glm::value_ptr(matView));
-//    glUniformMatrix4fv(glGetUniformLocation(shaderID, "matProjection"), 1,GL_FALSE,glm::value_ptr(matProjection));
-  
+    glUniform1i(glGetUniformLocation(shaderID, "texture1"), 0);
+    glUniform1i(glGetUniformLocation(shaderID, "texture2"), 1);
+
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,texID1);
     glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D,texID2);
-   
-    glViewport(0,0,winWidth,winHeight);
+    glEnable(GL_DEPTH_TEST);
+    
+    cameraObj->print();
     
     while(!glfwWindowShouldClose(g_window)){
         threadUtil::sleep(1);   //1000 means 1ms
 
-        glClearColor(1.0,1.0,1.0,0);   //指定背影色为白色
-        glClear(GL_COLOR_BUFFER_BIT);   //指定颜色缓存，该缓存使用glClearColor指定的背影色
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D,texID1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D,texID2);
         glBindVertexArray(vao);
-        flyEngine::shaderMgr::useShader(shaderID);
-        glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
+        glDrawArrays(GL_TRIANGLES,0,36);
         
         glfwSwapBuffers(g_window);
         glfwPollEvents();
     }
-}
-
-static void drawPlane1() {
-    float verticeArr[]={
-        0.5,0.5,0,    1,1,
-        0.5,-0.5,0,   1,0,
-        -0.5,-0.5,0,  0,0,
-        -0.5,0.5,0,   0,1
-    };
-    unsigned int verticeIndexArr[]={
-        0,1,3,      //first triangle
-        1,2,3       //second triangle
-    };
-    
-    int shaderID=shaderMgr::createShader("res/shader/1tex.vs","res/shader/1tex.fs");
-    
-    flyEngine::texture* texObj=(flyEngine::texture*)flyEngine::textureMgr::getInstance()->getTexture("res/smile.png");
-    int texID1=texObj->getTextureID();
-    if(!texID1)
-        return;
-    size texSize=texObj->getSize();
-    size winSize=getWindowSize();
-    
-    float winWidth=winSize.width;
-    float winHeight=winSize.height;
-    float width=texSize.width;
-    float height=texSize.height;
-//    verticeArr[0]=width/winWidth;
-//    verticeArr[1]=height/winHeight;
-//    verticeArr[0+5*1]=winWidth/winWidth;
-//    verticeArr[1+5*1]=-height/winHeight;
-//    verticeArr[0+5*2]=-width/winWidth;
-//    verticeArr[1+5*2]=-height/winHeight;
-//    verticeArr[0+5*3]=-width/winWidth;
-//    verticeArr[1+5*3]=height/winHeight;
-      
-    
-    unsigned int vao,vbo,ebo;
-    int stride=5*sizeof(float);
-    
-    glGenVertexArrays(1,&vao);
-    glBindVertexArray(vao);
-
-    glGenBuffers(1,&vbo);
-    glGenBuffers(1,&ebo);
-
-    glBindBuffer(GL_ARRAY_BUFFER,vbo);
-    glBufferData(GL_ARRAY_BUFFER,sizeof(verticeArr),verticeArr,GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,sizeof(verticeIndexArr),verticeIndexArr,GL_STATIC_DRAW);
-
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,stride,(void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,stride,(void*)(3*sizeof(float)));
-    glEnableVertexAttribArray(1);
-    
-    glUniform1i(glGetUniformLocation(shaderID, "texture1"), 0); //0号纹理GL_TEXTURE0
-  
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D,texID1);
    
-    glViewport(0,0,winWidth,winHeight);
-    
-    while(!glfwWindowShouldClose(g_window)){
-        threadUtil::sleep(1);   //1000 means 1ms
-
-        glClearColor(1.0,1.0,1.0,0.0);   //指定背影色为白色
-        glClear(GL_COLOR_BUFFER_BIT);   //指定颜色缓存，该缓存使用glClearColor指定的背影色
-        glBindVertexArray(vao);
-//        flyEngine::shaderMgr::useShader(shaderID);
-        glDrawElements(GL_TRIANGLES,6,GL_UNSIGNED_INT,0);
-        
-        glfwSwapBuffers(g_window);
-        glfwPollEvents();
-    }
-}
-
-
-void test3dView() {
-    drawPlane1();
 }
 
 /*
