@@ -28,7 +28,18 @@ public:
     camera();
     void setProgrameID(int program){_program=program;};
     void updateCameraPos(float x,float y,float z);
-   
+    void updateCameraPosX(float v);
+    void updateCameraPosY(float v);
+    void updateCameraPosZ(float v);
+    
+    float getCameraPosX(){return _cameraPos.x;};
+    float getCameraPosY(){return _cameraPos.y;};
+    float getCameraPosZ(){return _cameraPos.z;};
+    
+    void updateCameraFront(float x,float y,float z);
+    
+    void reset();
+
     void print();
     
 private:

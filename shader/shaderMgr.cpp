@@ -10,6 +10,8 @@
 #include "fileUtil.h"
 
 static unsigned int s_default_shader_id=0;
+static unsigned int s_3d_1tex_shader_id=0;
+static unsigned int s_3d_2tex_shader_id=0;
 static std::map<std::string,unsigned int> s_programIDMap;
 
 unsigned int shaderMgr::createShaderWithoutCache(const char* szVertFileName,const char* szFragFileName){
@@ -102,6 +104,17 @@ unsigned int shaderMgr::getDefaultShader(){
     if(!s_default_shader_id)
            s_default_shader_id=shaderMgr::createShader("./res/shader/default.vs","./res/shader/default.fs");
     return s_default_shader_id;
+}
+
+unsigned int shaderMgr::get3d1texShader(){
+    if(!s_3d_1tex_shader_id)
+           s_3d_1tex_shader_id=shaderMgr::createShader("./res/shader/3d_1tex.vs","./res/shader/3d_1tex.fs");
+    return s_3d_1tex_shader_id;
+}
+unsigned int shaderMgr::get3d2texShader(){
+    if(!s_3d_2tex_shader_id)
+           s_3d_2tex_shader_id=shaderMgr::createShader("./res/shader/3d_2tex.vs","./res/shader/3d_2tex.fs");
+    return s_3d_2tex_shader_id;
 }
 
 void shaderMgr::useShader(unsigned int idProgram){

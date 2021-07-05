@@ -79,7 +79,7 @@
 		D89B2B6024937E7800DA6873 /* pixel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89B2B5E24937E7800DA6873 /* pixel.cpp */; };
 		D8BB1B98255A6A0E00AF9FD5 /* mouseEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B97255A6A0E00AF9FD5 /* mouseEvent.cpp */; };
 		D8BB1B9B255A6D1500AF9FD5 /* mouseEventMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B9A255A6D1500AF9FD5 /* mouseEventMgr.cpp */; };
-		D8BB1B9E255BE08000AF9FD5 /* kbmControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B9D255BE08000AF9FD5 /* kbmControl.cpp */; };
+		D8BB1B9E255BE08000AF9FD5 /* control.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B9D255BE08000AF9FD5 /* control.cpp */; };
 		D8BED724253DACDE006974D3 /* keyboardEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED723253DACDE006974D3 /* keyboardEvent.cpp */; };
 		D8BED727253E9062006974D3 /* keyboardEventMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED726253E9062006974D3 /* keyboardEventMgr.cpp */; };
 		D8BED72B253EB9F0006974D3 /* std_move_forward.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED72A253EB9F0006974D3 /* std_move_forward.cpp */; };
@@ -1532,10 +1532,10 @@
 		8ECA452A26882E3C00FDFC7A /* shaderMgr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shaderMgr.h; sourceTree = "<group>"; };
 		8ECA452C2688776400FDFC7A /* world.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = world.cpp; sourceTree = "<group>"; };
 		8ECA452D2688776400FDFC7A /* world.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = world.h; sourceTree = "<group>"; };
-		8ECA4531268DB15400FDFC7A /* 2tex.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 2tex.fs; sourceTree = "<group>"; };
-		8ECA4532268DB15400FDFC7A /* 2tex.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 2tex.vs; sourceTree = "<group>"; };
-		8ECA4533268DB6E000FDFC7A /* 1tex.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 1tex.fs; sourceTree = "<group>"; };
-		8ECA4534268DB6E000FDFC7A /* 1tex.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 1tex.vs; sourceTree = "<group>"; };
+		8ECA4531268DB15400FDFC7A /* 2d_2tex.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 2d_2tex.fs; sourceTree = "<group>"; };
+		8ECA4532268DB15400FDFC7A /* 2d_2tex.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 2d_2tex.vs; sourceTree = "<group>"; };
+		8ECA4533268DB6E000FDFC7A /* 2d_1tex.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 2d_1tex.fs; sourceTree = "<group>"; };
+		8ECA4534268DB6E000FDFC7A /* 2d_1tex.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 2d_1tex.vs; sourceTree = "<group>"; };
 		8ECA45352691588900FDFC7A /* test2D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test2D.h; sourceTree = "<group>"; };
 		8ECA45362691588900FDFC7A /* test2D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test2D.cpp; sourceTree = "<group>"; };
 		8ECA453826916C3E00FDFC7A /* camera.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = camera.h; sourceTree = "<group>"; };
@@ -1620,6 +1620,10 @@
 		D827953124BC5FB400261C44 /* matrix.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = matrix.cpp; sourceTree = "<group>"; };
 		D827953424BC614800261C44 /* 3DTrans.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = 3DTrans.h; sourceTree = "<group>"; };
 		D827953524BC614800261C44 /* 3DTrans.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = 3DTrans.cpp; sourceTree = "<group>"; };
+		D8309C3F26932F6E00A855A6 /* 3d_1tex.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 3d_1tex.fs; sourceTree = "<group>"; };
+		D8309C4026932F6E00A855A6 /* 3d_1tex.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 3d_1tex.vs; sourceTree = "<group>"; };
+		D8309C4126932FD000A855A6 /* 3d_2tex.vs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 3d_2tex.vs; sourceTree = "<group>"; };
+		D8309C4226932FD000A855A6 /* 3d_2tex.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = 3d_2tex.fs; sourceTree = "<group>"; };
 		D853B5F91F15063300226235 /* triangle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = triangle.cpp; sourceTree = "<group>"; };
 		D853B5FA1F15063300226235 /* triangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = triangle.h; sourceTree = "<group>"; };
 		D853B5FD1F159F6600226235 /* quad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = quad.cpp; sourceTree = "<group>"; };
@@ -1660,8 +1664,8 @@
 		D8BB1B97255A6A0E00AF9FD5 /* mouseEvent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mouseEvent.cpp; sourceTree = "<group>"; };
 		D8BB1B99255A6D1500AF9FD5 /* mouseEventMgr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mouseEventMgr.h; sourceTree = "<group>"; };
 		D8BB1B9A255A6D1500AF9FD5 /* mouseEventMgr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mouseEventMgr.cpp; sourceTree = "<group>"; };
-		D8BB1B9C255BE08000AF9FD5 /* kbmControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = kbmControl.h; sourceTree = "<group>"; };
-		D8BB1B9D255BE08000AF9FD5 /* kbmControl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = kbmControl.cpp; sourceTree = "<group>"; };
+		D8BB1B9C255BE08000AF9FD5 /* control.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = control.h; sourceTree = "<group>"; };
+		D8BB1B9D255BE08000AF9FD5 /* control.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = control.cpp; sourceTree = "<group>"; };
 		D8BB1BA325625D7D00AF9FD5 /* camera_old.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = camera_old.h; sourceTree = "<group>"; };
 		D8BB1BA425625D7D00AF9FD5 /* camera_old.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = camera_old.cpp; sourceTree = "<group>"; };
 		D8BB1BA62563DB9C00AF9FD5 /* cameraFPS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cameraFPS.h; sourceTree = "<group>"; };
@@ -3614,16 +3618,20 @@
 		D809EE1724F502240067189D /* shader */ = {
 			isa = PBXGroup;
 			children = (
+				D8309C3F26932F6E00A855A6 /* 3d_1tex.fs */,
+				D8309C4026932F6E00A855A6 /* 3d_1tex.vs */,
+				D8309C4226932FD000A855A6 /* 3d_2tex.fs */,
+				D8309C4126932FD000A855A6 /* 3d_2tex.vs */,
 				D85F1BD725023B58005390DC /* default.fs */,
 				D85F1BD825023B58005390DC /* default.vs */,
 				D8273E822511F65300D2BC59 /* 2dTexture.fs */,
 				D8273E812511F65300D2BC59 /* 2dTexture.vs */,
 				D8CFDE6425359EF000C3334F /* 2dTextureApha.fs */,
 				D8CFDE6525359EF000C3334F /* 2dTextureApha.vs */,
-				8ECA4533268DB6E000FDFC7A /* 1tex.fs */,
-				8ECA4534268DB6E000FDFC7A /* 1tex.vs */,
-				8ECA4531268DB15400FDFC7A /* 2tex.fs */,
-				8ECA4532268DB15400FDFC7A /* 2tex.vs */,
+				8ECA4533268DB6E000FDFC7A /* 2d_1tex.fs */,
+				8ECA4534268DB6E000FDFC7A /* 2d_1tex.vs */,
+				8ECA4531268DB15400FDFC7A /* 2d_2tex.fs */,
+				8ECA4532268DB15400FDFC7A /* 2d_2tex.vs */,
 				D809EE1524F3D3930067189D /* basic.vs */,
 				D809EE1624F3D3A80067189D /* basic.fs */,
 				D8BED71B253D4312006974D3 /* 2dTextureAphaMix.fs */,
@@ -4021,8 +4029,8 @@
 				D8BB1B97255A6A0E00AF9FD5 /* mouseEvent.cpp */,
 				D8BB1B99255A6D1500AF9FD5 /* mouseEventMgr.h */,
 				D8BB1B9A255A6D1500AF9FD5 /* mouseEventMgr.cpp */,
-				D8BB1B9C255BE08000AF9FD5 /* kbmControl.h */,
-				D8BB1B9D255BE08000AF9FD5 /* kbmControl.cpp */,
+				D8BB1B9C255BE08000AF9FD5 /* control.h */,
+				D8BB1B9D255BE08000AF9FD5 /* control.cpp */,
 			);
 			path = event;
 			sourceTree = "<group>";
@@ -4129,7 +4137,7 @@
 				D89600F024D1686400DF6FD3 /* curve.cpp in Sources */,
 				D825DB9D24AC6BA900C494E7 /* testPixel.cpp in Sources */,
 				D881DEEF24D80E2E0011F7B8 /* pngUtil.cpp in Sources */,
-				D8BB1B9E255BE08000AF9FD5 /* kbmControl.cpp in Sources */,
+				D8BB1B9E255BE08000AF9FD5 /* control.cpp in Sources */,
 				D8BB1B9B255A6D1500AF9FD5 /* mouseEventMgr.cpp in Sources */,
 				D8BED724253DACDE006974D3 /* keyboardEvent.cpp in Sources */,
 				D825DBAC24AC82FF00C494E7 /* textureMgr.cpp in Sources */,

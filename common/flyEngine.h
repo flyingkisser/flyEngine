@@ -46,10 +46,12 @@
 //events
 #include "keyboardEventMgr.h"
 #include "mouseEventMgr.h"
-#include "kbmControl.h"
 
 //camera
 #include "camera.h"
+
+//control
+#include "control.h"
 
 using namespace flyEngine;
 

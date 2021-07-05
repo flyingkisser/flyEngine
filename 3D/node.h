@@ -28,11 +28,14 @@ private:
     unsigned int _gl_vao=0;
     
     void _glInit();
+    bool initTexture(const char* texPath);
+    void initShader(int id);
+    void initShader(const char* vsPath,const char* fsPath);
 
 public:
     ~node(){};
     node(const char* texPath);
-    bool init(const char* texPath);
+   
     void updateModel();
     void print();
     void draw(camera* cameraObj);
