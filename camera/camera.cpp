@@ -15,6 +15,20 @@ void flyEngine::camera::_updateCamera(){
     _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
     glUniformMatrix4fv(glGetUniformLocation(_program, "matCamera"), 1,GL_FALSE,glm::value_ptr(_matCamera));
 }
+void flyEngine::camera::_updateProjection(){
+    if(!_program)
+        return;
+    _matProj=glm::perspective(glm::radians((double)_fov),(double)_screenRatio, 0.1, 100.0);
+    glUniformMatrix4fv(glGetUniformLocation(_program, "matProj"), 1,GL_FALSE,glm::value_ptr(_matProj));
+}
+
+
+
+void flyEngine::camera::linkShader(int programID){
+    _program=programID;
+    glUniformMatrix4fv(glGetUniformLocation(programID, "matCamera"), 1,GL_FALSE,glm::value_ptr(_matCamera));
+    glUniformMatrix4fv(glGetUniformLocation(programID, "matProj"), 1,GL_FALSE,glm::value_ptr(_matProj));
+}
 
 void flyEngine::camera::reset(){
      glUniformMatrix4fv(glGetUniformLocation(_program, "matCamera"), 1,GL_FALSE,glm::value_ptr(_matCameraOrigin));
@@ -49,12 +63,7 @@ void flyEngine::camera::updateCameraFront(float x, float y, float z){
     _updateCamera();
 }
 
-void flyEngine::camera::_updateProjection(){
-    if(!_program)
-        return;
-    _matProj=glm::perspective(glm::radians((double)_fov),(double)_screenRatio, 0.1, 100.0);
-    glUniformMatrix4fv(glGetUniformLocation(_program, "matProj"), 1,GL_FALSE,glm::value_ptr(_matProj));
-}
+
 
 
 void flyEngine::camera::print(){

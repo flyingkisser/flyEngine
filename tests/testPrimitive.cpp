@@ -37,21 +37,21 @@ static void menuCallback(GLint menuID){
 
 
 void testPrimitive() {
-//polygon,quad从3.1开始被移除
-//    std::function<void(void)> drawCall=drawPolygon();
-//    std::function<void(void)> drawCall=drawQuad();
-    
-//    std::function<void(void)> drawCall=drawPoints();
-//    std::function<void(void)> drawCall=drawLines();
-    std::function<void(void)> drawCall=drawTriangle();
-    
-    testInitWindow2D("openGL primitive test",drawCall,0);
-    
-    testRegMenu("snapshot", [](){
-         snapsBMP("./save.bmp");
-    });
-    
-    windowLoop();
+////polygon,quad从3.1开始被移除
+////    std::function<void(void)> drawCall=drawPolygon();
+////    std::function<void(void)> drawCall=drawQuad();
+//    
+////    std::function<void(void)> drawCall=drawPoints();
+////    std::function<void(void)> drawCall=drawLines();
+//    std::function<void(void)> drawCall=drawTriangle();
+//    
+//    testInitWindow2D("openGL primitive test",drawCall,0);
+//    
+//    testRegMenu("snapshot", [](){
+//         snapsBMP("./save.bmp");
+//    });
+//    
+//    windowLoop();
 }
 
 

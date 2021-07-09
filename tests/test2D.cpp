@@ -38,7 +38,7 @@ void drawPlane1() {
         1,2,3       //second triangle
     };
     
-    int shaderID=shaderMgr::createShader("res/shader/1tex.vs","res/shader/1tex.fs");
+    int shaderID=shaderMgr::createShaderFromFile("res/shader/1tex.vs","res/shader/1tex.fs");
     
     flyEngine::texture* texObj=(flyEngine::texture*)flyEngine::textureMgr::getInstance()->getTexture("res/smile.png");
     int texID1=texObj->getTextureID();
@@ -114,7 +114,7 @@ void drawPlane2() {
         1,2,3       //second triangle
     };
     
-    int shaderID=shaderMgr::createShader("res/shader/2tex.vs","res/shader/2tex.fs");
+    int shaderID=shaderMgr::createShaderFromFile("res/shader/2tex.vs","res/shader/2tex.fs");
     
     flyEngine::texture* texObj1=(flyEngine::texture*)flyEngine::textureMgr::getInstance()->getTexture("res/wall.jpg");
     flyEngine::texture* texObj2=(flyEngine::texture*)flyEngine::textureMgr::getInstance()->getTexture("res/smile.png");
@@ -170,7 +170,7 @@ void drawPlane2() {
     glBindTexture(GL_TEXTURE_2D,texID2);
    
     glViewport(0,0,winWidth,winHeight);
-    flyEngine::shaderMgr::useShader(shaderID);
+    glUseProgram(shaderID);
     
     while(!glfwWindowShouldClose(g_window)){
         threadUtil::sleep(1);   //1000 means 1ms

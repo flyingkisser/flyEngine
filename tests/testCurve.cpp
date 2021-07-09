@@ -122,6 +122,6 @@ static void beginDrawLineByNurbs(){
 }
 
 void testCurve() {
-    testInitWindow2D("openGL 2D Bezier test", beginDrawLineByNurbs);
-    windowLoop();
+//    testInitWindow2D("openGL 2D Bezier test", beginDrawLineByNurbs);
+//    windowLoop();
 }

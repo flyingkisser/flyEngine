@@ -44,22 +44,22 @@ static void cppyPixel(float x,float y,float width,float height){
 }
 
 void testBMP(){
-    testInitWindow2D("openGL pixel test",beginDraw);
-    testRegMenu("show second picture",[](){
-//        node* imgObj=(node*)new ui::image("./res/test.bmp");
-//        imgObj->setPosition(30, 30);
-//        imgObj->draw();
-    });
-    testRegMenu("copy pixel",[](){
-//           node* imgObj=(node*)new ui::image("./res/test.bmp");
-//           size imgSize=imgObj->getSize();
-//           cppyPixel(30,30,imgSize.width,imgSize.height);
-          });
-    testRegMenu("remove second picture",[](){
-//        node* imgObj=(node*)new ui::image("./res/test.bmp");
-//        size imgSize=imgObj->getSize();
-//        xorPixel(30,30,imgSize.width,imgSize.height);
-       });
-    windowLoop();
+//    testInitWindow2D("openGL pixel test",beginDraw);
+//    testRegMenu("show second picture",[](){
+////        node* imgObj=(node*)new ui::image("./res/test.bmp");
+////        imgObj->setPosition(30, 30);
+////        imgObj->draw();
+//    });
+//    testRegMenu("copy pixel",[](){
+////           node* imgObj=(node*)new ui::image("./res/test.bmp");
+////           size imgSize=imgObj->getSize();
+////           cppyPixel(30,30,imgSize.width,imgSize.height);
+//          });
+//    testRegMenu("remove second picture",[](){
+////        node* imgObj=(node*)new ui::image("./res/test.bmp");
+////        size imgSize=imgObj->getSize();
+////        xorPixel(30,30,imgSize.width,imgSize.height);
+//       });
+//    windowLoop();
 }
 

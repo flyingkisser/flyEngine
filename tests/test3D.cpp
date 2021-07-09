@@ -30,8 +30,21 @@ void test3dView() {
     //drawPlane1();
 }
 
+void test3d_drawOneCube(){
+    flyEngine::node* nodeObj=new flyEngine::node("res/fire.png");
+    if(!nodeObj->init()){
+        flylog("node init failed!");
+        return;
+    }
+    nodeObj->glInit();
+       
+    world::getInstance()->addChild(nodeObj);
+    nodeObj->print();
+    nodeObj->setPosition(glm::vec3(0,-2,nodeObj->getPositionZ()-2));
+    nodeObj->print();
+}
 
-void drawCube(){
+void drawCubeRaw(){
     unsigned int vao,vbo,ebo;
     int texID1,texID2;
     int stride=5*sizeof(float);
@@ -44,7 +57,7 @@ void drawCube(){
     texID1=texObj1->getTextureID();
     texID2=texObj2->getTextureID();
    
-    int shaderID=shaderMgr::createShader("res/shader/3dTextureApha.vs","res/shader/3dTextureApha.fs");
+    int shaderID=shaderMgr::createShaderFromFile("res/shader/3dTextureApha.vs","res/shader/3dTextureApha.fs");
  
     glGenVertexArrays(1,&vao);
     glBindVertexArray(vao);

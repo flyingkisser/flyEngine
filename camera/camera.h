@@ -38,6 +38,8 @@ public:
     
     void updateCameraFront(float x,float y,float z);
     
+    void linkShader(int programID);
+    
     void reset();
 
     void print();

@@ -56,9 +56,11 @@ float g_verticeArr[180]={
 };
 
 void engineInit(){
-    g_textureMgr=textureMgr::getInstance();
-    g_render=render::getInstance();
-    g_render->start();
+//    g_textureMgr=textureMgr::getInstance();
+//    g_render=render::getInstance();
+//    g_render->start();
 }
 
 
+int g_winWidth=1;
+int g_winHeight=1;

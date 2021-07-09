@@ -14,6 +14,8 @@
 
 namespace flyEngine {
 
+class node;
+
 class world{
 private:
     std::vector<node*> _vector_child;
@@ -25,11 +27,11 @@ public:
     static world* getInstance();
     void addChild(node* node);
     void setCamera(camera* c);
-    void start();
+    void start_rendering();
     void pause();
     void end();
     
-    static void main_loop();
+    static void _main_loop();
     
     void draw();
 };

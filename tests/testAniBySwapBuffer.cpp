@@ -77,8 +77,8 @@ static void onMouseClick(int button,int action,int x,int y){
 }
 
 void testAniBySwapBuffer(){
-    testInitWindow2D("openGL ani swapBuffers test", drawAniBySwapBuffer);
-    std::function<void(int,int,int,int)> mouseClick=onMouseClick;
-    testRegMouseClick(mouseClick);
-    windowLoop();
+//    testInitWindow2D("openGL ani swapBuffers test", drawAniBySwapBuffer);
+//    std::function<void(int,int,int,int)> mouseClick=onMouseClick;
+//    testRegMouseClick(mouseClick);
+//    windowLoop();
 }

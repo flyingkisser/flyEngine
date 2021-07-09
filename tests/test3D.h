@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-void drawCube();
+void test3d_drawOneCube();
 
 //void test3dView();
 //void test3dViewRotate();

@@ -15,14 +15,15 @@
 
 extern GLFWwindow* g_window;
 
+
 void initWindow();
 
 //void testInitWindow2D(const char* szTitle,void (*drawCall)(void));
 
 //void testInitWindow2D(const char* szTitle,void (*drawCall)(void),int displayMode);
 
-void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall,unsigned int shaderID);
-void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall);
+//void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall,unsigned int shaderID);
+//void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall);
 
 
 //void testInitWindow3D(const char* szTitle,void (*drawCall)(void));
