@@ -25,7 +25,8 @@ void world::addChild(node *node){
 }
 
 void world::start_rendering(){
-    threadUtil::createThread(world::_main_loop);
+//    threadUtil::createThread(world::_main_loop);
+    world::_main_loop();
 }
 
 void world::setCamera(camera* c){
@@ -53,7 +54,6 @@ void world::end(){
 
 
 void world::_main_loop(){
-    initWindow();
     flyEngine::camera* cameraObj=new flyEngine::camera();
     flyEngine::world* worldObj=flyEngine::world::getInstance();
     worldObj->setCamera(cameraObj);

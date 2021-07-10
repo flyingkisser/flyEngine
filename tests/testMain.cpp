@@ -29,10 +29,10 @@ void main_logic(){
 
 
 void testMainBegin(){
-//    initWindow();
+    initWindow();
 //    flyEngine::camera* cameraObj=new flyEngine::camera();
 //    flyEngine::world::getInstance()->setCamera(cameraObj);
-//    main_logic();
+    main_logic();
     flyEngine::world::getInstance()->start_rendering();
 //    main_logic();
 }

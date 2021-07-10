@@ -27,16 +27,16 @@ public:
     camera(int program);
     camera();
     void setProgrameID(int program){_program=program;};
-    void updateCameraPos(float x,float y,float z);
-    void updateCameraPosX(float v);
-    void updateCameraPosY(float v);
-    void updateCameraPosZ(float v);
+    void setPosition(glm::vec3 v);
+    void setPositionX(float v);
+    void setPositionY(float v);
+    void setPositionZ(float v);
     
-    float getCameraPosX(){return _cameraPos.x;};
-    float getCameraPosY(){return _cameraPos.y;};
-    float getCameraPosZ(){return _cameraPos.z;};
+    float getPositionX(){return _cameraPos.x;};
+    float getPositionY(){return _cameraPos.y;};
+    float getPositionZ(){return _cameraPos.z;};
     
-    void updateCameraFront(float x,float y,float z);
+    void setPositionFront(glm::vec3 v;
     
     void linkShader(int programID);
     
@@ -44,8 +44,12 @@ public:
 
     void print();
     
+    void moveBy(glm::vec3 v);
+    void rotate(glm::vec3 v);
+    
+    bool init();
+    void glInit();
 private:
-    void _init();
     void _updateCamera();
     void _updateProjection();
     
@@ -58,6 +62,7 @@ private:
     glm::vec3 _cameraFront;
     glm::vec3 _cameraUp;
     
+    bool _dirtyPos;
     int _program=0;
     float _yaw=0;
     float _pitch=0;

@@ -49,6 +49,7 @@ int main(int argc, char **argv) {
 //#ifdef __APPLE__
 //    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 //#endif
+    
     testMainBegin();
     return 0;
 }

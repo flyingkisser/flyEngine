@@ -12,9 +12,13 @@
 void flyEngine::camera::_updateCamera(){
     if(!_program)
         return;
+    if(!_dirtyPos)
+        return;
+    _dirtyPos=false;
     _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
     glUniformMatrix4fv(glGetUniformLocation(_program, "matCamera"), 1,GL_FALSE,glm::value_ptr(_matCamera));
 }
+
 void flyEngine::camera::_updateProjection(){
     if(!_program)
         return;
@@ -34,33 +38,50 @@ void flyEngine::camera::reset(){
      glUniformMatrix4fv(glGetUniformLocation(_program, "matCamera"), 1,GL_FALSE,glm::value_ptr(_matCameraOrigin));
 }
 
-void flyEngine::camera::updateCameraPos(float x, float y, float z){
-    _cameraPos.x=x;
-    _cameraPos.y=y;
-    _cameraPos.z=z;
-    _updateCamera();
+void flyEngine::camera::setPosition(glm::vec3 pos){
+    _cameraPos.x=pos.x;
+    _cameraPos.y=pos.y;
+    _cameraPos.z=pos.z;
+    _dirtyPos=true;
 }
-void flyEngine::camera::updateCameraPosX(float v){
-    flylog("updateCameraPosX:%f->%f",_cameraPos.x,v);
+void flyEngine::camera::setPositionX(float v){
+    flylog("camera x:%f->%f",_cameraPos.x,v);
     _cameraPos.x=v;
-    _updateCamera();
+    _dirtyPos=true;
 }
-void flyEngine::camera::updateCameraPosY(float v){
-    flylog("updateCameraPosY:%f->%f",_cameraPos.y,v);
+void flyEngine::camera::setPositionY(float v){
+    flylog("camera y:%f->%f",_cameraPos.y,v);
     _cameraPos.y=v;
-    _updateCamera();
+    _dirtyPos=true;
 }
-void flyEngine::camera::updateCameraPosZ(float v){
-    flylog("updateCameraPosZ:%f->%f",_cameraPos.z,v);
+void flyEngine::camera::setPositionZ(float v){
+    flylog("camera z:%f->%f",_cameraPos.z,v);
     _cameraPos.z=v;
-    _updateCamera();
+    _dirtyPos=true;
 }
 
-void flyEngine::camera::updateCameraFront(float x, float y, float z){
-    _cameraFront.x=x;
-    _cameraFront.y=y;
-    _cameraFront.z=z;
-    _updateCamera();
+void flyEngine::camera::setPositionFront(glm::vec3 pos){
+    _cameraFront.x=pos.x;
+    _cameraFront.y=pos.y;
+    _cameraFront.z=pos.z;
+    _dirtyPos=true;
+}
+
+
+void flyEngine::camera::moveBy(glm::vec3 v){
+    _cameraPos.x+=v.x;
+    _cameraPos.y+=v.y;
+    _cameraPos.z+=v.z;
+    _dirtyPos=true;
+}
+void flyEngine::camera::rotate(glm::vec3 v){
+    if(v.x)
+        _matModel=glm::rotate(_matCamera,v.x,glm::vec3(1,0,0));
+    if(v.y)
+        _matModel=glm::rotate(_matCamera,v.y,glm::vec3(0,1,0));
+    if(v.z)
+        _matModel=glm::rotate(_matCamera,v.z,glm::vec3(0,0,1));
+    _dirtyPos=true;
 }
 
 
@@ -71,19 +92,17 @@ void flyEngine::camera::print(){
 }
 flyEngine::camera::camera(int program){
     _program=program;
-    _init();
 }
 flyEngine::camera::camera(){
-    _init();
 }
 
-void flyEngine::camera::_init(){
+bool flyEngine::camera::init(){
     _yaw=-90;
     _pitch=0;
     _fov=30.0;
     _fovOrigin=_fov;
     _screenRatio=800/600;
-    
+    _dirtyPos=true;
     _cameraPos=glm::vec3(0,0,3);
     _cameraFront.x=cos(glm::radians(_yaw))*cos(glm::radians(_pitch));
     _cameraFront.y=sin(glm::radians(_pitch));
@@ -101,4 +120,11 @@ void flyEngine::camera::_init(){
         _updateProjection();
         _updateCamera();
     }
+    return true;
+}
+
+void  flyEngine::camera::glInit(int programID){
+    linkShader(programID);
+    _updateProjection();
+    _updateCamera();
 }
