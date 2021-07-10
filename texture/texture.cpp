@@ -22,7 +22,6 @@ flyEngine::texture::texture(const char* szPath){
     _strPath=szPath;
 }
 
-
 bool flyEngine::texture::init(){
     char* szPath=(char*)_strPath.c_str();
     struct_texture st={0};
@@ -31,13 +30,11 @@ bool flyEngine::texture::init(){
             flylog("texture.init:png loadFile %s failed",szPath);
             return false;
         }
-//       _colorType=GL_RGBA;
     }else if(jpgUtil::isJpg(szPath)){
         if(!jpgUtil::loadFile(szPath, &st)){
             flylog("texture.init:jpg loadFile %s failed",szPath);
             return false;
         }
-//       _colorType=GL_RGB;
     }
     _width=st.width;
     _height=st.height;
@@ -45,11 +42,11 @@ bool flyEngine::texture::init(){
     //_internalFormat=st.internalFormat;
     _width=st.width;
     _dataBuf=st.buf;
-    _glInit();
     return true;
 }
 
-void flyEngine::texture::_glInit(){
+void flyEngine::texture::glInit(){
+    glRef::glInit();
     glGenTextures(1,&_textureID);
     glBindTexture(GL_TEXTURE_2D,_textureID);
     //GL_TEXTURE_WRAP_S表示纹理坐标的横向方向
@@ -91,6 +88,6 @@ void flyEngine::texture::_glInit(){
 //  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, structTex.width, structTex.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, structTex.buf);
 }
 
-  flyEngine::size flyEngine::texture::getSize(){
-      return flyEngine::size{(float)_width,(float)_height};
-  };
+flyEngine::size flyEngine::texture::getSize(){
+  return flyEngine::size{(float)_width,(float)_height};
+};

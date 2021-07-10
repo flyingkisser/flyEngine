@@ -52,7 +52,7 @@ flyEngine::texture* textureMgr::getTexture(const char *szFileName){
         return it->second;
     texture* texObj=new texture(szFileName);
     if(!texObj->init())
-        return NULL;
+        return nullptr;
     _mapTextureCache[szFileName]=texObj;
     return texObj;
 }

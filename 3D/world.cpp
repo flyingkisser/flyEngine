@@ -7,6 +7,7 @@
 //
 
 #include "world.h"
+#include "testWindow.h"
 static world* s_instance;
 
 world* world::getInstance(){
@@ -23,8 +24,8 @@ void world::addChild(node *node){
     _vector_child.push_back(node);
 }
 
-void world::start(){
-    threadUtil::createThread(world::main_loop);
+void world::start_rendering(){
+    threadUtil::createThread(world::_main_loop);
 }
 
 void world::setCamera(camera* c){
@@ -41,13 +42,6 @@ void world::draw(){
     }
 }
 
-void world::main_loop(){
-    world* worldObj=world::getInstance();
-    while (true) {
-        worldObj->draw();
-        threadUtil::sleep(1);
-    }
-}
 
 void world::pause(){
     
@@ -55,4 +49,25 @@ void world::pause(){
 
 void world::end(){
     
+}
+
+
+void world::_main_loop(){
+    initWindow();
+    flyEngine::camera* cameraObj=new flyEngine::camera();
+    flyEngine::world* worldObj=flyEngine::world::getInstance();
+    worldObj->setCamera(cameraObj);
+    
+    while(!glfwWindowShouldClose(g_window)){
+         threadUtil::sleep(0.1);   //1000 means 1ms
+
+         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+
+         worldObj->draw();
+
+         glfwSwapBuffers(g_window);
+         glfwPollEvents();
+   }
+
 }

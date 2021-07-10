@@ -409,8 +409,8 @@ void testTex1D() {
 }
 
 void testTex2DJpg() {
-    testInitWindow2D("openGL TexImage2D 2d jpg test", beginDraw2DByJpg);
-    windowLoop();
+//    testInitWindow2D("openGL TexImage2D 2d jpg test", beginDraw2DByJpg);
+//    windowLoop();
 }
 
 void testTex2DPng() {

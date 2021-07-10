@@ -12,19 +12,20 @@
 #include <stdio.h>
 #include <string>
 #include "flyEngine.h"
+#include "shader.h"
 
 namespace flyEngine {
 
 class shaderMgr{
 public:
-    static unsigned int createShaderWithoutCache(const char* szVertFileName,const char* szFragFileName);
-    static unsigned int createShader(const char* szVertFileName,const char* szFragFileName);
-    static void useShader(unsigned int id);
+    static void initDefaultShader();
+    static unsigned int createShaderFromFile(const char* szVertFileName,const char* szFragFileName);
     static void useDefaultShader();
-    static unsigned int getDefaultShader();
-    static void setBool(unsigned int id,const char* name,bool v);
-    static void setInt(unsigned int id,const char* name,int v);
-    static void setFloat(unsigned int id,const char* name,float v);
+    static shader* getDefaultShader();
+    static shader* get3d1texShader();
+    static shader* get3d2texShader();
+    
+    static shader* getShader(const char* szVertFileName,const char* szFragFileName);
 };
 
 }

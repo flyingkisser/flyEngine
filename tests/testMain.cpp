@@ -8,6 +8,7 @@
 
 #include "testMain.h"
 #include "flyEngine.h"
+
 #include "testPrimitive.h"
 #include "test2D.h"
 #include "testPixel.h"
@@ -22,62 +23,85 @@
 
 #include "std_move_forward.h"
 
-//class A
-//{
-//    int x;
-//  public:
-//    A(int x):x(x) { cout << "ctor invoked x="<<x << endl; }
-//    virtual ~A() { cout << "dtor invoked x=" <<x<< endl; }
-//    void sayHi() const { cout << "HI x="<<x << endl; }
-//};
-//
-//class B : public A { };
-//
-//void testBasic(){
-//    std::unique_ptr<A> a(new A{ 2 });
-//    // unique_ptr<X> c = a; //does not compile! no copy constructor
-//    std::unique_ptr<A> b = std::move(a); //valid: move constructor
-////    a->sayHi();
-//    b->sayHi();
-//}
+void main_logic(){
+     test3d_drawOneCube();
+}
+
 
 void testMainBegin(){
-    engineInit();
-    
-    initWindow();
-//    drawPlane2();
-    drawCube();
-    
-//    std_move_forward_test();
-//    testBasic();
-    
-//    testPrimitive();
-//    testBMP();
-//    test2dViewJpg();
-//     test2dViewPng();
-//    test2dViewMixPng();
-//    test2dViewMixPng2();
-//     test2dViewMixPng3();
-//    test2dViewMixPng4();
-//    test2dViewMixPng5();
-//    test2dViewTransPng();
-//    test2dViewTransPng2();
-//     test2dViewTransPng3();
-//     test2dViewTransPng4();
-
-   // test3dView();
-//    test3dViewRotate();
-//    test3dViewControl();
-//    test3dViewControlCamera();
-//    test3dViewMoreCube();
-//    test3dViewMoreCubeCamera();
-//    test3dViewMoreCubeCameraFPS();
-    
-//    testAniBySwapBuffer();
-//    test3DPolyhedra();
-//    testCurve();
-//    testTex3DPng();
-//    testShaderNormal();
-    
-//    testPhongAmbient();
+//    initWindow();
+//    flyEngine::camera* cameraObj=new flyEngine::camera();
+//    flyEngine::world::getInstance()->setCamera(cameraObj);
+//    main_logic();
+    flyEngine::world::getInstance()->start_rendering();
+//    main_logic();
 }
+
+
+
+
+//void testMainBegin2(){
+//    initWindow();
+//    flyEngine::camera* cameraObj=new flyEngine::camera();
+//    flyEngine::world* worldObj=flyEngine::world::getInstance();
+//    worldObj->setCamera(cameraObj);
+//    worldObj->start();
+//
+//    flyEngine::node* nodeObj=new flyEngine::node("res/fire.png");
+//    worldObj->addChild(nodeObj);
+//
+//    while(!glfwWindowShouldClose(g_window)){
+//        threadUtil::sleep(0.1);   //1000 means 1ms
+//
+//        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+//        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+//
+//        worldObj->draw();
+//
+//        glfwSwapBuffers(g_window);
+//        glfwPollEvents();
+//    }
+//
+//}
+
+
+//void testMainBegin(){
+//    engineInit();
+//
+//    initWindow();
+////    drawPlane2();
+//    drawCube();
+//
+////    std_move_forward_test();
+////    testBasic();
+//
+////    testPrimitive();
+////    testBMP();
+////    test2dViewJpg();
+////     test2dViewPng();
+////    test2dViewMixPng();
+////    test2dViewMixPng2();
+////     test2dViewMixPng3();
+////    test2dViewMixPng4();
+////    test2dViewMixPng5();
+////    test2dViewTransPng();
+////    test2dViewTransPng2();
+////     test2dViewTransPng3();
+////     test2dViewTransPng4();
+//
+//   // test3dView();
+////    test3dViewRotate();
+////    test3dViewControl();
+////    test3dViewControlCamera();
+////    test3dViewMoreCube();
+////    test3dViewMoreCubeCamera();
+////    test3dViewMoreCubeCameraFPS();
+//
+////    testAniBySwapBuffer();
+////    test3DPolyhedra();
+////    testCurve();
+////    testTex3DPng();
+////    testShaderNormal();
+//
+////    testPhongAmbient();
+//}

@@ -13,6 +13,25 @@
 
 using namespace std;
 
+//class A
+//{
+//    int x;
+//  public:
+//    A(int x):x(x) { cout << "ctor invoked x="<<x << endl; }
+//    virtual ~A() { cout << "dtor invoked x=" <<x<< endl; }
+//    void sayHi() const { cout << "HI x="<<x << endl; }
+//};
+//
+//class B : public A { };
+//
+//void testBasic(){
+//    std::unique_ptr<A> a(new A{ 2 });
+//    // unique_ptr<X> c = a; //does not compile! no copy constructor
+//    std::unique_ptr<A> b = std::move(a); //valid: move constructor
+////    a->sayHi();
+//    b->sayHi();
+//}
+
 //class Stack
 //{
 //public:

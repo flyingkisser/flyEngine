@@ -12,30 +12,62 @@
 #include <stdio.h>
 
 #include "flyEngine.h"
+#include "glRef.h"
+#include "texture.h"
+#include "camera.h"
 #include <string>
 #include <functional>
 using namespace std;
 
 namespace flyEngine {
+class camera;
+class texture;
+class shader;
 
-class node
+class node:glRef
 {
 private:
     glm::mat4 _matModel;
     glm::mat4 _matModelOrigin;
+    glm::vec3 _pos;
     unsigned int _gl_program=0;
     unsigned int _gl_texture0=0;
     unsigned int _gl_vao=0;
+    bool _dirtyPos=false;
     
-    void _glInit();
+    texture* _texObj;
+    shader* _shaderObj;
+    
+    const char* _texPath;
+    
+//    bool initTexture(const char* texPath);
+//    bool initShader(int id);
+//    bool initShader(const char* vsPath,const char* fsPath);
 
 public:
     ~node(){};
     node(const char* texPath);
-    bool init(const char* texPath);
+    bool init();
+    
+    void glInit();
+   
     void updateModel();
     void print();
-    void draw(camera* cameraObj);
+    void draw(flyEngine::camera* cameraObj);
+    
+    void setPosition(glm::vec3 p);
+    void setPositionX(float v);
+    void setPositionY(float v);
+    void setPositionZ(float v);
+    
+    glm::vec3& getPosition(){return _pos;};
+    float getPositionX(){return _pos.x;};
+    float getPositionY(){return _pos.y;};
+    float getPositionZ(){return _pos.z;};
+    
+    void moveBy(glm::vec3 v);
+    void scale(glm::vec3 v);
+    void rotate(glm::vec3 v);
     
 };
 

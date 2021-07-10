@@ -20,8 +20,8 @@
 #include "shaderMgr.h"
 #include "keyboardEventMgr.h"
 #include "mouseEventMgr.h"
-#include "cameraBase.h"
-#include "cameraFPS.h"
+#include "camera.h"
+#include "control.h"
 #include "threadUtil.h"
 
 using namespace flyEngine;
@@ -30,8 +30,21 @@ void test3dView() {
     //drawPlane1();
 }
 
+void test3d_drawOneCube(){
+    flyEngine::node* nodeObj=new flyEngine::node("res/fire.png");
+    if(!nodeObj->init()){
+        flylog("node init failed!");
+        return;
+    }
+    nodeObj->glInit();
+       
+    world::getInstance()->addChild(nodeObj);
+    nodeObj->print();
+    nodeObj->setPosition(glm::vec3(0,-2,nodeObj->getPositionZ()-2));
+    nodeObj->print();
+}
 
-void drawCube(){
+void drawCubeRaw(){
     unsigned int vao,vbo,ebo;
     int texID1,texID2;
     int stride=5*sizeof(float);
@@ -44,7 +57,7 @@ void drawCube(){
     texID1=texObj1->getTextureID();
     texID2=texObj2->getTextureID();
    
-    int shaderID=shaderMgr::createShader("res/shader/3dTextureApha.vs","res/shader/3dTextureApha.fs");
+    int shaderID=shaderMgr::createShaderFromFile("res/shader/3dTextureApha.vs","res/shader/3dTextureApha.fs");
  
     glGenVertexArrays(1,&vao);
     glBindVertexArray(vao);
@@ -65,7 +78,11 @@ void drawCube(){
     glUniform1f(glGetUniformLocation(shaderID, "mixValue"), 0.7);
    
     glm::mat4 matModel=glm::translate(glm::mat4(1.0),glm::vec3(0,0,-3));
-    camera* cameraObj=new camera(shaderID);
+    flyEngine::camera* cameraObj=new flyEngine::camera(shaderID);
+    cameraObj->print();
+    control* controlObj=new control();
+    controlObj->bindCamera(cameraObj);
+    
     glUniformMatrix4fv(glGetUniformLocation(shaderID,"matModel"),1,GL_FALSE,glm::value_ptr(matModel));
     
     glUniform1i(glGetUniformLocation(shaderID, "texture1"), 0);
@@ -77,10 +94,8 @@ void drawCube(){
     glBindTexture(GL_TEXTURE_2D,texID2);
     glEnable(GL_DEPTH_TEST);
     
-    cameraObj->print();
-    
     while(!glfwWindowShouldClose(g_window)){
-        threadUtil::sleep(1);   //1000 means 1ms
+        threadUtil::sleep(0.1);   //1000 means 1ms
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);

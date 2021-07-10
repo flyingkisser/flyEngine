@@ -17,7 +17,7 @@ using namespace std;
 
 namespace flyEngine{
 
-class texture{
+class texture:glRef{
 public:
     texture(const char* szPath);
     ~texture();
@@ -28,6 +28,8 @@ public:
     int getHeight(){return _height;};
     unsigned char* getBuf(){return _dataBuf;};
     unsigned int getTextureID(){return _textureID;};
+    
+    void glInit();
     
 private:
     int _width;
@@ -40,7 +42,7 @@ private:
     unsigned char* _dataBuf;
     std::string _strPath;
     
-    void _glInit();
+    
     
 };
 

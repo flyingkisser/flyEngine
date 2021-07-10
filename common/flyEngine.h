@@ -18,6 +18,7 @@
 //base
 #include "node.h"
 #include "matrix.h"
+#include "glRef.h"
 
 //ui
 #include "ui.h"
@@ -36,6 +37,7 @@
 
 //3d
 #include "3DTrans.h"
+#include "node.h"
 
 //shader
 #include "shader.h"
@@ -46,15 +48,22 @@
 //events
 #include "keyboardEventMgr.h"
 #include "mouseEventMgr.h"
-#include "kbmControl.h"
 
 //camera
 #include "camera.h"
+
+//control
+#include "control.h"
+
+//world
+#include "world.h"
 
 using namespace flyEngine;
 
 void engineInit();
 
 extern float g_verticeArr[180];
+extern int g_winWidth;
+extern int g_winHeight;
 
 #endif /* flyEngine_h */

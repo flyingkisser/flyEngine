@@ -8,17 +8,52 @@
 
 #include "shaderMgr.h"
 #include "fileUtil.h"
+static std::map<std::string,shader*> s_mapShaderCache;
 
-static unsigned int s_default_shader_id=0;
-static std::map<std::string,unsigned int> s_programIDMap;
+shader* shaderMgr::getShader(const char* szVertFileName,const char* szFragFileName){
+    std::string key=std::string(szVertFileName)+'_'+std::string(szFragFileName);
+    auto it=s_mapShaderCache.find(key);
+    if(it!=s_mapShaderCache.end())
+        return it->second;
+    shader* shaderObj=new shader(szVertFileName,szFragFileName);
+    if(!shaderObj->init())
+        return nullptr;
+    s_mapShaderCache[key]=shaderObj;
+    return shaderObj;
+}
 
-unsigned int shaderMgr::createShaderWithoutCache(const char* szVertFileName,const char* szFragFileName){
+void shaderMgr::initDefaultShader(){
+    shader* s=getDefaultShader();
+    s->glInit();
+    s=get3d1texShader();
+    s->glInit();
+    s=get3d2texShader();
+    s->glInit();
+}
+
+void shaderMgr::useDefaultShader(){
+    shader* s=getDefaultShader();
+    s->use();
+}
+
+shader* shaderMgr::getDefaultShader(){
+    return shaderMgr::getShader("./res/shader/default.vs","./res/shader/default.fs");
+}
+
+shader* shaderMgr::get3d1texShader(){
+    return shaderMgr::getShader("./res/shader/3d_1tex.vs","./res/shader/3d_1tex.fs");
+}
+shader* shaderMgr::get3d2texShader(){
+    return shaderMgr::getShader("./res/shader/3d_2tex.vs","./res/shader/3d_2tex.fs");
+}
+
+unsigned int shaderMgr::createShaderFromFile(const char* szVertFileName,const char* szFragFileName){
     GLuint vertShader,fragShader,idProgram=0;
     GLint vertStatus,fragStatus,programStatus;
     GLsizei logNumWrite;
     int lenLog;
     char szLog[512]={0};
-    
+
     char* szVert=(char*)readFile(szVertFileName);
     if(!szVert){
         return idProgram;
@@ -32,10 +67,10 @@ unsigned int shaderMgr::createShaderWithoutCache(const char* szVertFileName,cons
     fragShader=glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(vertShader, 1, &szVert, NULL);
     glShaderSource(fragShader, 1, &szFrag, NULL);
-    
+
     glCompileShader(vertShader);
     glCompileShader(fragShader);
- 
+
     glGetShaderiv(vertShader, GL_COMPILE_STATUS, &vertStatus);
     if(vertStatus!=GL_TRUE){
         glGetShaderiv(vertShader, GL_INFO_LOG_LENGTH, &lenLog);
@@ -43,7 +78,7 @@ unsigned int shaderMgr::createShaderWithoutCache(const char* szVertFileName,cons
         fprintf(stderr,"shader::shader: vertSahder error: %s",szLog);
         return idProgram;
     }
-    
+
     glGetShaderiv(fragShader, GL_COMPILE_STATUS, &fragStatus);
     if(fragStatus!=GL_TRUE){
         glGetShaderiv(fragShader, GL_INFO_LOG_LENGTH, &lenLog);
@@ -52,12 +87,12 @@ unsigned int shaderMgr::createShaderWithoutCache(const char* szVertFileName,cons
         glDeleteShader(vertShader);
         return idProgram;
     }
-    
+
     idProgram=glCreateProgram();
     glAttachShader(idProgram, vertShader);
     glAttachShader(idProgram, fragShader);
     glLinkProgram(idProgram);
-    
+
     glGetProgramiv(idProgram, GL_LINK_STATUS, &programStatus);
     if(programStatus!=GL_TRUE){
         glGetProgramiv(idProgram, GL_INFO_LOG_LENGTH, &lenLog);
@@ -68,54 +103,39 @@ unsigned int shaderMgr::createShaderWithoutCache(const char* szVertFileName,cons
         return idProgram;
     }
     glUseProgram(idProgram);
-    
+
     glDeleteShader(vertShader);
     glDeleteShader(fragShader);
-    
+
     return idProgram;
 }
 
-unsigned int shaderMgr::createShader(const char* szVertFileName,const char* szFragFileName){
-    GLuint idProgram=0;
 
-    if(s_programIDMap[szVertFileName]!=0)
-        return s_programIDMap[szVertFileName];
-
-    idProgram=shaderMgr::createShaderWithoutCache(szVertFileName,szFragFileName);
-    if(idProgram==0)
-        return 0;
-    s_programIDMap[szVertFileName]=idProgram;
-    
-    return idProgram;
-}
-
-void shaderMgr::useDefaultShader(){
-    if(!s_default_shader_id){
-        s_default_shader_id=shaderMgr::createShader("./res/shader/default.vs","./res/shader/default.fs");
-        if(!s_default_shader_id)
-            return;
-    }
-    shaderMgr::useShader(s_default_shader_id);
-}
-
-unsigned int shaderMgr::getDefaultShader(){
-    if(!s_default_shader_id)
-           s_default_shader_id=shaderMgr::createShader("./res/shader/default.vs","./res/shader/default.fs");
-    return s_default_shader_id;
-}
-
-void shaderMgr::useShader(unsigned int idProgram){
-    glUseProgram(idProgram);
-}
-
-void shaderMgr::setBool(unsigned int idProgram,const char *name, bool v){
-    glUniform1i(glGetUniformLocation(idProgram, name), (int)v);
-}
-
-void shaderMgr::setInt(unsigned int idProgram,const char *name, int v){
-    glUniform1i(glGetUniformLocation(idProgram, name),v);
-}
-
-void shaderMgr::setFloat(unsigned int idProgram,const char *name, float v){
-    glUniform1f(glGetUniformLocation(idProgram, name),v);
-}
+//void shaderMgr::useShader(unsigned int idProgram){
+//    glUseProgram(idProgram);
+//}
+//
+//void shaderMgr::setBool(unsigned int idProgram,const char *name, bool v){
+//    glUniform1i(glGetUniformLocation(idProgram, name), (int)v);
+//}
+//
+//void shaderMgr::setInt(unsigned int idProgram,const char *name, int v){
+//    glUniform1i(glGetUniformLocation(idProgram, name),v);
+//}
+//
+//void shaderMgr::setFloat(unsigned int idProgram,const char *name, float v){
+//    glUniform1f(glGetUniformLocation(idProgram, name),v);
+//}
+//unsigned int shaderMgr::createShader(const char* szVertFileName,const char* szFragFileName){
+//    GLuint idProgram=0;
+//
+//    if(s_programIDMap[szVertFileName]!=0)
+//        return s_programIDMap[szVertFileName];
+//
+//    idProgram=shaderMgr::createShaderFromFile(szVertFileName,szFragFileName);
+//    if(idProgram==0)
+//        return 0;
+//    s_programIDMap[szVertFileName]=idProgram;
+//
+//    return idProgram;
+//}

@@ -20,8 +20,8 @@
 using namespace flyEngine;
 using namespace std;
 
-int g_winWidth=0;
-int g_winHeight=0;
+static int s_winWidth=0;
+static int s_winHeight=0;
 static int s_intWidth=800;
 static int s_intHeight=800;
 static int s_menuID=1;
@@ -248,13 +248,28 @@ void printGpuInfo(){
 
 
 void initWindow(){
+    if(!glfwInit()){
+        flylog("glfwInit failed!");
+        return;
+    }
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    //GLFW_OPENGL_COMPAT_PROFILE
+    //GLFW_OPENGL_CORE_PROFILE
+    glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
+    #ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    #endif
+    
     int monitorCount=0;
     //获取第一个屏幕的大小
     GLFWmonitor** pMonitor=glfwGetMonitors(&monitorCount);
     for(int i=0;i<monitorCount;i++){
         GLFWvidmode* mode=(GLFWvidmode*)glfwGetVideoMode(pMonitor[i]);
-        g_winWidth=mode->width;
-        g_winHeight=mode->height;
+        s_winWidth=mode->width;
+        s_winHeight=mode->height;
+        g_winWidth=s_winWidth;
+        g_winHeight=g_winHeight;
         break;
     }
     
@@ -279,29 +294,6 @@ void initWindow(){
     printGpuInfo();
 }
 
-void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall) {
-    initOtho2D();
-    while (!glfwWindowShouldClose(g_window)){
-        drawCall();
-        glfwSwapBuffers(g_window);
-        glfwPollEvents();
-    }
-}
-
-void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall,unsigned int shaderID) {
-    initOtho2D();
-    if(!shaderID)
-        shaderID=flyEngine::shaderMgr::getDefaultShader();
-    flyEngine::shaderMgr::useShader(shaderID);
-    
-    while (!glfwWindowShouldClose(g_window)){
-//        shaderMgr::useShader(shaderID);
-        usleep(17*1000);   //1000 means 1ms
-        drawCall();
-        glfwSwapBuffers(g_window);
-        glfwPollEvents();
-    }
-}
 
 void windowLoop(){
    while(!glfwWindowShouldClose(g_window)){
@@ -314,6 +306,29 @@ void windowLoop(){
 }
 
 
+//void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall) {
+//    initOtho2D();
+//    while (!glfwWindowShouldClose(g_window)){
+//        drawCall();
+//        glfwSwapBuffers(g_window);
+//        glfwPollEvents();
+//    }
+//}
+
+//void testInitWindow2D(const char* szTitle,std::function<void(void)> drawCall,unsigned int shaderID) {
+//    initOtho2D();
+//    if(!shaderID)
+//        shaderID=flyEngine::shaderMgr::getDefaultShader();
+//    flyEngine::shaderMgr::useShader(shaderID);
+//
+//    while (!glfwWindowShouldClose(g_window)){
+////        shaderMgr::useShader(shaderID);
+//        usleep(17*1000);   //1000 means 1ms
+//        drawCall();
+//        glfwSwapBuffers(g_window);
+//        glfwPollEvents();
+//    }
+//}
 
 //void testInitWindow2D(const char* szTitle,void (*drawCall)(void)) {
 ////    glutInitDisplayMode(displayMode);
