@@ -78,7 +78,8 @@ void drawCubeRaw(){
     glUniform1f(glGetUniformLocation(shaderID, "mixValue"), 0.7);
    
     glm::mat4 matModel=glm::translate(glm::mat4(1.0),glm::vec3(0,0,-3));
-    flyEngine::camera* cameraObj=new flyEngine::camera(shaderID);
+    flyEngine::camera* cameraObj=new flyEngine::camera();
+    cameraObj->use(shaderID);
     cameraObj->print();
     control* controlObj=new control();
     controlObj->bindCamera(cameraObj);

@@ -24,31 +24,31 @@ namespace flyEngine {
 class camera{
     
 public:
-    camera(int program);
     camera();
-    void setProgrameID(int program){_program=program;};
-    void setPosition(glm::vec3 v);
-    void setPositionX(float v);
-    void setPositionY(float v);
-    void setPositionZ(float v);
     
     float getPositionX(){return _cameraPos.x;};
     float getPositionY(){return _cameraPos.y;};
     float getPositionZ(){return _cameraPos.z;};
     
-    void setPositionFront(glm::vec3 v;
-    
-    void linkShader(int programID);
-    
-    void reset();
+    void setProgrameID(int program){_program=program;};
+    void setPosition(glm::vec3 v);
+    void setPositionX(float v);
+    void setPositionY(float v);
+    void setPositionZ(float v);
+    void setPositionFront(glm::vec3 v);
 
-    void print();
-    
     void moveBy(glm::vec3 v);
     void rotate(glm::vec3 v);
     
+    void reset();
+    void print();
+    
+
     bool init();
-    void glInit();
+//    void glInit(int programID);
+    
+    void use(int programID);
+   
 private:
     void _updateCamera();
     void _updateProjection();

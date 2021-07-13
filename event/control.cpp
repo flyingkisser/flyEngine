@@ -20,23 +20,23 @@ void control::bindCamera(flyEngine::camera* c){
     mouseEvent* msEventObj=new mouseEvent();
 
     kbEventObj->regEvent('w', [&](){
-        _camera->updateCameraPosZ(_camera->getCameraPosZ()-_move_d);
+        _camera->setPositionZ(_camera->getPositionZ()-_move_d);
     });
 
     kbEventObj->regEvent('s', [&](){
-         _camera->updateCameraPosZ(_camera->getCameraPosZ()+_move_d);
+         _camera->setPositionZ(_camera->getPositionZ()+_move_d);
     });
     kbEventObj->regEvent('a', [&](){
-        _camera->updateCameraPosX(_camera->getCameraPosX()-_move_d);
+        _camera->setPositionX(_camera->getPositionX()-_move_d);
       });
     kbEventObj->regEvent('d', [&](){
-        _camera->updateCameraPosX(_camera->getCameraPosX()+_move_d);
+        _camera->setPositionX(_camera->getPositionX()+_move_d);
     });
     kbEventObj->regEvent('z', [&](){
-       _camera->updateCameraPosY(_camera->getCameraPosY()+_move_d);
+       _camera->setPositionY(_camera->getPositionY()+_move_d);
     });
     kbEventObj->regEvent('x', [&](){
-       _camera->updateCameraPosY(_camera->getCameraPosY()-_move_d);
+       _camera->setPositionY(_camera->getPositionY()-_move_d);
     });
 
     kbEventObj->regEvent('r', [&](){
@@ -71,12 +71,12 @@ void control::bindCamera(flyEngine::camera* c){
         
         _yaw+=rotateX;
         _pitch+=rotateY;
-        glm::vec3 cameraFront;
-        cameraFront.x=cos(glm::radians(_yaw))*cos(glm::radians(_pitch));
-        cameraFront.y=sin(glm::radians(_pitch));
-        cameraFront.z=sin(glm::radians(_yaw))*cos(glm::radians(_pitch));
-        cameraFront=glm::normalize(cameraFront);
-        _camera->updateCameraFront(cameraFront.x, cameraFront.y, cameraFront.z);
+        glm::vec3 posFront;
+        posFront.x=cos(glm::radians(_yaw))*cos(glm::radians(_pitch));
+        posFront.y=sin(glm::radians(_pitch));
+        posFront.z=sin(glm::radians(_yaw))*cos(glm::radians(_pitch));
+        posFront=glm::normalize(posFront);
+        _camera->setPositionFront(glm::vec3(posFront.x, posFront.y, posFront.z));
     });
 
     //move model itself

@@ -9,6 +9,10 @@
 #include "camera.h"
 #include "flyEngine.h"
 
+flyEngine::camera::camera(){
+    init();
+}
+
 void flyEngine::camera::_updateCamera(){
     if(!_program)
         return;
@@ -26,13 +30,6 @@ void flyEngine::camera::_updateProjection(){
     glUniformMatrix4fv(glGetUniformLocation(_program, "matProj"), 1,GL_FALSE,glm::value_ptr(_matProj));
 }
 
-
-
-void flyEngine::camera::linkShader(int programID){
-    _program=programID;
-    glUniformMatrix4fv(glGetUniformLocation(programID, "matCamera"), 1,GL_FALSE,glm::value_ptr(_matCamera));
-    glUniformMatrix4fv(glGetUniformLocation(programID, "matProj"), 1,GL_FALSE,glm::value_ptr(_matProj));
-}
 
 void flyEngine::camera::reset(){
      glUniformMatrix4fv(glGetUniformLocation(_program, "matCamera"), 1,GL_FALSE,glm::value_ptr(_matCameraOrigin));
@@ -76,11 +73,11 @@ void flyEngine::camera::moveBy(glm::vec3 v){
 }
 void flyEngine::camera::rotate(glm::vec3 v){
     if(v.x)
-        _matModel=glm::rotate(_matCamera,v.x,glm::vec3(1,0,0));
+        _matCamera=glm::rotate(_matCamera,v.x,glm::vec3(1,0,0));
     if(v.y)
-        _matModel=glm::rotate(_matCamera,v.y,glm::vec3(0,1,0));
+        _matCamera=glm::rotate(_matCamera,v.y,glm::vec3(0,1,0));
     if(v.z)
-        _matModel=glm::rotate(_matCamera,v.z,glm::vec3(0,0,1));
+        _matCamera=glm::rotate(_matCamera,v.z,glm::vec3(0,0,1));
     _dirtyPos=true;
 }
 
@@ -90,11 +87,7 @@ void flyEngine::camera::rotate(glm::vec3 v){
 void flyEngine::camera::print(){
     flylog("camera pos is %f %f %f",_cameraPos.x,_cameraPos.y,_cameraPos.z);
 }
-flyEngine::camera::camera(int program){
-    _program=program;
-}
-flyEngine::camera::camera(){
-}
+
 
 bool flyEngine::camera::init(){
     _yaw=-90;
@@ -115,16 +108,19 @@ bool flyEngine::camera::init(){
     
     _matProj=glm::perspective(glm::radians(double(_fov)), (double)_screenRatio, 0.1, 100.0);
     _matProjOrigin=_matProj;
-    
-    if(_program){
-        _updateProjection();
-        _updateCamera();
-    }
     return true;
 }
 
-void  flyEngine::camera::glInit(int programID){
-    linkShader(programID);
-    _updateProjection();
-    _updateCamera();
+//void  flyEngine::camera::glInit(int programID){
+//    _program=programID;
+//    _updateProjection();
+//    _updateCamera();
+//}
+
+void flyEngine::camera::use(int programID){
+    _program=programID;
+    glUniformMatrix4fv(glGetUniformLocation(_program, "matCamera"), 1,GL_FALSE,glm::value_ptr(_matCamera));
+    glUniformMatrix4fv(glGetUniformLocation(_program, "matProj"), 1,GL_FALSE,glm::value_ptr(_matProj));
 }
+
+
