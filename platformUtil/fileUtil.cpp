@@ -11,7 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-unsigned char* readFile(const char* szFileName){
+unsigned char* fileUtil::readFile(const char* szFileName){
     FILE* fFile=fopen(szFileName, "rb");
     if(fFile==NULL)
         return NULL;
@@ -34,7 +34,7 @@ unsigned char* readFile(const char* szFileName){
     return buf;
 }
 
-int writeFile(const char* szFileName,unsigned char* buf,int size){
+int fileUtil::writeFile(const char* szFileName,unsigned char* buf,int size){
     FILE* fFile=fopen(szFileName, "wb");
        if(fFile==NULL)
            return 0;

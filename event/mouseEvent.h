@@ -20,9 +20,9 @@ private:
     
     std::vector<std::function<void(float,float)>> _vectorOnMove;
     
-    std::vector<std::function<void(float,float)>> _vectorOnMoveWithLefClick;
-    std::vector<std::function<void(float,float)>> _vectorOnMoveWithRightClick;
-    std::vector<std::function<void(float,float)>> _vectorOnMoveWithMiddleClick;
+    std::vector<std::function<void(float,float)>> _vectorOnMoveWithLefHold;
+    std::vector<std::function<void(float,float)>> _vectorOnMoveWithRightHold;
+    std::vector<std::function<void(float,float)>> _vectorOnMoveWithMiddleHold;
     
     std::vector<std::function<void(float,float)>> _vectorOnScroll;
     
@@ -35,9 +35,9 @@ public:
         
         _vectorOnMove.clear();
         
-        _vectorOnMoveWithLefClick.clear();
-        _vectorOnMoveWithRightClick.clear();
-        _vectorOnMoveWithMiddleClick.clear();
+        _vectorOnMoveWithLefHold.clear();
+        _vectorOnMoveWithRightHold.clear();
+        _vectorOnMoveWithMiddleHold.clear();
         
         _vectorOnScroll.clear();
         
@@ -57,16 +57,16 @@ public:
    void regOnScroll(std::function<void(float,float)> cb){
          _vectorOnScroll.push_back(cb);
     }
-    void regOnMoveWithLeftClick(std::function<void(float,float)> cb){
-        _vectorOnMoveWithLefClick.push_back(cb);
+    void regOnMoveWithLeftHold(std::function<void(float,float)> cb){
+        _vectorOnMoveWithLefHold.push_back(cb);
     }
     
-    void regOnMoveWithRightClick(std::function<void(float,float)> cb){
-        _vectorOnMoveWithRightClick.push_back(cb);
+    void regOnMoveWithRightHold(std::function<void(float,float)> cb){
+        _vectorOnMoveWithRightHold.push_back(cb);
     }
     
-    void regOnMoveWithMiddleClick(std::function<void(float,float)> cb){
-         _vectorOnMoveWithMiddleClick.push_back(cb);
+    void regOnMoveWithMiddleHold(std::function<void(float,float)> cb){
+         _vectorOnMoveWithMiddleHold.push_back(cb);
     }
     
     void onLeftClick(){
@@ -89,18 +89,18 @@ public:
            cb(x,y);
        }
     }
-    void onMoveWithLeftClick(float x,float y){
-        for(std::function<void(float,float)> cb : _vectorOnMoveWithLefClick){
+    void onMoveWithLeftHold(float x,float y){
+        for(std::function<void(float,float)> cb : _vectorOnMoveWithLefHold){
            cb(x,y);
        }
     }
-    void onMoveWithRightClick(float x,float y){
-        for(std::function<void(float,float)> cb : _vectorOnMoveWithRightClick){
+    void onMoveWithRightHold(float x,float y){
+        for(std::function<void(float,float)> cb : _vectorOnMoveWithRightHold){
            cb(x,y);
        }
     }
-    void onMoveWithMiddleClick(float x,float y){
-        for(std::function<void(float,float)> cb : _vectorOnMoveWithMiddleClick){
+    void onMoveWithMiddleHold(float x,float y){
+        for(std::function<void(float,float)> cb : _vectorOnMoveWithMiddleHold){
            cb(x,y);
        }
     }

@@ -10,29 +10,29 @@
 #include "defines.h"
 #include <string>
 
-const char* getGPUBrand(){
+const char* gpuUtil::getGPUBrand(){
     GLubyte* b=(GLubyte*)glGetString(GL_RENDER);
     return (const char*)glGetString(GL_RENDER);
 }
 
-const char* getGPUVender(){
+const char* gpuUtil::getGPUVender(){
     return (const char*)glGetString(GL_VENDOR);
 }
 
-const char* getGLVersion(){
+const char* gpuUtil::getGLVersion(){
     return (const char*)glGetString(GL_VERSION);
 }
 
-const char* getGLSLVersion(){
+const char* gpuUtil::getGLSLVersion(){
     return (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION);
 }
 
 
-const char* getGPUSupportExtensions(){
+const char* gpuUtil::getGPUSupportExtensions(){
     return (const char*)glGetString(GL_EXTENSIONS);
 }
 
-bool isSupportETC1(){
+bool gpuUtil::isSupportETC1(){
     const char* extStrBuf=(const char*)glGetString(GL_EXTENSIONS);
     if(!extStrBuf)
         return false;
@@ -41,7 +41,7 @@ bool isSupportETC1(){
     
 }
 
-bool isSupportPVR(){
+bool gpuUtil::isSupportPVR(){
     const char* extStrBuf=(const char*)glGetString(GL_EXTENSIONS);
     if(!extStrBuf)
            return false;

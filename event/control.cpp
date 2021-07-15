@@ -12,13 +12,18 @@
 void control::bindCamera(flyEngine::camera* c){
     _camera=c;
     char szBuf[512]={0};
+    char szRand[32]={0};
+    
+    randUtil::getRandStr(6, szRand);
         
-    snprintf(szBuf,sizeof(szBuf),"keyboard_control");
+    snprintf(szBuf,sizeof(szBuf),"event_control_%s",szRand);
     keyboardEvent* kbEventObj=new keyboardEvent();
     keyboardEventMgr::addEvent(string(szBuf), kbEventObj);
 
     mouseEvent* msEventObj=new mouseEvent();
-
+    mouseEventMgr::addEvent(szBuf, msEventObj);
+    
+    //keyboard event
     kbEventObj->regEvent('w', [&](){
         _camera->setPositionZ(_camera->getPositionZ()-_move_d);
     });
@@ -42,7 +47,9 @@ void control::bindCamera(flyEngine::camera* c){
     kbEventObj->regEvent('r', [&](){
         _camera->reset();
     });
-
+    
+    
+    //mouse event
     msEventObj->regOnLeftClick([&](){
         _mouseLeftOriginX=0;
         _mouseLeftOriginY=0;
@@ -54,8 +61,8 @@ void control::bindCamera(flyEngine::camera* c){
     msEventObj->regOnMiddleClick([&](){
         cout<<"middle click!"<<endl;
     });
-    //move camera
-    msEventObj->regOnMoveWithLeftClick([&](float x,float y){
+  
+    msEventObj->regOnMoveWithLeftHold([&](float x,float y){
         if(_mouseLeftOriginX==0){
             _mouseLeftOriginX=x;
             _mouseLeftOriginY=y;
@@ -75,12 +82,19 @@ void control::bindCamera(flyEngine::camera* c){
         posFront.x=cos(glm::radians(_yaw))*cos(glm::radians(_pitch));
         posFront.y=sin(glm::radians(_pitch));
         posFront.z=sin(glm::radians(_yaw))*cos(glm::radians(_pitch));
-        posFront=glm::normalize(posFront);
-        _camera->setPositionFront(glm::vec3(posFront.x, posFront.y, posFront.z));
+        _camera->setPositionFront(glm::normalize(posFront));
     });
 
+    msEventObj->regOnMoveWithMiddleHold([&](float x,float y){
+      cout<<"on mouse middle move!"<<x<<" "<<y<<endl;
+    });
+
+    msEventObj->regOnScroll([&](float x,float y){
+      cout<<"on mouse scroll!"<<x<<" "<<y<<endl;
+    });
+    
     //move model itself
-    //    msEventObj->regOnMoveWithRightClick([&](float x,float y){
+    //    msEventObj->regOnMoveWithRightHold([&](float x,float y){
     //        if(_mouseRightOriginX==0){
     //            _mouseRightOriginX=x;
     //            _mouseRightOriginY=y;
@@ -98,13 +112,7 @@ void control::bindCamera(flyEngine::camera* c){
     //        updateModel();
     //    });
 
-    msEventObj->regOnMoveWithMiddleClick([&](float x,float y){
-        cout<<"on mouse middle move!"<<x<<" "<<y<<endl;
-    });
+  
 
-    msEventObj->regOnScroll([&](float x,float y){
-        cout<<"on mouse scroll!"<<x<<" "<<y<<endl;
-    });
-
-    mouseEventMgr::addEvent("control_mouse", msEventObj);
+    
 }

@@ -26,6 +26,9 @@ void flyEngine::camera::_updateCamera(){
 void flyEngine::camera::_updateProjection(){
     if(!_program)
         return;
+    if(!_dirtyProj)
+           return;
+    _dirtyProj=false;
     _matProj=glm::perspective(glm::radians((double)_fov),(double)_screenRatio, 0.1, 100.0);
     glUniformMatrix4fv(glGetUniformLocation(_program, "matProj"), 1,GL_FALSE,glm::value_ptr(_matProj));
 }
@@ -81,7 +84,10 @@ void flyEngine::camera::rotate(glm::vec3 v){
     _dirtyPos=true;
 }
 
-
+void flyEngine::camera::enableControl(){
+    control* _controlObj=new flyEngine::control();
+    _controlObj->bindCamera(this);
+}
 
 
 void flyEngine::camera::print(){
@@ -95,7 +101,7 @@ bool flyEngine::camera::init(){
     _fov=30.0;
     _fovOrigin=_fov;
     _screenRatio=800/600;
-    _dirtyPos=true;
+    
     _cameraPos=glm::vec3(0,0,3);
     _cameraFront.x=cos(glm::radians(_yaw))*cos(glm::radians(_pitch));
     _cameraFront.y=sin(glm::radians(_pitch));
@@ -108,19 +114,16 @@ bool flyEngine::camera::init(){
     
     _matProj=glm::perspective(glm::radians(double(_fov)), (double)_screenRatio, 0.1, 100.0);
     _matProjOrigin=_matProj;
+    
+    _dirtyPos=true;
+    _dirtyProj=true;
     return true;
 }
 
-//void  flyEngine::camera::glInit(int programID){
-//    _program=programID;
-//    _updateProjection();
-//    _updateCamera();
-//}
 
-void flyEngine::camera::use(int programID){
+void flyEngine::camera::update(int programID){
     _program=programID;
-    glUniformMatrix4fv(glGetUniformLocation(_program, "matCamera"), 1,GL_FALSE,glm::value_ptr(_matCamera));
-    glUniformMatrix4fv(glGetUniformLocation(_program, "matProj"), 1,GL_FALSE,glm::value_ptr(_matProj));
+    _updateCamera();
+    _updateProjection();
 }
-
 

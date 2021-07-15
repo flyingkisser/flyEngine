@@ -15,11 +15,13 @@
 #include <stdio.h>
 
 #include "flyEngine.h"
+#include "control.h"
 #include <string>
 #include <functional>
 using namespace std;
 
 namespace flyEngine {
+class control;
 
 class camera{
     
@@ -43,15 +45,17 @@ public:
     void reset();
     void print();
     
-
     bool init();
-//    void glInit(int programID);
+
+    void update(int programID);
     
-    void use(int programID);
+    void enableControl();
    
 private:
     void _updateCamera();
     void _updateProjection();
+    
+    control* _controlObj;
     
     glm::mat4 _matProj;
     glm::mat4 _matProjOrigin;
@@ -63,6 +67,7 @@ private:
     glm::vec3 _cameraUp;
     
     bool _dirtyPos;
+    bool _dirtyProj;
     int _program=0;
     float _yaw=0;
     float _pitch=0;

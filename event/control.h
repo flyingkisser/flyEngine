@@ -13,19 +13,18 @@
 #include <string>
 
 #include "flyEngine.h"
+#include "camera.h"
 
 using namespace std;
-class camera;
+
 
 namespace flyEngine {
+
+class camera;
 
 class control
 {
 private:
-    glm::mat4 _matModel;
-    glm::mat4 _matModelOrigin;
-    string _matNameModel;
-    
     float _move_d=0.1;
     float _mouseLeftOriginX=0;
     float _mouseLeftOriginY=0;
@@ -35,15 +34,10 @@ private:
     float _height2PI=4000;
     float _yaw=-90;
     float _pitch=0;
-    
-    int _program=0;
-    
-    camera* _camera;
-    
-    
+    flyEngine::camera* _camera;
 public:
     control(){};
-    void bindCamera(camera* c);
+    void bindCamera(flyEngine::camera* c);
 };
 
 }

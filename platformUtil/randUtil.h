@@ -13,6 +13,12 @@
 #include <iostream>
 #include <ctime>
 
-int getRand(int begin,int end);
+class randUtil{
+    public :
+        static unsigned int getRand(unsigned int begin,unsigned int end);
+        static float getRand(float begin,float end);
+        static void getRandStr(unsigned int strLen,char* buf);
+};
+
 
 #endif /* randUtil_h */

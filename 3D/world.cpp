@@ -57,6 +57,7 @@ void world::_main_loop(){
     flyEngine::camera* cameraObj=new flyEngine::camera();
     flyEngine::world* worldObj=flyEngine::world::getInstance();
     worldObj->setCamera(cameraObj);
+    cameraObj->enableControl();
     
     while(!glfwWindowShouldClose(g_window)){
          threadUtil::sleep(0.1);   //1000 means 1ms

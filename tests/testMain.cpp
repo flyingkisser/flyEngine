@@ -24,7 +24,7 @@
 #include "std_move_forward.h"
 
 void main_logic(){
-     test3d_drawOneCube();
+     test3d_drawCubeOne();
 }
 
 
