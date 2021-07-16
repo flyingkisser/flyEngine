@@ -35,50 +35,53 @@ bool node::init(){
 }
 
 void node::moveBy(glm::vec3 v){
-    _matModel=glm::translate(_matModel, v);
     _pos.x+=v.x;
     _pos.y+=v.y;
     _pos.z+=v.z;
     _dirtyPos=true;
+    //    _matModel=glm::translate(_matModel, v);
 }
 void node::scale(glm::vec3 v){
-    _matModel=glm::scale(_matModel, v);
+    _scale=v;
     _dirtyPos=true;
+//  _matModel=glm::scale(_matModel, v);
 }
 
 //v里面是旋转的角度，0到360，函数会转成弧度
 void node::rotate(glm::vec3 v){
-    if(v.x)
-        _matModel=glm::rotate(_matModel,glm::radians(v.x),glm::vec3(1,0,0));
-    if(v.y)
-          _matModel=glm::rotate(_matModel,glm::radians(v.y),glm::vec3(0,1,0));
-    if(v.z)
-          _matModel=glm::rotate(_matModel,glm::radians(v.z),glm::vec3(0,0,1));
+    _rorate=v;
+    _dirtyPos=true;
+//    if(v.x)
+//        _matModel=glm::rotate(_matModel,glm::radians(v.x),glm::vec3(1,0,0));
+//    if(v.y)
+//          _matModel=glm::rotate(_matModel,glm::radians(v.y),glm::vec3(0,1,0));
+//    if(v.z)
+//          _matModel=glm::rotate(_matModel,glm::radians(v.z),glm::vec3(0,0,1));
 }
 
 void node::setPosition(glm::vec3 p){
     _pos=p;
-//    _pos.x/=g_winWidth;
-//    _pos.y/=g_winHeight;
-    _matModel=glm::translate(_matModel,_pos);
     _dirtyPos=true;
+    //    _pos.x/=g_winWidth;
+    //    _pos.y/=g_winHeight;
+    //    _matModel=glm::translate(_matModel,_pos);
 };
 
 void node::setPositionX(float v){
     _pos.x=v;
-    _matModel=glm::translate(_matModel,glm::vec3(v,0,0));
+//    _matModel=glm::translate(_matModel,glm::vec3(v,0,0));
     _dirtyPos=true;
 };
 
 void node::setPositionY(float v){
     _pos.y=v;
-    _matModel=glm::translate(_matModel,glm::vec3(0,v,0));
+//    _matModel=glm::translate(_matModel,glm::vec3(0,v,0));
     _dirtyPos=true;
 };
 
 void node::setPositionZ(float v){
     _pos.z=v;
-    _matModel=glm::translate(_matModel,glm::vec3(0,0,v));
+//    _matModel=glm::translate(_matModel,glm::vec3(0,0,v));
     _dirtyPos=true;
 };
 
@@ -105,7 +108,7 @@ void node::glInit(){
     int numPerTex=2;     //每个纹理坐标用几个浮点数来表示
     int stride=5*sizeof(float);
     int offsetVertex=0;   //顶点坐标在数组每小块中的偏移
-    _pos=glm::vec3(0,0,-5);
+//    _pos=glm::vec3(0,0,-5);
     
     //生成VAO
     glGenVertexArrays(1,&_gl_vao);
@@ -127,12 +130,9 @@ void node::glInit(){
     
     glUniform1i(glGetUniformLocation(_gl_program, "texture0"), _gl_texture0);
     
-    _matModel=glm::translate(glm::mat4(1.0),_pos);
+    setPosition(glm::vec3(0,0,-10));
     rotate(glm::vec3(30,0,30));
 
-    _matModelOrigin=_matModel;
-    glUniformMatrix4fv(glGetUniformLocation(_gl_program,"matModel"), 1,GL_FALSE,glm::value_ptr(_matModel));
-    
     _dirtyPos=true;
 }
 
@@ -140,6 +140,18 @@ void node::draw(camera* cameraObj){
     _shaderObj->use();
     
     if(_dirtyPos){
+        _matModel=glm::mat4(1.0f);
+        if(_pos.x || _pos.y || _pos.z)
+            _matModel=glm::translate(_matModel,_pos);
+        if(_rorate.x)
+            _matModel=glm::rotate(_matModel,glm::radians(_rorate.x),glm::vec3(1,0,0));
+        if(_rorate.y)
+            _matModel=glm::rotate(_matModel,glm::radians(_rorate.y),glm::vec3(0,1,0));
+        if(_rorate.z)
+            _matModel=glm::rotate(_matModel,glm::radians(_rorate.z),glm::vec3(0,0,1));
+        if(_scale.x || _scale.y || _scale.z)
+            _matModel=glm::scale(_matModel,_scale);
+      
         glUniformMatrix4fv(glGetUniformLocation(_gl_program,"matModel"), 1,GL_FALSE,glm::value_ptr(_matModel));
         _dirtyPos=false;
         logUtil::logMat4(_matModel);

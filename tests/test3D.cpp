@@ -37,6 +37,7 @@ void test3d_drawCubeOne(){
         return;
     }
     nodeObj->glInit();
+   // nodeObj->setPosition(glm::vec3(0,0,-5));
        
     world::getInstance()->addChild(nodeObj);
     nodeObj->print();
