@@ -15,39 +15,47 @@
 #include <stdio.h>
 
 #include "flyEngine.h"
+#include "control.h"
 #include <string>
 #include <functional>
 using namespace std;
 
 namespace flyEngine {
+class control;
 
 class camera{
     
 public:
-    camera(int program);
     camera();
+    
+    float getPositionX(){return _cameraPos.x;};
+    float getPositionY(){return _cameraPos.y;};
+    float getPositionZ(){return _cameraPos.z;};
+    
     void setProgrameID(int program){_program=program;};
-    void updateCameraPos(float x,float y,float z);
-    void updateCameraPosX(float v);
-    void updateCameraPosY(float v);
-    void updateCameraPosZ(float v);
-    
-    float getCameraPosX(){return _cameraPos.x;};
-    float getCameraPosY(){return _cameraPos.y;};
-    float getCameraPosZ(){return _cameraPos.z;};
-    
-    void updateCameraFront(float x,float y,float z);
-    
-    void linkShader(int programID);
+    void setPosition(glm::vec3 v);
+    void setPositionX(float v);
+    void setPositionY(float v);
+    void setPositionZ(float v);
+    void setPositionFront(glm::vec3 v);
+
+    void moveBy(glm::vec3 v);
+    void rotate(glm::vec3 v);
     
     void reset();
-
     void print();
     
+    bool init();
+
+    void update(int programID);
+    
+    void enableControl();
+   
 private:
-    void _init();
     void _updateCamera();
     void _updateProjection();
+    
+    control* _controlObj;
     
     glm::mat4 _matProj;
     glm::mat4 _matProjOrigin;
@@ -58,6 +66,8 @@ private:
     glm::vec3 _cameraFront;
     glm::vec3 _cameraUp;
     
+    bool _dirtyPos;
+    bool _dirtyProj;
     int _program=0;
     float _yaw=0;
     float _pitch=0;

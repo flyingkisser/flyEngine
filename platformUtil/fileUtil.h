@@ -10,8 +10,13 @@
 #define fileUtil_h
 
 
+class fileUtil{
+    public :
+        static unsigned char* readFile(const char* szFileName);
+        static int writeFile(const char*szFileName,unsigned char* buf,int size);
+};
 
-unsigned char* readFile(const char* szFileName);
-int writeFile(const char*szFileName,unsigned char* buf,int size);
+
+
 
 #endif /* fileUtil_h */

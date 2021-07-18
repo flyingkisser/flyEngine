@@ -10,9 +10,12 @@
 #define logUtil_h
 
 #include <stdio.h>
+#include "defines.h"
 
 class logUtil{
+public:
     static void log(const char* szFmt,...);
+    static void logMat4(glm::mat4 mat);
 };
 
 void flylog(const char* szFmt,...);

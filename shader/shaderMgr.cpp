@@ -54,11 +54,11 @@ unsigned int shaderMgr::createShaderFromFile(const char* szVertFileName,const ch
     int lenLog;
     char szLog[512]={0};
 
-    char* szVert=(char*)readFile(szVertFileName);
+    char* szVert=(char*)fileUtil::readFile(szVertFileName);
     if(!szVert){
         return idProgram;
     }
-    char* szFrag=(char*)readFile(szFragFileName);
+    char* szFrag=(char*)fileUtil::readFile(szFragFileName);
     if(!szFrag){
         free(szVert);
         return idProgram;

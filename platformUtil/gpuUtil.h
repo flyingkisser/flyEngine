@@ -10,12 +10,16 @@
 #define gpuUtil_h
 
 #include <stdio.h>
-const char* getGPUBrand();
-const char* getGPUVender();
-const char* getGLVersion();
-const char* getGLSLVersion();
-const char* getGPUSupportExtensions();
-bool isSupportETC1();
-bool isSupportPVR();
+class gpuUtil{
+public:
+    static const char* getGPUBrand();
+    static const char* getGPUVender();
+    static const char* getGLVersion();
+    static const char* getGLSLVersion();
+    static const char* getGPUSupportExtensions();
+    static bool isSupportETC1();
+    static bool isSupportPVR();
+};
+
 
 #endif /* gpuUtil_h */

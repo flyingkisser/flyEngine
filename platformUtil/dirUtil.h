@@ -11,10 +11,12 @@
 
 #include <stdio.h>
 
-void getCurrentWorkDir(char *szBuf,int bufSize);
-void getHomeDir(char *szBuf,int bufSize);
-
-void setCurrentWorkDir(const char* szBuf);
 
 
+class dirUtil{
+public:
+    static void getCurrentWorkDir(char *szBuf,int bufSize);
+    static void getHomeDir(char *szBuf,int bufSize);
+    static void setCurrentWorkDir(const char* szBuf);
+};
 #endif /* dirUtil_h */

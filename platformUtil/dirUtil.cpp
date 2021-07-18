@@ -11,11 +11,11 @@
 #include <string.h>
 #include <stdlib.h>
 
-void getCurrentWorkDir(char *szBuf,int bufSize){
+void dirUtil::getCurrentWorkDir(char *szBuf,int bufSize){
     getcwd(szBuf,bufSize);
 }
 
-void getHomeDir(char* szBuf,int bufSize){
+void dirUtil::getHomeDir(char* szBuf,int bufSize){
     char *home_path = getenv("HOME");
     int strLen=(int)strlen(home_path);
     if(strLen>bufSize)
@@ -23,6 +23,6 @@ void getHomeDir(char* szBuf,int bufSize){
     strncpy(szBuf,home_path,strLen);
 }
 
-void setCurrentWorkDir(const char* szBuf){
+void dirUtil::setCurrentWorkDir(const char* szBuf){
     chdir(szBuf);
 }

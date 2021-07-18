@@ -29,7 +29,11 @@ class node:glRef
 private:
     glm::mat4 _matModel;
     glm::mat4 _matModelOrigin;
-    glm::vec3 _pos;
+    
+    glm::vec3 _pos=glm::vec3(0,0,0);
+    glm::vec3 _scale=glm::vec3(1,1,1);
+    glm::vec3 _rorate=glm::vec3(0,0,0);
+    
     unsigned int _gl_program=0;
     unsigned int _gl_texture0=0;
     unsigned int _gl_vao=0;

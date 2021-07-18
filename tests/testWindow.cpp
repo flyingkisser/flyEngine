@@ -236,13 +236,13 @@ void testRegMenu(const char* szMenuName,std::function<void(void)>cb){
 
 void printGpuInfo(){
     fprintf(stdout,"gpu brand:%s\ngpu vender:%s\nGL version:%s\nGLSL version:%s\nsupport etc:%d\nsupport pvr:%d\ngpu extension:\n%s\n",
-           getGPUBrand(),
-           getGPUVender(),
-           getGLVersion(),
-            getGLSLVersion(),
-           isSupportETC1(),
-           isSupportPVR(),
-           getGPUSupportExtensions()
+           gpuUtil::getGPUBrand(),
+           gpuUtil::getGPUVender(),
+           gpuUtil::getGLVersion(),
+            gpuUtil::getGLSLVersion(),
+           gpuUtil::isSupportETC1(),
+           gpuUtil::isSupportPVR(),
+           gpuUtil::getGPUSupportExtensions()
            );
 }
 

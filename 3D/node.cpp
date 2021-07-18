@@ -24,24 +24,6 @@ node::node(const char* texPath){
     _texPath=texPath;
 }
 
-//bool node::initTexture(const char* texPath){
-//    _texObj=textureMgr::getInstance()->getTexture(texPath);
-//    if(_texObj==nullptr)
-//          return false;
-//    return true;
-//}
-//
-//bool node::initShader(int id){
-//    _gl_program=id;
-//    return true;
-//}
-//bool node::initShader(const char* vsPath,const char* fsPath){
-//    _shaderObj=shaderMgr::getShader(vsPath, fsPath);
-//    if(_shaderObj==nullptr)
-//        return false;
-//    return true;
-//}
-
 bool node::init(){
     _texObj=textureMgr::getInstance()->getTexture(_texPath);
     if(_texObj==nullptr)
@@ -52,6 +34,58 @@ bool node::init(){
     return true;
 }
 
+void node::moveBy(glm::vec3 v){
+    _pos.x+=v.x;
+    _pos.y+=v.y;
+    _pos.z+=v.z;
+    _dirtyPos=true;
+    //    _matModel=glm::translate(_matModel, v);
+}
+void node::scale(glm::vec3 v){
+    _scale=v;
+    _dirtyPos=true;
+//  _matModel=glm::scale(_matModel, v);
+}
+
+//v里面是旋转的角度，0到360，函数会转成弧度
+void node::rotate(glm::vec3 v){
+    _rorate=v;
+    _dirtyPos=true;
+//    if(v.x)
+//        _matModel=glm::rotate(_matModel,glm::radians(v.x),glm::vec3(1,0,0));
+//    if(v.y)
+//          _matModel=glm::rotate(_matModel,glm::radians(v.y),glm::vec3(0,1,0));
+//    if(v.z)
+//          _matModel=glm::rotate(_matModel,glm::radians(v.z),glm::vec3(0,0,1));
+}
+
+void node::setPosition(glm::vec3 p){
+    _pos=p;
+    _dirtyPos=true;
+    //    _pos.x/=g_winWidth;
+    //    _pos.y/=g_winHeight;
+    //    _matModel=glm::translate(_matModel,_pos);
+};
+
+void node::setPositionX(float v){
+    _pos.x=v;
+//    _matModel=glm::translate(_matModel,glm::vec3(v,0,0));
+    _dirtyPos=true;
+};
+
+void node::setPositionY(float v){
+    _pos.y=v;
+//    _matModel=glm::translate(_matModel,glm::vec3(0,v,0));
+    _dirtyPos=true;
+};
+
+void node::setPositionZ(float v){
+    _pos.z=v;
+//    _matModel=glm::translate(_matModel,glm::vec3(0,0,v));
+    _dirtyPos=true;
+};
+
+
 void node::glInit(){
     _texObj->glInit();
     _gl_texture0=_texObj->getTextureID();
@@ -61,7 +95,7 @@ void node::glInit(){
         flylog("node::glInit: _gl_texture0 is 0,error!");
         return;
     }
-    if(!_gl_texture0){
+    if(!_gl_program){
         flylog("node::glInit: _gl_program is 0,error!");
         return;
     }
@@ -74,7 +108,8 @@ void node::glInit(){
     int numPerTex=2;     //每个纹理坐标用几个浮点数来表示
     int stride=5*sizeof(float);
     int offsetVertex=0;   //顶点坐标在数组每小块中的偏移
-    _pos=glm::vec3(0,0,-3);
+//    _pos=glm::vec3(0,0,-5);
+    
     //生成VAO
     glGenVertexArrays(1,&_gl_vao);
     glBindVertexArray(_gl_vao);
@@ -95,19 +130,33 @@ void node::glInit(){
     
     glUniform1i(glGetUniformLocation(_gl_program, "texture0"), _gl_texture0);
     
-    _matModel=glm::translate(glm::mat4(1.0),_pos);
-    _matModelOrigin=_matModel;
-    glUniformMatrix4fv(glGetUniformLocation(_gl_program,"matModel"), 1,GL_FALSE,glm::value_ptr(_matModel));
+    setPosition(glm::vec3(0,0,-10));
+    rotate(glm::vec3(30,0,30));
+
+    _dirtyPos=true;
 }
 
 void node::draw(camera* cameraObj){
     _shaderObj->use();
     
-    cameraObj->linkShader(_gl_program);
     if(_dirtyPos){
+        _matModel=glm::mat4(1.0f);
+        if(_pos.x || _pos.y || _pos.z)
+            _matModel=glm::translate(_matModel,_pos);
+        if(_rorate.x)
+            _matModel=glm::rotate(_matModel,glm::radians(_rorate.x),glm::vec3(1,0,0));
+        if(_rorate.y)
+            _matModel=glm::rotate(_matModel,glm::radians(_rorate.y),glm::vec3(0,1,0));
+        if(_rorate.z)
+            _matModel=glm::rotate(_matModel,glm::radians(_rorate.z),glm::vec3(0,0,1));
+        if(_scale.x || _scale.y || _scale.z)
+            _matModel=glm::scale(_matModel,_scale);
+      
         glUniformMatrix4fv(glGetUniformLocation(_gl_program,"matModel"), 1,GL_FALSE,glm::value_ptr(_matModel));
         _dirtyPos=false;
+        logUtil::logMat4(_matModel);
     }
+    cameraObj->update(_gl_program);
         
     glEnable(GL_DEPTH_TEST);
     glActiveTexture(GL_TEXTURE0);
@@ -115,53 +164,3 @@ void node::draw(camera* cameraObj){
     glBindVertexArray(_gl_vao);
     glDrawArrays(GL_TRIANGLES,0,36);
 }
-
-
-void node::moveBy(glm::vec3 v){
-    _matModel=glm::translate(_matModel, v);
-    _pos.x=_matModel[0][1];
-    _pos.y=_matModel[1][1];
-    _pos.z=_matModel[2][1];
-    _dirtyPos=true;
-}
-void node::scale(glm::vec3 v){
-    _matModel=glm::scale(_matModel, v);
-    _dirtyPos=true;
-}
-void node::rotate(glm::vec3 v){
-    if(v.x)
-        _matModel=glm::rotate(_matModel,v.x,glm::vec3(1,0,0));
-    if(v.y)
-          _matModel=glm::rotate(_matModel,v.y,glm::vec3(0,1,0));
-    if(v.z)
-          _matModel=glm::rotate(_matModel,v.z,glm::vec3(0,0,1));
-    _dirtyPos=true;
-}
-
-void node::setPosition(glm::vec3 p){
-    _pos=p;
-    _pos.x/=g_winWidth;
-    _pos.y/=g_winHeight;
-    _matModel=glm::translate(glm::mat4(1.0),_pos);
-    _dirtyPos=true;
-};
-
-void node::setPositionX(float v){
-    _pos.x=v;
-    _matModel=glm::translate(glm::mat4(1.0),_pos);
-    _dirtyPos=true;
-};
-
-void node::setPositionY(float v){
-    _pos.y=v;
-    _matModel=glm::translate(glm::mat4(1.0),_pos);
-    _dirtyPos=true;
-};
-
-void node::setPositionZ(float v){
-    _pos.z=v;
-    _matModel=glm::translate(glm::mat4(1.0),_pos);
-    _dirtyPos=true;
-};
-
-

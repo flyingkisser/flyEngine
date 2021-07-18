@@ -47,17 +47,17 @@ void mouseEventMgr::init(GLFWwindow* window){
         }
         if(glfwGetMouseButton(s_window, GLFW_MOUSE_BUTTON_LEFT)==GLFW_PRESS){
             for(auto it : s_eventChainMap){
-                 it.second->onMoveWithLeftClick((float)xpos,s_high-(float)ypos);
+                 it.second->onMoveWithLeftHold((float)xpos,s_high-(float)ypos);
             }
         }
         if(glfwGetMouseButton(s_window, GLFW_MOUSE_BUTTON_RIGHT)==GLFW_PRESS){
             for(auto it : s_eventChainMap){
-                 it.second->onMoveWithRightClick((float)xpos,s_high-(float)ypos);
+                 it.second->onMoveWithRightHold((float)xpos,s_high-(float)ypos);
             }
         }
         if(glfwGetMouseButton(s_window, GLFW_MOUSE_BUTTON_MIDDLE)==GLFW_PRESS){
             for(auto it : s_eventChainMap){
-                 it.second->onMoveWithMiddleClick((float)xpos,s_high-(float)ypos);
+                 it.second->onMoveWithMiddleHold((float)xpos,s_high-(float)ypos);
             }
         }
         

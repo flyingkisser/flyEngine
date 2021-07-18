@@ -18,11 +18,11 @@ shader::shader(const char* szVertFileName,const char* szFragFileName){
 bool shader::init(){
     _idProgram=0;
 
-    char* szVert=(char*)readFile(_szVertFileName);
+    char* szVert=(char*)fileUtil::readFile(_szVertFileName);
     if(!szVert){
         return false;
     }
-    char* szFrag=(char*)readFile(_szFragFileName);
+    char* szFrag=(char*)fileUtil::readFile(_szFragFileName);
     if(!szFrag){
         free(szVert);
         return false;

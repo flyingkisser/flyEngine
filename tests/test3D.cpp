@@ -30,7 +30,22 @@ void test3dView() {
     //drawPlane1();
 }
 
-void test3d_drawOneCube(){
+void test3d_drawCubeOne(){
+    flyEngine::node* nodeObj=new flyEngine::node("res/fire.png");
+    if(!nodeObj->init()){
+        flylog("node init failed!");
+        return;
+    }
+    nodeObj->glInit();
+   // nodeObj->setPosition(glm::vec3(0,0,-5));
+       
+    world::getInstance()->addChild(nodeObj);
+    nodeObj->print();
+//    nodeObj->setPosition(glm::vec3(0,-0.5,nodeObj->getPositionZ()-2));
+//    nodeObj->print();
+}
+
+void test3d_drawCubeMore(){
     flyEngine::node* nodeObj=new flyEngine::node("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -78,7 +93,8 @@ void drawCubeRaw(){
     glUniform1f(glGetUniformLocation(shaderID, "mixValue"), 0.7);
    
     glm::mat4 matModel=glm::translate(glm::mat4(1.0),glm::vec3(0,0,-3));
-    flyEngine::camera* cameraObj=new flyEngine::camera(shaderID);
+    flyEngine::camera* cameraObj=new flyEngine::camera();
+    cameraObj->update(shaderID);
     cameraObj->print();
     control* controlObj=new control();
     controlObj->bindCamera(cameraObj);

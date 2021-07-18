@@ -49,11 +49,13 @@
 #include "keyboardEventMgr.h"
 #include "mouseEventMgr.h"
 
+//control
+#include "control.h"
+
 //camera
 #include "camera.h"
 
-//control
-#include "control.h"
+
 
 //world
 #include "world.h"

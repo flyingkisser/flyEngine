@@ -32,9 +32,9 @@
 
 int main(int argc, char **argv) {
     char szHomeDir[1024]={0};
-    getHomeDir(szHomeDir,sizeof(szHomeDir));
+    dirUtil::getHomeDir(szHomeDir,sizeof(szHomeDir));
     strcat(szHomeDir,"/Documents/flyEngine/");
-    setCurrentWorkDir(szHomeDir);
+    dirUtil::setCurrentWorkDir(szHomeDir);
     printf("main:set current work dir %s\n",szHomeDir);
     
 //    if(!glfwInit()){
@@ -49,6 +49,7 @@ int main(int argc, char **argv) {
 //#ifdef __APPLE__
 //    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 //#endif
+    
     testMainBegin();
     return 0;
 }

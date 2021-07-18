@@ -79,7 +79,7 @@ void pixelDrawPixels(){
 }
 
 void drawBMP(const char* fileName){
-    unsigned char* szBuf=(unsigned char*)readFile(fileName);
+    unsigned char* szBuf=(unsigned char*)fileUtil::readFile(fileName);
     if(!szBuf){
         printf("cannot read file %s",fileName);
         return;
@@ -161,7 +161,7 @@ void snapsBMP(const char* fileNameSave){
     //bmp图的像素使用的是bgr排列
      //xmin,ymin,width,height
     glReadPixels(20,60,640,1136,GL_BGR,GL_UNSIGNED_BYTE,szBuf+54);
-    writeFile(fileNameSave, szBuf, bufSize);
+    fileUtil::writeFile(fileNameSave, szBuf, bufSize);
     free(szBuf);
 }
 
