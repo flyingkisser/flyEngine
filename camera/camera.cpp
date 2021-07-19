@@ -85,8 +85,12 @@ void flyEngine::camera::rotate(glm::vec3 v){
 }
 
 void flyEngine::camera::enableControl(){
-    control* _controlObj=new flyEngine::control();
+    _controlObj=new flyEngine::control();
     _controlObj->bindCamera(this);
+}
+
+control* flyEngine::camera::getControl(){
+    return _controlObj;
 }
 
 

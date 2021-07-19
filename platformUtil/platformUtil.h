@@ -17,6 +17,9 @@
 #include "gpuUtil.h"
 #include "stringUtil.h"
 #include "logUtil.h"
+#include "timeUtil.h"
+#include "timerMgr.h"
+
 
 
 #endif /* platformUtil_h */

@@ -69,9 +69,15 @@ public:
     float getPositionY(){return _pos.y;};
     float getPositionZ(){return _pos.z;};
     
-    void moveBy(glm::vec3 v);
-    void scale(glm::vec3 v);
+    void setScale(glm::vec3 v);
+    
+    
     void rotate(glm::vec3 v);
+    
+    
+    void moveBy(glm::vec3 v);
+  
+   
     
 };
 

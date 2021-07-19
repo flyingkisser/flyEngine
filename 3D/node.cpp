@@ -41,7 +41,7 @@ void node::moveBy(glm::vec3 v){
     _dirtyPos=true;
     //    _matModel=glm::translate(_matModel, v);
 }
-void node::scale(glm::vec3 v){
+void node::setScale(glm::vec3 v){
     _scale=v;
     _dirtyPos=true;
 //  _matModel=glm::scale(_matModel, v);
@@ -49,14 +49,8 @@ void node::scale(glm::vec3 v){
 
 //v里面是旋转的角度，0到360，函数会转成弧度
 void node::rotate(glm::vec3 v){
-    _rorate=v;
+    _rorate+=v;
     _dirtyPos=true;
-//    if(v.x)
-//        _matModel=glm::rotate(_matModel,glm::radians(v.x),glm::vec3(1,0,0));
-//    if(v.y)
-//          _matModel=glm::rotate(_matModel,glm::radians(v.y),glm::vec3(0,1,0));
-//    if(v.z)
-//          _matModel=glm::rotate(_matModel,glm::radians(v.z),glm::vec3(0,0,1));
 }
 
 void node::setPosition(glm::vec3 p){
@@ -143,10 +137,10 @@ void node::draw(camera* cameraObj){
         _matModel=glm::mat4(1.0f);
         if(_pos.x || _pos.y || _pos.z)
             _matModel=glm::translate(_matModel,_pos);
-        if(_rorate.x)
-            _matModel=glm::rotate(_matModel,glm::radians(_rorate.x),glm::vec3(1,0,0));
-        if(_rorate.y)
-            _matModel=glm::rotate(_matModel,glm::radians(_rorate.y),glm::vec3(0,1,0));
+        if(_rorate.x)//水平方向上旋转
+            _matModel=glm::rotate(_matModel,glm::radians(_rorate.x),glm::vec3(0,1,0));
+        if(_rorate.y)//垂直方向上旋转
+            _matModel=glm::rotate(_matModel,glm::radians(_rorate.y),glm::vec3(1,0,0));
         if(_rorate.z)
             _matModel=glm::rotate(_matModel,glm::radians(_rorate.z),glm::vec3(0,0,1));
         if(_scale.x || _scale.y || _scale.z)

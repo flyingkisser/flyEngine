@@ -68,6 +68,8 @@
 		D853B6031F16757600226235 /* vertexArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853B6011F16757600226235 /* vertexArray.cpp */; };
 		D856FED624E15DB7005A0760 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D856FED524E15DB7005A0760 /* shader.cpp */; };
 		D85F1BD625022327005390DC /* VAOMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D85F1BD525022327005390DC /* VAOMgr.cpp */; };
+		D87EBFD426A5780B004ED7DE /* timerMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFD326A5780B004ED7DE /* timerMgr.cpp */; };
+		D87EBFD726A59A46004ED7DE /* timeUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFD626A59A46004ED7DE /* timeUtil.cpp */; };
 		D881DEEF24D80E2E0011F7B8 /* pngUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D881DEEE24D80E2E0011F7B8 /* pngUtil.cpp */; };
 		D881DEF324D8216A0011F7B8 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D881DEF224D8216A0011F7B8 /* libz.tbd */; };
 		D881DEF924DA8D180011F7B8 /* jpgUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D881DEF824DA8D180011F7B8 /* jpgUtil.cpp */; };
@@ -1640,6 +1642,10 @@
 		D85F1BD525022327005390DC /* VAOMgr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VAOMgr.cpp; sourceTree = "<group>"; };
 		D85F1BD725023B58005390DC /* default.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = default.fs; sourceTree = "<group>"; };
 		D85F1BD825023B58005390DC /* default.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = default.vs; sourceTree = "<group>"; };
+		D87EBFD226A5780B004ED7DE /* timerMgr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = timerMgr.h; sourceTree = "<group>"; };
+		D87EBFD326A5780B004ED7DE /* timerMgr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timerMgr.cpp; sourceTree = "<group>"; };
+		D87EBFD526A59A46004ED7DE /* timeUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = timeUtil.h; sourceTree = "<group>"; };
+		D87EBFD626A59A46004ED7DE /* timeUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timeUtil.cpp; sourceTree = "<group>"; };
 		D881DEED24D80E2D0011F7B8 /* pngUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pngUtil.h; sourceTree = "<group>"; };
 		D881DEEE24D80E2E0011F7B8 /* pngUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pngUtil.cpp; sourceTree = "<group>"; };
 		D881DEF024D820210011F7B8 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = external/libpng16.a; sourceTree = "<group>"; };
@@ -3729,6 +3735,10 @@
 				D8EF622E2519E32500B8588F /* stringUtil.cpp */,
 				D810AEB4268B3BE3009B774B /* logUtil.h */,
 				D810AEB5268B3BE3009B774B /* logUtil.cpp */,
+				D87EBFD226A5780B004ED7DE /* timerMgr.h */,
+				D87EBFD326A5780B004ED7DE /* timerMgr.cpp */,
+				D87EBFD526A59A46004ED7DE /* timeUtil.h */,
+				D87EBFD626A59A46004ED7DE /* timeUtil.cpp */,
 			);
 			path = platformUtil;
 			sourceTree = "<group>";
@@ -4142,6 +4152,7 @@
 				D81EF38F1EBCD0490003604F /* rectangular.cpp in Sources */,
 				D810AEB32684A1AF009B774B /* texture.cpp in Sources */,
 				D89600F024D1686400DF6FD3 /* curve.cpp in Sources */,
+				D87EBFD726A59A46004ED7DE /* timeUtil.cpp in Sources */,
 				D825DB9D24AC6BA900C494E7 /* testPixel.cpp in Sources */,
 				D881DEEF24D80E2E0011F7B8 /* pngUtil.cpp in Sources */,
 				D8BB1B9E255BE08000AF9FD5 /* control.cpp in Sources */,
@@ -4168,6 +4179,7 @@
 				D881DEF924DA8D180011F7B8 /* jpgUtil.cpp in Sources */,
 				D825DBB024AC8F3600C494E7 /* flyEngine.cpp in Sources */,
 				8ECA452E2688776400FDFC7A /* world.cpp in Sources */,
+				D87EBFD426A5780B004ED7DE /* timerMgr.cpp in Sources */,
 				D89600E924C8541400DF6FD3 /* testAniBySwapBuffer.cpp in Sources */,
 				D81EF3601EAFA0070003604F /* main.cpp in Sources */,
 				D825DB9624AB1A5200C494E7 /* testPrimitive.cpp in Sources */,

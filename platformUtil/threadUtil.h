@@ -16,7 +16,8 @@
 
 class threadUtil{
 public:
-    static void sleep(float sec);
+    static void sleep(int sec);
+    static void sleepMS(int ms);
     static void createThread(std::function<void(void)> cb);
 };
 

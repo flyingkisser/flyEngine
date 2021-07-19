@@ -34,6 +34,7 @@ public:
     static void _main_loop();
     
     void draw();
+    control* getControl();
 };
 
 }

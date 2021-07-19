@@ -37,10 +37,18 @@ void test3d_drawCubeOne(){
         return;
     }
     nodeObj->glInit();
-   // nodeObj->setPosition(glm::vec3(0,0,-5));
+    nodeObj->setPosition(glm::vec3(0,0,-5));
        
     world::getInstance()->addChild(nodeObj);
     nodeObj->print();
+    control* controlObj=world::getInstance()->getControl();
+    controlObj->bindNode(nodeObj);
+    timerMgr* timerMgrObj=new timerMgr("node_test_timer");
+    timerMgrObj->exec(200,[](node* _node){
+        _node->rotate(glm::vec3(6,6,6));
+    },nodeObj);
+    
+    
 //    nodeObj->setPosition(glm::vec3(0,-0.5,nodeObj->getPositionZ()-2));
 //    nodeObj->print();
 }

@@ -17,64 +17,64 @@ void control::bindCamera(flyEngine::camera* c){
     randUtil::getRandStr(6, szRand);
         
     snprintf(szBuf,sizeof(szBuf),"event_control_%s",szRand);
-    keyboardEvent* kbEventObj=new keyboardEvent();
-    keyboardEventMgr::addEvent(string(szBuf), kbEventObj);
+    _kbEventObj=new keyboardEvent();
+    keyboardEventMgr::addEvent(string(szBuf),_kbEventObj);
 
-    mouseEvent* msEventObj=new mouseEvent();
-    mouseEventMgr::addEvent(szBuf, msEventObj);
+    _msEventObj=new mouseEvent();
+    mouseEventMgr::addEvent(szBuf, _msEventObj);
     
     //keyboard event
-    kbEventObj->regEvent('w', [&](){
+    _kbEventObj->regEvent('w', [&](){
         _camera->setPositionZ(_camera->getPositionZ()-_move_d);
     });
 
-    kbEventObj->regEvent('s', [&](){
+    _kbEventObj->regEvent('s', [&](){
          _camera->setPositionZ(_camera->getPositionZ()+_move_d);
     });
-    kbEventObj->regEvent('a', [&](){
+    _kbEventObj->regEvent('a', [&](){
         _camera->setPositionX(_camera->getPositionX()-_move_d);
       });
-    kbEventObj->regEvent('d', [&](){
+    _kbEventObj->regEvent('d', [&](){
         _camera->setPositionX(_camera->getPositionX()+_move_d);
     });
-    kbEventObj->regEvent('z', [&](){
+    _kbEventObj->regEvent('z', [&](){
        _camera->setPositionY(_camera->getPositionY()+_move_d);
     });
-    kbEventObj->regEvent('x', [&](){
+    _kbEventObj->regEvent('x', [&](){
        _camera->setPositionY(_camera->getPositionY()-_move_d);
     });
 
-    kbEventObj->regEvent('r', [&](){
+    _kbEventObj->regEvent('r', [&](){
         _camera->reset();
     });
     
     
     //mouse event
-    msEventObj->regOnLeftClick([&](){
-        _mouseLeftOriginX=0;
-        _mouseLeftOriginY=0;
+    _msEventObj->regOnLeftClick([&](){
+        _mouseLeftLastX=0;
+        _mouseLeftLastY=0;
     });
-    msEventObj->regOnRightClick([&](){
-        _mouseRightOriginX=0;
-        _mouseRightOriginY=0;
+    _msEventObj->regOnRightClick([&](){
+//        _mouseRightOriginX=0;
+//        _mouseRightOriginY=0;
     });
-    msEventObj->regOnMiddleClick([&](){
+    _msEventObj->regOnMiddleClick([&](){
         cout<<"middle click!"<<endl;
     });
   
-    msEventObj->regOnMoveWithLeftHold([&](float x,float y){
-        if(_mouseLeftOriginX==0){
-            _mouseLeftOriginX=x;
-            _mouseLeftOriginY=y;
+    _msEventObj->regOnMoveWithLeftHold([&](float x,float y){
+        if(_mouseLeftLastX==0){
+            _mouseLeftLastX=x;
+            _mouseLeftLastY=y;
             return;
         }
 
-        float dx=x-_mouseLeftOriginX;
-        float dy=y-_mouseLeftOriginY;
+        float dx=x-_mouseLeftLastX;
+        float dy=y-_mouseLeftLastY;
         float rotateX=360*(dx/_width2PI);
         float rotateY=360*(dy/_height2PI);
-        _mouseLeftOriginX=x;
-        _mouseLeftOriginY=y;
+        _mouseLeftLastX=x;
+        _mouseLeftLastY=y;
         
         _yaw+=rotateX;
         _pitch+=rotateY;
@@ -85,34 +85,37 @@ void control::bindCamera(flyEngine::camera* c){
         _camera->setPositionFront(glm::normalize(posFront));
     });
 
-    msEventObj->regOnMoveWithMiddleHold([&](float x,float y){
+    _msEventObj->regOnMoveWithMiddleHold([&](float x,float y){
       cout<<"on mouse middle move!"<<x<<" "<<y<<endl;
     });
 
-    msEventObj->regOnScroll([&](float x,float y){
+    _msEventObj->regOnScroll([&](float x,float y){
       cout<<"on mouse scroll!"<<x<<" "<<y<<endl;
     });
     
+    flylog("control::bindCamera finished!");
+}
+
+void control::bindNode(flyEngine::node* nodeObj){
+    if(_msEventObj==NULL)
+        return;
     //move model itself
-    //    msEventObj->regOnMoveWithRightHold([&](float x,float y){
-    //        if(_mouseRightOriginX==0){
-    //            _mouseRightOriginX=x;
-    //            _mouseRightOriginY=y;
-    //            return;
-    //        }
-    //
-    //        float dx=x-_mouseRightOriginX;
-    //        float dy=y-_mouseRightOriginY;
-    //        float rotateX=360*(dx/_width2PI);
-    //        float rotateY=360*(dy/_height2PI);
-    //        _mouseRightOriginX=x;
-    //        _mouseRightOriginY=y;
-    //        _matModel=glm::rotate(_matModel,glm::radians(rotateX),glm::vec3(0,1,0));
-    //        _matModel=glm::rotate(_matModel,glm::radians(rotateY),glm::vec3(1,0,0));
-    //        updateModel();
-    //    });
+    _bindNode=nodeObj;
+    _msEventObj->regOnMoveWithRightHold([&](float x,float y){
+        if(_mouseRightOriginX==0){
+          _mouseRightOriginX=x;
+          _mouseRightOriginY=y;
+          _mouseRightLastX=x;
+          _mouseRightLastY=y;
+          return;
+        }
 
-  
-
-    
+        float dx=x-_mouseRightLastX;
+        float dy=y-_mouseRightLastY;
+        float rotateX=360*((_mouseRightOriginX+dx)/_width2PI);
+        float rotateY=360*((_mouseRightOriginY+dy)/_height2PI);
+        _mouseRightLastX=x;
+        _mouseRightLastY=y;
+        _bindNode->rotate(glm::vec3(rotateX,rotateY,0));
+    });
 }

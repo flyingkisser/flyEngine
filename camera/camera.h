@@ -50,6 +50,7 @@ public:
     void update(int programID);
     
     void enableControl();
+    control* getControl();
    
 private:
     void _updateCamera();
