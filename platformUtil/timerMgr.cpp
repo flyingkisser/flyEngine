@@ -13,6 +13,16 @@
 #include <sys/time.h>
 #include <stdlib.h>
 
+static timerMgr* s_instance;
+
+timerMgr* timerMgr::getInstance(){
+    if(s_instance!=NULL)
+        return s_instance;
+    s_instance=new timerMgr("default_timer_mgr");
+    return s_instance;
+}
+
+
 timerMgr::timerMgr(const std::string sTimerName):m_bStoped(false){
     m_sName = sTimerName;
 }
@@ -21,11 +31,14 @@ timerMgr::~timerMgr(){
     clear();
 }
 
-bool timerMgr::start(unsigned int msTime, std::function<void()> task, bool bLoop){
+//loopCount 0 表示无限循环
+//loopCount 1 只执行一次
+//loopCount n 只执行n次
+bool timerMgr::start(float secTime, std::function<void()> task, int loopCount){
     if(m_bStoped)
         return false;  //任务未过期(即内部仍在存在或正在运行任务)
-    bool isLoop = bLoop;
-    m_arrThread[m_intArrIndex++] = new std::thread([this, msTime, task, isLoop]() {
+    unsigned int msTime=(int)(secTime*1000);
+    m_arrThread[m_intArrIndex++] = new std::thread([this, msTime, task, loopCount]() {
         if (!m_sName.empty()) {
         #if (defined(__ANDROID__) || defined(ANDROID))      //兼容Android
             pthread_setname_np(pthread_self(), m_sName.c_str());
@@ -33,22 +46,22 @@ bool timerMgr::start(unsigned int msTime, std::function<void()> task, bool bLoop
             pthread_setname_np(m_sName.c_str());    //设置线程(定时器)名称
         #endif
         }
-        if(!isLoop){
-            std::this_thread::sleep_for(std::chrono::milliseconds(msTime));
-            if(m_bStoped)
-                return;
-            task();
-            return;
-        }
+        int count=0;
         while(!m_bStoped) {
             std::this_thread::sleep_for(std::chrono::milliseconds(msTime));
             if(m_bStoped)
                 return;
             task();     //执行任务
+            count++;    //执行次数
+            if(loopCount && count>=loopCount){
+                //已经到达执行次数
+                return;
+            }
         }
     });
     return true;
 }
+
 
 void timerMgr::clear(){
     m_bStoped = true;
@@ -63,7 +76,34 @@ void timerMgr::clear(){
 
 
 
-
+//bool timerMgr::start(unsigned int msTime, std::function<void()> task, bool bLoop){
+//    if(m_bStoped)
+//        return false;  //任务未过期(即内部仍在存在或正在运行任务)
+//    bool isLoop = bLoop;
+//    m_arrThread[m_intArrIndex++] = new std::thread([this, msTime, task, isLoop]() {
+//        if (!m_sName.empty()) {
+//        #if (defined(__ANDROID__) || defined(ANDROID))      //兼容Android
+//            pthread_setname_np(pthread_self(), m_sName.c_str());
+//        #elif defined(__APPLE__)                            //兼容苹果系统
+//            pthread_setname_np(m_sName.c_str());    //设置线程(定时器)名称
+//        #endif
+//        }
+//        if(!isLoop){
+//            std::this_thread::sleep_for(std::chrono::milliseconds(msTime));
+//            if(m_bStoped)
+//                return;
+//            task();
+//            return;
+//        }
+//        while(!m_bStoped) {
+//            std::this_thread::sleep_for(std::chrono::milliseconds(msTime));
+//            if(m_bStoped)
+//                return;
+//            task();     //执行任务
+//        }
+//    });
+//    return true;
+//}
 
 //void timerUtil::DeleteThread()
 //{

@@ -21,19 +21,20 @@
 class timerMgr
 {
 public:
+    static timerMgr* getInstance();
+    
     timerMgr(const std::string sTimerName = "");   //构造定时器，附带名称
     ~timerMgr();
     
     /**
      开始运行定时器
 
-     @param msTime 延迟运行(单位ms)
+     @param secTime 延迟运行(单位s)
      @param task 任务函数接口
-     @param bLoop 是否循环(默认执行1次)
-     @param async 是否异步(默认异步)
+     @param loopCount 执行次数，给0则无限循环
      @return true:已准备执行，否则失败
      */
-    bool start(unsigned int msTime, std::function<void()> task, bool bLoop = false);
+    bool start(float secTime, std::function<void()> task, int loopCount);
     
     /**
      取消定时器，同步定时器无法取消(若任务代码已执行则取消无效)
@@ -49,9 +50,9 @@ public:
      @return true:已准备执行，否则失败
      */
     template<typename callable, typename... arguments>
-    bool execOnceDelay(int msTime, callable&& fun, arguments&&... args) {
+    bool execOnceDelay(float secTime, callable&& fun, arguments&&... args) {
         std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(fun), std::forward<arguments>(args)...));
-        return start(msTime, task, false);
+        return start(secTime, task, 1);
     }
     
     /**
@@ -64,7 +65,7 @@ public:
     template<typename callable, typename... arguments>
     bool execOnce(callable&& fun, arguments&&... args) {
         std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(fun), std::forward<arguments>(args)...));
-        return start(0, task, false);
+        return start(0, task, 1);
     }
     
     
@@ -77,10 +78,17 @@ public:
      @return true:已准备执行，否则失败
      */
     template<typename callable, typename... arguments>
-    bool exec(int msTime, callable&& fun, arguments&&... args) {
+    bool exec(float secTime, callable&& fun, arguments&&... args) {
         std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(fun), std::forward<arguments>(args)...));
-        return start(msTime, task, true);
+        return start(secTime, task, 0);
     }
+    
+    template<typename callable, typename... arguments>
+       bool execWithCount(float secTime, int count, callable&& fun, arguments&&... args) {
+           std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(fun), std::forward<arguments>(args)...));
+           if(count<=0) count=1;
+           return start(secTime, task, count);
+       }
     
 public:
     /// 获取时间戳(毫秒)

@@ -19,7 +19,7 @@
 #include "logUtil.h"
 #include "timeUtil.h"
 #include "timerMgr.h"
-
+#include "mathUtil.h"
 
 
 #endif /* platformUtil_h */

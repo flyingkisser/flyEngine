@@ -15,6 +15,7 @@
 #include "glRef.h"
 #include "texture.h"
 #include "camera.h"
+#include "action.h"
 #include <string>
 #include <functional>
 using namespace std;
@@ -23,6 +24,7 @@ namespace flyEngine {
 class camera;
 class texture;
 class shader;
+class action;
 
 class node:glRef
 {
@@ -73,12 +75,10 @@ public:
     
     
     void rotate(glm::vec3 v);
-    
-    
     void moveBy(glm::vec3 v);
-  
-   
     
+    void runAction(action* act);
+
 };
 
 }

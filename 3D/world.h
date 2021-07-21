@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "node.h"
+#include "defines.h"
 
 namespace flyEngine {
 
@@ -35,6 +36,8 @@ public:
     
     void draw();
     control* getControl();
+    
+    float getFrameRate(){return CONST_FRAME_RATE;};
 };
 
 }

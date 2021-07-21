@@ -31,6 +31,8 @@ void test3dView() {
 }
 
 void test3d_drawCubeOne(){
+    mathUtil::test();
+    
     flyEngine::node* nodeObj=new flyEngine::node("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");

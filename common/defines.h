@@ -37,6 +37,11 @@
 #include "types.h"
 #include "error.h"
 
+#define NS_FLYENGINE_BEGIN namespace flyEngine {;
+#define NS_FLYENGINE_END };
+
+#define CONST_FRAME_RATE 0.0167
+
 using namespace flyEngine;
 
 //#ifndef g_verticeArr

@@ -9,6 +9,7 @@
 #include "node.h"
 #include "shaderMgr.h"
 #include "defines.h"
+#include "move.h"
 using namespace flyEngine;
 
 
@@ -34,6 +35,7 @@ bool node::init(){
     return true;
 }
 
+//从当前位置，移动一个指定的距离
 void node::moveBy(glm::vec3 v){
     _pos.x+=v.x;
     _pos.y+=v.y;
@@ -41,44 +43,45 @@ void node::moveBy(glm::vec3 v){
     _dirtyPos=true;
     //    _matModel=glm::translate(_matModel, v);
 }
-void node::setScale(glm::vec3 v){
-    _scale=v;
-    _dirtyPos=true;
-//  _matModel=glm::scale(_matModel, v);
-}
 
+//从当前位置，旋转一个指定的角度
 //v里面是旋转的角度，0到360，函数会转成弧度
 void node::rotate(glm::vec3 v){
     _rorate+=v;
     _dirtyPos=true;
 }
 
+//设置scale
+void node::setScale(glm::vec3 v){
+    _scale=v;
+    _dirtyPos=true;
+}
+
+//设置坐标
 void node::setPosition(glm::vec3 p){
     _pos=p;
     _dirtyPos=true;
-    //    _pos.x/=g_winWidth;
-    //    _pos.y/=g_winHeight;
-    //    _matModel=glm::translate(_matModel,_pos);
 };
 
 void node::setPositionX(float v){
     _pos.x=v;
-//    _matModel=glm::translate(_matModel,glm::vec3(v,0,0));
     _dirtyPos=true;
 };
 
 void node::setPositionY(float v){
     _pos.y=v;
-//    _matModel=glm::translate(_matModel,glm::vec3(0,v,0));
     _dirtyPos=true;
 };
 
 void node::setPositionZ(float v){
     _pos.z=v;
-//    _matModel=glm::translate(_matModel,glm::vec3(0,0,v));
     _dirtyPos=true;
 };
 
+//动画相关
+void node::runAction(action* act){
+    act->start(this);
+}
 
 void node::glInit(){
     _texObj->glInit();
