@@ -11,8 +11,12 @@
 #include <chrono>
 #include <math.h>
 
-void threadUtil::sleep(float sec){
-    int ms=floor(sec*1000);
+void threadUtil::sleep(int sec){
+    long long ms=int(sec*1000);
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+}
+
+void threadUtil::sleepMS(int ms){
     std::this_thread::sleep_for(std::chrono::milliseconds(ms));
 }
 

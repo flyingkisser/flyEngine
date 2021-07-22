@@ -8,6 +8,8 @@
 
 #include "mouseEventMgr.h"
 
+USE_NS_FLYENGINE;
+
 static map<std::string,mouseEvent*> s_eventChainMap;
 static GLFWwindow* s_window;
 static float s_width;

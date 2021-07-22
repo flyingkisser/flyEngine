@@ -9,8 +9,6 @@
 #include "testPhong.h"
 
 
-#include "test3D.h"
-
 #include <math.h>
 
 #include "defines.h"

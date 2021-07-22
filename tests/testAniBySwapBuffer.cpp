@@ -6,10 +6,12 @@
 //  Copyright © 2020 joe. All rights reserved.
 //
 #include <math.h>
+#include "defines.h"
 #include "testAniBySwapBuffer.h"
-#include "flyEngine.h"
 #include "testWindow.h"
+#include "3DTrans.h"
 
+USE_NS_FLYENGINE;
 
 static int s_listID=0;
 static int s_theta=0;

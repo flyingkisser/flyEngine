@@ -11,6 +11,9 @@
 
 #include <stdio.h>
 #include "node.h"
+#include "defines.h"
+#include "control.h"
+#include "camera.h"
 
 namespace flyEngine {
 
@@ -34,6 +37,9 @@ public:
     static void _main_loop();
     
     void draw();
+    control* getControl();
+    
+    float getFrameRate(){return CONST_FRAME_RATE;};
 };
 
 }

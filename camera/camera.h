@@ -10,17 +10,14 @@
 #define camera_h
 
 #include <stdio.h>
-
-
-#include <stdio.h>
-
-#include "flyEngine.h"
-#include "control.h"
 #include <string>
 #include <functional>
+#include "defines.h"
+#include "control.h"
+
 using namespace std;
 
-namespace flyEngine {
+NS_FLYENGINE_BEGIN
 class control;
 
 class camera{
@@ -50,6 +47,7 @@ public:
     void update(int programID);
     
     void enableControl();
+    control* getControl();
    
 private:
     void _updateCamera();
@@ -77,5 +75,5 @@ private:
     
 };
 
-}
+NS_FLYENGINE_END
 #endif /* camera_h */

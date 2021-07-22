@@ -7,7 +7,12 @@
 //
 
 #include "world.h"
+#include "threadUtil.h"
+
 #include "testWindow.h"
+
+using namespace flyEngine;
+
 static world* s_instance;
 
 world* world::getInstance(){
@@ -17,7 +22,8 @@ world* world::getInstance(){
 }
 
 world::world(){
-    _camera=NULL;
+    _camera=new flyEngine::camera();
+    _camera->enableControl();
 }
 
 void world::addChild(node *node){
@@ -31,6 +37,12 @@ void world::start_rendering(){
 
 void world::setCamera(camera* c){
     _camera=c;
+}
+
+control* world::getControl(){
+    if(_camera==nullptr)
+        return nullptr;
+    return _camera->getControl();
 }
 
 void world::draw(){
@@ -54,13 +66,13 @@ void world::end(){
 
 
 void world::_main_loop(){
-    flyEngine::camera* cameraObj=new flyEngine::camera();
+//    flyEngine::camera* cameraObj=new flyEngine::camera();
     flyEngine::world* worldObj=flyEngine::world::getInstance();
-    worldObj->setCamera(cameraObj);
-    cameraObj->enableControl();
+//    worldObj->setCamera(cameraObj);
+//    cameraObj->enableControl();
     
     while(!glfwWindowShouldClose(g_window)){
-         threadUtil::sleep(0.1);   //1000 means 1ms
+         threadUtil::sleepMS(CONST_FRAME_RATE*1000);   //1000 means 1ms
 
          glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
          glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);

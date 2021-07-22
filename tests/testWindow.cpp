@@ -12,10 +12,12 @@
 //#include <syswait.h>
 
 #include "testWindow.h"
-#include "flyEngine.h"
 #include "gpuUtil.h"
 #include "shader.h"
 #include "shaderMgr.h"
+#include "logUtil.h"
+#include "keyboardEventMgr.h"
+#include "mouseEventMgr.h"
 
 using namespace flyEngine;
 using namespace std;
@@ -268,8 +270,8 @@ void initWindow(){
         GLFWvidmode* mode=(GLFWvidmode*)glfwGetVideoMode(pMonitor[i]);
         s_winWidth=mode->width;
         s_winHeight=mode->height;
-        g_winWidth=s_winWidth;
-        g_winHeight=g_winHeight;
+//        g_winWidth=s_winWidth;
+//        g_winHeight=g_winHeight;
         break;
     }
     
@@ -281,7 +283,7 @@ void initWindow(){
     }
     g_window=window;
     
-    glfwSetWindowPos(window,(g_winWidth-s_intWidth)/2,(g_winHeight-s_intHeight)/2);
+    glfwSetWindowPos(window,(s_winWidth-s_intWidth)/2,(s_winHeight-s_intHeight)/2);
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, reshape2D);
     if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){

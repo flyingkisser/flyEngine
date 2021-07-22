@@ -7,13 +7,16 @@
 //
 
 #include "camera.h"
-#include "flyEngine.h"
+#include "logUtil.h"
+#include "control.h"
 
-flyEngine::camera::camera(){
+using namespace flyEngine;
+
+camera::camera(){
     init();
 }
 
-void flyEngine::camera::_updateCamera(){
+void camera::_updateCamera(){
     if(!_program)
         return;
     if(!_dirtyPos)
@@ -23,7 +26,7 @@ void flyEngine::camera::_updateCamera(){
     glUniformMatrix4fv(glGetUniformLocation(_program, "matCamera"), 1,GL_FALSE,glm::value_ptr(_matCamera));
 }
 
-void flyEngine::camera::_updateProjection(){
+void camera::_updateProjection(){
     if(!_program)
         return;
     if(!_dirtyProj)
@@ -34,33 +37,33 @@ void flyEngine::camera::_updateProjection(){
 }
 
 
-void flyEngine::camera::reset(){
+void camera::reset(){
      glUniformMatrix4fv(glGetUniformLocation(_program, "matCamera"), 1,GL_FALSE,glm::value_ptr(_matCameraOrigin));
 }
 
-void flyEngine::camera::setPosition(glm::vec3 pos){
+void camera::setPosition(glm::vec3 pos){
     _cameraPos.x=pos.x;
     _cameraPos.y=pos.y;
     _cameraPos.z=pos.z;
     _dirtyPos=true;
 }
-void flyEngine::camera::setPositionX(float v){
+void camera::setPositionX(float v){
     flylog("camera x:%f->%f",_cameraPos.x,v);
     _cameraPos.x=v;
     _dirtyPos=true;
 }
-void flyEngine::camera::setPositionY(float v){
+void camera::setPositionY(float v){
     flylog("camera y:%f->%f",_cameraPos.y,v);
     _cameraPos.y=v;
     _dirtyPos=true;
 }
-void flyEngine::camera::setPositionZ(float v){
+void camera::setPositionZ(float v){
     flylog("camera z:%f->%f",_cameraPos.z,v);
     _cameraPos.z=v;
     _dirtyPos=true;
 }
 
-void flyEngine::camera::setPositionFront(glm::vec3 pos){
+void camera::setPositionFront(glm::vec3 pos){
     _cameraFront.x=pos.x;
     _cameraFront.y=pos.y;
     _cameraFront.z=pos.z;
@@ -68,13 +71,14 @@ void flyEngine::camera::setPositionFront(glm::vec3 pos){
 }
 
 
-void flyEngine::camera::moveBy(glm::vec3 v){
+void camera::moveBy(glm::vec3 v){
     _cameraPos.x+=v.x;
     _cameraPos.y+=v.y;
     _cameraPos.z+=v.z;
     _dirtyPos=true;
 }
-void flyEngine::camera::rotate(glm::vec3 v){
+
+void camera::rotate(glm::vec3 v){
     if(v.x)
         _matCamera=glm::rotate(_matCamera,v.x,glm::vec3(1,0,0));
     if(v.y)
@@ -84,18 +88,22 @@ void flyEngine::camera::rotate(glm::vec3 v){
     _dirtyPos=true;
 }
 
-void flyEngine::camera::enableControl(){
-    control* _controlObj=new flyEngine::control();
+void camera::enableControl(){
+    _controlObj=new flyEngine::control();
     _controlObj->bindCamera(this);
 }
 
+control* camera::getControl(){
+    return _controlObj;
+}
 
-void flyEngine::camera::print(){
+
+void camera::print(){
     flylog("camera pos is %f %f %f",_cameraPos.x,_cameraPos.y,_cameraPos.z);
 }
 
 
-bool flyEngine::camera::init(){
+bool camera::init(){
     _yaw=-90;
     _pitch=0;
     _fov=30.0;
@@ -121,7 +129,7 @@ bool flyEngine::camera::init(){
 }
 
 
-void flyEngine::camera::update(int programID){
+void camera::update(int programID){
     _program=programID;
     _updateCamera();
     _updateProjection();

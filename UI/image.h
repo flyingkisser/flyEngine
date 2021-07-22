@@ -9,7 +9,7 @@
 #ifndef image_h
 #define image_h
 
-#include "flyEngine.h"
+
 
 
 
@@ -24,7 +24,7 @@ public:
     image(const char* szFileName);
     void draw();
     
-    size getSize();
+    flyEngine::size getSize();
 };
 
 }

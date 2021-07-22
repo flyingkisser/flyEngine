@@ -7,7 +7,6 @@
 //
 
 #include "testTexXDImm.h"
-#include "flyEngine.h"
 #include "testWindow.h"
 
 static float s_rx=0;

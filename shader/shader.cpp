@@ -8,6 +8,7 @@
 
 #include "shader.h"
 #include "fileUtil.h"
+using namespace flyEngine;
 
 shader::shader(const char* szVertFileName,const char* szFragFileName){
     _idProgram=0;

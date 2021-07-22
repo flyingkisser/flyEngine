@@ -6,10 +6,13 @@
 //  Copyright © 2017年 joe. All rights reserved.
 //
 
-#include "polygon.h"
 #include "defines.h"
 #include "error.h"
-#include "flyEngine.h"
+
+#include "polygon.h"
+#include "VAOMgr.h"
+
+USE_NS_FLYENGINE;
 
 static void drawPolygonImm(){
     GLint p1[]={1,1};
@@ -52,7 +55,7 @@ std::function<void(void)> drawPolygon(){
          0.5f, -0.5f, 0.0f,
          0.5f,  0.5f, 0.0f
     };
-    unsigned int vao=flyEngine::VAOMgr::createVAO(vertices, sizeof(vertices), 3, 3*sizeof(float),false);
+    unsigned int vao=VAOMgr::createVAO(vertices, sizeof(vertices), 3, 3*sizeof(float),false);
     return [vao](){
         VAOMgr::drawPrimitive(vao, GL_POLYGON, 4);
         checkGLError();

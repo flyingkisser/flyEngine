@@ -12,7 +12,7 @@
 #include <stdio.h>
 #include "defines.h"
 
-void drawLineByPosArrImm(structPos2* pointArr,int num,structColor* color);
+void drawLineByPosArrImm(flyEngine::structPos2* pointArr,int num,flyEngine::structColor* color);
 
 
 void drawLineStripImm();

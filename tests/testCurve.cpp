@@ -7,7 +7,6 @@
 //
 
 #include "testCurve.h"
-#include "flyEngine.h"
 #include "testWindow.h"
 
 static void beginDrawLineByEvalMesh(){

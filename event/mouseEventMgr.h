@@ -18,11 +18,15 @@
 
 using namespace std;
 
+NS_FLYENGINE_BEGIN
+
 class mouseEventMgr{
 public:
     static void init(GLFWwindow* window);
     static void addEvent(std::string name,mouseEvent* eventObj);
     static void printInfo();
 };
+
+NS_FLYENGINE_END
 
 #endif /* mouseEventMgr_h */

@@ -1,12 +1,12 @@
 //
-//  test3D.cpp
+//  test3D_h.cpp
 //  flyEngine
 //
 //  Created by joe on 28/10/2020.
 //  Copyright © 2020 joe. All rights reserved.
 //
 
-#include "test3D.h"
+#include "test3D_node.h"
 
 #include <math.h>
 
@@ -23,6 +23,7 @@
 #include "camera.h"
 #include "control.h"
 #include "threadUtil.h"
+#include "move.h"
 
 using namespace flyEngine;
 
@@ -36,27 +37,39 @@ void test3d_drawCubeOne(){
         flylog("node init failed!");
         return;
     }
-    nodeObj->glInit();
-   // nodeObj->setPosition(glm::vec3(0,0,-5));
+    nodeObj->setPosition(glm::vec3(0,0,-5));
        
     world::getInstance()->addChild(nodeObj);
     nodeObj->print();
-//    nodeObj->setPosition(glm::vec3(0,-0.5,nodeObj->getPositionZ()-2));
-//    nodeObj->print();
+    
+    //通过按住鼠标右键，控制模型旋转
+    control* controlObj=world::getInstance()->getControl();
+    controlObj->bindNode(nodeObj);
+    
+    timerMgr* timerMgrObj=new timerMgr("node_test_timer");
+    timerMgrObj->exec(0.1,[](flyEngine::node* _node){
+        _node->rotate(glm::vec3(0.5f,0,0));
+    },nodeObj);
 }
 
-void test3d_drawCubeMore(){
+void test3d_drawCubeOneWithMove(){
     flyEngine::node* nodeObj=new flyEngine::node("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
         return;
     }
-    nodeObj->glInit();
+    nodeObj->setPosition(glm::vec3(0,0,-5));
        
     world::getInstance()->addChild(nodeObj);
-    nodeObj->print();
-    nodeObj->setPosition(glm::vec3(0,-2,nodeObj->getPositionZ()-2));
-    nodeObj->print();
+ 
+    flyEngine::action* moveAct=new flyEngine::move(3,glm::vec3(0.5,0,-5));
+    nodeObj->runAction(moveAct);
+}
+
+
+
+void test3d_drawCubeMore(){
+    
 }
 
 void drawCubeRaw(){

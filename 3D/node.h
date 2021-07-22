@@ -10,21 +10,24 @@
 #define _node_h
 
 #include <stdio.h>
+#include <string>
+#include <functional>
 
-#include "flyEngine.h"
 #include "glRef.h"
 #include "texture.h"
 #include "camera.h"
-#include <string>
-#include <functional>
+#include "action.h"
+#include "shader.h"
+
 using namespace std;
 
 namespace flyEngine {
 class camera;
 class texture;
 class shader;
+class action;
 
-class node:glRef
+class node: public glRef
 {
 private:
     glm::mat4 _matModel;
@@ -69,10 +72,14 @@ public:
     float getPositionY(){return _pos.y;};
     float getPositionZ(){return _pos.z;};
     
-    void moveBy(glm::vec3 v);
-    void scale(glm::vec3 v);
-    void rotate(glm::vec3 v);
+    void setScale(glm::vec3 v);
     
+    
+    void rotate(glm::vec3 v);
+    void moveBy(glm::vec3 v);
+    
+    void runAction(action* act);
+
 };
 
 }

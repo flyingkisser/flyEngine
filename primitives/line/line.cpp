@@ -9,7 +9,6 @@
 #include "line.h"
 #include "defines.h"
 #include "error.h"
-#include "flyEngine.h"
 
 void drawLineByPosArrImm(structPos2* pointArr,int num,structColor* color){
     glColor4ub(color->r,color->g,color->b,color->a);

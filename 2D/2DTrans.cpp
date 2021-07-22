@@ -9,7 +9,7 @@
 #include "2dTrans.h"
 #include "defines.h"
 
-
+using namespace flyEngine;
 
 //void move2dBy(p2* p1,float x,float y){
 //    p1->x+=x;
