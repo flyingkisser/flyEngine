@@ -12,7 +12,7 @@
 #include "defines.h"
 #include "matrix.h"
 
-namespace flyEngine {
+NS_FLYENGINE_BEGIN
 
 class _3dTrans{
 public:
@@ -29,6 +29,6 @@ public:
 };
 
 
-}
+NS_FLYENGINE_END
 
 #endif /* _DTrans_h */

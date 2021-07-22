@@ -10,6 +10,8 @@
 #include <thread>
 #include "threadUtil.h"
 
+using namespace flyEngine;
+
 static int s_frame_rate=60;
 
 static render* s_instance;

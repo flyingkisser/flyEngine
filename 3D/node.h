@@ -10,14 +10,15 @@
 #define _node_h
 
 #include <stdio.h>
+#include <string>
+#include <functional>
 
-#include "flyEngine.h"
 #include "glRef.h"
 #include "texture.h"
 #include "camera.h"
 #include "action.h"
-#include <string>
-#include <functional>
+#include "shader.h"
+
 using namespace std;
 
 namespace flyEngine {
@@ -26,7 +27,7 @@ class texture;
 class shader;
 class action;
 
-class node:glRef
+class node: public glRef
 {
 private:
     glm::mat4 _matModel;

@@ -35,6 +35,6 @@ void testRegMouseClickWithMove(std::function<void(int,int)>cb);
 void testRegMouseMove(std::function<void(int,int)>cb);
 
 void windowLoop();
-size getWindowSize();
+flyEngine::size getWindowSize();
 
 #endif /* testMain_h */

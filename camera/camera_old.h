@@ -10,8 +10,6 @@
 #define camera_h
 
 #include <stdio.h>
-
-#include "flyEngine.h"
 #include <string>
 #include <functional>
 using namespace std;

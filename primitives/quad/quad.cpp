@@ -9,7 +9,9 @@
 #include "quad.h"
 #include "defines.h"
 #include "error.h"
-#include "flyEngine.h"
+#include "VAOMgr.h"
+
+USE_NS_FLYENGINE;
 
 void drawQuadImm(){
     GLint p1[]={1,1};
@@ -63,7 +65,7 @@ std::function<void(void)> drawQuad(){
             0.0f,  0.5f, 0.0f,
             -0.5f,  0.5f, 0.0f
        };
-    unsigned int vao=flyEngine::VAOMgr::createVAO(vertices, sizeof(vertices), 3, 3*sizeof(float),false);
+    unsigned int vao=VAOMgr::createVAO(vertices, sizeof(vertices), 3, 3*sizeof(float),false);
     return [vao](){
         VAOMgr::drawPrimitive(vao, GL_QUADS, 4);
     };

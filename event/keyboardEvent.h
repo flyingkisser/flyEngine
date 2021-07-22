@@ -14,6 +14,8 @@
 #include <tuple>
 #include "defines.h"
 
+NS_FLYENGINE_BEGIN
+
 class keyboardEvent{
 private:
     std::map<char,std::function<void(void)>> _cbMap;
@@ -24,5 +26,6 @@ public:
     void onKeyPress(char key);
 };
 
+NS_FLYENGINE_END
 
 #endif /* keyboardEvent_h */

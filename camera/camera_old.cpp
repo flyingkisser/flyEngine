@@ -7,7 +7,6 @@
 //
 
 #include "camera.h"
-#include "flyEngine.h"
 
 void camera::updateCamera(){
     if(_modeFPS)

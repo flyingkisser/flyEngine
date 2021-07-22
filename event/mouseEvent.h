@@ -12,6 +12,8 @@
 #include <vector>
 #include "defines.h"
 
+NS_FLYENGINE_BEGIN
+
 class mouseEvent{
 private:
     std::vector<std::function<void(void)>> _vectorOnLeftClick;
@@ -112,5 +114,5 @@ public:
 
 };
 
-
+NS_FLYENGINE_END
 #endif /* mouseEvent_h */

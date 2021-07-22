@@ -32,7 +32,7 @@
 		D810AEB026849DCE009B774B /* node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEAF26849DCE009B774B /* node.cpp */; };
 		D810AEB32684A1AF009B774B /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEB22684A1AF009B774B /* texture.cpp */; };
 		D810AEB6268B3BE3009B774B /* logUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEB5268B3BE3009B774B /* logUtil.cpp */; };
-		D810AEB9268B3F1F009B774B /* test3D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEB8268B3F1F009B774B /* test3D.cpp */; };
+		D810AEB9268B3F1F009B774B /* test3D_node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEB8268B3F1F009B774B /* test3D_node.cpp */; };
 		D81EF3601EAFA0070003604F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81EF35F1EAFA0070003604F /* main.cpp */; };
 		D81EF3811EAFA1A10003604F /* line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81EF37F1EAFA1A10003604F /* line.cpp */; };
 		D81EF3831EAFA4A20003604F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D81EF3821EAFA4A20003604F /* Cocoa.framework */; };
@@ -1559,8 +1559,8 @@
 		D810AEB22684A1AF009B774B /* texture.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = texture.cpp; sourceTree = "<group>"; };
 		D810AEB4268B3BE3009B774B /* logUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = logUtil.h; sourceTree = "<group>"; };
 		D810AEB5268B3BE3009B774B /* logUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = logUtil.cpp; sourceTree = "<group>"; };
-		D810AEB7268B3F1F009B774B /* test3D.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test3D.h; sourceTree = "<group>"; };
-		D810AEB8268B3F1F009B774B /* test3D.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test3D.cpp; sourceTree = "<group>"; };
+		D810AEB7268B3F1F009B774B /* test3D_node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test3D_node.h; sourceTree = "<group>"; };
+		D810AEB8268B3F1F009B774B /* test3D_node.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test3D_node.cpp; sourceTree = "<group>"; };
 		D81EF35C1EAFA0070003604F /* flyEngine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = flyEngine; sourceTree = BUILT_PRODUCTS_DIR; };
 		D81EF35F1EAFA0070003604F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		D81EF37A1EAFA0E60003604F /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
@@ -3931,8 +3931,8 @@
 				D825DBC724B4911100C494E7 /* test3D_old.cpp */,
 				D8C7A1AD2549875F007573B3 /* test3D_old_2.h */,
 				D8C7A1AE2549875F007573B3 /* test3D_old_2.cpp */,
-				D810AEB7268B3F1F009B774B /* test3D.h */,
-				D810AEB8268B3F1F009B774B /* test3D.cpp */,
+				D810AEB7268B3F1F009B774B /* test3D_node.h */,
+				D810AEB8268B3F1F009B774B /* test3D_node.cpp */,
 				D89600E724C8541400DF6FD3 /* testAniBySwapBuffer.h */,
 				D89600E824C8541400DF6FD3 /* testAniBySwapBuffer.cpp */,
 				D89600EA24CEC36400DF6FD3 /* test3DPolyhedra.h */,
@@ -4206,7 +4206,7 @@
 				D8F0B7FE25652BCD0034E7B7 /* cameraBase.cpp in Sources */,
 				8E2763DB26512E9F00993B0B /* glm.cpp in Sources */,
 				D89600EC24CEC36400DF6FD3 /* test3DPolyhedra.cpp in Sources */,
-				D810AEB9268B3F1F009B774B /* test3D.cpp in Sources */,
+				D810AEB9268B3F1F009B774B /* test3D_node.cpp in Sources */,
 				D810AEB6268B3BE3009B774B /* logUtil.cpp in Sources */,
 				D81EF38B1EB253FF0003604F /* points.cpp in Sources */,
 				D827953224BC5FB400261C44 /* matrix.cpp in Sources */,

@@ -10,6 +10,7 @@
 #include "baseImg.h"
 #include "pngUtil.h"
 #include "jpgUtil.h"
+#include "logUtil.h"
 
 using namespace flyEngine;
 

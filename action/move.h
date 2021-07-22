@@ -11,20 +11,21 @@
 
 #include <stdio.h>
 #include "defines.h"
-#include "action.h"
 #include "node.h"
+#include "action.h"
+
 
 NS_FLYENGINE_BEGIN
 
-class move:action{
-    
+class move  : public flyEngine::action {
+
 public:    
-    move(float sec,glm::vec3& targPos){
+    move(float sec,glm::vec3 targPos){
         m_fSec=sec;
         m_vec3TargetPos=targPos;
     };
     
-    void start(node* nodeObj);
+    void start(flyEngine::node* nodeObj);
     
 private:
     float m_fSec;

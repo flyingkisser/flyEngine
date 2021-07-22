@@ -7,7 +7,14 @@
 //
 
 #include "control.h"
-#include "flyEngine.h"
+#include "keyboardEvent.h"
+#include "keyboardEventMgr.h"
+#include "mouseEvent.h"
+#include "mouseEventMgr.h"
+#include "randUtil.h"
+#include "logUtil.h"
+
+using namespace flyEngine;
 
 void control::bindCamera(flyEngine::camera* c){
     _camera=c;

@@ -8,6 +8,7 @@
 
 #include "VAOMgr.h"
 #include "error.h"
+using namespace flyEngine;
 
 //VAORender::VAORender(float* verticeBuf,unsigned int sizeOfVertice,){
 //    unsigned int vao,vbo;

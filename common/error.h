@@ -1,15 +1,17 @@
 //
-//  error.hpp
+//  error.h
 //  lines
 //
 //  Created by Joe on 2017/4/26.
 //  Copyright © 2017年 joe. All rights reserved.
 //
 
-#ifndef error_hpp
-#define error_hpp
+#ifndef error_h
+#define error_h
 
 #include <stdio.h>
 
-#endif /* error_hpp */
 int checkGLError ();
+
+#endif /* error_h */
+

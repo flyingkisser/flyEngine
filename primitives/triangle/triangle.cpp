@@ -9,6 +9,7 @@
 #include "defines.h"
 #include "triangle.h"
 #include "shader.h"
+#include "VAOMgr.h"
 using namespace flyEngine;
 
 void drawTriangleImm(p2* v1,p2* v2,p2* v3){

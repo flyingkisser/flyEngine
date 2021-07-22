@@ -7,7 +7,12 @@
 //
 
 #include "world.h"
+#include "threadUtil.h"
+
 #include "testWindow.h"
+
+using namespace flyEngine;
+
 static world* s_instance;
 
 world* world::getInstance(){
@@ -67,7 +72,7 @@ void world::_main_loop(){
 //    cameraObj->enableControl();
     
     while(!glfwWindowShouldClose(g_window)){
-         threadUtil::sleepMS(100);   //1000 means 1ms
+         threadUtil::sleepMS(CONST_FRAME_RATE*1000);   //1000 means 1ms
 
          glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
          glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);

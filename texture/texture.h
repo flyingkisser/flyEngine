@@ -11,7 +11,8 @@
 
 #include <stdio.h>
 #include <string>
-#include "flyEngine.h"
+#include "glRef.h"
+#include "defines.h"
 
 using namespace std;
 

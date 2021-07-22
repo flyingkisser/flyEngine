@@ -18,12 +18,16 @@
 
 using namespace std;
 
+NS_FLYENGINE_BEGIN
+
 class keyboardEventMgr{
 public:
     static void init(GLFWwindow* window);
     static void addEvent(std::string name,keyboardEvent* eventObj);
     static void printInfo();
 };
+
+NS_FLYENGINE_END
 
 #endif
 

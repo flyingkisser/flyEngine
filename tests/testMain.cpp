@@ -6,13 +6,13 @@
 //  Copyright © 2020 joe. All rights reserved.
 //
 
+
 #include "testMain.h"
-#include "flyEngine.h"
 
 #include "testPrimitive.h"
 #include "test2D.h"
 #include "testPixel.h"
-#include "test3D.h"
+#include "test3D_node.h"
 #include "testAniBySwapBuffer.h"
 #include "test3DPolyhedra.h"
 #include "testCurve.h"
@@ -23,8 +23,15 @@
 
 #include "std_move_forward.h"
 
+#include "defines.h"
+#include "world.h"
+
+
+USE_NS_FLYENGINE;
+
 void main_logic(){
-     test3d_drawCubeOne();
+     //test3d_drawCubeOne();
+    test3d_drawCubeOneWithMove();
 }
 
 
@@ -33,7 +40,7 @@ void testMainBegin(){
 //    flyEngine::camera* cameraObj=new flyEngine::camera();
 //    flyEngine::world::getInstance()->setCamera(cameraObj);
     main_logic();
-    flyEngine::world::getInstance()->start_rendering();
+    world::getInstance()->start_rendering();
 //    main_logic();
 }
 

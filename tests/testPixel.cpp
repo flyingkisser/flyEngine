@@ -5,10 +5,10 @@
 //  Created by joe on 01/07/2020.
 //  Copyright © 2020 joe. All rights reserved.
 //
-#include "flyEngine.h"
 
 #include "testPixel.h"
 #include "testWindow.h"
+#include "image.h"
 
 static void beginDraw(){
 //    unsigned char* szBuf=g_textureMgr->getTexture("./res/test.bmp");

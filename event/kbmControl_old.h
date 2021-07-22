@@ -10,7 +10,6 @@
 #define _kbmControl_h
 
 #include <stdio.h>
-#include "flyEngine.h"
 #include <string>
 using namespace std;
 

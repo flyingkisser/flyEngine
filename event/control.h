@@ -12,18 +12,13 @@
 #include <stdio.h>
 #include <string>
 
-#include "flyEngine.h"
 #include "camera.h"
 #include "node.h"
-#include "keyboardEvent.h"
-#include "mouseEvent.h"
+
 using namespace std;
 
 
-namespace flyEngine {
-
-class camera;
-class node;
+NS_FLYENGINE_BEGIN
 
 class control
 {
@@ -41,17 +36,17 @@ private:
     float _height2PI=4000;
     float _yaw=-90;
     float _pitch=0;
-    flyEngine::camera* _camera=NULL;
+    camera* _camera=NULL;
     keyboardEvent* _kbEventObj=NULL;
     mouseEvent* _msEventObj=NULL;
     node* _bindNode=NULL;
     
 public:
     control(){};
-    void bindCamera(flyEngine::camera* c);
-    void bindNode(flyEngine::node* nodeObj);
+    void bindCamera(camera* c);
+    void bindNode(node* nodeObj);
 };
 
-}
+NS_FLYENGINE_END
 
 #endif /* _control_h */

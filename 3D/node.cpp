@@ -32,6 +32,7 @@ bool node::init(){
     _shaderObj=shaderMgr::get3d1texShader();
     if(_shaderObj==nullptr)
        return false;
+    glInit();
     return true;
 }
 
@@ -85,8 +86,9 @@ void node::runAction(action* act){
 
 void node::glInit(){
     _texObj->glInit();
-    _gl_texture0=_texObj->getTextureID();
     _shaderObj->glInit();
+    
+    _gl_texture0=_texObj->getTextureID();
     _gl_program=_shaderObj->getProgramID();
     if(!_gl_texture0){
         flylog("node::glInit: _gl_texture0 is 0,error!");

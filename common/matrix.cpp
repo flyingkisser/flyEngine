@@ -7,6 +7,7 @@
 //
 
 #include "matrix.h"
+using namespace flyEngine;
 
 void matrix::setIdentity(Matrix4x4 mat){
     for(int i=0;i<4;i++){

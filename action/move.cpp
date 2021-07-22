@@ -7,9 +7,13 @@
 //
 
 #include "move.h"
+#include "world.h"
 #include "mathUtil.h"
+#include "timerMgr.h"
 
-void move::start(node* nodeObj){
+using namespace flyEngine;
+
+void move::start(flyEngine::node* nodeObj){
     //计算出几帧完成这个动画
     float secRate=world::getInstance()->getFrameRate();
     int loopCount=mathUtil::ceil(m_fSec/secRate);
@@ -17,7 +21,7 @@ void move::start(node* nodeObj){
     glm::vec3& curPos=nodeObj->getPosition();
     glm::vec3 moveDis=m_vec3TargetPos-curPos;
     glm::vec3 moveInner=glm::vec3(moveDis.x/loopCount,moveDis.y/loopCount,moveDis.z/loopCount);
-    timerMgr::getInstance()->execWithCount(secRate,loopCount, [](node* nodeObj,glm::vec3& moveInner){
+    timerMgr::getInstance()->execWithCount(secRate,loopCount, [](flyEngine::node* nodeObj,glm::vec3& moveInner){
        nodeObj->moveBy(moveInner);
     }, nodeObj,moveInner);
 }

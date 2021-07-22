@@ -7,7 +7,7 @@
 //
 
 #include "3DTrans.h"
-
+using namespace flyEngine;
 
 void _3dTrans::_setMoveMatrix(Matrix4x4 mat,float x,float y,float z){
     matrix::setIdentity(mat);

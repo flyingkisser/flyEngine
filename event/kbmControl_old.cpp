@@ -7,7 +7,6 @@
 //
 
 #include "kbmControl.h"
-#include "flyEngine.h"
 
 kbmControl::kbmControl(int shaderID,
                     string matNameModel,glm::mat4 matModel,

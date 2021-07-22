@@ -9,12 +9,14 @@
 #ifndef shader_h
 #define shader_h
 
-#include "flyEngine.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "defines.h"
 #include "glRef.h"
 
-namespace flyEngine {
-//class glRef;
-class shader : glRef{
+NS_FLYENGINE_BEGIN
+
+class shader : public glRef{
 private:
     unsigned int _idProgram;
     char* _szVert;
@@ -36,7 +38,7 @@ public:
     bool init();
 };
  
-}
+NS_FLYENGINE_END
 
 
 #endif /* shader_h */

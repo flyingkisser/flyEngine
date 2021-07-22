@@ -11,10 +11,9 @@
 
 #include <stdio.h>
 #include <string>
-#include "flyEngine.h"
 #include "shader.h"
 
-namespace flyEngine {
+NS_FLYENGINE_BEGIN
 
 class shaderMgr{
 public:
@@ -28,7 +27,7 @@ public:
     static shader* getShader(const char* szVertFileName,const char* szFragFileName);
 };
 
-}
+NS_FLYENGINE_END
 
 
 #endif /* shaderMgr_h */
