@@ -24,6 +24,9 @@
 #include "control.h"
 #include "threadUtil.h"
 #include "move.h"
+#include "world.h"
+#include "logUtil.h"
+#include "timerMgr.h"
 
 using namespace flyEngine;
 

@@ -8,8 +8,8 @@
 
 #include "flyEngine.h"
 
-textureMgr* g_textureMgr;
-render* g_render;
+int g_winWidth=1;
+int g_winHeight=1;
 
 float g_verticeArr[180]={
          -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
@@ -60,7 +60,3 @@ void engineInit(){
 //    g_render=render::getInstance();
 //    g_render->start();
 }
-
-
-int g_winWidth=1;
-int g_winHeight=1;

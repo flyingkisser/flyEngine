@@ -9,6 +9,8 @@
 #include "keyboardEvent.h"
 #include "logUtil.h"
 
+USE_NS_FLYENGINE
+
 keyboardEvent::keyboardEvent(){
     
 }

@@ -18,6 +18,7 @@
 //#include "shader_s.h"
 
 #include "shader.h"
+#include "dirUtil.h"
 
 
 //void initPerspective3D(void)

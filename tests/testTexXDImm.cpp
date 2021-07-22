@@ -8,6 +8,11 @@
 
 #include "testTexXDImm.h"
 #include "testWindow.h"
+#include "defines.h"
+#include "pngUtil.h"
+#include "jpgUtil.h"
+#include "3DTrans.h"
+USE_NS_FLYENGINE
 
 static float s_rx=0;
 static float s_ry=0;

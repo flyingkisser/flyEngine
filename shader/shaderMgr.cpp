@@ -8,6 +8,9 @@
 
 #include "shaderMgr.h"
 #include "fileUtil.h"
+
+USE_NS_FLYENGINE
+
 static std::map<std::string,shader*> s_mapShaderCache;
 
 shader* shaderMgr::getShader(const char* szVertFileName,const char* szFragFileName){

@@ -8,6 +8,9 @@
 
 #include "keyboardEventMgr.h"
 #include "logUtil.h"
+#include "keyboardEvent.h"
+
+USE_NS_FLYENGINE
 
 static map<std::string,keyboardEvent*> s_eventChainMap;
 

@@ -9,7 +9,7 @@
 #ifndef image_h
 #define image_h
 
-
+#include "defines.h"
 
 
 

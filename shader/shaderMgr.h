@@ -11,7 +11,9 @@
 
 #include <stdio.h>
 #include <string>
+#include "defines.h"
 #include "shader.h"
+
 
 NS_FLYENGINE_BEGIN
 

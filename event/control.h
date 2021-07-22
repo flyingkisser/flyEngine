@@ -14,11 +14,15 @@
 
 #include "camera.h"
 #include "node.h"
+#include "keyboardEvent.h"
+#include "mouseEvent.h"
 
 using namespace std;
 
-
 NS_FLYENGINE_BEGIN
+
+class camera;
+class node;
 
 class control
 {
@@ -37,9 +41,11 @@ private:
     float _yaw=-90;
     float _pitch=0;
     camera* _camera=NULL;
+    node* _bindNode=NULL;
+    
     keyboardEvent* _kbEventObj=NULL;
     mouseEvent* _msEventObj=NULL;
-    node* _bindNode=NULL;
+    
     
 public:
     control(){};

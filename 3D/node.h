@@ -13,6 +13,7 @@
 #include <string>
 #include <functional>
 
+#include "defines.h"
 #include "glRef.h"
 #include "texture.h"
 #include "camera.h"

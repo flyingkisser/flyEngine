@@ -7,10 +7,11 @@
 //
 
 #include "node.h"
-#include "shaderMgr.h"
-#include "defines.h"
-#include "move.h"
-using namespace flyEngine;
+//#include "shaderMgr.h"
+//#include "move.h"
+
+
+USE_NS_FLYENGINE
 
 
 void node::updateModel(){
