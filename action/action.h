@@ -13,13 +13,11 @@
 #include "defines.h"
 #include "node.h"
 
-class node;
-
 NS_FLYENGINE_BEGIN
 
 class action{
 public:
-   virtual void start(node* nodeObj)=0;
+   virtual void start(flyEngine::node* nodeObj)=0;
     //void start(node* nodeObj);
 };
 

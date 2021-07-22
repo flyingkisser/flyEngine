@@ -8,6 +8,12 @@
 
 #include "testShader.h"
 #include "testWindow.h"
+#include "3DTrans.h"
+#include "shader.h"
+#include "baseImg.h"
+#include "pngUtil.h"
+
+USE_NS_FLYENGINE
 
 static float s_rx=0;
 static float s_ry=0;
