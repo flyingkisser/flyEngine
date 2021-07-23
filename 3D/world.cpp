@@ -7,11 +7,15 @@
 //
 
 #include "world.h"
+#include "node.h"
+#include "control.h"
+#include "camera.h"
 #include "threadUtil.h"
+#include "window.h"
 
-#include "testWindow.h"
+//#include "testWindow.h"
 
-using namespace flyEngine;
+USE_NS_FLYENGINE
 
 static world* s_instance;
 

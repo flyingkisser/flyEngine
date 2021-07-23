@@ -5,9 +5,10 @@
 //  Created by wu mingzhou on 2021/6/27.
 //  Copyright © 2021 joe. All rights reserved.
 //
-
+#include <map>
 #include "shaderMgr.h"
 #include "fileUtil.h"
+
 
 USE_NS_FLYENGINE
 

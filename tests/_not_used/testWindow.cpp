@@ -30,7 +30,8 @@ static int s_menuID=1;
 static int s_near=1;
 static int s_far=1000;
 
-GLFWwindow* g_window;
+static GLFWwindow* s_window;
+
 
 //static std::map<int,function<void(void)>> s_mapMenuCallback;
 
@@ -99,66 +100,9 @@ static void initPerspective3D(){
 }
 
 
-
-//void onKeyboard(unsigned char c,int x,int y){
-//    switch (c) {
-//        case 'T':
-//            break;
-//
-//        default:
-//            break;
-//    }
-//    s_keyboard_callback(c,x,y);
-//}
-//void onMouseClick(int button,int action,int x,int y){
-//    switch (button) {
-//        case GLUT_LEFT_BUTTON:
-//            break;
-//        case GLUT_RIGHT_BUTTON:
-//                  break;
-//        case GLUT_MIDDLE_BUTTON:
-//                  break;
-//        default:
-//            break;
-//    }
-//    switch (action) {
-//       case GLUT_DOWN:
-//           break;
-//       case GLUT_UP:
-//            break;
-//       default:
-//           break;
-//      }
-//    s_mouse_click_callback(button,action,x,s_intHeight-y);
-//}
-//void onMouseMoveClick(GLFWwindow* window,double x,double y){
-//    s_mouse_clickmove_callback((int)x,(int)(s_intHeight-y));
-//}
-//void testRegKeyboard(std::function<void(unsigned char,int,int)>cb){
-//    s_keyboard_callback=cb;
-//    glutKeyboardFunc (onKeyboard);
-//}
-//void testRegMouseClick(std::function<void(int,int,int,int)>cb){
-//    s_mouse_click_callback=cb;
-//    glutMouseFunc(onMouseClick);
-//}
-//void testRegMouseClickWithMove(std::function<void(int,int)>cb){
-//    s_mouse_clickmove_callback=cb;
-//    glutMotionFunc(onMouseMoveClick);
-//}
-//void testRegMouseMove(std::function<void(int,int)>cb){
-//    s_mouse_move_callback=cb;
-//    glutPassiveMotionFunc(onMouseMove);
-//}
-//static void menuCallback(GLint menuID){
-//    if(!s_mapMenuCallback[menuID])
-//        return;
-//    s_mapMenuCallback[menuID]();
-//}
-
 void onKeyboard(GLFWwindow* window, int key, int scancode, int action, int mods){
     if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS){
-        glfwSetWindowShouldClose(g_window, GL_TRUE);
+        glfwSetWindowShouldClose(s_window, GL_TRUE);
         return;
     }
     const char* keyName = glfwGetKeyName(key, scancode);
@@ -175,7 +119,7 @@ void onKeyboard(GLFWwindow* window, int key, int scancode, int action, int mods)
 
 void testRegKeyboard(std::function<void(unsigned char, int,int)>cb){
     s_keyboard_callback=cb;
-    glfwSetKeyCallback(g_window, onKeyboard);
+    glfwSetKeyCallback(s_window, onKeyboard);
 }
 
 void onMouseClick(GLFWwindow* window,int button,int action,int mods){
@@ -216,17 +160,17 @@ void onMouseClickMove(GLFWwindow* window,double x,double y){
 
 void testRegMouseClick(std::function<void(int,int,int,int)>cb){
     s_mouse_click_callback=cb;
-    glfwSetMouseButtonCallback(g_window, onMouseClick);
+    glfwSetMouseButtonCallback(s_window, onMouseClick);
 }
 
 void testRegMouseMove(std::function<void(int,int)>cb){
     s_mouse_move_callback=cb;
-    glfwSetCursorPosCallback(g_window,onMouseClickMove);
+    glfwSetCursorPosCallback(s_window,onMouseClickMove);
 }
 
 void testRegMouseClickWithMove(std::function<void(int,int)>cb){
     s_mouse_clickmove_callback=cb;
-    glfwSetCursorPosCallback(g_window,onMouseClickMove);
+    glfwSetCursorPosCallback(s_window,onMouseClickMove);
 }
 
 
@@ -235,19 +179,6 @@ void testRegMenu(const char* szMenuName,std::function<void(void)>cb){
 //    glutAddMenuEntry(szMenuName, s_menuID++);
 ////    glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
-
-void printGpuInfo(){
-    fprintf(stdout,"gpu brand:%s\ngpu vender:%s\nGL version:%s\nGLSL version:%s\nsupport etc:%d\nsupport pvr:%d\ngpu extension:\n%s\n",
-           gpuUtil::getGPUBrand(),
-           gpuUtil::getGPUVender(),
-           gpuUtil::getGLVersion(),
-            gpuUtil::getGLSLVersion(),
-           gpuUtil::isSupportETC1(),
-           gpuUtil::isSupportPVR(),
-           gpuUtil::getGPUSupportExtensions()
-           );
-}
-
 
 void initWindow(){
     if(!glfwInit()){
@@ -281,7 +212,7 @@ void initWindow(){
        glfwTerminate();
        return;
     }
-    g_window=window;
+    s_window=window;
     
     glfwSetWindowPos(window,(s_winWidth-s_intWidth)/2,(s_winHeight-s_intHeight)/2);
     glfwMakeContextCurrent(window);
@@ -293,14 +224,14 @@ void initWindow(){
     }
     keyboardEventMgr::init(window);
     mouseEventMgr::init(window);
-    printGpuInfo();
+    //printGpuInfo();
 }
 
 
 void windowLoop(){
-   while(!glfwWindowShouldClose(g_window)){
+   while(!glfwWindowShouldClose(s_window)){
         usleep(3000);
-        glfwSwapBuffers(g_window);
+        glfwSwapBuffers(s_window);
         glfwPollEvents();
     }
     std::cout<<"window loop end"<<std::endl;

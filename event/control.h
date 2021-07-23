@@ -12,8 +12,6 @@
 #include <stdio.h>
 #include <string>
 
-#include "camera.h"
-#include "node.h"
 #include "keyboardEvent.h"
 #include "mouseEvent.h"
 

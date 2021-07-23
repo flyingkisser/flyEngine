@@ -23,6 +23,7 @@
 #include "cameraBase.h"
 #include "cameraFPS.h"
 #include "threadUtil.h"
+#include "window.h"
 
 using namespace flyEngine;
 

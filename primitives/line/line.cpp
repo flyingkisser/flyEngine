@@ -10,6 +10,7 @@
 #include "defines.h"
 #include "error.h"
 #include "3DTrans.h"
+#include "VAOMgr.h"
 
 USE_NS_FLYENGINE
 
@@ -81,7 +82,7 @@ std::function<void(void)> drawLines(){
       0.25, 0.5, 0,
       0, 0, 0
     };
-    unsigned int vao=flyEngine::VAOMgr::createVAO(vertices, sizeof(vertices), 3, 3*sizeof(float),false);
+    unsigned int vao=VAOMgr::createVAO(vertices, sizeof(vertices), 3, 3*sizeof(float),false);
     return [vao](){
         VAOMgr::drawPrimitive(vao, GL_LINES, 6);
     };

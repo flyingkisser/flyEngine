@@ -11,8 +11,10 @@
 #include "keyboardEventMgr.h"
 #include "mouseEvent.h"
 #include "mouseEventMgr.h"
+#include "camera.h"
 #include "randUtil.h"
 #include "logUtil.h"
+#include "node.h"
 
 using namespace flyEngine;
 

@@ -13,11 +13,11 @@
 #include <string>
 #include <functional>
 #include "defines.h"
-#include "control.h"
 
 using namespace std;
 
 NS_FLYENGINE_BEGIN
+
 class control;
 
 class camera{

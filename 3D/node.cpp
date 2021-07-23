@@ -7,9 +7,13 @@
 //
 
 #include "node.h"
-//#include "shaderMgr.h"
-//#include "move.h"
-
+#include "logUtil.h"
+#include "texture.h"
+#include "textureMgr.h"
+#include "shader.h"
+#include "shaderMgr.h"
+#include "action.h"
+#include "camera.h"
 
 USE_NS_FLYENGINE
 
@@ -154,7 +158,7 @@ void node::draw(camera* cameraObj){
       
         glUniformMatrix4fv(glGetUniformLocation(_gl_program,"matModel"), 1,GL_FALSE,glm::value_ptr(_matModel));
         _dirtyPos=false;
-        logUtil::logMat4(_matModel);
+        //logUtil::logMat4(_matModel);
     }
     cameraObj->update(_gl_program);
         

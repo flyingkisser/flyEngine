@@ -11,8 +11,7 @@
 
 
 
-namespace flyEngine {
-
+NS_FLYENGINE_BEGIN
 
 class vec3{
 public:
@@ -168,30 +167,6 @@ public:
     }
 };
 
-//class size{
-//public:
-//    GLfloat width,height;
-//    size(){
-//        width=0;
-//        height=0;
-//    }
-//    size(float v1,float v2){
-//        width=v1;
-//        height=v2;
-//    }
-//};
-
-//class color{
-//public:
-//    GLfloat r,g,b,a;
-//    color(){
-//        r=0;
-//        g=0;
-//        b=0;
-//        a=0;
-//    }
-//};
-
 struct structColor{
     int r;
     int g;
@@ -225,7 +200,7 @@ struct size{
 
 typedef float Matrix4x4 [4][4];
 
-}
+NS_FLYENGINE_END
 
 #ifdef __cplusplus
 extern "C" {

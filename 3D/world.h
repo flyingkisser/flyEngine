@@ -10,14 +10,14 @@
 #define world_h
 
 #include <stdio.h>
-#include "node.h"
 #include "defines.h"
-#include "control.h"
-#include "camera.h"
 
-namespace flyEngine {
+
+NS_FLYENGINE_BEGIN
 
 class node;
+class control;
+class camera;
 
 class world{
 private:
@@ -42,7 +42,7 @@ public:
     float getFrameRate(){return CONST_FRAME_RATE;};
 };
 
-}
+NS_FLYENGINE_END
 
 
 #endif /* world_h */

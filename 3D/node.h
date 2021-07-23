@@ -15,18 +15,15 @@
 
 #include "defines.h"
 #include "glRef.h"
-#include "texture.h"
-#include "camera.h"
-#include "action.h"
-#include "shader.h"
 
 using namespace std;
 
-namespace flyEngine {
+NS_FLYENGINE_BEGIN
+
 class camera;
+class action;
 class texture;
 class shader;
-class action;
 
 class node: public glRef
 {
@@ -61,7 +58,7 @@ public:
    
     void updateModel();
     void print();
-    void draw(flyEngine::camera* cameraObj);
+    void draw(camera* cameraObj);
     
     void setPosition(glm::vec3 p);
     void setPositionX(float v);
@@ -83,7 +80,7 @@ public:
 
 };
 
-}
+NS_FLYENGINE_END
 
 
 #endif /* _node_h */

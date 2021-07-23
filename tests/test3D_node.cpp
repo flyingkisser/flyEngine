@@ -6,13 +6,10 @@
 //  Copyright © 2020 joe. All rights reserved.
 //
 
-#include "test3D_node.h"
-
 #include <math.h>
-
 #include "defines.h"
 
-#include "testWindow.h"
+#include "test3D_node.h"
 #include "texture.h"
 #include "textureMgr.h"
 #include "VAOMgr.h"
@@ -22,20 +19,26 @@
 #include "mouseEventMgr.h"
 #include "camera.h"
 #include "control.h"
-#include "threadUtil.h"
-#include "move.h"
 #include "world.h"
+#include "node.h"
+#include "moveBy.h"
+#include "sequence.h"
+
+
 #include "logUtil.h"
 #include "timerMgr.h"
+#include "threadUtil.h"
+#include "window.h"
 
-using namespace flyEngine;
+
+USE_NS_FLYENGINE;
 
 void test3dView() {
     //drawPlane1();
 }
 
 void test3d_drawCubeOne(){
-    flyEngine::node* nodeObj=new flyEngine::node("res/fire.png");
+    node* nodeObj=new node("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
         return;
@@ -50,13 +53,13 @@ void test3d_drawCubeOne(){
     controlObj->bindNode(nodeObj);
     
     timerMgr* timerMgrObj=new timerMgr("node_test_timer");
-    timerMgrObj->exec(0.1,[](flyEngine::node* _node){
+    timerMgrObj->exec(0.1,[](node* _node){
         _node->rotate(glm::vec3(0.5f,0,0));
     },nodeObj);
 }
 
 void test3d_drawCubeOneWithMove(){
-    flyEngine::node* nodeObj=new flyEngine::node("res/fire.png");
+    node* nodeObj=new node("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
         return;
@@ -65,8 +68,26 @@ void test3d_drawCubeOneWithMove(){
        
     world::getInstance()->addChild(nodeObj);
  
-    flyEngine::action* moveAct=new flyEngine::move(3,glm::vec3(0.5,0,-5));
+    action* moveAct=new flyEngine::moveBy(1,glm::vec3(0.5,0,-5));
     nodeObj->runAction(moveAct);
+}
+
+void test3d_drawCubeOneWithSequence(){
+    node* nodeObj=new node("res/fire.png");
+    if(!nodeObj->init()){
+        flylog("node init failed!");
+        return;
+    }
+    nodeObj->setPosition(glm::vec3(0,0,-5));
+       
+    world::getInstance()->addChild(nodeObj);
+ 
+    action* moveAct1=new moveBy(1,glm::vec3(0.5,0,-5));
+    action* moveAct2=new moveBy(1,glm::vec3(0.5,0,-5));
+    flyEngine::sequence* seq=new flyEngine::sequence(2,moveAct1,moveAct2);
+    
+    nodeObj->runAction(seq);
+   
 }
 
 

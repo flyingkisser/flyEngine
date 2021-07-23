@@ -9,6 +9,8 @@
 #ifndef testMain_h
 #define testMain_h
 
-#include <stdio.h>
 void testMainBegin();
-#endif /* testMain_h */
+
+#endif
+
+/* testMain_h */

@@ -61,10 +61,8 @@
 ////world
 //#include "world.h"
 
-void engineInit();
+//void engineInit();
 
-extern float g_verticeArr[180];
-extern int g_winWidth;
-extern int g_winHeight;
+
 
 #endif /* flyEngine_h */

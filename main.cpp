@@ -6,28 +6,13 @@
 //
 
 #include <iostream>
-
+#include "defines.h"
+#include "dirUtil.h"
+#include "window.h"
+#include "world.h"
 #include "testMain.h"
 
-#include "glad.h"
-#include <GLFW/glfw3.h>
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
-
-//#include "shader_s.h"
-
-#include "shader.h"
-#include "dirUtil.h"
-
-
-//void initPerspective3D(void)
-//{
-//    glClearColor(1.0,1.0,1.0,0.0);
-//    gluPerspective(30.0, 0.9, 1, 10000);
-//    glMatrixMode(GL_MODELVIEW);
-//    gluLookAt(500,300,800,0,0,0,0,1,0);
-//}
+USE_NS_FLYENGINE;
 
 
 int main(int argc, char **argv) {
@@ -37,24 +22,27 @@ int main(int argc, char **argv) {
     dirUtil::setCurrentWorkDir(szHomeDir);
     printf("main:set current work dir %s\n",szHomeDir);
     
-//    if(!glfwInit()){
-//        std::cout<<"glfw init error!"<<std::endl;
-//        return -1;
-//    }
-//    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-//    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-//    //GLFW_OPENGL_COMPAT_PROFILE
-//    //GLFW_OPENGL_CORE_PROFILE
-//    glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
-//#ifdef __APPLE__
-//    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-//#endif
+    window::init();
     
     testMainBegin();
+    
+    world::getInstance()->start_rendering();
+    
     return 0;
 }
 
 
+//#include "glad.h"
+//#define STB_IMAGE_IMPLEMENTATION
+//#include "stb_image.h"
+
+//void initPerspective3D(void)
+//{
+//    glClearColor(1.0,1.0,1.0,0.0);
+//    gluPerspective(30.0, 0.9, 1, 10000);
+//    glMatrixMode(GL_MODELVIEW);
+//    gluLookAt(500,300,800,0,0,0,0,1,0);
+//}
 //void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 //void processInput(GLFWwindow *window);
 //

@@ -13,7 +13,7 @@
 #include <functional>
 #include "defines.h"
 
-extern GLFWwindow* g_window;
+//extern GLFWwindow* g_window;
 
 
 void initWindow();

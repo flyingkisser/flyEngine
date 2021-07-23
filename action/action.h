@@ -11,14 +11,18 @@
 
 #include <stdio.h>
 #include "defines.h"
-#include "node.h"
+
 
 NS_FLYENGINE_BEGIN
 
+class node;
 class action{
 public:
-   virtual void start(flyEngine::node* nodeObj)=0;
-    //void start(node* nodeObj);
+//    virtual ~action()=0;
+    virtual void start(node* nodeObj)=0;
+    virtual void start(node* nodeObj,std::function<void(void)> cb)=0;
+public:
+     std::function<void(void)> m_funcCB;
 };
 
 NS_FLYENGINE_END

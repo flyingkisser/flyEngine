@@ -11,8 +11,10 @@
 
 #include <stdio.h>
 
+
 void test3d_drawCubeOne();
 void test3d_drawCubeOneWithMove();
+void test3d_drawCubeOneWithSequence();
 
 //void test3dView();
 //void test3dViewRotate();

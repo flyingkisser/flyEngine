@@ -9,8 +9,9 @@
 #include "points.h"
 #include "defines.h"
 #include "shader.h"
+#include "VAOMgr.h"
 
-using namespace flyEngine;
+USE_NS_FLYENGINE
 
 void drawPointsImm(){
     //glClearColor(0, 0, 0, 0);
@@ -71,7 +72,7 @@ std::function<void(void)> drawPoints(){
       0.5,0, 0,
       0.25, 0.5, 0
     };
-    unsigned int vao=flyEngine::VAOMgr::createVAO(vertices, sizeof(vertices), 3,3*sizeof(float),false);
+    unsigned int vao=VAOMgr::createVAO(vertices, sizeof(vertices), 3,3*sizeof(float),false);
     return [vao](){
         VAOMgr::drawPrimitive(vao, GL_POINTS, 3);
     };
