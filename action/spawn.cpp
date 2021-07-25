@@ -7,3 +7,46 @@
 //
 
 #include "spawn.h"
+
+#include "action.h"
+#include "logUtil.h"
+
+USE_NS_FLYENGINE;
+
+spawn::spawn(int c,...){
+    va_list ap;
+    va_start(ap,c);
+    for(int i=0;i<c;i++){
+        action* act=va_arg(ap, action*);
+        m_vectorActionArr.push_back(act);
+    }
+}
+
+spawn::~spawn(){
+  
+}
+
+void spawn::start(node* nodeObj){
+    if(m_objNode==NULL)
+        m_objNode=nodeObj;
+    
+    for(action* act:m_vectorActionArr){
+        act->start(m_objNode,[this](){
+//            flylog("spawn:on cb %d %d",m_intRunIndex,m_vectorActionArr.size());
+            if(++m_intRunIndex>=m_vectorActionArr.size()){
+                if(m_funcCB!=NULL){
+                     flylog("spawn:all end!call cb!");
+                     m_funcCB();
+                }else{
+                     flylog("spawn:all end!return!");
+                }
+            }
+        });
+    }
+}
+
+void spawn::start(node* nodeObj,std::function<void(void)> cb){
+    m_funcCB=cb;
+    m_objNode=nodeObj;
+    start(nodeObj);
+}

@@ -23,6 +23,7 @@
 #include "node.h"
 #include "moveBy.h"
 #include "sequence.h"
+#include "spawn.h"
 
 
 #include "logUtil.h"
@@ -79,17 +80,32 @@ void test3d_drawCubeOneWithSequence(){
         return;
     }
     nodeObj->setPosition(glm::vec3(0,0,-5));
-       
     world::getInstance()->addChild(nodeObj);
  
-    action* moveAct1=new moveBy(1,glm::vec3(0.5,0,-5));
-    action* moveAct2=new moveBy(1,glm::vec3(0.5,0,-5));
-    flyEngine::sequence* seq=new flyEngine::sequence(2,moveAct1,moveAct2);
+    action* moveAct1=new moveBy(1,glm::vec3(0.5,0,0));
+    action* moveAct2=new moveBy(1,glm::vec3(0,-0.5,0));
+    action* moveAct3=new moveBy(1,glm::vec3(0,0,-5));
+    flyEngine::sequence* seq=new flyEngine::sequence(3,moveAct1,moveAct2,moveAct3);
     
     nodeObj->runAction(seq);
-   
 }
 
+void test3d_drawCubeOneWithSpawn(){
+    node* nodeObj=new node("res/fire.png");
+    if(!nodeObj->init()){
+        flylog("node init failed!");
+        return;
+    }
+    nodeObj->setPosition(glm::vec3(0,0,-5));
+    world::getInstance()->addChild(nodeObj);
+    
+    action* moveAct1=new moveBy(1,glm::vec3(0.5,0,0));
+    action* moveAct2=new moveBy(1,glm::vec3(0,-0.5,0));
+    action* moveAct3=new moveBy(1,glm::vec3(0,0,-5));
+    flyEngine::spawn* spawnAct=new flyEngine::spawn(3,moveAct1,moveAct2,moveAct3);
+    
+    nodeObj->runAction(spawnAct);
+}
 
 
 void test3d_drawCubeMore(){

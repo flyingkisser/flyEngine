@@ -21,13 +21,12 @@ void moveBy::start(node* nodeObj){
     float secRate=world::getInstance()->getFrameRate();
     m_intLoopCount=mathUtil::ceil(m_fSec/secRate);
     //计算出每一帧要移动的距离
-    glm::vec3& curPos=nodeObj->getPosition();
-    glm::vec3 moveDis=m_vec3TargetPos-curPos;
-    glm::vec3 moveInner=glm::vec3(moveDis.x/m_intLoopCount,moveDis.y/m_intLoopCount,moveDis.z/m_intLoopCount);
+    glm::vec3 moveInner=glm::vec3(m_vec3MoveDis.x/m_intLoopCount,m_vec3MoveDis.y/m_intLoopCount,m_vec3MoveDis.z/m_intLoopCount);
     if(m_funcCB!=NULL){
         m_intLoopCount++;
     }
     m_intLoopIndex=0;
+    flylog("moveBy:action begin exec timer!");
     timerMgr::getInstance()->execWithCount(secRate,m_intLoopCount, [&](moveBy* act, node* nodeObj,glm::vec3& moveInner){
         //如果有回调，且已经到了最后一帧率，则调用回调，返回，这时最后一帧是额外加的
         if(this->m_funcCB!=NULL && ++this->m_intLoopIndex>=this->m_intLoopCount){

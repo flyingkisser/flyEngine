@@ -29,6 +29,8 @@ public:
 
 private:
     std::vector<action*> m_vectorActionArr;
+    node* m_objNode=NULL;
+    int m_intRunIndex=0;
     
 };
 

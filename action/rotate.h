@@ -10,5 +10,34 @@
 #define rotate_h
 
 #include <stdio.h>
+#include <functional>
+
+#include "defines.h"
+#include "action.h"
+
+
+NS_FLYENGINE_BEGIN
+
+class moveBy : public action {
+    
+public:
+    moveBy(float sec,glm::vec3 moveDis){
+        m_fSec=sec;
+        m_vec3MoveDis=moveDis;
+    };
+    
+    ~moveBy(){};
+    
+    void start(node* nodeObj);
+    void start(node* nodeObj,std::function<void(void)> cb);
+    
+private:
+    float m_fSec;
+    int m_intLoopCount=0;
+    int m_intLoopIndex=0;
+    glm::vec3 m_vec3MoveDis;
+};
+
+NS_FLYENGINE_END
 
 #endif /* rotate_h */

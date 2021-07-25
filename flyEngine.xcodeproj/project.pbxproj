@@ -63,6 +63,7 @@
 		D827953624BC614800261C44 /* 3DTrans.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D827953524BC614800261C44 /* 3DTrans.cpp */; };
 		D8309C4626970FD000A855A6 /* glRef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8309C4526970FD000A855A6 /* glRef.cpp */; };
 		D84FB806266B1D0E003FDDE1 /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E27578226512D9700993B0B /* libglfw.3.3.dylib */; };
+		D84FB80926ABF59B003FDDE1 /* moveTo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84FB80726ABF59B003FDDE1 /* moveTo.cpp */; };
 		D853B5FB1F15063300226235 /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853B5F91F15063300226235 /* triangle.cpp */; };
 		D853B5FF1F159F6600226235 /* quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853B5FD1F159F6600226235 /* quad.cpp */; };
 		D853B6031F16757600226235 /* vertexArray.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853B6011F16757600226235 /* vertexArray.cpp */; };
@@ -1640,6 +1641,8 @@
 		D8309C43269469F100A855A6 /* readme.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = readme.txt; sourceTree = "<group>"; };
 		D8309C4426970FD000A855A6 /* glRef.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = glRef.h; sourceTree = "<group>"; };
 		D8309C4526970FD000A855A6 /* glRef.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = glRef.cpp; sourceTree = "<group>"; };
+		D84FB80726ABF59B003FDDE1 /* moveTo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moveTo.cpp; sourceTree = "<group>"; };
+		D84FB80826ABF59B003FDDE1 /* moveTo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = moveTo.h; sourceTree = "<group>"; };
 		D853B5F91F15063300226235 /* triangle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = triangle.cpp; sourceTree = "<group>"; };
 		D853B5FA1F15063300226235 /* triangle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = triangle.h; sourceTree = "<group>"; };
 		D853B5FD1F159F6600226235 /* quad.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = quad.cpp; sourceTree = "<group>"; };
@@ -4037,6 +4040,8 @@
 				D87EBFF026AAAEF2004ED7DE /* sequence.cpp */,
 				D87EBFF226AAAEFE004ED7DE /* spawn.h */,
 				D87EBFF326AAAEFE004ED7DE /* spawn.cpp */,
+				D84FB80726ABF59B003FDDE1 /* moveTo.cpp */,
+				D84FB80826ABF59B003FDDE1 /* moveTo.h */,
 			);
 			path = action;
 			sourceTree = "<group>";
@@ -4269,6 +4274,7 @@
 				D87EBFDB26A6F010004ED7DE /* action.cpp in Sources */,
 				D87EBFF126AAAEF2004ED7DE /* sequence.cpp in Sources */,
 				D87EBFE726A7CA3F004ED7DE /* mathUtil.cpp in Sources */,
+				D84FB80926ABF59B003FDDE1 /* moveTo.cpp in Sources */,
 				D825DB71249CB3EB00C494E7 /* randUtil.cpp in Sources */,
 				D81EF3811EAFA1A10003604F /* line.cpp in Sources */,
 				D81EF3871EB01E950003604F /* error.cpp in Sources */,
@@ -4384,8 +4390,7 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include/,
-					/usr/local/Cellar/glew/2.1.0_1/include,
-					/usr/local/Cellar/glfw/3.3.2/include,
+					"$(PROJECT_DIR)/external/",
 					"$(PROJECT_DIR)/external/libpng/1.6.37/include",
 					"$(PROJECT_DIR)/external/jpeg/9d/include",
 					"$(PROJECT_DIR)/external/glad/include",
@@ -4395,8 +4400,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
-					/usr/local/Cellar/glew/2.1.0_1/lib,
-					/usr/local/Cellar/glfw/3.3.2/lib,
 					"$(PROJECT_DIR)/lib",
 					"$(PROJECT_DIR)/external/glfw/3.3.2/lib",
 					"$(PROJECT_DIR)/external/jpeg/9d/lib",
@@ -4411,8 +4414,7 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include/,
-					/usr/local/Cellar/glew/2.1.0_1/include,
-					/usr/local/Cellar/glfw/3.3.2/include,
+					"$(PROJECT_DIR)/external/",
 					"$(PROJECT_DIR)/external/libpng/1.6.37/include",
 					"$(PROJECT_DIR)/external/jpeg/9d/include",
 					"$(PROJECT_DIR)/external/glad/include",
@@ -4422,8 +4424,6 @@
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
-					/usr/local/Cellar/glew/2.1.0_1/lib,
-					/usr/local/Cellar/glfw/3.3.2/lib,
 					"$(PROJECT_DIR)/lib",
 					"$(PROJECT_DIR)/external/glfw/3.3.2/lib",
 					"$(PROJECT_DIR)/external/jpeg/9d/lib",

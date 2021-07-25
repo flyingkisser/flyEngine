@@ -10,5 +10,30 @@
 #define spawn_h
 
 #include <stdio.h>
+#include <vector>
+#include "defines.h"
+#include "action.h"
+
+
+NS_FLYENGINE_BEGIN
+
+
+class spawn : public action{
+public:
+    spawn(int count,...);
+    ~spawn();
+    
+    void start(node* nodeObj);
+    
+    void start(node* nodeObj,std::function<void(void)> cb);
+    
+private:
+    std::vector<action*> m_vectorActionArr;
+    node* m_objNode=NULL;
+    int m_intRunIndex=0;
+    
+};
+
+NS_FLYENGINE_END
 
 #endif /* spawn_h */

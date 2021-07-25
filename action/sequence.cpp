@@ -29,19 +29,26 @@ sequence::~sequence(){
 }
 
 void sequence::start(node* nodeObj){
-    if(m_vectorActionArr.size()<=0){
-        flylog("sequence:all end!");
-        return;
-    }
-       
-    action* act=m_vectorActionArr.front();
-    act->start(nodeObj,[&](){
+//    if(m_vectorActionArr.size()<=0 || m_intRunIndex>=m_vectorActionArr.size()){
+//        flylog("sequence:all end!");
+//        return;
+//    }
+    if(m_objNode==NULL)
+        m_objNode=nodeObj;
+
+    action* act=m_vectorActionArr[m_intRunIndex++];
+    act->start(m_objNode,[&](){
+        if(m_vectorActionArr.size()<=0 || m_intRunIndex>=m_vectorActionArr.size()){
+            flylog("sequence:all end!");
+            return;
+        }
         flylog("sequence:one action end,start next!");
-        start(nodeObj);
+        start(m_objNode);
     });
 }
 
 void sequence::start(node* nodeObj,std::function<void(void)> cb){
     m_funcCB=cb;
+    m_objNode=nodeObj;
     start(nodeObj);
 }
