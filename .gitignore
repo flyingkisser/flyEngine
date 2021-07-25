@@ -1,6 +1,7 @@
 .DS_STORE
 *.bak
 *.log
+lib
 flyEngine.xcodeproj/xcuserdata/joe.xcuserdatad/xcdebugger/*
 flyEngine.xcodeproj/xcuserdata/wumingzhou.xcuserdatad/xcdebugger/*
 flyEngine.xcodeproj/project.xcworkspace/xcuserdata
