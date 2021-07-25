@@ -4370,20 +4370,16 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include/,
-					/usr/local/Cellar/glew/2.1.0_1/include,
-					/usr/local/Cellar/glfw/3.3.2/include,
+					"$(PROJECT_DIR)/external/",
 					"$(PROJECT_DIR)/external/libpng/1.6.37/include",
 					"$(PROJECT_DIR)/external/jpeg/9d/include",
 					"$(PROJECT_DIR)/external/glad/include",
 					"$(PROJECT_DIR)/external/glfw/3.3.2/include",
 					"$(PROJECT_DIR)/external/glm/0.9.9.8/include",
-					"$(PROJECT_DIR)/external/",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
-					/usr/local/Cellar/glew/2.1.0_1/lib,
-					/usr/local/Cellar/glfw/3.3.2/lib,
 					"$(PROJECT_DIR)/lib",
 					"$(PROJECT_DIR)/external/glfw/3.3.2/lib",
 					"$(PROJECT_DIR)/external/jpeg/9d/lib",
@@ -4398,20 +4394,16 @@
 			buildSettings = {
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include/,
-					/usr/local/Cellar/glew/2.1.0_1/include,
-					/usr/local/Cellar/glfw/3.3.2/include,
+					"$(PROJECT_DIR)/external/",
 					"$(PROJECT_DIR)/external/libpng/1.6.37/include",
 					"$(PROJECT_DIR)/external/jpeg/9d/include",
 					"$(PROJECT_DIR)/external/glad/include",
 					"$(PROJECT_DIR)/external/glfw/3.3.2/include",
 					"$(PROJECT_DIR)/external/glm/0.9.9.8/include",
-					"$(PROJECT_DIR)/external/",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/external",
-					/usr/local/Cellar/glew/2.1.0_1/lib,
-					/usr/local/Cellar/glfw/3.3.2/lib,
 					"$(PROJECT_DIR)/lib",
 					"$(PROJECT_DIR)/external/glfw/3.3.2/lib",
 					"$(PROJECT_DIR)/external/jpeg/9d/lib",
