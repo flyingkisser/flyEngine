@@ -15,6 +15,7 @@
 void test3d_drawCubeOne();
 void test3d_drawCubeOneWithMove();
 void test3d_drawCubeOneWithSequence();
+void test3d_drawCubeOneWithSpawn();
 
 //void test3dView();
 //void test3dViewRotate();
