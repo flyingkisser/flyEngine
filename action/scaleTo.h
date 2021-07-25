@@ -6,8 +6,8 @@
 //  Copyright © 2021 joe. All rights reserved.
 //
 
-#ifndef scale_h
-#define scale_h
+#ifndef scaleTo_h
+#define scaleTo_h
 
 #include <stdio.h>
 #include <functional>
@@ -18,15 +18,15 @@
 
 NS_FLYENGINE_BEGIN
 
-class moveBy : public action {
+class scaleTo : public action {
     
 public:
-    moveBy(float sec,glm::vec3 moveDis){
+    scaleTo(float sec,glm::vec3 moveDis){
         m_fSec=sec;
         m_vec3MoveDis=moveDis;
     };
     
-    ~moveBy(){};
+    ~scaleTo(){};
     
     void start(node* nodeObj);
     void start(node* nodeObj,std::function<void(void)> cb);
@@ -40,4 +40,4 @@ private:
 
 NS_FLYENGINE_END
 
-#endif /* scale_h */
+#endif /* scaleTo_h */

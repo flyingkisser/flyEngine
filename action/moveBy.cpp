@@ -27,7 +27,7 @@ void moveBy::start(node* nodeObj){
     }
     m_intLoopIndex=0;
     flylog("moveBy:action begin exec timer!");
-    timerMgr::getInstance()->execWithCount(secRate,m_intLoopCount, [&](moveBy* act, node* nodeObj,glm::vec3& moveInner){
+    timerMgr::getInstance()->execWithCount(secRate,m_intLoopCount, [&](action* act, node* nodeObj,glm::vec3& moveInner){
         //如果有回调，且已经到了最后一帧率，则调用回调，返回，这时最后一帧是额外加的
         if(this->m_funcCB!=NULL && ++this->m_intLoopIndex>=this->m_intLoopCount){
             flylog("moveBy:action end,call cb!");

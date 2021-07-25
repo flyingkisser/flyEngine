@@ -1,13 +1,13 @@
 //
-//  rotate.h
+//  rotateTo.h
 //  flyEngine
 //
 //  Created by joe on 20/07/2021.
 //  Copyright © 2021 joe. All rights reserved.
 //
 
-#ifndef rotate_h
-#define rotate_h
+#ifndef rotateTo_h
+#define rotateTo_h
 
 #include <stdio.h>
 #include <functional>
@@ -18,15 +18,15 @@
 
 NS_FLYENGINE_BEGIN
 
-class moveBy : public action {
+class rotateTo : public action {
     
 public:
-    moveBy(float sec,glm::vec3 moveDis){
+    rotateTo(float sec,glm::vec3 moveDis){
         m_fSec=sec;
         m_vec3MoveDis=moveDis;
     };
     
-    ~moveBy(){};
+    ~rotateTo(){};
     
     void start(node* nodeObj);
     void start(node* nodeObj,std::function<void(void)> cb);
@@ -40,4 +40,4 @@ private:
 
 NS_FLYENGINE_END
 
-#endif /* rotate_h */
+#endif /* rotateTo_h */

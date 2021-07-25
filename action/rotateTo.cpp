@@ -1,12 +1,12 @@
 //
-//  scale.cpp
+//  rotateTo.cpp
 //  flyEngine
 //
 //  Created by joe on 20/07/2021.
 //  Copyright © 2021 joe. All rights reserved.
 //
 
-#include "scale.h"
+#include "rotateTo.h"
 #include "world.h"
 #include "node.h"
 
@@ -16,7 +16,7 @@
 
 USE_NS_FLYENGINE
 
-void moveBy::start(node* nodeObj){
+void rotateTo::start(node* nodeObj){
     //计算出几帧完成这个动画
     float secRate=world::getInstance()->getFrameRate();
     m_intLoopCount=mathUtil::ceil(m_fSec/secRate);
@@ -27,7 +27,7 @@ void moveBy::start(node* nodeObj){
     }
     m_intLoopIndex=0;
     flylog("moveBy:action begin exec timer!");
-    timerMgr::getInstance()->execWithCount(secRate,m_intLoopCount, [&](moveBy* act, node* nodeObj,glm::vec3& moveInner){
+    timerMgr::getInstance()->execWithCount(secRate,m_intLoopCount, [&](action* act, node* nodeObj,glm::vec3& moveInner){
         //如果有回调，且已经到了最后一帧率，则调用回调，返回，这时最后一帧是额外加的
         if(this->m_funcCB!=NULL && ++this->m_intLoopIndex>=this->m_intLoopCount){
             flylog("moveBy:action end,call cb!");
@@ -38,7 +38,7 @@ void moveBy::start(node* nodeObj){
     }, this,nodeObj,moveInner);
 }
 
-void moveBy::start(node* nodeObj,std::function<void(void)> cb){
+void rotateTo::start(node* nodeObj,std::function<void(void)> cb){
     m_funcCB=cb;
     start(nodeObj);
 }

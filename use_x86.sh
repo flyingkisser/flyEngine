@@ -1,2 +1,2 @@
 rm -rf lib
-cp -R lib_86 lib
+cp -R lib_x86 lib

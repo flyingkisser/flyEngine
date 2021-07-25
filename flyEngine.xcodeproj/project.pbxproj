@@ -7,12 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8E2757592651238600993B0B /* m1_libGLEW.2.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2757572651237600993B0B /* m1_libGLEW.2.2.0.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
-		8E27575A2651238600993B0B /* m1_libGLEW.2.2.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 8E2757572651237600993B0B /* m1_libGLEW.2.2.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		8E27575C2651239300993B0B /* m1_libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2757562651237600993B0B /* m1_libGLEW.a */; settings = {ATTRIBUTES = (Weak, ); }; };
-		8E27575D265123A100993B0B /* m1_libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2757582651237600993B0B /* m1_libglfw.3.3.dylib */; settings = {ATTRIBUTES = (Weak, ); }; };
-		8E27575E265123A100993B0B /* m1_libglfw.3.3.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 8E2757582651237600993B0B /* m1_libglfw.3.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
-		8E275762265124BE00993B0B /* m1_libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E2757602651249A00993B0B /* m1_libjpeg.a */; settings = {ATTRIBUTES = (Weak, ); }; };
 		8E2763DB26512E9F00993B0B /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E275F7A26512E9E00993B0B /* glm.cpp */; };
 		8E86C9C326638480004B3BB7 /* testPhong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E86C9C126638480004B3BB7 /* testPhong.cpp */; };
 		8EA969BB26AD141C00C281C3 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E9CDED24F8EF990025D62E /* libGLEW.a */; };
@@ -61,7 +55,6 @@
 		D827953224BC5FB400261C44 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D827953124BC5FB400261C44 /* matrix.cpp */; };
 		D827953624BC614800261C44 /* 3DTrans.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D827953524BC614800261C44 /* 3DTrans.cpp */; };
 		D8309C4626970FD000A855A6 /* glRef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8309C4526970FD000A855A6 /* glRef.cpp */; };
-		D84FB806266B1D0E003FDDE1 /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E27578226512D9700993B0B /* libglfw.3.3.dylib */; };
 		D84FB80926ABF59B003FDDE1 /* moveTo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84FB80726ABF59B003FDDE1 /* moveTo.cpp */; };
 		D853B5FB1F15063300226235 /* triangle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853B5F91F15063300226235 /* triangle.cpp */; };
 		D853B5FF1F159F6600226235 /* quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D853B5FD1F159F6600226235 /* quad.cpp */; };
@@ -72,8 +65,8 @@
 		D87EBFD726A59A46004ED7DE /* timeUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFD626A59A46004ED7DE /* timeUtil.cpp */; };
 		D87EBFDB26A6F010004ED7DE /* action.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFDA26A6F010004ED7DE /* action.cpp */; };
 		D87EBFDE26A6F0D6004ED7DE /* moveBy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFDD26A6F0D6004ED7DE /* moveBy.cpp */; };
-		D87EBFE126A6F0EA004ED7DE /* rotate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFE026A6F0EA004ED7DE /* rotate.cpp */; };
-		D87EBFE426A6F102004ED7DE /* scale.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFE326A6F102004ED7DE /* scale.cpp */; };
+		D87EBFE126A6F0EA004ED7DE /* rotateTo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFE026A6F0EA004ED7DE /* rotateTo.cpp */; };
+		D87EBFE426A6F102004ED7DE /* scaleTo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFE326A6F102004ED7DE /* scaleTo.cpp */; };
 		D87EBFE726A7CA3F004ED7DE /* mathUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFE626A7CA3F004ED7DE /* mathUtil.cpp */; };
 		D87EBFEB26AA6DD5004ED7DE /* window.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFEA26AA6DD5004ED7DE /* window.cpp */; };
 		D87EBFED26AA7547004ED7DE /* test3D_old_2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8C7A1AE2549875F007573B3 /* test3D_old_2.cpp */; };
@@ -1663,10 +1656,10 @@
 		D87EBFDA26A6F010004ED7DE /* action.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = action.cpp; sourceTree = "<group>"; };
 		D87EBFDC26A6F0D6004ED7DE /* moveBy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = moveBy.h; sourceTree = "<group>"; };
 		D87EBFDD26A6F0D6004ED7DE /* moveBy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moveBy.cpp; sourceTree = "<group>"; };
-		D87EBFDF26A6F0EA004ED7DE /* rotate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rotate.h; sourceTree = "<group>"; };
-		D87EBFE026A6F0EA004ED7DE /* rotate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rotate.cpp; sourceTree = "<group>"; };
-		D87EBFE226A6F102004ED7DE /* scale.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scale.h; sourceTree = "<group>"; };
-		D87EBFE326A6F102004ED7DE /* scale.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scale.cpp; sourceTree = "<group>"; };
+		D87EBFDF26A6F0EA004ED7DE /* rotateTo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rotateTo.h; sourceTree = "<group>"; };
+		D87EBFE026A6F0EA004ED7DE /* rotateTo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rotateTo.cpp; sourceTree = "<group>"; };
+		D87EBFE226A6F102004ED7DE /* scaleTo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scaleTo.h; sourceTree = "<group>"; };
+		D87EBFE326A6F102004ED7DE /* scaleTo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scaleTo.cpp; sourceTree = "<group>"; };
 		D87EBFE526A7CA3F004ED7DE /* mathUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mathUtil.h; sourceTree = "<group>"; };
 		D87EBFE626A7CA3F004ED7DE /* mathUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mathUtil.cpp; sourceTree = "<group>"; };
 		D87EBFE926AA6DD5004ED7DE /* window.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = window.h; sourceTree = "<group>"; };
@@ -4021,14 +4014,14 @@
 		D87EBFD826A6EFFC004ED7DE /* action */ = {
 			isa = PBXGroup;
 			children = (
-				D87EBFE226A6F102004ED7DE /* scale.h */,
-				D87EBFE326A6F102004ED7DE /* scale.cpp */,
+				D87EBFE226A6F102004ED7DE /* scaleTo.h */,
+				D87EBFE326A6F102004ED7DE /* scaleTo.cpp */,
 				D87EBFD926A6F010004ED7DE /* action.h */,
 				D87EBFDA26A6F010004ED7DE /* action.cpp */,
 				D87EBFDC26A6F0D6004ED7DE /* moveBy.h */,
 				D87EBFDD26A6F0D6004ED7DE /* moveBy.cpp */,
-				D87EBFDF26A6F0EA004ED7DE /* rotate.h */,
-				D87EBFE026A6F0EA004ED7DE /* rotate.cpp */,
+				D87EBFDF26A6F0EA004ED7DE /* rotateTo.h */,
+				D87EBFE026A6F0EA004ED7DE /* rotateTo.cpp */,
 				D87EBFEF26AAAEF2004ED7DE /* sequence.h */,
 				D87EBFF026AAAEF2004ED7DE /* sequence.cpp */,
 				D87EBFF226AAAEFE004ED7DE /* spawn.h */,
@@ -4223,10 +4216,10 @@
 				D8BB1B9E255BE08000AF9FD5 /* control.cpp in Sources */,
 				D87EBFDE26A6F0D6004ED7DE /* moveBy.cpp in Sources */,
 				D8BB1B9B255A6D1500AF9FD5 /* mouseEventMgr.cpp in Sources */,
-				D87EBFE126A6F0EA004ED7DE /* rotate.cpp in Sources */,
+				D87EBFE126A6F0EA004ED7DE /* rotateTo.cpp in Sources */,
 				D87EBFEB26AA6DD5004ED7DE /* window.cpp in Sources */,
 				D8BED724253DACDE006974D3 /* keyboardEvent.cpp in Sources */,
-				D87EBFE426A6F102004ED7DE /* scale.cpp in Sources */,
+				D87EBFE426A6F102004ED7DE /* scaleTo.cpp in Sources */,
 				D825DBAC24AC82FF00C494E7 /* textureMgr.cpp in Sources */,
 				D825DB7B24A0C4FA00C494E7 /* dirUtil.cpp in Sources */,
 				D8BED727253E9062006974D3 /* keyboardEventMgr.cpp in Sources */,
