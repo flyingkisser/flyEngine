@@ -65,16 +65,21 @@ public:
     void setPositionY(float v);
     void setPositionZ(float v);
     
-    glm::vec3& getPosition(){return _pos;};
+    
     float getPositionX(){return _pos.x;};
     float getPositionY(){return _pos.y;};
     float getPositionZ(){return _pos.z;};
     
     void setScale(glm::vec3 v);
     
-    
-    void rotate(glm::vec3 v);
     void moveBy(glm::vec3 v);
+    void scaleBy(glm::vec3 v);
+    void rotateBy(glm::vec3 v);
+    
+    glm::vec3& getPosition(){return _pos;};
+    glm::vec3& getScale(){return _scale;};
+    glm::vec3& getRotation(){return _rorate;};
+    
     
     void runAction(action* act);
 

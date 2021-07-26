@@ -43,16 +43,19 @@ bool node::init(){
 
 //从当前位置，移动一个指定的距离
 void node::moveBy(glm::vec3 v){
-    _pos.x+=v.x;
-    _pos.y+=v.y;
-    _pos.z+=v.z;
+    _pos+=v;
     _dirtyPos=true;
-    //    _matModel=glm::translate(_matModel, v);
+}
+
+//从当前大小，缩放一个指定的系数
+void node::scaleBy(glm::vec3 v){
+    _scale+=v;
+    _dirtyPos=true;
 }
 
 //从当前位置，旋转一个指定的角度
 //v里面是旋转的角度，0到360，函数会转成弧度
-void node::rotate(glm::vec3 v){
+void node::rotateBy(glm::vec3 v){
     _rorate+=v;
     _dirtyPos=true;
 }
@@ -135,7 +138,7 @@ void node::glInit(){
     glUniform1i(glGetUniformLocation(_gl_program, "texture0"), _gl_texture0);
     
     setPosition(glm::vec3(0,0,-10));
-    rotate(glm::vec3(30,0,30));
+    rotateBy(glm::vec3(30,0,30));
 
     _dirtyPos=true;
 }

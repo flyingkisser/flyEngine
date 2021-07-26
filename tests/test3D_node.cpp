@@ -22,6 +22,11 @@
 #include "world.h"
 #include "node.h"
 #include "moveBy.h"
+#include "scaleBy.h"
+#include "scaleTo.h"
+#include "rotateTo.h"
+#include "rotateBy.h"
+
 #include "sequence.h"
 #include "spawn.h"
 
@@ -55,7 +60,7 @@ void test3d_drawCubeOne(){
     
     timerMgr* timerMgrObj=new timerMgr("node_test_timer");
     timerMgrObj->exec(0.1,[](node* _node){
-        _node->rotate(glm::vec3(0.5f,0,0));
+        _node->rotateBy(glm::vec3(0.5f,0,0));
     },nodeObj);
 }
 
@@ -82,9 +87,18 @@ void test3d_drawCubeOneWithSequence(){
     nodeObj->setPosition(glm::vec3(0,0,-5));
     world::getInstance()->addChild(nodeObj);
  
+//    action* moveAct1=new moveBy(1,glm::vec3(0.5,0,0));
+//    action* moveAct2=new moveBy(1,glm::vec3(0,-0.5,0));
+//    action* moveAct3=new moveBy(1,glm::vec3(0,0,-5));
+    
+//    action* moveAct1=new moveBy(1,glm::vec3(0.5,0,0));
+//    action* moveAct2=new scaleTo(1,glm::vec3(0.5,0.5,1));
+//    action* moveAct3=new scaleTo(1,glm::vec3(1.5,1.5,1));
+    
     action* moveAct1=new moveBy(1,glm::vec3(0.5,0,0));
-    action* moveAct2=new moveBy(1,glm::vec3(0,-0.5,0));
-    action* moveAct3=new moveBy(1,glm::vec3(0,0,-5));
+      action* moveAct2=new rotateTo(1,glm::vec3(0.5,0.5,1));
+      action* moveAct3=new scaleTo(1,glm::vec3(1.5,1.5,1));
+    
     flyEngine::sequence* seq=new flyEngine::sequence(3,moveAct1,moveAct2,moveAct3);
     
     nodeObj->runAction(seq);
@@ -100,8 +114,8 @@ void test3d_drawCubeOneWithSpawn(){
     world::getInstance()->addChild(nodeObj);
     
     action* moveAct1=new moveBy(1,glm::vec3(0.5,0,0));
-    action* moveAct2=new moveBy(1,glm::vec3(0,-0.5,0));
-    action* moveAct3=new moveBy(1,glm::vec3(0,0,-5));
+    action* moveAct2=new moveBy(3,glm::vec3(0.5,0.5,0.5));
+    action* moveAct3=new scaleTo(5,glm::vec3(0.3,0.3,1));
     flyEngine::spawn* spawnAct=new flyEngine::spawn(3,moveAct1,moveAct2,moveAct3);
     
     nodeObj->runAction(spawnAct);

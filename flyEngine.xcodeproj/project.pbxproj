@@ -11,11 +11,9 @@
 		8E86C9C326638480004B3BB7 /* testPhong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E86C9C126638480004B3BB7 /* testPhong.cpp */; };
 		8EA969BB26AD141C00C281C3 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E9CDED24F8EF990025D62E /* libGLEW.a */; };
 		8EA969BC26AD141C00C281C3 /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E9CDF124F8EF9E0025D62E /* libglfw.3.3.dylib */; };
-		8EA969BD26AD141C00C281C3 /* libglfw.3.3.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = D8E9CDF124F8EF9E0025D62E /* libglfw.3.3.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		8EA969BE26AD141C00C281C3 /* libjpeg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E9CDE824F8EEA30025D62E /* libjpeg.a */; };
 		8EA969BF26AD141C00C281C3 /* libpng16.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E9CDE924F8EEA30025D62E /* libpng16.a */; };
 		8EA969C226AD141D00C281C3 /* libGLEW.2.2.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 8EA969C126AD141D00C281C3 /* libGLEW.2.2.0.dylib */; };
-		8EA969C326AD141D00C281C3 /* libGLEW.2.2.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = 8EA969C126AD141D00C281C3 /* libGLEW.2.2.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		8ECA452B26882E3C00FDFC7A /* shaderMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA452926882E3C00FDFC7A /* shaderMgr.cpp */; };
 		8ECA452E2688776400FDFC7A /* world.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA452C2688776400FDFC7A /* world.cpp */; };
 		8ECA45372691588900FDFC7A /* test2D.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8ECA45362691588900FDFC7A /* test2D.cpp */; };
@@ -73,6 +71,8 @@
 		D87EBFEE26AA7547004ED7DE /* test3D_old.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D825DBC724B4911100C494E7 /* test3D_old.cpp */; };
 		D87EBFF126AAAEF2004ED7DE /* sequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFF026AAAEF2004ED7DE /* sequence.cpp */; };
 		D87EBFF426AAAEFE004ED7DE /* spawn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFF326AAAEFE004ED7DE /* spawn.cpp */; };
+		D87EBFF726AEB1D0004ED7DE /* scaleBy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFF626AEB1D0004ED7DE /* scaleBy.cpp */; };
+		D87EBFFA26AEDE4A004ED7DE /* rotateBy.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFF926AEDE4A004ED7DE /* rotateBy.cpp */; };
 		D881DEEF24D80E2E0011F7B8 /* pngUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D881DEEE24D80E2E0011F7B8 /* pngUtil.cpp */; };
 		D881DEF324D8216A0011F7B8 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D881DEF224D8216A0011F7B8 /* libz.tbd */; };
 		D881DEF924DA8D180011F7B8 /* jpgUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D881DEF824DA8D180011F7B8 /* jpgUtil.cpp */; };
@@ -100,8 +100,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				8EA969BD26AD141C00C281C3 /* libglfw.3.3.dylib in Embed Libraries */,
-				8EA969C326AD141D00C281C3 /* libGLEW.2.2.0.dylib in Embed Libraries */,
 			);
 			name = "Embed Libraries";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1668,6 +1666,10 @@
 		D87EBFF026AAAEF2004ED7DE /* sequence.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = sequence.cpp; sourceTree = "<group>"; };
 		D87EBFF226AAAEFE004ED7DE /* spawn.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = spawn.h; sourceTree = "<group>"; };
 		D87EBFF326AAAEFE004ED7DE /* spawn.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = spawn.cpp; sourceTree = "<group>"; };
+		D87EBFF526AEB1D0004ED7DE /* scaleBy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = scaleBy.h; sourceTree = "<group>"; };
+		D87EBFF626AEB1D0004ED7DE /* scaleBy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = scaleBy.cpp; sourceTree = "<group>"; };
+		D87EBFF826AEDE4A004ED7DE /* rotateBy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = rotateBy.h; sourceTree = "<group>"; };
+		D87EBFF926AEDE4A004ED7DE /* rotateBy.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = rotateBy.cpp; sourceTree = "<group>"; };
 		D881DEED24D80E2D0011F7B8 /* pngUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pngUtil.h; sourceTree = "<group>"; };
 		D881DEEE24D80E2E0011F7B8 /* pngUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pngUtil.cpp; sourceTree = "<group>"; };
 		D881DEF024D820210011F7B8 /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libpng16.a; path = external/libpng16.a; sourceTree = "<group>"; };
@@ -4014,20 +4016,24 @@
 		D87EBFD826A6EFFC004ED7DE /* action */ = {
 			isa = PBXGroup;
 			children = (
-				D87EBFE226A6F102004ED7DE /* scaleTo.h */,
-				D87EBFE326A6F102004ED7DE /* scaleTo.cpp */,
 				D87EBFD926A6F010004ED7DE /* action.h */,
 				D87EBFDA26A6F010004ED7DE /* action.cpp */,
-				D87EBFDC26A6F0D6004ED7DE /* moveBy.h */,
-				D87EBFDD26A6F0D6004ED7DE /* moveBy.cpp */,
+				D87EBFE226A6F102004ED7DE /* scaleTo.h */,
+				D87EBFE326A6F102004ED7DE /* scaleTo.cpp */,
+				D87EBFF526AEB1D0004ED7DE /* scaleBy.h */,
+				D87EBFF626AEB1D0004ED7DE /* scaleBy.cpp */,
 				D87EBFDF26A6F0EA004ED7DE /* rotateTo.h */,
 				D87EBFE026A6F0EA004ED7DE /* rotateTo.cpp */,
+				D87EBFF826AEDE4A004ED7DE /* rotateBy.h */,
+				D87EBFF926AEDE4A004ED7DE /* rotateBy.cpp */,
+				D84FB80726ABF59B003FDDE1 /* moveTo.cpp */,
+				D84FB80826ABF59B003FDDE1 /* moveTo.h */,
+				D87EBFDC26A6F0D6004ED7DE /* moveBy.h */,
+				D87EBFDD26A6F0D6004ED7DE /* moveBy.cpp */,
 				D87EBFEF26AAAEF2004ED7DE /* sequence.h */,
 				D87EBFF026AAAEF2004ED7DE /* sequence.cpp */,
 				D87EBFF226AAAEFE004ED7DE /* spawn.h */,
 				D87EBFF326AAAEFE004ED7DE /* spawn.cpp */,
-				D84FB80726ABF59B003FDDE1 /* moveTo.cpp */,
-				D84FB80826ABF59B003FDDE1 /* moveTo.h */,
 			);
 			path = action;
 			sourceTree = "<group>";
@@ -4233,6 +4239,7 @@
 				8E2763DB26512E9F00993B0B /* glm.cpp in Sources */,
 				D89600EC24CEC36400DF6FD3 /* test3DPolyhedra.cpp in Sources */,
 				D810AEB9268B3F1F009B774B /* test3D_node.cpp in Sources */,
+				D87EBFFA26AEDE4A004ED7DE /* rotateBy.cpp in Sources */,
 				D810AEB6268B3BE3009B774B /* logUtil.cpp in Sources */,
 				D81EF38B1EB253FF0003604F /* points.cpp in Sources */,
 				D827953224BC5FB400261C44 /* matrix.cpp in Sources */,
@@ -4254,6 +4261,7 @@
 				D8EF622F2519E32500B8588F /* stringUtil.cpp in Sources */,
 				D89B2B6024937E7800DA6873 /* pixel.cpp in Sources */,
 				D810AEAD26835232009B774B /* glad.c in Sources */,
+				D87EBFF726AEB1D0004ED7DE /* scaleBy.cpp in Sources */,
 				D87EBFF426AAAEFE004ED7DE /* spawn.cpp in Sources */,
 				D825DBC124AED03300C494E7 /* threadUtil.cpp in Sources */,
 				D89600F324D169D700DF6FD3 /* testCurve.cpp in Sources */,

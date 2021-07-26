@@ -1,13 +1,13 @@
 //
-//  scaleTo.h
+//  scaleBy.h
 //  flyEngine
 //
-//  Created by joe on 20/07/2021.
+//  Created by joe on 26/07/2021.
 //  Copyright © 2021 joe. All rights reserved.
 //
 
-#ifndef scaleTo_h
-#define scaleTo_h
+#ifndef scaleBy_h
+#define scaleBy_h
 
 #include <stdio.h>
 #include <functional>
@@ -18,15 +18,15 @@
 
 NS_FLYENGINE_BEGIN
 
-class scaleTo : public action {
+class scaleBy : public action {
     
 public:
-    scaleTo(float sec,glm::vec3 scaleDis){
+    scaleBy(float sec,glm::vec3 scaleDis){
         m_fSec=sec;
         m_vec3ScaleDis=scaleDis;
     };
     
-    ~scaleTo(){};
+    ~scaleBy(){};
     
     void start(node* nodeObj);
     void start(node* nodeObj,std::function<void(void)> cb);
@@ -40,4 +40,4 @@ private:
 
 NS_FLYENGINE_END
 
-#endif /* scaleTo_h */
+#endif /* scaleBy_h */

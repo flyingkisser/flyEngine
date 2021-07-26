@@ -1,15 +1,16 @@
 //
-//  scaleTo.h
+//  rotateBy.h
 //  flyEngine
 //
-//  Created by joe on 20/07/2021.
+//  Created by joe on 26/07/2021.
 //  Copyright © 2021 joe. All rights reserved.
 //
 
-#ifndef scaleTo_h
-#define scaleTo_h
+#ifndef rotateBy_h
+#define rotateBy_h
 
 #include <stdio.h>
+
 #include <functional>
 
 #include "defines.h"
@@ -18,15 +19,15 @@
 
 NS_FLYENGINE_BEGIN
 
-class scaleTo : public action {
+class rotateBy : public action {
     
 public:
-    scaleTo(float sec,glm::vec3 scaleDis){
+    rotateBy(float sec,glm::vec3 moveDis){
         m_fSec=sec;
-        m_vec3ScaleDis=scaleDis;
+        m_vec3MoveDis=moveDis;
     };
     
-    ~scaleTo(){};
+    ~rotateBy(){};
     
     void start(node* nodeObj);
     void start(node* nodeObj,std::function<void(void)> cb);
@@ -35,9 +36,9 @@ private:
     float m_fSec;
     int m_intLoopCount=0;
     int m_intLoopIndex=0;
-    glm::vec3 m_vec3ScaleDis;
+    glm::vec3 m_vec3MoveDis;
 };
 
 NS_FLYENGINE_END
 
-#endif /* scaleTo_h */
+#endif /* rotateBy_h */

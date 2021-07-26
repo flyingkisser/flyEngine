@@ -125,6 +125,6 @@ void control::bindNode(flyEngine::node* nodeObj){
         float rotateY=360*((_mouseRightOriginY+dy)/_height2PI);
         _mouseRightLastX=x;
         _mouseRightLastY=y;
-        _bindNode->rotate(glm::vec3(rotateX,rotateY,0));
+        _bindNode->rotateBy(glm::vec3(rotateX,rotateY,0));
     });
 }
