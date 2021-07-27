@@ -27,6 +27,7 @@ public:
     static shader* get3d2texShader();
     
     static shader* getShader(const char* szVertFileName,const char* szFragFileName);
+    static shader* getShaderUniqueue(const char* szVertFileName,const char* szFragFileName);
 };
 
 NS_FLYENGINE_END

@@ -11,5 +11,6 @@ void testMainBegin(){
      //test3d_drawCubeOne();
 //      test3d_drawCubeOneWithMove();
 //    test3d_drawCubeOneWithSequence();
-    test3d_drawCubeOneWithSpawn();
+//    test3d_drawCubeOneWithSpawn();
+    test3d_drawCubeMore();
 }

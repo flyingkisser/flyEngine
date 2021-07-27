@@ -32,10 +32,10 @@ node::node(const char* texPath){
 
 bool node::init(){
     _texObj=textureMgr::getInstance()->getTexture(_texPath);
-    if(_texObj==nullptr)
+    if(_texObj==NULL)
         return false;
     _shaderObj=shaderMgr::get3d1texShader();
-    if(_shaderObj==nullptr)
+    if(_shaderObj==NULL)
        return false;
     glInit();
     return true;
@@ -147,22 +147,19 @@ void node::draw(camera* cameraObj){
     _shaderObj->use();
     
     if(_dirtyPos){
-        _matModel=glm::mat4(1.0f);
-        if(_pos.x || _pos.y || _pos.z)
-            _matModel=glm::translate(_matModel,_pos);
+        _matModel=glm::translate(glm::mat4(1.0f),_pos);
         if(_rorate.x)//水平方向上旋转
-            _matModel=glm::rotate(_matModel,glm::radians(_rorate.x),glm::vec3(0,1,0));
+          _matModel=glm::rotate(_matModel,glm::radians(_rorate.x),glm::vec3(0,1,0));
         if(_rorate.y)//垂直方向上旋转
-            _matModel=glm::rotate(_matModel,glm::radians(_rorate.y),glm::vec3(1,0,0));
+          _matModel=glm::rotate(_matModel,glm::radians(_rorate.y),glm::vec3(1,0,0));
         if(_rorate.z)
-            _matModel=glm::rotate(_matModel,glm::radians(_rorate.z),glm::vec3(0,0,1));
-        if(_scale.x || _scale.y || _scale.z)
-            _matModel=glm::scale(_matModel,_scale);
-      
-        glUniformMatrix4fv(glGetUniformLocation(_gl_program,"matModel"), 1,GL_FALSE,glm::value_ptr(_matModel));
-        _dirtyPos=false;
-        //logUtil::logMat4(_matModel);
+          _matModel=glm::rotate(_matModel,glm::radians(_rorate.z),glm::vec3(0,0,1));
+        _matModel=glm::scale(_matModel,_scale);
     }
+  
+    glUniformMatrix4fv(glGetUniformLocation(_gl_program,"matModel"), 1,GL_FALSE,glm::value_ptr(_matModel));
+    _dirtyPos=false;
+
     cameraObj->update(_gl_program);
         
     glEnable(GL_DEPTH_TEST);
@@ -171,3 +168,33 @@ void node::draw(camera* cameraObj){
     glBindVertexArray(_gl_vao);
     glDrawArrays(GL_TRIANGLES,0,36);
 }
+
+
+//void node::draw(camera* cameraObj){
+//    _shaderObj->use();
+//
+////    if(_dirtyPos){
+//        _matModel=glm::mat4(1.0f);
+//        if(_pos.x || _pos.y || _pos.z)
+//            _matModel=glm::translate(_matModel,_pos);
+//        if(_rorate.x)//水平方向上旋转
+//            _matModel=glm::rotate(_matModel,glm::radians(_rorate.x),glm::vec3(0,1,0));
+//        if(_rorate.y)//垂直方向上旋转
+//            _matModel=glm::rotate(_matModel,glm::radians(_rorate.y),glm::vec3(1,0,0));
+//        if(_rorate.z)
+//            _matModel=glm::rotate(_matModel,glm::radians(_rorate.z),glm::vec3(0,0,1));
+//        if(_scale.x || _scale.y || _scale.z)
+//            _matModel=glm::scale(_matModel,_scale);
+//
+//        glUniformMatrix4fv(glGetUniformLocation(_gl_program,"matModel"), 1,GL_FALSE,glm::value_ptr(_matModel));
+//        _dirtyPos=false;
+//        //logUtil::logMat4(_matModel);
+////    }
+//    cameraObj->update(_gl_program);
+//
+//    glEnable(GL_DEPTH_TEST);
+//    glActiveTexture(GL_TEXTURE0);
+//    glBindTexture(GL_TEXTURE_2D,_gl_texture0);
+//    glBindVertexArray(_gl_vao);
+//    glDrawArrays(GL_TRIANGLES,0,36);
+//}

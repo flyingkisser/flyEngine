@@ -52,7 +52,6 @@ control* world::getControl(){
 void world::draw(){
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
-    
     for(auto c : _vector_child){
         node* nodeObj=c;
         nodeObj->draw(_camera);

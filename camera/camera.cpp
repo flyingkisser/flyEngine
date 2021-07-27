@@ -19,20 +19,16 @@ camera::camera(){
 void camera::_updateCamera(){
     if(!_program)
         return;
-    if(!_dirtyPos)
-        return;
-    _dirtyPos=false;
-    _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
+    if(_dirtyPos){
+        _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
+        _dirtyPos=false;
+    }
     glUniformMatrix4fv(glGetUniformLocation(_program, "matCamera"), 1,GL_FALSE,glm::value_ptr(_matCamera));
 }
 
 void camera::_updateProjection(){
     if(!_program)
         return;
-    if(!_dirtyProj)
-           return;
-    _dirtyProj=false;
-    _matProj=glm::perspective(glm::radians((double)_fov),(double)_screenRatio, 0.1, 100.0);
     glUniformMatrix4fv(glGetUniformLocation(_program, "matProj"), 1,GL_FALSE,glm::value_ptr(_matProj));
 }
 
@@ -135,3 +131,22 @@ void camera::update(int programID){
     _updateProjection();
 }
 
+//void camera::_updateCamera(){
+//    if(!_program)
+//        return;
+////    if(!_dirtyPos)
+////        return;
+////    _dirtyPos=false;
+//    _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
+//    glUniformMatrix4fv(glGetUniformLocation(_program, "matCamera"), 1,GL_FALSE,glm::value_ptr(_matCamera));
+//}
+//
+//void camera::_updateProjection(){
+//    if(!_program)
+//        return;
+////    if(!_dirtyProj)
+////        return;
+////    _dirtyProj=false;
+//    _matProj=glm::perspective(glm::radians((double)_fov),(double)_screenRatio, 0.1, 100.0);
+//    glUniformMatrix4fv(glGetUniformLocation(_program, "matProj"), 1,GL_FALSE,glm::value_ptr(_matProj));
+//}

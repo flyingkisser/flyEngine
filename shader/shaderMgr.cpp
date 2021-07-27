@@ -21,34 +21,41 @@ shader* shaderMgr::getShader(const char* szVertFileName,const char* szFragFileNa
         return it->second;
     shader* shaderObj=new shader(szVertFileName,szFragFileName);
     if(!shaderObj->init())
-        return nullptr;
+        return NULL;
     s_mapShaderCache[key]=shaderObj;
     return shaderObj;
 }
 
-void shaderMgr::initDefaultShader(){
-    shader* s=getDefaultShader();
-    s->glInit();
-    s=get3d1texShader();
-    s->glInit();
-    s=get3d2texShader();
-    s->glInit();
+shader* shaderMgr::getShaderUniqueue(const char* szVertFileName,const char* szFragFileName){
+    shader* shaderObj=new shader(szVertFileName,szFragFileName);
+    if(!shaderObj->init())
+        return NULL;
+    return shaderObj;
 }
 
-void shaderMgr::useDefaultShader(){
-    shader* s=getDefaultShader();
-    s->use();
+void shaderMgr::initDefaultShader(){
+//    shader* s=getDefaultShader();
+//    s->glInit();
+//    s=get3d1texShader();
+//    s->glInit();
+//    s=get3d2texShader();
+//    s->glInit();
 }
+
+//void shaderMgr::useDefaultShader(){
+//    shader* s=getDefaultShader();
+//    s->use();
+//}
 
 shader* shaderMgr::getDefaultShader(){
-    return shaderMgr::getShader("./res/shader/default.vs","./res/shader/default.fs");
+    return shaderMgr::getShaderUniqueue("./res/shader/default.vs","./res/shader/default.fs");
 }
 
 shader* shaderMgr::get3d1texShader(){
     return shaderMgr::getShader("./res/shader/3d_1tex.vs","./res/shader/3d_1tex.fs");
 }
 shader* shaderMgr::get3d2texShader(){
-    return shaderMgr::getShader("./res/shader/3d_2tex.vs","./res/shader/3d_2tex.fs");
+    return shaderMgr::getShaderUniqueue("./res/shader/3d_2tex.vs","./res/shader/3d_2tex.fs");
 }
 
 unsigned int shaderMgr::createShaderFromFile(const char* szVertFileName,const char* szFragFileName){

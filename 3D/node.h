@@ -80,6 +80,8 @@ public:
     glm::vec3& getScale(){return _scale;};
     glm::vec3& getRotation(){return _rorate;};
     
+    bool isDirty(){return _dirtyPos;};
+    
     
     void runAction(action* act);
 

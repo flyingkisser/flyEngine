@@ -123,6 +123,22 @@ void test3d_drawCubeOneWithSpawn(){
 
 
 void test3d_drawCubeMore(){
+    node* nodeObj1=new node("res/fire.png");
+    if(!nodeObj1->init()){
+      flylog("node1 init failed!");
+      return;
+    }
+    nodeObj1->setPosition(glm::vec3(-0.5,0,-5));
+    world::getInstance()->addChild(nodeObj1);
+
+    node* nodeObj2=new node("res/smile.png");
+    if(!nodeObj2->init()){
+      flylog("node2 init failed!");
+      return;
+    }
+    nodeObj2->setPosition(glm::vec3(0.5,0,-5));
+    world::getInstance()->addChild(nodeObj2);
+    
     
 }
 
