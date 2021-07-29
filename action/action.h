@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include "defines.h"
+#include "timerMgr.h"
 
 
 NS_FLYENGINE_BEGIN
@@ -21,7 +22,14 @@ public:
 //    virtual ~action()=0;
     virtual void start(node* nodeObj)=0;
     virtual void start(node* nodeObj,std::function<void(void)> cb)=0;
+    virtual void stop(){
+        m_bStop=true;
+        if(m_intTimerKey>0)
+            timerMgr::getInstance()->stop(m_intTimerKey);
+    };
 public:
+     bool m_bStop=false;
+     int m_intTimerKey=0;
      std::function<void(void)> m_funcCB;
 };
 

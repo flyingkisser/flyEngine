@@ -22,33 +22,43 @@ sequence::sequence(int c,...){
 }
 
 sequence::~sequence(){
-//    for(auto act:m_vectorActionArr){
-//        delete act;
-//    }
-//    m_vectorActionArr.clear();
+    for(auto a:m_vectorActionArr){
+        a->stop();
+        delete a;
+    }
+    m_vectorActionArr.clear();
 }
 
 void sequence::start(node* nodeObj){
-//    if(m_vectorActionArr.size()<=0 || m_intRunIndex>=m_vectorActionArr.size()){
-//        flylog("sequence:all end!");
-//        return;
-//    }
     if(m_objNode==NULL)
         m_objNode=nodeObj;
-
     action* act=m_vectorActionArr[m_intRunIndex++];
     act->start(m_objNode,[&](){
+        if(m_bStop){
+            flylog("sequence:stopped!return!");
+            return;
+        }
         if(m_vectorActionArr.size()<=0 || m_intRunIndex>=m_vectorActionArr.size()){
             flylog("sequence:all end!");
+            if(m_funcCB!=NULL){
+                m_funcCB();
+            }
             return;
         }
         flylog("sequence:one action end,start next!");
         start(m_objNode);
     });
+    m_objActionCur=act;
 }
 
 void sequence::start(node* nodeObj,std::function<void(void)> cb){
     m_funcCB=cb;
     m_objNode=nodeObj;
     start(nodeObj);
+}
+
+void sequence::stop(){
+    action::stop();
+    if(m_objActionCur!=NULL)
+        m_objActionCur->stop();
 }

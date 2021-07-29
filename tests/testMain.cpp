@@ -5,12 +5,18 @@
 //  Created by joe on 01/07/2020.
 //  Copyright © 2020 joe. All rights reserved.
 //
-#include "test3D_node.h"
+#include "test_node.h"
+#include "test_action.h"
 
 void testMainBegin(){
-     //test3d_drawCubeOne();
-//      test3d_drawCubeOneWithMove();
-//    test3d_drawCubeOneWithSequence();
-//    test3d_drawCubeOneWithSpawn();
-    test3d_drawCubeMore();
+    //node test
+     //test_oneNode();
+//      test_twoNode();
+    test_multiNode(3);
+    
+    //action test
+//    test_actionSequence();
+//    test_actionRepeat();
+//    test_actionForever();
+
 }

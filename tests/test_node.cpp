@@ -1,5 +1,5 @@
 //
-//  test3D_h.cpp
+//  test_h.cpp
 //  flyEngine
 //
 //  Created by joe on 28/10/2020.
@@ -9,7 +9,7 @@
 #include <math.h>
 #include "defines.h"
 
-#include "test3D_node.h"
+#include "test_node.h"
 #include "texture.h"
 #include "textureMgr.h"
 #include "VAOMgr.h"
@@ -29,6 +29,8 @@
 
 #include "sequence.h"
 #include "spawn.h"
+#include "repeat.h"
+#include "forever.h"
 
 
 #include "logUtil.h"
@@ -39,11 +41,8 @@
 
 USE_NS_FLYENGINE;
 
-void test3dView() {
-    //drawPlane1();
-}
 
-void test3d_drawCubeOne(){
+void test_oneNode(){
     node* nodeObj=new node("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -64,65 +63,7 @@ void test3d_drawCubeOne(){
     },nodeObj);
 }
 
-void test3d_drawCubeOneWithMove(){
-    node* nodeObj=new node("res/fire.png");
-    if(!nodeObj->init()){
-        flylog("node init failed!");
-        return;
-    }
-    nodeObj->setPosition(glm::vec3(0,0,-5));
-       
-    world::getInstance()->addChild(nodeObj);
- 
-    action* moveAct=new flyEngine::moveBy(1,glm::vec3(0.5,0,-5));
-    nodeObj->runAction(moveAct);
-}
-
-void test3d_drawCubeOneWithSequence(){
-    node* nodeObj=new node("res/fire.png");
-    if(!nodeObj->init()){
-        flylog("node init failed!");
-        return;
-    }
-    nodeObj->setPosition(glm::vec3(0,0,-5));
-    world::getInstance()->addChild(nodeObj);
- 
-//    action* moveAct1=new moveBy(1,glm::vec3(0.5,0,0));
-//    action* moveAct2=new moveBy(1,glm::vec3(0,-0.5,0));
-//    action* moveAct3=new moveBy(1,glm::vec3(0,0,-5));
-    
-//    action* moveAct1=new moveBy(1,glm::vec3(0.5,0,0));
-//    action* moveAct2=new scaleTo(1,glm::vec3(0.5,0.5,1));
-//    action* moveAct3=new scaleTo(1,glm::vec3(1.5,1.5,1));
-    
-    action* moveAct1=new moveBy(1,glm::vec3(0.5,0,0));
-      action* moveAct2=new rotateTo(1,glm::vec3(0.5,0.5,1));
-      action* moveAct3=new scaleTo(1,glm::vec3(1.5,1.5,1));
-    
-    flyEngine::sequence* seq=new flyEngine::sequence(3,moveAct1,moveAct2,moveAct3);
-    
-    nodeObj->runAction(seq);
-}
-
-void test3d_drawCubeOneWithSpawn(){
-    node* nodeObj=new node("res/fire.png");
-    if(!nodeObj->init()){
-        flylog("node init failed!");
-        return;
-    }
-    nodeObj->setPosition(glm::vec3(0,0,-5));
-    world::getInstance()->addChild(nodeObj);
-    
-    action* moveAct1=new moveBy(1,glm::vec3(0.5,0,0));
-    action* moveAct2=new moveBy(3,glm::vec3(0.5,0.5,0.5));
-    action* moveAct3=new scaleTo(5,glm::vec3(0.3,0.3,1));
-    flyEngine::spawn* spawnAct=new flyEngine::spawn(3,moveAct1,moveAct2,moveAct3);
-    
-    nodeObj->runAction(spawnAct);
-}
-
-
-void test3d_drawCubeMore(){
+void test_twoNode(){
     node* nodeObj1=new node("res/fire.png");
     if(!nodeObj1->init()){
       flylog("node1 init failed!");
@@ -139,8 +80,28 @@ void test3d_drawCubeMore(){
     nodeObj2->setPosition(glm::vec3(0.5,0,-5));
     world::getInstance()->addChild(nodeObj2);
     
-    
+    action* act1=new rotateBy(1,glm::vec3(10,0,0));
+    action* act2=new rotateBy(1,glm::vec3(10,0,0));
+    nodeObj1->runAction(new forever(1,act1));
+    nodeObj2->runAction(new forever(1,act2));
 }
+
+void test_multiNode(int count){
+    float inner=2.0/count;
+    for(int i=0;i<count;i++){
+        node* nodeObj=new node("res/fire.png");
+        if(!nodeObj->init()){
+            flylog("node%d init failed!",i);
+            return;
+        }
+        float x=-1+inner*(i+1);
+        float y=0;
+        nodeObj->setPosition(glm::vec3(x,y,-5));
+        world::getInstance()->addChild(nodeObj);
+        nodeObj->runAction(new forever(1,new rotateBy(1,glm::vec3(10,0,0))));
+    }
+}
+
 
 void drawCubeRaw(){
     unsigned int vao,vbo,ebo;

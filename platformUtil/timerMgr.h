@@ -13,10 +13,12 @@
 #include <functional>
 #include <chrono>
 #include <thread>
-#include <atomic>
-#include <mutex>
+#include <vector>
 #include <string>
-#include <condition_variable>
+#include <map>
+//#include <condition_variable>
+//#include <atomic>
+//#include <mutex>
 
 class timerMgr
 {
@@ -32,9 +34,9 @@ public:
      @param secTime 延迟运行(单位s)
      @param task 任务函数接口
      @param loopCount 执行次数，给0则无限循环
-     @return true:已准备执行，否则失败
+     @return int:timer id
      */
-    bool start(float secTime, std::function<void()> task, int loopCount);
+    int start(float secTime, std::function<void()> task, int loopCount);
     
     /**
      取消定时器，同步定时器无法取消(若任务代码已执行则取消无效)
@@ -50,7 +52,7 @@ public:
      @return true:已准备执行，否则失败
      */
     template<typename callable, typename... arguments>
-    bool execOnceDelay(float secTime, callable&& fun, arguments&&... args) {
+    int execOnceDelay(float secTime, callable&& fun, arguments&&... args) {
         std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(fun), std::forward<arguments>(args)...));
         return start(secTime, task, 1);
     }
@@ -63,11 +65,10 @@ public:
      @return true:已准备执行，否则失败
      */
     template<typename callable, typename... arguments>
-    bool execOnce(callable&& fun, arguments&&... args) {
+    int execOnce(callable&& fun, arguments&&... args) {
         std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(fun), std::forward<arguments>(args)...));
         return start(0, task, 1);
     }
-    
     
     /**
      异步循环执行任务
@@ -78,36 +79,20 @@ public:
      @return true:已准备执行，否则失败
      */
     template<typename callable, typename... arguments>
-    bool exec(float secTime, callable&& fun, arguments&&... args) {
+    int exec(float secTime, callable&& fun, arguments&&... args) {
         std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(fun), std::forward<arguments>(args)...));
         return start(secTime, task, 0);
     }
     
     template<typename callable, typename... arguments>
-       bool execWithCount(float secTime, int count, callable&& fun, arguments&&... args) {
+       int execWithCount(float secTime, int count, callable&& fun, arguments&&... args) {
            std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(fun), std::forward<arguments>(args)...));
            if(count<=0) count=1;
            return start(secTime, task, count);
        }
     
-public:
-    /// 获取时间戳(毫秒)
-    static uint64_t Timestamp();
+    void stop(int i);
 
-    /// 获取格式化时间
-    static std::string FormatTime(const std::string sFormat = "%Y-%m-%d %H:%M:%S");
-
-    /// 获取UTC时间
-    static struct tm *UTCTime(long long secTime = 0);
-
-    /// 获取UTC时间(秒)
-    static int64_t UTCTime();
-
-    /// 获取与0时区的时差（以秒为单位）
-    static int TimeDifFrimGMT();
-    
-private:
-    void DeleteThread();    //删除任务线程
 
 public:
     int m_nCount = 0;   //循环次数
@@ -115,18 +100,11 @@ public:
     
 private:
     std::string m_sName;   //定时器名称
-    
     std::atomic_bool m_bStoped;       //装载的任务是否已经过期
-    std::thread *m_arrThread[128] = {NULL};
-    int m_intArrIndex=0;
-    
-//    std::atomic_bool m_bTryExpired;    //装备让已装载的任务过期(标记)
-//    std::atomic_bool m_bLoop;          //是否循环
-    
-//    std::thread *m_Thread = nullptr;
-   
-//    std::mutex m_ThreadLock;
-//    std::condition_variable_any m_ThreadCon;
+    //std::vector<std::thread*> m_vectorThread;
+    std::map<int,std::thread*> m_mapThread;
+  
+    int m_intKey=1;
 };
 
 #endif /* timerMgr_h */

@@ -23,16 +23,19 @@ spawn::spawn(int c,...){
 }
 
 spawn::~spawn(){
-  
+    for(auto a:m_vectorActionArr){
+        a->stop();
+        delete a;
+    }
+    m_vectorActionArr.clear();
 }
 
 void spawn::start(node* nodeObj){
     if(m_objNode==NULL)
         m_objNode=nodeObj;
-    
     for(action* act:m_vectorActionArr){
         act->start(m_objNode,[this](){
-//            flylog("spawn:on cb %d %d",m_intRunIndex,m_vectorActionArr.size());
+//          flylog("spawn:on cb %d %d",m_intRunIndex,m_vectorActionArr.size());
             if(++m_intRunIndex>=m_vectorActionArr.size()){
                 if(m_funcCB!=NULL){
                      flylog("spawn:all end!call cb!");
@@ -49,4 +52,11 @@ void spawn::start(node* nodeObj,std::function<void(void)> cb){
     m_funcCB=cb;
     m_objNode=nodeObj;
     start(nodeObj);
+}
+
+void spawn::stop(){
+    action::stop();
+    for(action* act:m_vectorActionArr){
+        act->stop();
+    }
 }

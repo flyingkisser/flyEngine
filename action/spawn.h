@@ -27,6 +27,8 @@ public:
     
     void start(node* nodeObj,std::function<void(void)> cb);
     
+    void stop();
+    
 private:
     std::vector<action*> m_vectorActionArr;
     node* m_objNode=NULL;

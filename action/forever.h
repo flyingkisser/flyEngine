@@ -1,15 +1,16 @@
 //
-//  sequence.h
+//  forever.h
 //  flyEngine
 //
-//  Created by joe on 23/07/2021.
+//  Created by joe on 28/07/2021.
 //  Copyright © 2021 joe. All rights reserved.
 //
 
-#ifndef sequence_h
-#define sequence_h
+#ifndef forever_h
+#define forever_h
 
 #include <stdio.h>
+
 #include <vector>
 #include "defines.h"
 #include "action.h"
@@ -17,26 +18,23 @@
 
 NS_FLYENGINE_BEGIN
 
-
-class sequence : public action{
+class forever : public action{
 public:
-    sequence(int count,...);
-    ~sequence();
+    forever(int count,...);
+    ~forever();
      
     void start(node* nodeObj);
-    
     void start(node* nodeObj,std::function<void(void)> cb);
-    
     void stop();
 
 private:
     std::vector<action*> m_vectorActionArr;
+    action* m_actionCur=NULL;
     node* m_objNode=NULL;
-    action* m_objActionCur;
     int m_intRunIndex=0;
-    
+    int m_intRepeatCur=0;
 };
 
 NS_FLYENGINE_END
 
-#endif /* sequence_h */
+#endif /* forever_h */

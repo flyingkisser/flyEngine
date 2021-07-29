@@ -31,7 +31,7 @@ public:
     
     void start(node* nodeObj);
     void start(node* nodeObj,std::function<void(void)> cb);
-    
+
 private:
     float m_fSec;
     int m_intLoopCount=0;
