@@ -38,7 +38,8 @@ int timerMgr::start(float secTime, std::function<void()> task, int loopCount){
     if(m_bStoped)
         return 0;
     unsigned int msTime=(int)(secTime*1000);
-    std::thread* workThread = new std::thread([this, msTime, task, loopCount]() {
+    int currentKey=m_intKey;
+    std::thread* workThread = new std::thread([this, msTime, task, loopCount,currentKey]() {
         if (!m_sName.empty()) {
         #if (defined(__ANDROID__) || defined(ANDROID))      //兼容Android
             pthread_setname_np(pthread_self(), m_sName.c_str());
@@ -51,6 +52,8 @@ int timerMgr::start(float secTime, std::function<void()> task, int loopCount){
             std::this_thread::sleep_for(std::chrono::milliseconds(msTime));
             if(m_bStoped)
                 return;
+            if(!m_mapThreadState[currentKey])
+                return;
             task();     //执行任务
             count++;    //执行次数
             if(loopCount && count>=loopCount){
@@ -59,7 +62,9 @@ int timerMgr::start(float secTime, std::function<void()> task, int loopCount){
             }
         }
     });
-    m_mapThread[m_intKey++]=workThread;
+    m_mapThread[m_intKey]=workThread;
+    m_mapThreadState[m_intKey]=true;
+    m_intKey++;
     return m_intKey-1;
 }
 
@@ -79,7 +84,9 @@ void timerMgr::stop(int key){
     std::thread* threadObj=m_mapThread[key];
     if(threadObj==NULL)
         return;
+    m_mapThreadState[key]=false;
     threadObj->join();
     delete threadObj;
     m_mapThread.erase(key);
+//    m_mapThreadState.erase(key);
 }

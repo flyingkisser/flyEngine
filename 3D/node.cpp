@@ -92,6 +92,10 @@ void node::runAction(action* act){
     act->start(this);
 }
 
+void node::stopAction(action* act){
+    act->stop();
+}
+
 void node::glInit(){
     _texObj->glInit();
     _shaderObj->glInit();

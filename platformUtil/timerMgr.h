@@ -103,6 +103,7 @@ private:
     std::atomic_bool m_bStoped;       //装载的任务是否已经过期
     //std::vector<std::thread*> m_vectorThread;
     std::map<int,std::thread*> m_mapThread;
+    std::map<int,bool> m_mapThreadState;
   
     int m_intKey=1;
 };

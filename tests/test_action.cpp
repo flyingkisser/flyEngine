@@ -118,9 +118,33 @@ void test_actionForever(){
     action* act2=new moveBy(1,glm::vec3(-0.5,0,0));
     action* act3=new scaleBy(2,glm::vec3(0.1,0.1,0.1));
     action* act4=new scaleBy(2,glm::vec3(-0.1,-0.1,-0.1));
-//    repeat* multiAct=new repeat(4,2,act1,act2,act3);
-    
     forever* multiAct=new flyEngine::forever(4,act1,act2,act3,act4);
     
     nodeObj->runAction(multiAct);
+}
+
+void test_actionForeverAndStop(){
+    node* nodeObj=new node("res/fire.png");
+    if(!nodeObj->init()){
+        flylog("node init failed!");
+        return;
+    }
+    nodeObj->setPosition(glm::vec3(0,0,-5));
+    world::getInstance()->addChild(nodeObj);
+    
+    action* act1=new moveBy(1,glm::vec3(0.5,0,0));
+    action* act2=new moveBy(1,glm::vec3(-0.5,0,0));
+    action* act3=new scaleBy(2,glm::vec3(0.1,0.1,0.1));
+    action* act4=new scaleBy(2,glm::vec3(-0.1,-0.1,-0.1));
+    forever* multiAct=new flyEngine::forever(4,act1,act2,act3,act4);
+    
+    nodeObj->runAction(multiAct);
+    
+    int id=timerMgr::getInstance()->execOnceDelay(3, [&](node* nodeObj,action* act){
+        nodeObj->stopAction(act);
+    },nodeObj,multiAct);
+    
+    timerMgr::getInstance()->execOnceDelay(2.9, [&](int timerID){
+        timerMgr::getInstance()->stop(timerID);
+    },id);
 }

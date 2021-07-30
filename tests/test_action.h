@@ -16,5 +16,5 @@ void test_actionSequence();
 void test_actionSpawn();
 void test_actionRepeat();
 void test_actionForever();
-
+void test_actionForeverAndStop();
 #endif /* test_action_h */

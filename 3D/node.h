@@ -84,6 +84,7 @@ public:
     
     
     void runAction(action* act);
+    void stopAction(action* act);
 
 };
 

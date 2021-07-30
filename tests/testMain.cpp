@@ -12,11 +12,12 @@ void testMainBegin(){
     //node test
      //test_oneNode();
 //      test_twoNode();
-    test_multiNode(3);
+//    test_multiNode(3);
     
     //action test
 //    test_actionSequence();
 //    test_actionRepeat();
 //    test_actionForever();
+    test_actionForeverAndStop();
 
 }

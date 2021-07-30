@@ -1649,6 +1649,8 @@
 		D85F1BD525022327005390DC /* VAOMgr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VAOMgr.cpp; sourceTree = "<group>"; };
 		D85F1BD725023B58005390DC /* default.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = default.fs; sourceTree = "<group>"; };
 		D85F1BD825023B58005390DC /* default.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = default.vs; sourceTree = "<group>"; };
+		D8691EE626B3FA2100D40717 /* 3d_0tex.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_0tex.vs; sourceTree = "<group>"; };
+		D8691EE726B3FA2100D40717 /* 3d_0tex.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_0tex.fs; sourceTree = "<group>"; };
 		D87EBFD226A5780B004ED7DE /* timerMgr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = timerMgr.h; sourceTree = "<group>"; };
 		D87EBFD326A5780B004ED7DE /* timerMgr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timerMgr.cpp; sourceTree = "<group>"; };
 		D87EBFD526A59A46004ED7DE /* timeUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = timeUtil.h; sourceTree = "<group>"; };
@@ -3653,6 +3655,8 @@
 		D809EE1724F502240067189D /* shader */ = {
 			isa = PBXGroup;
 			children = (
+				D8691EE726B3FA2100D40717 /* 3d_0tex.fs */,
+				D8691EE626B3FA2100D40717 /* 3d_0tex.vs */,
 				D8309C3F26932F6E00A855A6 /* 3d_1tex.fs */,
 				D8309C4026932F6E00A855A6 /* 3d_1tex.vs */,
 				D8309C4226932FD000A855A6 /* 3d_2tex.fs */,
