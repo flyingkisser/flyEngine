@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8E2763DB26512E9F00993B0B /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E275F7A26512E9E00993B0B /* glm.cpp */; };
+		8E832EC726B675EF0003B019 /* cube.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E832EC526B675EF0003B019 /* cube.cpp */; };
 		8E86C9C326638480004B3BB7 /* testPhong.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 8E86C9C126638480004B3BB7 /* testPhong.cpp */; };
 		8EA969BB26AD141C00C281C3 /* libGLEW.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E9CDED24F8EF990025D62E /* libGLEW.a */; };
 		8EA969BC26AD141C00C281C3 /* libglfw.3.3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D8E9CDF124F8EF9E0025D62E /* libglfw.3.3.dylib */; };
@@ -1531,6 +1532,8 @@
 		8E27642426512F7A00993B0B /* libpngpf.3 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = libpngpf.3; sourceTree = "<group>"; };
 		8E27642D2651333800993B0B /* khrplatform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = khrplatform.h; sourceTree = "<group>"; };
 		8E27642F2651333800993B0B /* glad.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glad.h; sourceTree = "<group>"; };
+		8E832EC526B675EF0003B019 /* cube.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cube.cpp; sourceTree = "<group>"; };
+		8E832EC626B675EF0003B019 /* cube.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cube.h; sourceTree = "<group>"; };
 		8E86C9C126638480004B3BB7 /* testPhong.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testPhong.cpp; sourceTree = "<group>"; };
 		8E86C9C226638480004B3BB7 /* testPhong.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testPhong.h; sourceTree = "<group>"; };
 		8E86C9C42663A089004B3BB7 /* light_normal.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = light_normal.vs; sourceTree = "<group>"; };
@@ -3998,6 +4001,8 @@
 				D810AEAF26849DCE009B774B /* node.cpp */,
 				8ECA452C2688776400FDFC7A /* world.cpp */,
 				8ECA452D2688776400FDFC7A /* world.h */,
+				8E832EC526B675EF0003B019 /* cube.cpp */,
+				8E832EC626B675EF0003B019 /* cube.h */,
 			);
 			path = 3D;
 			sourceTree = "<group>";
@@ -4253,6 +4258,7 @@
 				D8BED727253E9062006974D3 /* keyboardEventMgr.cpp in Sources */,
 				D8309C4626970FD000A855A6 /* glRef.cpp in Sources */,
 				D825DB76249CC6C900C494E7 /* fileUtil.cpp in Sources */,
+				8E832EC726B675EF0003B019 /* cube.cpp in Sources */,
 				D8BED72B253EB9F0006974D3 /* std_move_forward.cpp in Sources */,
 				D825DB7F24A360DB00C494E7 /* character.cpp in Sources */,
 				8ECA45372691588900FDFC7A /* test2D.cpp in Sources */,

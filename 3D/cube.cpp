@@ -1,12 +1,13 @@
 //
-//  Node.cpp
+//  cube.cpp
 //  flyEngine
 //
-//  Created by joe on 24/06/2021.
+//  Created by wu mingzhou on 2021/8/1.
 //  Copyright © 2021 joe. All rights reserved.
 //
 
-#include "node.h"
+#include "cube.h"
+
 #include "logUtil.h"
 #include "texture.h"
 #include "textureMgr.h"
@@ -17,14 +18,16 @@
 
 USE_NS_FLYENGINE
 
-void node::print(){
-    flylog("node:pos %f %f %f",_pos.x,_pos.y,_pos.z);
+
+
+cube::cube(const char* texPath){
+    _texPath=texPath;
 }
 
-node::node(){
-}
-
-bool node::init(){
+bool cube::init(){
+    _texObj=textureMgr::getInstance()->getTexture(_texPath);
+    if(_texObj==NULL)
+        return false;
     _shaderObj=shaderMgr::get3d1texShader();
     if(_shaderObj==NULL)
        return false;
@@ -32,64 +35,16 @@ bool node::init(){
     return true;
 }
 
-//从当前位置，移动一个指定的距离
-void node::moveBy(glm::vec3 v){
-    _pos+=v;
-    _dirtyPos=true;
-}
-
-//从当前大小，缩放一个指定的系数
-void node::scaleBy(glm::vec3 v){
-    _scale+=v;
-    _dirtyPos=true;
-}
-
-//从当前位置，旋转一个指定的角度
-//v里面是旋转的角度，0到360，函数会转成弧度
-void node::rotateBy(glm::vec3 v){
-    _rorate+=v;
-    _dirtyPos=true;
-}
-
-//设置scale
-void node::setScale(glm::vec3 v){
-    _scale=v;
-    _dirtyPos=true;
-}
-
-//设置坐标
-void node::setPosition(glm::vec3 p){
-    _pos=p;
-    _dirtyPos=true;
-};
-
-void node::setPositionX(float v){
-    _pos.x=v;
-    _dirtyPos=true;
-};
-
-void node::setPositionY(float v){
-    _pos.y=v;
-    _dirtyPos=true;
-};
-
-void node::setPositionZ(float v){
-    _pos.z=v;
-    _dirtyPos=true;
-};
-
-//动画相关
-void node::runAction(action* act){
-    act->start(this);
-}
-
-void node::stopAction(action* act){
-    act->stop();
-}
-
-void node::glInit(){
+void cube::glInit(){
+    _texObj->glInit();
     _shaderObj->glInit();
+    
+    _gl_texture0=_texObj->getTextureID();
     _gl_program=_shaderObj->getProgramID();
+    if(!_gl_texture0){
+        flylog("node::glInit: _gl_texture0 is 0,error!");
+        return;
+    }
     if(!_gl_program){
         flylog("node::glInit: _gl_program is 0,error!");
         return;
@@ -131,7 +86,7 @@ void node::glInit(){
     _dirtyPos=true;
 }
 
-void node::draw(camera* cameraObj){
+void cube::draw(camera* cameraObj){
     _shaderObj->use();
     
     if(_dirtyPos){
@@ -156,4 +111,3 @@ void node::draw(camera* cameraObj){
     glBindVertexArray(_gl_vao);
     glDrawArrays(GL_TRIANGLES,0,36);
 }
-

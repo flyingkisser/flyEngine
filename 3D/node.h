@@ -36,27 +36,19 @@ private:
     glm::vec3 _rorate=glm::vec3(0,0,0);
     
     unsigned int _gl_program=0;
-    unsigned int _gl_texture0=0;
     unsigned int _gl_vao=0;
     bool _dirtyPos=false;
     
-    texture* _texObj;
     shader* _shaderObj;
     
-    const char* _texPath;
-    
-//    bool initTexture(const char* texPath);
-//    bool initShader(int id);
-//    bool initShader(const char* vsPath,const char* fsPath);
 
 public:
     ~node(){};
-    node(const char* texPath);
+    node();
     bool init();
     
     void glInit();
    
-    void updateModel();
     void print();
     void draw(camera* cameraObj);
     
@@ -81,7 +73,6 @@ public:
     glm::vec3& getRotation(){return _rorate;};
     
     bool isDirty(){return _dirtyPos;};
-    
     
     void runAction(action* act);
     void stopAction(action* act);
