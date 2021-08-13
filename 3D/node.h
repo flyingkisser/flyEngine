@@ -24,6 +24,7 @@ class camera;
 class action;
 class texture;
 class shader;
+class material;
 
 class node: public glRef
 {
@@ -35,32 +36,42 @@ private:
     glm::vec3 _scale=glm::vec3(1,1,1);
     glm::vec3 _rorate=glm::vec3(0,0,0);
     
+public:
+    shader* _shaderObj;
+    material* m_material;
     unsigned int _gl_program=0;
     unsigned int _gl_vao=0;
     bool _dirtyPos=false;
     
-    shader* _shaderObj;
-    
-
 public:
-    ~node(){};
     node();
-    bool init();
+    ~node(){};
     
-    void glInit();
-   
+    virtual bool init()=0;
+    virtual void glInit()=0;
+    virtual void draw(camera* cameraObj)=0;
     void print();
-    void draw(camera* cameraObj);
+    void updateModel(camera* cameraObj);
+    
+    void glInitVAO();
+    void glInitVAOWithTexCoord();
+    void glInitVAOWithTexCoordAndNormal();
+    
+    void glInitShader();
+    bool glInitMaterial();
+    void glInitLight();
     
     void setPosition(glm::vec3 p);
     void setPositionX(float v);
     void setPositionY(float v);
     void setPositionZ(float v);
     
-    
     float getPositionX(){return _pos.x;};
     float getPositionY(){return _pos.y;};
     float getPositionZ(){return _pos.z;};
+    glm::vec3& getPosition(){return _pos;};
+    glm::vec3& getScale(){return _scale;};
+    glm::vec3& getRotation(){return _rorate;};
     
     void setScale(glm::vec3 v);
     
@@ -68,15 +79,12 @@ public:
     void scaleBy(glm::vec3 v);
     void rotateBy(glm::vec3 v);
     
-    glm::vec3& getPosition(){return _pos;};
-    glm::vec3& getScale(){return _scale;};
-    glm::vec3& getRotation(){return _rorate;};
-    
     bool isDirty(){return _dirtyPos;};
     
     void runAction(action* act);
     void stopAction(action* act);
-
+    
+    void setMaterial(material* mt);
 };
 
 NS_FLYENGINE_END

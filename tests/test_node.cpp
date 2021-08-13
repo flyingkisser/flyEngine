@@ -20,7 +20,8 @@
 #include "camera.h"
 #include "control.h"
 #include "world.h"
-#include "node.h"
+#include "cubeTex.h"
+#include "cubeColor.h"
 #include "moveBy.h"
 #include "scaleBy.h"
 #include "scaleTo.h"
@@ -43,28 +44,28 @@ USE_NS_FLYENGINE;
 
 
 void test_oneNode(){
-    node* nodeObj=new node("res/fire.png");
-    if(!nodeObj->init()){
+    node* cubeObj=new cubeTex("res/fire.png");
+    if(!cubeObj->init()){
         flylog("node init failed!");
         return;
     }
-    nodeObj->setPosition(glm::vec3(0,0,-5));
+    cubeObj->setPosition(glm::vec3(0,0,-5));
        
-    world::getInstance()->addChild(nodeObj);
-    nodeObj->print();
+    world::getInstance()->addChild(cubeObj);
+    cubeObj->print();
     
     //通过按住鼠标右键，控制模型旋转
     control* controlObj=world::getInstance()->getControl();
-    controlObj->bindNode(nodeObj);
+    controlObj->bindNode(cubeObj);
     
-    timerMgr* timerMgrObj=new timerMgr("node_test_timer");
+    timerMgr* timerMgrObj=new timerMgr("cube_test_timer");
     timerMgrObj->exec(0.1,[](node* _node){
         _node->rotateBy(glm::vec3(0.5f,0,0));
-    },nodeObj);
+    },cubeObj);
 }
 
 void test_twoNode(){
-    node* nodeObj1=new node("res/fire.png");
+    node* nodeObj1=new cubeTex("res/fire.png");
     if(!nodeObj1->init()){
       flylog("node1 init failed!");
       return;
@@ -72,7 +73,7 @@ void test_twoNode(){
     nodeObj1->setPosition(glm::vec3(-0.5,0,-5));
     world::getInstance()->addChild(nodeObj1);
 
-    node* nodeObj2=new node("res/smile.png");
+    node* nodeObj2=new cubeTex("res/smile.png");
     if(!nodeObj2->init()){
       flylog("node2 init failed!");
       return;
@@ -89,7 +90,7 @@ void test_twoNode(){
 void test_multiNode(int count){
     float inner=2.0/count;
     for(int i=0;i<count;i++){
-        node* nodeObj=new node("res/fire.png");
+        node* nodeObj=new cubeTex("res/fire.png");
         if(!nodeObj->init()){
             flylog("node%d init failed!",i);
             return;
@@ -100,6 +101,26 @@ void test_multiNode(int count){
         world::getInstance()->addChild(nodeObj);
         nodeObj->runAction(new forever(1,new rotateBy(1,glm::vec3(10,0,0))));
     }
+}
+
+void test_cubeColor(){
+    cubeColor* cubeObj=new cubeColor(glm::vec4(0.8,0.2,0,1));
+    if(!cubeObj->init()){
+       flylog("cubeObj init failed!");
+       return;
+    }
+    cubeObj->setPosition(glm::vec3(0.8,0.8,-5));
+      
+    world::getInstance()->addChild(cubeObj);
+
+    //通过按住鼠标右键，控制模型旋转
+    control* controlObj=world::getInstance()->getControl();
+    controlObj->bindNode(cubeObj);
+
+    timerMgr* timerMgrObj=new timerMgr("light_test_timer");
+    timerMgrObj->exec(0.1,[](node* _node){
+       _node->rotateBy(glm::vec3(0.5f,0,0));
+    },cubeObj);
 }
 
 
@@ -125,7 +146,7 @@ void drawCubeRaw(){
     glGenBuffers(1,&ebo);
 
     glBindBuffer(GL_ARRAY_BUFFER,vbo);
-    glBufferData(GL_ARRAY_BUFFER,sizeof(g_verticeArr),g_verticeArr,GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER,sizeof(g_verticeArrWithTexCoord),g_verticeArrWithTexCoord,GL_STATIC_DRAW);
 
     glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,stride,(void*)0);
     glEnableVertexAttribArray(0);

@@ -51,8 +51,14 @@ shader* shaderMgr::getDefaultShader(){
     return shaderMgr::getShaderUniqueue("./res/shader/default.vs","./res/shader/default.fs");
 }
 
+shader* shaderMgr::get3dColorShader(){
+    return shaderMgr::getShader("./res/shader/3d_color.vs","./res/shader/3d_color.fs");
+}
 shader* shaderMgr::get3d1texShader(){
     return shaderMgr::getShader("./res/shader/3d_1tex.vs","./res/shader/3d_1tex.fs");
+}
+shader* shaderMgr::get3d1texPongShader(){
+    return shaderMgr::getShader("./res/shader/3d_1tex_phong.vs","./res/shader/3d_1tex_phong.fs");
 }
 shader* shaderMgr::get3d2texShader(){
     return shaderMgr::getShaderUniqueue("./res/shader/3d_2tex.vs","./res/shader/3d_2tex.fs");

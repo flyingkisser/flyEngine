@@ -22,9 +22,11 @@ public:
     static void initDefaultShader();
     static unsigned int createShaderFromFile(const char* szVertFileName,const char* szFragFileName);
     static void useDefaultShader();
+    static shader* get3dColorShader();
     static shader* getDefaultShader();
     static shader* get3d1texShader();
     static shader* get3d2texShader();
+    static shader* get3d1texPongShader();
     
     static shader* getShader(const char* szVertFileName,const char* szFragFileName);
     static shader* getShaderUniqueue(const char* szVertFileName,const char* szFragFileName);

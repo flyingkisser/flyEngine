@@ -19,7 +19,7 @@
 #include "camera.h"
 #include "control.h"
 #include "world.h"
-#include "node.h"
+#include "cubeTex.h"
 #include "moveBy.h"
 #include "scaleBy.h"
 #include "scaleTo.h"
@@ -40,7 +40,7 @@
 USE_NS_FLYENGINE
 
 void test_actionMove(){
-    node* nodeObj=new node("res/fire.png");
+    node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
         return;
@@ -54,7 +54,7 @@ void test_actionMove(){
 }
 
 void test_actionSequence(){
-    node* nodeObj=new node("res/fire.png");
+    node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
         return;
@@ -72,7 +72,7 @@ void test_actionSequence(){
 }
 
 void test_actionSpawn(){
-    node* nodeObj=new node("res/fire.png");
+    node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
         return;
@@ -89,7 +89,7 @@ void test_actionSpawn(){
 }
 
 void test_actionRepeat(){
-    node* nodeObj=new node("res/fire.png");
+    node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
         return;
@@ -106,7 +106,7 @@ void test_actionRepeat(){
 }
 
 void test_actionForever(){
-    node* nodeObj=new node("res/fire.png");
+    node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
         return;
@@ -124,7 +124,7 @@ void test_actionForever(){
 }
 
 void test_actionForeverAndStop(){
-    node* nodeObj=new node("res/fire.png");
+    node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
         return;
@@ -144,7 +144,8 @@ void test_actionForeverAndStop(){
         nodeObj->stopAction(act);
     },nodeObj,multiAct);
     
-    timerMgr::getInstance()->execOnceDelay(2.9, [&](int timerID){
-        timerMgr::getInstance()->stop(timerID);
-    },id);
+//    timerMgr::getInstance()->execOnceDelay(2.9, [&](int timerID){
+//        flylog("stop timer %d",timerID);
+//        timerMgr::getInstance()->stop(timerID);
+//    },id);
 }

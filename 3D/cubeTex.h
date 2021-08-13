@@ -1,13 +1,13 @@
 //
-//  cube.h
+//  cubeTex.h
 //  flyEngine
 //
 //  Created by wu mingzhou on 2021/8/1.
 //  Copyright © 2021 joe. All rights reserved.
 //
 
-#ifndef cube_h
-#define cube_h
+#ifndef cubeTex_h
+#define cubeTex_h
 
 #include <stdio.h>
 #include <string>
@@ -20,7 +20,7 @@ using namespace std;
 
 NS_FLYENGINE_BEGIN
 
-class cube: public node
+class cubeTex: public node
 {
 private:
     unsigned int _gl_texture0=0;
@@ -28,15 +28,15 @@ private:
     const char* _texPath;
 
 public:
-    ~cube(){};
-    cube(const char* texPath);
+    cubeTex(const char* texPath);
+    ~cubeTex(){};
+    
     bool init();
     void glInit();
 
     void draw(camera* cameraObj);
-    
 };
 
 NS_FLYENGINE_END
 
-#endif /* cube_h */
+#endif /* cubeTex_h */

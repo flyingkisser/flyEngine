@@ -7,6 +7,7 @@
 //
 #include "test_node.h"
 #include "test_action.h"
+#include "test_light.h"
 
 void testMainBegin(){
     //node test
@@ -18,6 +19,11 @@ void testMainBegin(){
 //    test_actionSequence();
 //    test_actionRepeat();
 //    test_actionForever();
-    test_actionForeverAndStop();
+//    test_actionForeverAndStop();
+    
+//    test_cubeColor();
+    
+    //light
+    test_light_phong();
 
 }

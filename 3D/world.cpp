@@ -34,6 +34,10 @@ void world::addChild(node *node){
     _vector_child.push_back(node);
 }
 
+void world::addLight(node *node){
+    _vector_light.push_back(node);
+}
+
 void world::start_rendering(){
 //    threadUtil::createThread(world::_main_loop);
     world::_main_loop();
@@ -43,6 +47,11 @@ void world::setCamera(camera* c){
     _camera=c;
 }
 
+void world::setAmbientLight(ambientLight* amLight){
+    m_amLight=amLight;
+}
+
+
 control* world::getControl(){
     if(_camera==nullptr)
         return nullptr;
@@ -50,11 +59,15 @@ control* world::getControl(){
 }
 
 void world::draw(){
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
     for(auto c : _vector_child){
         node* nodeObj=c;
         nodeObj->draw(_camera);
+    }
+    for(auto c : _vector_light){
+       node* nodeObj=c;
+       nodeObj->draw(_camera);
     }
 }
 
