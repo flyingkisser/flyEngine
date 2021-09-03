@@ -19,6 +19,7 @@ using namespace std;
 NS_FLYENGINE_BEGIN
 
 class control;
+class shader;
 
 class camera{
     
@@ -54,6 +55,7 @@ private:
     void _updateProjection();
     
     control* _controlObj;
+    shader* _shaderObj;
     
     glm::mat4 _matProj;
     glm::mat4 _matProjOrigin;

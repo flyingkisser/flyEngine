@@ -27,11 +27,15 @@ class light: public cubeColor
 private:
 
 public:
-    light(glm::vec4 color);
+    light(glm::vec3 color,material* mt);
+    light(glm::vec3 color);
     ~light(){};
     
     bool init();
-    void glInit();
+    void glUpdateForCube(int program_id,int ligth_index);
+    
+   
+    void setColor(glm::vec3 color);
 
     void draw(camera* cameraObj);
 };

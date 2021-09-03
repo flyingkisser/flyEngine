@@ -32,44 +32,35 @@
 #include "types.h"
 #include "error.h"
 
-extern float g_verticeArrWithTexCoord[180];
 extern float g_verticeArr[108];
+extern float g_verticeArrWithTexCoord[180];
+extern float g_verticeArrWithNormal[216];
 extern float g_verticeArrWithTexCoordAndNormal[288];
 
 #define uniform_name_camera_pos "camera_pos"
 #define uniform_name_mat_proj   "matProj"
 #define uniform_name_mat_camera "matCamera"
 #define uniform_name_mat_model  "matModel"
-#define uniform_name_material_ambient   "material_ambient"
-#define uniform_name_material_diffuse   "material_diffuse"
-#define uniform_name_material_specular  "material_specular"
-#define uniform_name_material_shininess "material_shininess"
 
-#define uniform_name_light_ambient_color "ambient_color"
+#define uniform_name_material_ambient   "mt.ambient"
+#define uniform_name_material_diffuse   "mt.diffuse"
+#define uniform_name_material_specular_tex   "mt.specular_tex"
+#define uniform_name_material_specular  "mt.specular"
+#define uniform_name_material_shininess "mt.shininess"
 
-#define uniform_name_light_pos_0 "light_pos_0"
-#define uniform_name_light_pos_1 "light_pos_1"
-#define uniform_name_light_pos_2 "light_pos_2"
-#define uniform_name_light_pos_3 "light_pos_3"
-#define uniform_name_light_pos_4 "light_pos_4"
-#define uniform_name_light_pos_5 "light_pos_5"
-#define uniform_name_light_pos_6 "light_pos_6"
-#define uniform_name_light_pos_7 "light_pos_7"
-#define uniform_name_light_pos_8 "light_pos_8"
-#define uniform_name_light_pos_9 "light_pos_9"
-#define uniform_name_light_pos_10 "light_pos_10"
-#define uniform_name_light_pos_11 "light_pos_11"
-#define uniform_name_light_pos_12 "light_pos_12"
-#define uniform_name_light_pos_13 "light_pos_13"
-#define uniform_name_light_pos_14 "light_pos_14"
-#define uniform_name_light_pos_15 "light_pos_15"
-#define uniform_name_light_pos_16 "light_pos_16"
-#define uniform_name_light_pos_17 "light_pos_17"
-#define uniform_name_light_pos_18 "light_pos_18"
-#define uniform_name_light_pos_19 "light_pos_19"
-#define uniform_name_light_pos_20 "light_pos_20"
-#define uniform_name_light_pos_21 "light_pos_21"
-#define uniform_name_light_pos_22 "light_pos_22"
-#define uniform_name_light_pos_23 "light_pos_23"
+//#define uniform_name_global_ambient_color "global_ambient_color"
+#define uniform_name_light_direction_enabled  "light_direction.enabled"
+#define uniform_name_light_direction_direction"light_direction.direction"
+#define uniform_name_light_direction_color    "light_direction.color"
+#define uniform_name_light_direction_ambient  "light_direction.ambient"
+#define uniform_name_light_direction_diffuse  "light_direction.diffuse"
+#define uniform_name_light_direction_specular "light_direction.specular"
+
+#define uniform_name_light_point_enabled  "light_point_arr[%d].enabled"
+#define uniform_name_light_point_pos      "light_point_arr[%d].pos"
+#define uniform_name_light_point_color    "light_point_arr[%d].color"
+#define uniform_name_light_point_ambient  "light_point_arr[%d].ambient"
+#define uniform_name_light_point_diffuse  "light_point_arr[%d].diffuse"
+#define uniform_name_light_point_specular "light_point_arr[%d].specular"
 
 #endif /* defines_h */

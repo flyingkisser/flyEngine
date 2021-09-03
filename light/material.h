@@ -13,20 +13,29 @@
 #include "defines.h"
 
 NS_FLYENGINE_BEGIN
+class texture;
 
 class material {
 private:
-    glm::vec4 m_vec4Ambient;
-    glm::vec4 m_vec4Diffuse;
-    glm::vec4 m_vec4Specular;
+    glm::vec3 m_vec3Ambient;
+    glm::vec3 m_vec3Diffuse;
+    glm::vec3 m_vec3Specular;
     float m_fShininess;
     
+    texture* m_texDiffuse;
+    texture* m_texSpecular;
+    
 public:
-    material(glm::vec4 ambient,glm::vec4 diffuse,glm::vec4 specular,float shininess);
-    glm::vec4 getAmbient(){return m_vec4Ambient;};
-    glm::vec4 getDiffuse(){return m_vec4Diffuse;};
-    glm::vec4 getSpecular(){return m_vec4Specular;};
+    //shininess越大，则物体反射走的光越多，进入人眼的光越少，光强越弱
+    material(glm::vec3 ambient,glm::vec3 diffuse,glm::vec3 specular,float shininess);
+    glm::vec3 getAmbient(){return m_vec3Ambient;};
+    glm::vec3 getDiffuse(){return m_vec3Diffuse;};
+    glm::vec3 getSpecular(){return m_vec3Specular;};
     float getShininess(){return m_fShininess;};
+    bool setDiffuseTex(const char* szTex);
+    bool setSpecularTex(const char* szTex);
+    void glUpdateForCube(int gl_program);
+    void glUpdateForLight(int gl_program,int i);
 };
 
 NS_FLYENGINE_END

@@ -59,7 +59,7 @@ public:
     
     void glInitShader();
     bool glInitMaterial();
-    void glInitLight();
+    void glUpdateLight();
     
     void setPosition(glm::vec3 p);
     void setPositionX(float v);
@@ -74,6 +74,7 @@ public:
     glm::vec3& getRotation(){return _rorate;};
     
     void setScale(glm::vec3 v);
+    void setScale(float v);
     
     void moveBy(glm::vec3 v);
     void scaleBy(glm::vec3 v);
@@ -85,6 +86,7 @@ public:
     void stopAction(action* act);
     
     void setMaterial(material* mt);
+    material* getMaterial(){return m_material;};
 };
 
 NS_FLYENGINE_END

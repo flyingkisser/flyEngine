@@ -17,13 +17,15 @@ NS_FLYENGINE_BEGIN
 class ambientLight: public light{
     
 public:
-    ambientLight(glm::vec4 color);
+    ambientLight(glm::vec3 color);
     ~ambientLight();
     
     bool init();
-    void glInit();
+    void glUpdate(int program_id);
 
     void draw(camera* cameraObj);
+private:
+    glm::vec3 m_vec3Direction;
 };
 
 NS_FLYENGINE_END

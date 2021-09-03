@@ -7,14 +7,15 @@
 //
 
 #include "randUtil.h"
+#include "logUtil.h"
+#include "timeUtil.h"
 
 unsigned int randUtil::getRand(unsigned int begin,unsigned int end){
     if(begin>end)
         return 0;
     if(begin==end)
         return begin;
-    srand((unsigned int)time(0));
-    
+//    srand((unsigned int)time(0));
     unsigned int inner=end-begin;
     unsigned int r=rand();
     unsigned int ret=r%inner;
@@ -26,10 +27,12 @@ float randUtil::getRand(float begin,float end){
         return 0;
     if(begin==end)
         return begin;
-    srand((unsigned int)time(0));
-    
+//  srand((unsigned int)time(0));
+//    srand((unsigned int)timeUtil::getTimeMS());
     float inner=end-begin;
-    float r=rand()/double(RAND_MAX);    //value [0,1]
+    float r=rand();
+//    flylog("rand:%f",r);
+    r=r/double(RAND_MAX);    //value [0,1]
     return begin+r*inner;
 }
 

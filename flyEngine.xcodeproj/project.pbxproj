@@ -1755,6 +1755,7 @@
 		D8CFDE6525359EF000C3334F /* 2dTextureApha.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 2dTextureApha.vs; sourceTree = "<group>"; };
 		D8CFDE6625359F2B00C3334F /* wall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wall.jpg; sourceTree = "<group>"; };
 		D8CFDE6825359F2B00C3334F /* fire.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = fire.png; sourceTree = "<group>"; };
+		D8DCADCB26D8F85D003C6685 /* 3d_1tex_phong_specularTex.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_1tex_phong_specularTex.fs; sourceTree = "<group>"; };
 		D8E9CDDE24F8EE3A0025D62E /* libpng16.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libpng16.a; sourceTree = "<group>"; };
 		D8E9CDDF24F8EE3A0025D62E /* glad.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = glad.c; sourceTree = "<group>"; };
 		D8E9CDE024F8EE3A0025D62E /* libjpeg.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libjpeg.a; sourceTree = "<group>"; };
@@ -1767,6 +1768,8 @@
 		D8EF622E2519E32500B8588F /* stringUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stringUtil.cpp; sourceTree = "<group>"; };
 		D8F0B7FC25652BCD0034E7B7 /* cameraBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cameraBase.h; sourceTree = "<group>"; };
 		D8F0B7FD25652BCD0034E7B7 /* cameraBase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cameraBase.cpp; sourceTree = "<group>"; };
+		D8F37D6E26DF758700E5225B /* wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood.png; sourceTree = "<group>"; };
+		D8F37D6F26E0DE7100E5225B /* wood_specular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood_specular.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3669,6 +3672,7 @@
 				D8309C3F26932F6E00A855A6 /* 3d_1tex.fs */,
 				D8309C4026932F6E00A855A6 /* 3d_1tex.vs */,
 				D8826A5826C3AE5100314F16 /* 3d_1tex_phong.fs */,
+				D8DCADCB26D8F85D003C6685 /* 3d_1tex_phong_specularTex.fs */,
 				D8826A5926C3AE5100314F16 /* 3d_1tex_phong.vs */,
 				D8309C4226932FD000A855A6 /* 3d_2tex.fs */,
 				D8309C4126932FD000A855A6 /* 3d_2tex.vs */,
@@ -3795,6 +3799,8 @@
 				D825DB78249CD2D900C494E7 /* test.bmp */,
 				D8CFDE6825359F2B00C3334F /* fire.png */,
 				D8BED71A25399499006974D3 /* smile.png */,
+				D8F37D6E26DF758700E5225B /* wood.png */,
+				D8F37D6F26E0DE7100E5225B /* wood_specular.png */,
 				D8CFDE6625359F2B00C3334F /* wall.jpg */,
 			);
 			path = res;

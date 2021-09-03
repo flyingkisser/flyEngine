@@ -8,12 +8,18 @@
 
 #include "shader.h"
 #include "fileUtil.h"
+#include "logUtil.h"
 using namespace flyEngine;
 
 shader::shader(const char* szVertFileName,const char* szFragFileName){
     _idProgram=0;
     _szVertFileName=(char*)szVertFileName;
     _szFragFileName=(char*)szFragFileName;
+    if(!init()){
+        flylog("shader:init failed!");
+        return;
+    }
+    compile();
 }
 
 bool shader::init(){
@@ -44,7 +50,7 @@ shader::~shader(){
     }
 }
 
-void shader::glInit(){
+void shader::compile(){
     glRef::glInit();
     GLuint vertShader,fragShader,idProgram;
     GLint vertStatus,fragStatus,programStatus;
@@ -122,4 +128,18 @@ void shader::setInt(const char *name, int v){
 
 void shader::setFloat(const char *name, float v){
     glUniform1f(glGetUniformLocation(_idProgram, name),v);
+}
+
+void shader::setMat4(const char *name, float* v){
+    int pos=glGetUniformLocation(_idProgram, name);
+    if(pos==-1)
+        return;
+    glUniformMatrix4fv(pos,1,GL_FALSE,v);
+}
+
+void shader::setVec3(const char *name, float* v){
+    int pos=glGetUniformLocation(_idProgram, name);
+    if(pos==-1)
+        return;
+    glUniform3fv(pos,1,v);
 }

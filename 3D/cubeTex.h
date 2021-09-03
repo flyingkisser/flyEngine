@@ -19,6 +19,7 @@
 using namespace std;
 
 NS_FLYENGINE_BEGIN
+class shader;
 
 class cubeTex: public node
 {
@@ -33,7 +34,7 @@ public:
     
     bool init();
     void glInit();
-
+    void setShader(shader* shaderObj);
     void draw(camera* cameraObj);
 };
 

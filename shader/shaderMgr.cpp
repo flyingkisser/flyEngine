@@ -8,22 +8,37 @@
 #include <map>
 #include "shaderMgr.h"
 #include "fileUtil.h"
+#include "logUtil.h"
 
 
 USE_NS_FLYENGINE
 
 static std::map<std::string,shader*> s_mapShaderCache;
+static std::map<int,shader*> s_mapShaderCacheByProgram;
+
+shader* shaderMgr::createAndCacheShader(const char* szVertFileName,const char* szFragFileName){
+    std::string key=std::string(szVertFileName)+'_'+std::string(szFragFileName);
+    shader* shaderObj=new shader(szVertFileName,szFragFileName);
+    int programID=shaderObj->getProgramID();
+    s_mapShaderCache[key]=shaderObj;
+    s_mapShaderCacheByProgram[programID]=shaderObj;
+    flylog("programID %d %s",programID,szVertFileName);
+    return shaderObj;
+}
 
 shader* shaderMgr::getShader(const char* szVertFileName,const char* szFragFileName){
     std::string key=std::string(szVertFileName)+'_'+std::string(szFragFileName);
     auto it=s_mapShaderCache.find(key);
     if(it!=s_mapShaderCache.end())
         return it->second;
-    shader* shaderObj=new shader(szVertFileName,szFragFileName);
-    if(!shaderObj->init())
-        return NULL;
-    s_mapShaderCache[key]=shaderObj;
-    return shaderObj;
+    return shaderMgr::createAndCacheShader(szVertFileName,szFragFileName);
+}
+
+shader* shaderMgr::getShader(int programID){
+    auto it=s_mapShaderCacheByProgram.find(programID);
+    if(it!=s_mapShaderCacheByProgram.end())
+        return it->second;
+    return NULL;
 }
 
 shader* shaderMgr::getShaderUniqueue(const char* szVertFileName,const char* szFragFileName){
@@ -60,6 +75,10 @@ shader* shaderMgr::get3d1texShader(){
 shader* shaderMgr::get3d1texPongShader(){
     return shaderMgr::getShader("./res/shader/3d_1tex_phong.vs","./res/shader/3d_1tex_phong.fs");
 }
+shader* shaderMgr::get3d1texPongWithSpecularTexShader(){
+    return shaderMgr::getShader("./res/shader/3d_1tex_phong.vs","./res/shader/3d_1tex_phong_specularTex.fs");
+}
+
 shader* shaderMgr::get3d2texShader(){
     return shaderMgr::getShaderUniqueue("./res/shader/3d_2tex.vs","./res/shader/3d_2tex.fs");
 }
@@ -127,32 +146,28 @@ unsigned int shaderMgr::createShaderFromFile(const char* szVertFileName,const ch
     return idProgram;
 }
 
+void shaderMgr::setBool(unsigned int idProgram,const char *name, bool v){
+    glUniform1i(glGetUniformLocation(idProgram, name), (int)v);
+}
 
-//void shaderMgr::useShader(unsigned int idProgram){
-//    glUseProgram(idProgram);
-//}
-//
-//void shaderMgr::setBool(unsigned int idProgram,const char *name, bool v){
-//    glUniform1i(glGetUniformLocation(idProgram, name), (int)v);
-//}
-//
-//void shaderMgr::setInt(unsigned int idProgram,const char *name, int v){
-//    glUniform1i(glGetUniformLocation(idProgram, name),v);
-//}
-//
-//void shaderMgr::setFloat(unsigned int idProgram,const char *name, float v){
-//    glUniform1f(glGetUniformLocation(idProgram, name),v);
-//}
-//unsigned int shaderMgr::createShader(const char* szVertFileName,const char* szFragFileName){
-//    GLuint idProgram=0;
-//
-//    if(s_programIDMap[szVertFileName]!=0)
-//        return s_programIDMap[szVertFileName];
-//
-//    idProgram=shaderMgr::createShaderFromFile(szVertFileName,szFragFileName);
-//    if(idProgram==0)
-//        return 0;
-//    s_programIDMap[szVertFileName]=idProgram;
-//
-//    return idProgram;
-//}
+void shaderMgr::setInt(unsigned int idProgram,const char *name, int v){
+    glUniform1i(glGetUniformLocation(idProgram, name),v);
+}
+
+void shaderMgr::setFloat(unsigned int idProgram,const char *name, float v){
+    glUniform1f(glGetUniformLocation(idProgram, name),v);
+}
+
+void shaderMgr::setMat4(unsigned int idProgram,const char *name, float* v){
+    int pos=glGetUniformLocation(idProgram, name);
+    if(pos==-1)
+        return;
+    glUniformMatrix4fv(pos,1,GL_FALSE,v);
+}
+
+void shaderMgr::setVec3(unsigned int idProgram,const char *name, float* v){
+    int pos=glGetUniformLocation(idProgram, name);
+    if(pos==-1)
+        return;
+    glUniform3fv(pos,1,v);
+}

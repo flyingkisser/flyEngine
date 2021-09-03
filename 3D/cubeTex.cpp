@@ -30,14 +30,17 @@ bool cubeTex::init(){
     if(_texObj==NULL)
         return false;
     _shaderObj=shaderMgr::get3d1texPongShader();
-    if(_shaderObj==NULL)
-       return false;
+    if(_shaderObj==NULL){
+        flylog("cubeTex::init shaderObj is null,return!");
+        return false;
+    }
+    _gl_program=_shaderObj->getProgramID();
     glInit();
     return true;
 }
 
 void cubeTex::glInit(){
-    node::glInitShader();
+    //除了多边形坐标，还增加纹理坐标、法向量
     node::glInitVAOWithTexCoordAndNormal();
 //    node::glInitVAOWithTexCoord();
     
@@ -47,15 +50,27 @@ void cubeTex::glInit(){
       flylog("cube::glInit: _gl_texture0 is 0,error!");
       return;
     }
-    glUniform1i(glGetUniformLocation(_gl_program, "texture0"), _gl_texture0);
+    _shaderObj->setInt("texture0", _gl_texture0);
 
     node::setPosition(glm::vec3(0,0,-10));
     node::rotateBy(glm::vec3(30,0,30));
 }
 
+void cubeTex::setShader(shader* shaderObj){
+    _shaderObj=shaderObj;
+    _shaderObj->use();
+    _gl_program=shaderObj->getProgramID();
+}
+
+
 void cubeTex::draw(camera* cameraObj){
+    _shaderObj->use();
+    cameraObj->update(_gl_program);
     node::updateModel(cameraObj);
-    node::glInitLight();
+    node::glUpdateLight();
+    if(m_material!=NULL)
+        m_material->glUpdateForCube(_gl_program);
+    _shaderObj->setInt("texture0", 0);
     
     glEnable(GL_DEPTH_TEST);
     glActiveTexture(GL_TEXTURE0);

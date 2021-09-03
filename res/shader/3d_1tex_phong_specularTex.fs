@@ -8,12 +8,12 @@ uniform sampler2D texture0;
 
 uniform vec3  camera_pos;
 
-//uniform vec3  global_ambient_color;
+uniform vec3  global_ambient_color;
 
 struct Material{
     vec3 ambient;
     vec3 diffuse;
-    vec3 specular;
+    sampler2D specular_tex;
     float shininess;
 };
 uniform Material mt;
@@ -49,36 +49,34 @@ void main(){
     vec3 specular=vec3(0,0,0);
     
     //环境光
-//    if(any(greaterThan(global_ambient_color,zero_vector))){
-//        ambient=global_ambient_color*mt.ambient;
-//    }
     //环境光 平行光(太阳)
     if(light_direction.enabled){
-        //全局光照
-        ambient+=light_direction.color*light_direction.ambient;
-        //漫反射
-        vec3 light_vector=normalize(-light_direction.direction);
-        diffuse+=light_direction.color*light_direction.diffuse*max(dot(normal_vector,light_vector),0);
-        //镜面反射
-        vec3 reflect_vector=reflect(-light_vector,normal_vector);
+       //全局光照
+       ambient+=light_direction.color*light_direction.ambient;
+       //漫反射
+       vec3 light_vector=normalize(-light_direction.direction);
+       diffuse+=light_direction.color*light_direction.diffuse*max(dot(normal_vector,light_vector),0);
+       //镜面反射
+       vec3 reflect_vector=reflect(-light_vector,normal_vector);
     specular+=light_direction.color*light_direction.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess);
     }
     
-    //点光源
     for(int i=0;i<POINT_LIGHTS_NUM;i++){
         PointLight light=light_point_arr[i];
         if(!light.enabled)
             continue;
+        
         //全局光照
-        ambient+=light.color*light.ambient;
+        ambient+=light.color*light.ambient*mt.ambient;
+
         //漫反射
         vec3 light_vector=normalize(light.pos-posFrag);
-        diffuse+=light.color*light.diffuse*max(dot(normal_vector,light_vector),0);
+        diffuse+=light.color*light.diffuse*max(dot(normal_vector,light_vector),0)*mt.diffuse;
+
         //镜面反射
         vec3 reflect_vector=reflect(-light_vector,normal_vector);
-        specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess);
+    specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess)*texture(mt.specular_tex,texCoord).rgb;
     }
 
-    //FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse+mt.specular*specular,1)*obj_color;
-    FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse,1)*obj_color+vec4(mt.specular*specular,0);
+    FragColor=vec4(ambient+diffuse,1)*obj_color+vec4(specular,0);
 }

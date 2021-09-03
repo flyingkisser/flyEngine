@@ -51,6 +51,10 @@ void node::setScale(glm::vec3 v){
     _scale=v;
     _dirtyPos=true;
 }
+void node::setScale(float v){
+    _scale=glm::vec3(v,v,v);
+    _dirtyPos=true;
+}
 
 //设置坐标
 void node::setPosition(glm::vec3 p){
@@ -88,7 +92,6 @@ void node::setMaterial(material *mt){
 }
 
 void node::updateModel(camera* cameraObj){
-    _shaderObj->use();
     if(_dirtyPos){
         _matModel=glm::translate(glm::mat4(1.0f),_pos);
         if(_rorate.x)//水平方向上旋转
@@ -100,75 +103,28 @@ void node::updateModel(camera* cameraObj){
         _matModel=glm::scale(_matModel,_scale);
         _dirtyPos=false;
     }
-    glUniformMatrix4fv(glGetUniformLocation(_gl_program,uniform_name_mat_model), 1,GL_FALSE,glm::value_ptr(_matModel));
-    cameraObj->update(_gl_program);
+    _shaderObj->setMat4(uniform_name_mat_model, glm::value_ptr(_matModel));
 }
 
+//void node::glInitShader(){
+//    _gl_program=_shaderObj->getProgramID();
+//    if(!_gl_program){
+//        flylog("node::glInitShader: _gl_program is 0,error!");
+//        return;
+//    }
+//}
 
-
-void node::glInitShader(){
-    _shaderObj->glInit();
-    _gl_program=_shaderObj->getProgramID();
-    if(!_gl_program){
-        flylog("node::glInitShader: _gl_program is 0,error!");
-        return;
-    }
-}
-
-bool node::glInitMaterial(){
-    if(m_material==NULL)
-        return false;
-    //环境光材质
-    int pos=glGetUniformLocation(_gl_program,uniform_name_material_ambient);
-    if(pos!=-1){
-        glUniform4fv(pos,1,glm::value_ptr(m_material->getAmbient()));
-    }
-    //漫反射材质
-    pos=glGetUniformLocation(_gl_program,uniform_name_material_diffuse);
-    if(pos!=-1){
-       glUniform4fv(pos,1,glm::value_ptr(m_material->getDiffuse()));
-    }
-    //镜面反射材质
-    pos=glGetUniformLocation(_gl_program,uniform_name_material_specular);
-    if(pos!=-1){
-       glUniform4fv(pos,1,glm::value_ptr(m_material->getSpecular()));
-    }
-    //镜面光滑系数
-    pos=glGetUniformLocation(_gl_program,uniform_name_material_shininess);
-    if(pos!=-1){
-       glUniform1f(pos,m_material->getShininess());
-    }
-    return true;
-}
-
-void node::glInitLight(){
-    //初始化材质
-    if(!glInitMaterial())
-        return;
-    //写入环境光颜色
+void node::glUpdateLight(){
+    //设置环境光
     ambientLight* lightAM=world::getInstance()->getAmbientLight();
-    if(lightAM!=NULL){
-        int pos=glGetUniformLocation(_gl_program,uniform_name_light_ambient_color);
-        if(pos!=-1)
-            glUniform4fv(pos,1,glm::value_ptr(lightAM->getColor()));
-    }
-    //写入漫反射光源位置与颜色
+    lightAM->glUpdate(_gl_program);
+    
+    //点光源初始化
     std::vector<node*> lightVector=world::getInstance()->getLightVector();
     int i=0;
     for(auto c : lightVector){
         light* lightObj=(light*)c;
-        char szBuf[128]={0};
-        //光源位置
-        snprintf(szBuf, sizeof(szBuf), "light_pos_%d",i);
-        int pos=glGetUniformLocation(_gl_program,szBuf);
-        if(pos!=-1)
-            glUniform3fv(pos,1,glm::value_ptr(lightObj->getPosition()));
-        //光源颜色
-        memset(szBuf,0,sizeof(szBuf));
-        snprintf(szBuf, sizeof(szBuf), "light_color_%d",i);
-        pos=glGetUniformLocation(_gl_program,szBuf);
-        if(pos!=-1)
-            glUniform4fv(pos,1,glm::value_ptr(lightObj->getColor()));
+        lightObj->glUpdateForCube(_gl_program,i++);
     }
 }
 

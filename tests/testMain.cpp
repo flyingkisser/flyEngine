@@ -24,6 +24,15 @@ void testMainBegin(){
 //    test_cubeColor();
     
     //light
-    test_light_phong();
+
+    
+//    test_oneLight_oneCube();
+//     test_oneLight_oneCube_changingColor();
+//    test_oneLight_twoCube();
+//    test_twoLight_oneCube();
+//    test_oneLight_oneCube_specularMap();
+//    test_oneLight_twoCube_specularMap();
+    test_oneLight_multiCube_specularMap();
+   
 
 }

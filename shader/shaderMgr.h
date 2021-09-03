@@ -27,9 +27,21 @@ public:
     static shader* get3d1texShader();
     static shader* get3d2texShader();
     static shader* get3d1texPongShader();
+    static shader* get3d1texPongWithSpecularTexShader();
     
     static shader* getShader(const char* szVertFileName,const char* szFragFileName);
+    static shader* getShader(int programID);
     static shader* getShaderUniqueue(const char* szVertFileName,const char* szFragFileName);
+    
+    static shader* createAndCacheShader(const char* szVertFileName,const char* szFragFileName);
+    
+    static void setBool(unsigned int idProgram,const char *name, bool v);
+    static void setInt(unsigned int idProgram,const char *name, int v);
+    static void setFloat(unsigned int idProgram,const char *name, float v);
+    static void setMat4(unsigned int idProgram,const char *name, float* v);
+    static void setVec3(unsigned int idProgram,const char *name, float* v);
+
+    
 };
 
 NS_FLYENGINE_END

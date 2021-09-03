@@ -17,28 +17,31 @@
 
 USE_NS_FLYENGINE
 
-cubeColor::cubeColor(glm::vec4 color){
-    m_vec4Color=color;
+cubeColor::cubeColor(glm::vec3 color){
+    m_vec3Color=color;
 }
 
 bool cubeColor::init(){
     _shaderObj=shaderMgr::get3dColorShader();
     if(_shaderObj==NULL)
        return false;
+    _gl_program=_shaderObj->getProgramID();
     glInit();
     return true;
 }
 
 void cubeColor::glInit(){
-    node::glInitShader();
     node::glInitVAO();
     node::setPosition(glm::vec3(0,0,-10));
     node::rotateBy(glm::vec3(30,0,30));
 }
 
 void cubeColor::draw(camera* cameraObj){
+    _shaderObj->use();
+    cameraObj->update(_gl_program);
     node::updateModel(cameraObj);
-    glUniform4fv(glGetUniformLocation(_gl_program, "color"),1, glm::value_ptr(m_vec4Color));
+    _shaderObj->setVec3("color", glm::value_ptr(m_vec3Color));
+
     glEnable(GL_DEPTH_TEST);
     glBindVertexArray(_gl_vao);
     glDrawArrays(GL_TRIANGLES,0,36);

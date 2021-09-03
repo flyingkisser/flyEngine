@@ -29,8 +29,8 @@ public:
     int getHeight(){return _height;};
     unsigned char* getBuf(){return _dataBuf;};
     unsigned int getTextureID(){return _textureID;};
-    
-    void glInit();
+    unsigned int getTexturePos(){return _texturePos;};
+    void glInit(int texturePos=0);
     
 private:
     int _width;
@@ -39,6 +39,7 @@ private:
     int _format;
     int _internalFormat;
     int _colorType;
+    int _texturePos;
     unsigned int _textureID;
     unsigned char* _dataBuf;
     std::string _strPath;

@@ -46,9 +46,15 @@ bool flyEngine::texture::init(){
     return true;
 }
 
-void flyEngine::texture::glInit(){
+//texturePos from GL_TEXTURE0,GL_TEXTURE1
+void flyEngine::texture::glInit(int texturePos){
     glRef::glInit();
     glGenTextures(1,&_textureID);
+    if(texturePos){
+        glActiveTexture(texturePos);
+        _texturePos=texturePos-GL_TEXTURE0;
+    }
+       
     glBindTexture(GL_TEXTURE_2D,_textureID);
     //GL_TEXTURE_WRAP_S表示纹理坐标的横向方向
     //GL_TEXTURE_WRAP_T表示纹理坐标的纵向方向

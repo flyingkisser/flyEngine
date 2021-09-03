@@ -32,9 +32,12 @@ public:
     void setBool(const char* name,bool v);
     void setInt(const char* name,int v);
     void setFloat(const char* name,float v);
+    void setMat4(const char* name,float* v);
+    void setVec3(const char* name,float* v);
+        
     unsigned int getProgramID(){return _idProgram;};
 
-    void glInit();
+    void compile();
     bool init();
 };
  

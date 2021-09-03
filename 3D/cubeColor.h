@@ -23,16 +23,17 @@ NS_FLYENGINE_BEGIN
 class cubeColor: public node
 {
 private:
-    glm::vec4 m_vec4Color;
+    glm::vec3 m_vec3Color;
 
 public:
-    cubeColor(glm::vec4 color);
+    cubeColor(glm::vec3 color);
     ~cubeColor(){};
     
-    glm::vec4 getColor(){return m_vec4Color;};
+    glm::vec3 getColor(){return m_vec3Color;};
     
     bool init();
     void glInit();
+    void setColor(glm::vec3 color){m_vec3Color=color;};
 
     void draw(camera* cameraObj);
 };

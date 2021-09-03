@@ -9,6 +9,8 @@
 #include "camera.h"
 #include "logUtil.h"
 #include "control.h"
+#include "shader.h"
+#include "shaderMgr.h"
 
 using namespace flyEngine;
 
@@ -23,22 +25,19 @@ void camera::_updateCamera(){
         _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
         _dirtyPos=false;
     }
-    glUniformMatrix4fv(glGetUniformLocation(_program, uniform_name_mat_camera), 1,GL_FALSE,glm::value_ptr(_matCamera));
-    
-    int pos=glGetUniformLocation(_program, uniform_name_camera_pos);
-    if(pos!=-1)
-        glUniform3fv(pos, 1,glm::value_ptr(_cameraPos));
+    shaderMgr::setMat4(_program,uniform_name_mat_camera,glm::value_ptr(_matCamera));
+    shaderMgr::setVec3(_program,uniform_name_camera_pos,glm::value_ptr(_cameraPos));
 }
 
 void camera::_updateProjection(){
     if(!_program)
         return;
-    glUniformMatrix4fv(glGetUniformLocation(_program, uniform_name_mat_proj), 1,GL_FALSE,glm::value_ptr(_matProj));
+    shaderMgr::setMat4(_program,uniform_name_mat_proj,glm::value_ptr(_matProj));
 }
 
 
 void camera::reset(){
-     glUniformMatrix4fv(glGetUniformLocation(_program, uniform_name_mat_camera), 1,GL_FALSE,glm::value_ptr(_matCameraOrigin));
+    shaderMgr::setMat4(_program,uniform_name_mat_camera,glm::value_ptr(_matCameraOrigin));
 }
 
 void camera::setPosition(glm::vec3 pos){
@@ -97,7 +96,6 @@ control* camera::getControl(){
     return _controlObj;
 }
 
-
 void camera::print(){
     flylog("camera pos is %f %f %f",_cameraPos.x,_cameraPos.y,_cameraPos.z);
 }
@@ -127,7 +125,6 @@ bool camera::init(){
     _dirtyProj=true;
     return true;
 }
-
 
 void camera::update(int programID){
     _program=programID;
