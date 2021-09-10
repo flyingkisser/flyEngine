@@ -46,7 +46,7 @@ void light::glUpdateForCube(int program_id,int light_index){
     
     //光源材质
     material* mt=getMaterial();
-    mt->glUpdateForLight(program_id,i);
+    mt->glUpdateForPointLight(program_id,i);
 }
 
 void light::draw(camera* cameraObj){

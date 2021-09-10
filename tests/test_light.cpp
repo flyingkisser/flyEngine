@@ -24,7 +24,7 @@
 USE_NS_FLYENGINE;
 
 
-void init_light_ambient(){
+static void init_light_ambient(){
     //设置环境光
     ambientLight* amLight=new ambientLight(glm::vec3(0.2f,0.2f,0.2f));
     world::getInstance()->setAmbientLight(amLight);
@@ -49,7 +49,7 @@ void test_oneLight_oneCube(){
     
     //光源1
     material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
-    node* lightObj1=new light(glm::vec3(1,1,1),mtLight);
+    light* lightObj1=new light(glm::vec3(1,1,1),mtLight);
     if(!lightObj1->init()){
        flylog("lightObj1 init failed!");
        return;
@@ -85,7 +85,7 @@ void test_oneLight_oneCube_changingColor(){
     
     //光源1
     material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
-    node* lightObj1=new light(glm::vec3(1,1,1),mtLight);
+    light* lightObj1=new light(glm::vec3(1,1,1),mtLight);
     if(!lightObj1->init()){
        flylog("lightObj1 init failed!");
        return;
@@ -136,7 +136,7 @@ void test_oneLight_twoCube(){
     
     //光源1
     material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
-    node* lightObj1=new light(glm::vec3(1,1,1),mtLight);
+    light* lightObj1=new light(glm::vec3(1,1,1),mtLight);
     if(!lightObj1->init()){
        flylog("lightObj1 init failed!");
        return;
@@ -179,7 +179,7 @@ void test_twoLight_oneCube(){
     
      material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1.0f);
     //光源1
-    node* lightObj1=new light(glm::vec3(1,0,0),mtLight);
+    light* lightObj1=new light(glm::vec3(1,0,0),mtLight);
     if(!lightObj1->init()){
         flylog("lightObj1 init failed!");
         return;
@@ -188,7 +188,7 @@ void test_twoLight_oneCube(){
     world::getInstance()->addLight(lightObj1);
     
     //光源2
-    node* lightObj2=new light(glm::vec3(0,1,0),mtLight);
+    light* lightObj2=new light(glm::vec3(0,1,0),mtLight);
     if(!lightObj2->init()){
         flylog("lightObj2 init failed!");
         return;
@@ -224,7 +224,7 @@ void test_oneLight_oneCube_specularMap(){
     
     //光源1
     material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
-    node* lightObj1=new light(glm::vec3(1,1.0,1.0),mtLight);
+    light* lightObj1=new light(glm::vec3(1,1.0,1.0),mtLight);
     if(!lightObj1->init()){
        flylog("lightObj1 init failed!");
        return;
@@ -274,7 +274,7 @@ void test_oneLight_twoCube_specularMap(){
     
     //光源1
     material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
-    node* lightObj1=new light(glm::vec3(1,1.0,1.0),mtLight);
+    light* lightObj1=new light(glm::vec3(1,1.0,1.0),mtLight);
     if(!lightObj1->init()){
        flylog("lightObj1 init failed!");
        return;
@@ -297,7 +297,7 @@ void test_oneLight_multiCube_specularMap(){
     for(int i=0;i<50;i++){
         cubeTex* cubeObj=new cubeTex("res/wood.png");
         if(!cubeObj->init()){
-            flylog("node1 init failed!");
+            flylog("node%d init failed!",i);
             return;
         }
        // float t=glfwGetTime();
@@ -309,12 +309,13 @@ void test_oneLight_multiCube_specularMap(){
         flylog("add %f %f",x,y);
         material* mt=new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8);
         cubeObj->setMaterial(mt);
+        cubeObj->setShader(shaderMgr::get3d1texPongWithSpecularTexShader());
         world::getInstance()->addChild(cubeObj);
     }
    
     //光源1
     material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
-    node* lightObj1=new light(glm::vec3(1,1.0,1.0),mtLight);
+    light* lightObj1=new light(glm::vec3(1,1.0,1.0),mtLight);
     if(!lightObj1->init()){
        flylog("lightObj1 init failed!");
        return;

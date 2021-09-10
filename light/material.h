@@ -35,7 +35,7 @@ public:
     bool setDiffuseTex(const char* szTex);
     bool setSpecularTex(const char* szTex);
     void glUpdateForCube(int gl_program);
-    void glUpdateForLight(int gl_program,int i);
+    void glUpdateForPointLight(int gl_program,int i);
 };
 
 NS_FLYENGINE_END

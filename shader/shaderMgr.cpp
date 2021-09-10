@@ -147,15 +147,24 @@ unsigned int shaderMgr::createShaderFromFile(const char* szVertFileName,const ch
 }
 
 void shaderMgr::setBool(unsigned int idProgram,const char *name, bool v){
-    glUniform1i(glGetUniformLocation(idProgram, name), (int)v);
+    int pos=glGetUniformLocation(idProgram, name);
+    if(pos==-1)
+        return;
+    glUniform1i(pos, (int)v);
 }
 
 void shaderMgr::setInt(unsigned int idProgram,const char *name, int v){
-    glUniform1i(glGetUniformLocation(idProgram, name),v);
+    int pos=glGetUniformLocation(idProgram, name);
+    if(pos==-1)
+        return;
+    glUniform1i(pos,v);
 }
 
 void shaderMgr::setFloat(unsigned int idProgram,const char *name, float v){
-    glUniform1f(glGetUniformLocation(idProgram, name),v);
+    int pos=glGetUniformLocation(idProgram, name);
+    if(pos==-1)
+        return;
+    glUniform1f(pos,v);
 }
 
 void shaderMgr::setMat4(unsigned int idProgram,const char *name, float* v){

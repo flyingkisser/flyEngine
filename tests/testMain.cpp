@@ -8,6 +8,7 @@
 #include "test_node.h"
 #include "test_action.h"
 #include "test_light.h"
+#include "test_pointLight.h"
 
 void testMainBegin(){
     //node test
@@ -32,7 +33,10 @@ void testMainBegin(){
 //    test_twoLight_oneCube();
 //    test_oneLight_oneCube_specularMap();
 //    test_oneLight_twoCube_specularMap();
-    test_oneLight_multiCube_specularMap();
+//    test_oneLight_multiCube_specularMap();
+    
+//    test_onePointLight_oneCube();
+//    test_onePointLight_multiCube_specularMap();
    
 
 }

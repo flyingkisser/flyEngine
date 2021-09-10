@@ -100,6 +100,9 @@
 		D8BED72B253EB9F0006974D3 /* std_move_forward.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED72A253EB9F0006974D3 /* std_move_forward.cpp */; };
 		D8EF622F2519E32500B8588F /* stringUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EF622E2519E32500B8588F /* stringUtil.cpp */; };
 		D8F0B7FE25652BCD0034E7B7 /* cameraBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0B7FD25652BCD0034E7B7 /* cameraBase.cpp */; };
+		D8F37D7626E607D000E5225B /* pointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F37D7526E607D000E5225B /* pointLight.cpp */; };
+		D8F37D7926E60D9F00E5225B /* test_pointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F37D7826E60D9F00E5225B /* test_pointLight.cpp */; };
+		D8F37D7C26E6331200E5225B /* spotLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F37D7B26E6331200E5225B /* spotLight.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1770,6 +1773,12 @@
 		D8F0B7FD25652BCD0034E7B7 /* cameraBase.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cameraBase.cpp; sourceTree = "<group>"; };
 		D8F37D6E26DF758700E5225B /* wood.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood.png; sourceTree = "<group>"; };
 		D8F37D6F26E0DE7100E5225B /* wood_specular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = wood_specular.png; sourceTree = "<group>"; };
+		D8F37D7426E607D000E5225B /* pointLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = pointLight.h; sourceTree = "<group>"; };
+		D8F37D7526E607D000E5225B /* pointLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = pointLight.cpp; sourceTree = "<group>"; };
+		D8F37D7726E60D9F00E5225B /* test_pointLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_pointLight.h; sourceTree = "<group>"; };
+		D8F37D7826E60D9F00E5225B /* test_pointLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_pointLight.cpp; sourceTree = "<group>"; };
+		D8F37D7A26E6331200E5225B /* spotLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = spotLight.h; sourceTree = "<group>"; };
+		D8F37D7B26E6331200E5225B /* spotLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = spotLight.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3959,6 +3968,8 @@
 				D87EC00226B2CF33004ED7DE /* test_action.cpp */,
 				D83EF33226C29AC00007E460 /* test_light.h */,
 				D83EF33326C29AC00007E460 /* test_light.cpp */,
+				D8F37D7726E60D9F00E5225B /* test_pointLight.h */,
+				D8F37D7826E60D9F00E5225B /* test_pointLight.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -4034,6 +4045,10 @@
 				D83EF33026C299550007E460 /* light.cpp */,
 				D8826A5A26C3B28700314F16 /* ambientLight.h */,
 				D8826A5B26C3B28700314F16 /* ambientLight.cpp */,
+				D8F37D7426E607D000E5225B /* pointLight.h */,
+				D8F37D7526E607D000E5225B /* pointLight.cpp */,
+				D8F37D7A26E6331200E5225B /* spotLight.h */,
+				D8F37D7B26E6331200E5225B /* spotLight.cpp */,
 			);
 			path = light;
 			sourceTree = "<group>";
@@ -4327,7 +4342,10 @@
 				D810AEAD26835232009B774B /* glad.c in Sources */,
 				D87EBFF726AEB1D0004ED7DE /* scaleBy.cpp in Sources */,
 				D87EBFF426AAAEFE004ED7DE /* spawn.cpp in Sources */,
+				D8F37D7C26E6331200E5225B /* spotLight.cpp in Sources */,
 				D825DBC124AED03300C494E7 /* threadUtil.cpp in Sources */,
+				D8F37D7626E607D000E5225B /* pointLight.cpp in Sources */,
+				D8F37D7926E60D9F00E5225B /* test_pointLight.cpp in Sources */,
 				D89600F324D169D700DF6FD3 /* testCurve.cpp in Sources */,
 				D87EBFDB26A6F010004ED7DE /* action.cpp in Sources */,
 				D87EBFF126AAAEF2004ED7DE /* sequence.cpp in Sources */,

@@ -55,7 +55,7 @@ void material::glUpdateForCube(int gl_program){
 }
 
 //i:light index from 0
-void material::glUpdateForLight(int gl_program,int i){
+void material::glUpdateForPointLight(int gl_program,int i){
     char szBuf[128]={0};
     shader* shaderObj=shaderMgr::getShader(gl_program);
     int pos=0;
@@ -70,5 +70,23 @@ void material::glUpdateForLight(int gl_program,int i){
 
     memset(szBuf,0,sizeof(szBuf));
     snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_specular,i);
+    shaderObj->setVec3(szBuf, glm::value_ptr(m_vec3Specular));
+}
+
+void material::glUpdateForSpotLight(int gl_program,int i){
+    char szBuf[128]={0};
+    shader* shaderObj=shaderMgr::getShader(gl_program);
+    int pos=0;
+    //光源材质
+    memset(szBuf,0,sizeof(szBuf));
+    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_ambient,i);
+    shaderObj->setVec3(szBuf, glm::value_ptr(m_vec3Ambient));
+                  
+    memset(szBuf,0,sizeof(szBuf));
+    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_diffuse,i);
+    shaderObj->setVec3(szBuf, glm::value_ptr(m_vec3Diffuse));
+
+    memset(szBuf,0,sizeof(szBuf));
+    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_specular,i);
     shaderObj->setVec3(szBuf, glm::value_ptr(m_vec3Specular));
 }

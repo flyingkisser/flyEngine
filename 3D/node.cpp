@@ -15,8 +15,11 @@
 #include "action.h"
 #include "camera.h"
 #include "ambientLight.h"
+#include "light.h"
+#include "pointLight.h"
 #include "world.h"
 #include "material.h"
+
 
 USE_NS_FLYENGINE
 
@@ -120,10 +123,16 @@ void node::glUpdateLight(){
     lightAM->glUpdate(_gl_program);
     
     //点光源初始化
-    std::vector<node*> lightVector=world::getInstance()->getLightVector();
+    std::vector<light*> lightVector=world::getInstance()->getLightVector();
     int i=0;
     for(auto c : lightVector){
         light* lightObj=(light*)c;
+        lightObj->glUpdateForCube(_gl_program,i++);
+    }
+    std::vector<pointLight*> pointLightVector=world::getInstance()->getPointLightVector();
+    i=0;
+    for(auto c : pointLightVector){
+        pointLight* lightObj=(pointLight*)c;
         lightObj->glUpdateForCube(_gl_program,i++);
     }
 }

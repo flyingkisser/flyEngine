@@ -34,8 +34,11 @@ void world::addChild(node *node){
     _vector_child.push_back(node);
 }
 
-void world::addLight(node *node){
+void world::addLight(light *node){
     _vector_light.push_back(node);
+}
+void world::addPointLight(pointLight *node){
+    _vector_point_light.push_back(node);
 }
 
 void world::start_rendering(){
@@ -66,9 +69,13 @@ void world::draw(){
         nodeObj->draw(_camera);
     }
     for(auto c : _vector_light){
-       node* nodeObj=c;
+       node* nodeObj=(node*)c;
        nodeObj->draw(_camera);
     }
+    for(auto c : _vector_point_light){
+        node* nodeObj=(node*)c;
+        nodeObj->draw(_camera);
+     }
 }
 
 

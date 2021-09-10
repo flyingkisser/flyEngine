@@ -19,11 +19,14 @@ class node;
 class control;
 class camera;
 class ambientLight;
+class light;
+class pointLight;
 
 class world{
 private:
     std::vector<node*> _vector_child;
-    std::vector<node*> _vector_light;
+    std::vector<light*> _vector_light;
+    std::vector<pointLight*> _vector_point_light;
     camera* _camera;
     ambientLight* m_amLight;
     
@@ -32,7 +35,8 @@ public:
     ~world();
     static world* getInstance();
     void addChild(node* node);
-    void addLight(node* node);
+    void addLight(light* node);
+    void addPointLight(pointLight* node);
     void setCamera(camera* c);
     void setAmbientLight(ambientLight* amLight);
     void start_rendering();
@@ -45,7 +49,8 @@ public:
     control* getControl();
     
     ambientLight* getAmbientLight(){return m_amLight;};
-    std::vector<node*> getLightVector(){return _vector_light;};
+    std::vector<light*> getLightVector(){return _vector_light;};
+    std::vector<pointLight*> getPointLightVector(){return _vector_point_light;};
     
     float getFrameRate(){return CONST_FRAME_RATE;};
 };
