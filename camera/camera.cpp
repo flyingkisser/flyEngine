@@ -26,7 +26,10 @@ void camera::_updateCamera(){
         _dirtyPos=false;
     }
     shaderMgr::setMat4(_program,uniform_name_mat_camera,glm::value_ptr(_matCamera));
-    shaderMgr::setVec3(_program,uniform_name_camera_pos,glm::value_ptr(_cameraPos));
+    
+    int pos=glGetUniformLocation(_program, uniform_name_camera_pos);
+    if(pos!=-1)
+        shaderMgr::setVec3(_program,uniform_name_camera_pos,glm::value_ptr(_cameraPos));
 }
 
 void camera::_updateProjection(){

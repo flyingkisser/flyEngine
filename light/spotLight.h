@@ -18,10 +18,11 @@ NS_FLYENGINE_BEGIN
 class spotLight:public light{
   
 public:
-    spotLight(glm::vec3 color,material* mt,float cutOffEngle=15);
+    spotLight(glm::vec3 color,material* mt,float cutOffEngleInner=15,float cutOffEngleOuter=20);
     void glUpdateForCube(int program_id,int index,camera* c);
 private:
-    float m_fcufOff;
+    float m_fcufOffInner;
+    float m_fcufOffOuter;
 };
 
 NS_FLYENGINE_END

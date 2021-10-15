@@ -103,6 +103,7 @@
 		D8F37D7626E607D000E5225B /* pointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F37D7526E607D000E5225B /* pointLight.cpp */; };
 		D8F37D7926E60D9F00E5225B /* test_pointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F37D7826E60D9F00E5225B /* test_pointLight.cpp */; };
 		D8F37D7C26E6331200E5225B /* spotLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F37D7B26E6331200E5225B /* spotLight.cpp */; };
+		D8F37D7F26EF683600E5225B /* test_spotLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F37D7E26EF683600E5225B /* test_spotLight.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1779,6 +1780,8 @@
 		D8F37D7826E60D9F00E5225B /* test_pointLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_pointLight.cpp; sourceTree = "<group>"; };
 		D8F37D7A26E6331200E5225B /* spotLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = spotLight.h; sourceTree = "<group>"; };
 		D8F37D7B26E6331200E5225B /* spotLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = spotLight.cpp; sourceTree = "<group>"; };
+		D8F37D7D26EF683600E5225B /* test_spotLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_spotLight.h; sourceTree = "<group>"; };
+		D8F37D7E26EF683600E5225B /* test_spotLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_spotLight.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3970,6 +3973,8 @@
 				D83EF33326C29AC00007E460 /* test_light.cpp */,
 				D8F37D7726E60D9F00E5225B /* test_pointLight.h */,
 				D8F37D7826E60D9F00E5225B /* test_pointLight.cpp */,
+				D8F37D7D26EF683600E5225B /* test_spotLight.h */,
+				D8F37D7E26EF683600E5225B /* test_spotLight.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -4327,6 +4332,7 @@
 				D8826A5726C3AA0700314F16 /* cubeColor.cpp in Sources */,
 				D8826A5F26C3EB9000314F16 /* material.cpp in Sources */,
 				8ECA452E2688776400FDFC7A /* world.cpp in Sources */,
+				D8F37D7F26EF683600E5225B /* test_spotLight.cpp in Sources */,
 				D87EBFD426A5780B004ED7DE /* timerMgr.cpp in Sources */,
 				D89600E924C8541400DF6FD3 /* testAniBySwapBuffer.cpp in Sources */,
 				D81EF3601EAFA0070003604F /* main.cpp in Sources */,

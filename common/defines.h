@@ -66,19 +66,21 @@ extern float g_verticeArrWithTexCoordAndNormal[288];
 #define uniform_name_light_point_constant "light_point_arr[%d].constant"
 #define uniform_name_light_point_linear "light_point_arr[%d].linear"
 #define uniform_name_light_point_quadratic "light_point_arr[%d].quadratic"
-#define uniform_name_light_point_cutOffCos "light_point_arr[%d].cutOffCos"
 
-#define uniform_name_light_spot_enabled  "spot_point_arr[%d].enabled"
-#define uniform_name_light_spot_pos      "spot_point_arr[%d].pos"
-#define uniform_name_light_spot_color    "spot_point_arr[%d].color"
-#define uniform_name_light_spot_ambient  "spot_point_arr[%d].ambient"
-#define uniform_name_light_spot_diffuse  "spot_point_arr[%d].diffuse"
-#define uniform_name_light_spot_specular "spot_point_arr[%d].specular"
 
-#define uniform_name_light_spot_constant "spot_point_arr[%d].constant"
-#define uniform_name_light_spot_linear "spot_point_arr[%d].linear"
-#define uniform_name_light_spot_quadratic "spot_point_arr[%d].quadratic"
-#define uniform_name_light_spot_cutoff "spot_point_arr[%d].cutoff"
-#define uniform_name_light_spot_direction "spot_point_arr[%d].direction"
+#define uniform_name_light_spot_enabled  "light_spot_arr[%d].enabled"
+#define uniform_name_light_spot_pos      "light_spot_arr[%d].pos"
+#define uniform_name_light_spot_color    "light_spot_arr[%d].color"
+#define uniform_name_light_spot_ambient  "light_spot_arr[%d].ambient"
+#define uniform_name_light_spot_diffuse  "light_spot_arr[%d].diffuse"
+#define uniform_name_light_spot_specular "light_spot_arr[%d].specular"
+
+#define uniform_name_light_spot_constant "light_spot_arr[%d].constant"
+#define uniform_name_light_spot_linear "light_spot_arr[%d].linear"
+#define uniform_name_light_spot_quadratic "light_spot_arr[%d].quadratic"
+#define uniform_name_light_spot_cutoff_inner "light_spot_arr[%d].cutoff_inner"
+#define uniform_name_light_spot_cutoff_outer "light_spot_arr[%d].cutoff_outer"
+
+#define uniform_name_light_spot_direction "light_spot_arr[%d].direction"
 
 #endif /* defines_h */

@@ -27,20 +27,22 @@ struct DirectionLight{
     vec3 specular;
 };
 
+//点光源
 struct PointLight{
-    bool enabled;
-    vec3 pos;
-    vec3 color;
+    bool enabled;   //是否启用
+    vec3 pos;       //位置
+    vec3 color;     //光的颜色
+
+    vec3 ambient;   //环境光材质系数
+    vec3 diffuse;   //漫反射材质系数
+    vec3 specular;  //镜面反射材质系数
     
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-    
-    float constant;
-    float linear;
-    float quadratic;
+    float constant;     //距离衰减常量
+    float linear;       //距离衰减一次常量系数
+    float quadratic;    //距离衰减二次常量系数
 };
 
+//聚光灯
 struct SpotLight{
     bool enabled;
     vec3 pos;
@@ -54,14 +56,15 @@ struct SpotLight{
     float linear;
     float quadratic;
     
-    float cutoff;
-    vec3  direction;
+    float cutoff_inner; //内角的cos值
+    float cutoff_outer; //外角的cos值
+    vec3  direction;    //方向向量
 };
 
 #define POINT_LIGHT_NUM 4
 #define SPOT_LIGHT_NUM 4
 uniform PointLight light_point_arr[POINT_LIGHT_NUM];
-uniform SPOTLight light_spot_arr[POINT_LIGHT_NUM];
+uniform SpotLight light_spot_arr[SPOT_LIGHT_NUM];
 
 uniform DirectionLight light_direction;
 
@@ -103,15 +106,6 @@ void main(){
         if(!light.enabled)
             continue;
         vec3 light_vector=normalize(light.pos-posFrag);
-        
-        if(light.cutoff){
-            float theta=dot(light_vector,light.direction);
-            if(theta>light.cutoff){
-                //在角度内
-            }else{
-                
-            }
-        }
         //环境光
         ambient+=light.color*light.ambient;
         //漫反射
@@ -119,7 +113,6 @@ void main(){
         //镜面反射
         vec3 reflect_vector=reflect(-light_vector,normal_vector);
         specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess);
-        
         if(light.constant!=0){
             //需要计算距离衰减
             float attenuation=calcAttenuation(posFrag,light.pos,light.constant,light.linear,light.quadratic);
@@ -131,25 +124,36 @@ void main(){
 
     //聚光灯
     for(int i=0;i<SPOT_LIGHT_NUM;i++){
-       SPOTLight light=spot_point_arr[i];
+       SpotLight light=light_spot_arr[i];
        if(!light.enabled)
            continue;
-        if(!light.cutoff)
+        if(light.cutoff_inner<=0)
             continue;
         vec3 light_vector=normalize(light.pos-posFrag);
-        float theta=dot(light_vector,light.direction);
-        if(theta>light.cutoff){
+        //vec3 light_direction=normalize(-light.direction);
+        vec3 light_direction=normalize(light.pos);
+        float theta=dot(light_vector,light_direction);
+        //i值的计算：分母：内角的cos值-外角的cos值 分子：内角的cos值-当前角的cos值
+        //当前角的角度小于内角时，i>1，则正常照亮
+        //当前角的角度大于外角时，i为负值，不照亮
+        //位于内角和外角之间时，i在(0,1)之间，进行衰减计算
+        //最后通过clamp函数把i限制在0到1的范围内
+        float l=(theta-light.cutoff_outer)/(light.cutoff_inner-light.cutoff_outer);
+        l=clamp(l,0.0,1.0);
+        if(l>0.0){
             //在角度内
             //漫反射
-            diffuse+=light.color*light.diffuse*max(dot(normal_vector,light_vector),0);
+            diffuse+=light.color*light.diffuse*max(dot(normal_vector,light_vector),0)*l;
             //镜面反射
             vec3 reflect_vector=reflect(-light_vector,normal_vector);
-            specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess);
+            specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess)*l;
         }
+    
         //环境光
         ambient+=light.color*light.ambient;
+        
+        //距离衰减
         if(light.constant!=0){
-            //需要计算距离衰减
             float attenuation=calcAttenuation(posFrag,light.pos,light.constant,light.linear,light.quadratic);
             ambient*=attenuation;
             diffuse*=attenuation;

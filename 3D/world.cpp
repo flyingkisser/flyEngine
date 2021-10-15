@@ -40,6 +40,9 @@ void world::addLight(light *node){
 void world::addPointLight(pointLight *node){
     _vector_point_light.push_back(node);
 }
+void world::addSpotLight(spotLight *node){
+    _vector_spot_light.push_back(node);
+}
 
 void world::start_rendering(){
 //    threadUtil::createThread(world::_main_loop);
@@ -75,7 +78,11 @@ void world::draw(){
     for(auto c : _vector_point_light){
         node* nodeObj=(node*)c;
         nodeObj->draw(_camera);
-     }
+    }
+    for(auto c : _vector_spot_light){
+          node* nodeObj=(node*)c;
+          nodeObj->draw(_camera);
+    }
 }
 
 

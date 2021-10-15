@@ -68,7 +68,7 @@ void shader::compile(){
        glGetShaderiv(vertShader, GL_INFO_LOG_LENGTH, &lenLog);
        char* szLog=(char*)malloc(lenLog);
        glGetShaderInfoLog(vertShader,lenLog,&num,szLog);
-       fprintf(stderr,"shader::shader: vertSahder error: %s",szLog);
+       fprintf(stderr,"%s\nshader::shader: vertSahder error: %s",_szVertFileName,szLog);
        free(szLog);
        return;
     }
@@ -80,7 +80,7 @@ void shader::compile(){
        glGetShaderiv(fragShader, GL_INFO_LOG_LENGTH, &lenLog);
        char* szLog=(char*)malloc(lenLog);
        glGetShaderInfoLog(fragShader,lenLog,&num,szLog);
-       fprintf(stderr,"shader::shader: fragShader error: %s",szLog);
+       fprintf(stderr,"%s\nshader::shader: fragShader error: %s",_szFragFileName,szLog);
        free(szLog);
        glDeleteShader(vertShader);
        return;
@@ -118,28 +118,52 @@ bool shader::isSuccess(){
     return (bool)_idProgram;
 }
 
-void shader::setBool(const char *name, bool v){
-    glUniform1i(glGetUniformLocation(_idProgram, name), (int)v);
-}
-
-void shader::setInt(const char *name, int v){
-    glUniform1i(glGetUniformLocation(_idProgram, name),v);
-}
-
-void shader::setFloat(const char *name, float v){
-    glUniform1f(glGetUniformLocation(_idProgram, name),v);
-}
-
-void shader::setMat4(const char *name, float* v){
+void shader::setBool(const char *name, bool v,bool debug){
     int pos=glGetUniformLocation(_idProgram, name);
-    if(pos==-1)
+    if(pos==-1){
+        if(debug)
+            flylog("shader::setBool cannot find %s",name);
         return;
+    }
+    glUniform1i(pos, (int)v);
+}
+
+void shader::setInt(const char *name, int v,bool debug){
+    int pos=glGetUniformLocation(_idProgram, name);
+    if(pos==-1){
+        if(debug)
+            flylog("shader::setInt cannot find %s",name);
+       return;
+    }
+    glUniform1i(pos,v);
+}
+
+void shader::setFloat(const char *name, float v,bool debug){
+    int pos=glGetUniformLocation(_idProgram, name);
+    if(pos==-1){
+        if(debug)
+            flylog("shader::setFloat cannot find %s",name);
+       return;
+    }
+    glUniform1f(pos,v);
+}
+
+void shader::setMat4(const char *name, float* v,bool debug){
+    int pos=glGetUniformLocation(_idProgram, name);
+    if(pos==-1){
+        if(debug)
+            flylog("shader::setMat4 cannot find %s",name);
+       return;
+    }
     glUniformMatrix4fv(pos,1,GL_FALSE,v);
 }
 
-void shader::setVec3(const char *name, float* v){
+void shader::setVec3(const char *name, float* v,bool debug){
     int pos=glGetUniformLocation(_idProgram, name);
-    if(pos==-1)
-        return;
+    if(pos==-1){
+        if(debug)
+            flylog("shader::setVec3 cannot find %s",name);
+       return;
+    }
     glUniform3fv(pos,1,v);
 }

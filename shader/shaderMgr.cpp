@@ -148,35 +148,45 @@ unsigned int shaderMgr::createShaderFromFile(const char* szVertFileName,const ch
 
 void shaderMgr::setBool(unsigned int idProgram,const char *name, bool v){
     int pos=glGetUniformLocation(idProgram, name);
-    if(pos==-1)
-        return;
+    if(pos==-1){
+      flylog("shaderMgr::setBool cannot find %s",name);
+      return;
+    }
     glUniform1i(pos, (int)v);
 }
 
 void shaderMgr::setInt(unsigned int idProgram,const char *name, int v){
     int pos=glGetUniformLocation(idProgram, name);
-    if(pos==-1)
-        return;
+    if(pos==-1){
+      flylog("shaderMgr::setInt cannot find %s",name);
+      return;
+    }
     glUniform1i(pos,v);
 }
 
 void shaderMgr::setFloat(unsigned int idProgram,const char *name, float v){
     int pos=glGetUniformLocation(idProgram, name);
-    if(pos==-1)
-        return;
+    if(pos==-1){
+      flylog("shaderMgr::setFloat cannot find %s",name);
+      return;
+    }
     glUniform1f(pos,v);
 }
 
 void shaderMgr::setMat4(unsigned int idProgram,const char *name, float* v){
     int pos=glGetUniformLocation(idProgram, name);
-    if(pos==-1)
-        return;
+    if(pos==-1){
+      flylog("shaderMgr::setMat4 cannot find %s",name);
+      return;
+    }
     glUniformMatrix4fv(pos,1,GL_FALSE,v);
 }
 
 void shaderMgr::setVec3(unsigned int idProgram,const char *name, float* v){
     int pos=glGetUniformLocation(idProgram, name);
-    if(pos==-1)
+    if(pos==-1){
+        flylog("shaderMgr::setVec3 cannot find %s",name);
         return;
+    }
     glUniform3fv(pos,1,v);
 }

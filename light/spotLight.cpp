@@ -13,8 +13,9 @@
 
 USE_NS_FLYENGINE
 
-spotLight::spotLight(glm::vec3 color,material* mt,float cutOffEngle):light(color,mt){
-    m_fcufOff=glm::cos(glm::radians(12.5f));
+spotLight::spotLight(glm::vec3 color,material* mt,float cutOffEngleInner,float cutOffEngleOuter):light(color,mt){
+    m_fcufOffInner=glm::cos(glm::radians(cutOffEngleInner));
+    m_fcufOffOuter=glm::cos(glm::radians(cutOffEngleOuter));
 }
 
 void spotLight::glUpdateForCube(int program_id,int light_index,camera* c){
@@ -38,14 +39,17 @@ void spotLight::glUpdateForCube(int program_id,int light_index,camera* c){
 
     //光源材质
     material* mt=getMaterial();
-    mt->glUpdateForPointLight(program_id,i);
+    mt->glUpdateForSpotLight(program_id,i);
     
     //角度的cos值
-    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_cutoff,i);
-    shaderMgr::setFloat(program_id, szBuf, m_fcufOff);
+    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_cutoff_inner,i);
+    shaderMgr::setFloat(program_id, szBuf, m_fcufOffInner);
+    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_cutoff_outer,i);
+    shaderMgr::setFloat(program_id, szBuf, m_fcufOffOuter);
+    
     //方向向量
     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_direction,i);
-    shaderMgr::setVec3(program_id, szBuf,(float*)glm::value_ptr(c->getDirection()));
+    shaderMgr::setVec3(program_id, szBuf,(float*)glm::value_ptr(c->getFront()));
 
 
 }

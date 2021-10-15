@@ -50,7 +50,7 @@ public:
     void enableControl();
     control* getControl();
     
-    glm::vec3 getDirection(){return _cameraFront;};
+    glm::vec3 getFront(){return _cameraFront;};
    
 private:
     void _updateCamera();

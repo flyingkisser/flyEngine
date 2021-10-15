@@ -14,11 +14,14 @@
 #include "shaderMgr.h"
 #include "action.h"
 #include "camera.h"
+#include "world.h"
+#include "material.h"
+
 #include "ambientLight.h"
 #include "light.h"
 #include "pointLight.h"
-#include "world.h"
-#include "material.h"
+#include "spotLight.h"
+
 
 
 USE_NS_FLYENGINE
@@ -134,6 +137,13 @@ void node::glUpdateLight(){
     for(auto c : pointLightVector){
         pointLight* lightObj=(pointLight*)c;
         lightObj->glUpdateForCube(_gl_program,i++);
+    }
+    //聚光灯初始化
+    std::vector<spotLight*> spotLightVector=world::getInstance()->getSpotLightVector();
+    i=0;
+    for(auto c : spotLightVector){
+       spotLight* lightObj=(spotLight*)c;
+       lightObj->glUpdateForCube(_gl_program,i++,world::getInstance()->getCamera());
     }
 }
 

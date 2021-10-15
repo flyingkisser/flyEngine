@@ -19,4 +19,6 @@ void test_oneLight_oneCube_specularMap();
 void test_oneLight_twoCube_specularMap();
 void test_oneLight_multiCube_specularMap();
 
+void test_multiLight_multiCube_specularMap();
+
 #endif /* test_light_h */

@@ -34,12 +34,12 @@ timerMgr::~timerMgr(){
 //loopCount 0 表示无限循环
 //loopCount 1 只执行一次
 //loopCount n 只执行n次
-int timerMgr::start(float secTime, std::function<void()> task, int loopCount){
+int timerMgr::start(float secTime, std::function<void()> task, int loopCount,float secDelay){
     if(m_bStoped)
         return 0;
     unsigned int msTime=(int)(secTime*1000);
     int currentKey=m_intKey;
-    std::thread* workThread = new std::thread([this, msTime, task, loopCount,currentKey]() {
+    std::thread* workThread = new std::thread([this, msTime,secDelay, task, loopCount,currentKey]() {
         if (!m_sName.empty()) {
         #if (defined(__ANDROID__) || defined(ANDROID))      //兼容Android
             pthread_setname_np(pthread_self(), m_sName.c_str());
@@ -47,6 +47,9 @@ int timerMgr::start(float secTime, std::function<void()> task, int loopCount){
             pthread_setname_np(m_sName.c_str());    //设置线程(定时器)名称
         #endif
         }
+        if(secDelay>0)
+             std::this_thread::sleep_for(std::chrono::milliseconds((int)(secDelay*1000)));
+        
         int count=0;
         while(!m_bStoped) {
             std::this_thread::sleep_for(std::chrono::milliseconds(msTime));

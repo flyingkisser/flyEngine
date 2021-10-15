@@ -36,7 +36,7 @@ public:
      @param loopCount 执行次数，给0则无限循环
      @return int:timer id
      */
-    int start(float secTime, std::function<void()> task, int loopCount);
+    int start(float secTime, std::function<void()> task, int loopCount,float secDelay=0.0f);
     
     /**
      取消定时器，同步定时器无法取消(若任务代码已执行则取消无效)
@@ -54,7 +54,7 @@ public:
     template<typename callable, typename... arguments>
     int execOnceDelay(float secTime, callable&& fun, arguments&&... args) {
         std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(fun), std::forward<arguments>(args)...));
-        return start(secTime, task, 1);
+        return start(secTime, task, 1,0.0f);
     }
     
     /**
@@ -67,7 +67,7 @@ public:
     template<typename callable, typename... arguments>
     int execOnce(callable&& fun, arguments&&... args) {
         std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(fun), std::forward<arguments>(args)...));
-        return start(0, task, 1);
+        return start(0, task, 1,0.0f);
     }
     
     /**
@@ -81,14 +81,14 @@ public:
     template<typename callable, typename... arguments>
     int exec(float secTime, callable&& fun, arguments&&... args) {
         std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(fun), std::forward<arguments>(args)...));
-        return start(secTime, task, 0);
+        return start(secTime, task, 0,0.0f);
     }
     
     template<typename callable, typename... arguments>
        int execWithCount(float secTime, int count, callable&& fun, arguments&&... args) {
            std::function<typename std::result_of<callable(arguments...)>::type()> task(std::bind(std::forward<callable>(fun), std::forward<arguments>(args)...));
            if(count<=0) count=1;
-           return start(secTime, task, count);
+           return start(secTime, task, count,0.0f);
        }
     
     void stop(int i);
