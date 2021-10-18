@@ -78,8 +78,9 @@ void test_oneSpotLight_multiCube_specularMap(){
         }
         float x=randUtil::getRand(-2.0f,2.0f);
         float y=randUtil::getRand(-2.0f,2.0f);
+        float z=0;
         cubeObj->setScale(glm::vec3(0.2,0.2,0.2));
-        cubeObj->setPosition(glm::vec3(x,y,0));
+        cubeObj->setPosition(glm::vec3(x,y,z));
         flylog("add %f %f",x,y);
         
         material* mt=new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8);
@@ -96,7 +97,8 @@ void test_oneSpotLight_multiCube_specularMap(){
        flylog("lightObj1 init failed!");
        return;
     }
-    lightObj1->setPosition(glm::vec3(0,0,-4));
+    float z=-4;
+    lightObj1->setPosition(glm::vec3(0,0,z));
     lightObj1->setScale(glm::vec3(0.1,0.1,0.1));
     world::getInstance()->addSpotLight(lightObj1);
 

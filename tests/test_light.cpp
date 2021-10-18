@@ -385,63 +385,116 @@ void test_multiLight_multiCube_specularMap(){
     material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
     timerMgr* timerMgrObj=new timerMgr("light_test_timer");
     //普通cube
-    for(int i=0;i<30;i++){
-        float scale=0.7;
+    for(int i=0;i<80;i++){
+        float scale=0.2;
         cubeTex* cubeObj=new cubeTex("res/wood.png");
         if(!cubeObj->init()){
             flylog("node%d init failed!",i);
             return;
         }
-        float x=randUtil::getRand(-3.0f,3.0f);
-        float y=randUtil::getRand(-3.0f,3.0f);
+        float x=randUtil::getRand(-2.0f,2.0f);
+        float y=randUtil::getRand(-2.0f,2.0f);
+        float z=0.0f;
         cubeObj->setScale(glm::vec3(scale,scale,scale));
-        cubeObj->setPosition(glm::vec3(x,y,-8));
+        cubeObj->setPosition(glm::vec3(x,y,z));
         material* mt=new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8);
         mt->setSpecularTex("res/wood_specular.png");
         cubeObj->setMaterial(mt);
         cubeObj->setShader(shaderMgr::get3d1texPongWithSpecularTexShader());
         world::getInstance()->addChild(cubeObj);
-        flylog("add cube %f %f",x,y);
+        flylog("add cube %d %f %f",i,x,y);
     }
     
     
-    //点光源
-//    for(int i=0;i<4;i++){
-//       pointLight* pLight1=new pointLight(glm::vec3(1,1.0,1.0),mtLight);
-//       if(!pLight1->init()){
-//          flylog("point light %d init failed!",i);
-//          return;
-//       }
-//       x=randUtil::getRand(-2.0f,2.0f);
-//       y=randUtil::getRand(-2.0f,2.0f);
-//       //z=randUtil::getRand(-2.0f,-4.0f);
-//       pLight1->setPosition(glm::vec3(x,y,-4));
-//       pLight1->setScale(glm::vec3(0.2,0.2,0.2));
-//       world::getInstance()->addPointLight(pLight1);
-//       flylog("add point light %d %f %f %f",i,x,y,z);
-//    }
+    //4个点光源
+    //点光源1
+    float pScale=0.1;
+    pointLight* pLight;
+    pLight=new pointLight(glm::vec3(1,1.0,1.0),mtLight);
+    if(!pLight->init()){
+        flylog("point light init failed!");
+        return;
+    }
+    x=randUtil::getRand(0,2.0f);
+    y=randUtil::getRand(0,2.0f);
+    pLight->setPosition(glm::vec3(x,y,0));
+    pLight->setScale(glm::vec3(pScale,pScale,pScale));
+    world::getInstance()->addPointLight(pLight);
+    flylog("point light add at %f %f",x,y);
+    //点光源2
+    pLight=new pointLight(glm::vec3(1,1.0,1.0),mtLight);
+     if(!pLight->init()){
+         flylog("point light init failed!");
+         return;
+     }
+     x=randUtil::getRand(-2.0f,0);
+     y=randUtil::getRand(-2.0f,0);
+     pLight->setPosition(glm::vec3(x,y,0));
+     pLight->setScale(glm::vec3(pScale,pScale,pScale));
+     world::getInstance()->addPointLight(pLight);
+      flylog("point light add at %f %f",x,y);
+    //点光源3
+    pLight=new pointLight(glm::vec3(1,1.0,1.0),mtLight);
+    if(!pLight->init()){
+        flylog("point light init failed!");
+        return;
+    }
+    x=randUtil::getRand(-2.0f,0);
+    y=randUtil::getRand(0,2.0f);
+    pLight->setPosition(glm::vec3(x,y,0));
+    pLight->setScale(glm::vec3(pScale,pScale,pScale));
+     world::getInstance()->addPointLight(pLight);
+    flylog("point light add at %f %f",x,y);
+    //点光源4
+    pLight=new pointLight(glm::vec3(1,1.0,1.0),mtLight);
+    if(!pLight->init()){
+        flylog("point light init failed!");
+        return;
+    }
+    x=randUtil::getRand(0,2.0f);
+    y=randUtil::getRand(-2.0f,0);
+    pLight->setPosition(glm::vec3(x,y,0));
+    pLight->setScale(glm::vec3(pScale,pScale,pScale));
+    world::getInstance()->addPointLight(pLight);
+    flylog("point light add at %f %f",x,y);
     
-    //聚光灯
-    for(int i=0;i<4;i++){
+    //聚光灯1，沿着Y平面转
+    for(int i=0;i<1;i++){
         spotLight* spLight1=new spotLight(glm::vec3(1,1.0,1.0),mtLight,5,10);
         if(!spLight1->init()){
             flylog("spot light %d init failed!",i);
             return;
         }
-        x=randUtil::getRand(-2.0f,2.0f);
-        y=randUtil::getRand(-2.0f,2.0f);
-        //z=randUtil::getRand(-4.0f,-3);
-        z=-4;
-        spLight1->setPosition(glm::vec3(x,y,z));
+        spLight1->setPosition(glm::vec3(0,0,0));
         spLight1->setScale(glm::vec3(0.1,0.1,0.1));
         world::getInstance()->addSpotLight(spLight1);
         flylog("add spot light %d %f %f %f",i,x,y,z);
-        
+
         float timeInner=randUtil::getRand(0.1f,0.5f);
         timerMgrObj->exec(timeInner,[](node* lightObj){
             float radius=glfwGetTime();
             lightObj->setPositionX(2*cos(radius));
-            lightObj->setPositionY(2*sin(radius));
+            lightObj->setPositionZ(2*sin(radius));
+        },spLight1);
+    }
+    
+    //聚光灯1，沿着X平面转
+    for(int i=0;i<1;i++){
+        spotLight* spLight1=new spotLight(glm::vec3(1,1.0,1.0),mtLight,5,10);
+        if(!spLight1->init()){
+            flylog("spot light %d init failed!",i);
+            return;
+        }
+        spLight1->setPosition(glm::vec3(0,0,0));
+        spLight1->setScale(glm::vec3(0.1,0.1,0.1));
+        world::getInstance()->addSpotLight(spLight1);
+        flylog("add spot light %d %f %f %f",i,x,y,z);
+
+        float timeInner=randUtil::getRand(0.1f,0.5f);
+        timerMgrObj->exec(timeInner,[](node* lightObj){
+            float radius=glfwGetTime();
+            lightObj->setPositionY(2*cos(radius));
+            lightObj->setPositionZ(2*sin(radius));
         },spLight1);
     }
 }
