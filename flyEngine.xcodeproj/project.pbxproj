@@ -98,6 +98,8 @@
 		D8BED724253DACDE006974D3 /* keyboardEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED723253DACDE006974D3 /* keyboardEvent.cpp */; };
 		D8BED727253E9062006974D3 /* keyboardEventMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED726253E9062006974D3 /* keyboardEventMgr.cpp */; };
 		D8BED72B253EB9F0006974D3 /* std_move_forward.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED72A253EB9F0006974D3 /* std_move_forward.cpp */; };
+		D8CF0593271EBD3C00D26C07 /* mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8CF0592271EBD3C00D26C07 /* mesh.cpp */; };
+		D8CF0596271EEB4300D26C07 /* model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8CF0595271EEB4300D26C07 /* model.cpp */; };
 		D8EF622F2519E32500B8588F /* stringUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EF622E2519E32500B8588F /* stringUtil.cpp */; };
 		D8F0B7FE25652BCD0034E7B7 /* cameraBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0B7FD25652BCD0034E7B7 /* cameraBase.cpp */; };
 		D8F37D7626E607D000E5225B /* pointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F37D7526E607D000E5225B /* pointLight.cpp */; };
@@ -1755,6 +1757,10 @@
 		D8C7A0A52546DF7C007573B3 /* 2dTextureAphaTrans.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 2dTextureAphaTrans.vs; sourceTree = "<group>"; };
 		D8C7A1AD2549875F007573B3 /* test3D_old_2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test3D_old_2.h; sourceTree = "<group>"; };
 		D8C7A1AE2549875F007573B3 /* test3D_old_2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test3D_old_2.cpp; sourceTree = "<group>"; };
+		D8CF0591271EBD3C00D26C07 /* mesh.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mesh.h; sourceTree = "<group>"; };
+		D8CF0592271EBD3C00D26C07 /* mesh.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mesh.cpp; sourceTree = "<group>"; };
+		D8CF0594271EEB4300D26C07 /* model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = model.h; sourceTree = "<group>"; };
+		D8CF0595271EEB4300D26C07 /* model.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = model.cpp; sourceTree = "<group>"; };
 		D8CFDE6425359EF000C3334F /* 2dTextureApha.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 2dTextureApha.fs; sourceTree = "<group>"; };
 		D8CFDE6525359EF000C3334F /* 2dTextureApha.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 2dTextureApha.vs; sourceTree = "<group>"; };
 		D8CFDE6625359F2B00C3334F /* wall.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = wall.jpg; sourceTree = "<group>"; };
@@ -3730,6 +3736,7 @@
 				D825DBB824ACA31A00C494E7 /* render */,
 				D825DBA924AC82DF00C494E7 /* texture */,
 				D83EF32E26C298F10007E460 /* light */,
+				D8CF0590271EBD1800D26C07 /* model */,
 				D825DB8024AAEDD600C494E7 /* 2D */,
 				D827953324BC613400261C44 /* 3D */,
 				D87EBFD826A6EFFC004ED7DE /* action */,
@@ -4199,6 +4206,17 @@
 			path = "learnC++";
 			sourceTree = "<group>";
 		};
+		D8CF0590271EBD1800D26C07 /* model */ = {
+			isa = PBXGroup;
+			children = (
+				D8CF0591271EBD3C00D26C07 /* mesh.h */,
+				D8CF0592271EBD3C00D26C07 /* mesh.cpp */,
+				D8CF0594271EEB4300D26C07 /* model.h */,
+				D8CF0595271EEB4300D26C07 /* model.cpp */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
 		D8E9CDDD24F8EE3A0025D62E /* external */ = {
 			isa = PBXGroup;
 			children = (
@@ -4342,6 +4360,8 @@
 				8ECA452B26882E3C00FDFC7A /* shaderMgr.cpp in Sources */,
 				D825DBBB24ACA32F00C494E7 /* render.cpp in Sources */,
 				D83EF33126C299550007E460 /* light.cpp in Sources */,
+				D8CF0593271EBD3C00D26C07 /* mesh.cpp in Sources */,
+				D8CF0596271EEB4300D26C07 /* model.cpp in Sources */,
 				D825DBB324AC929B00C494E7 /* _nouse_node.cpp in Sources */,
 				D8EF622F2519E32500B8588F /* stringUtil.cpp in Sources */,
 				D89B2B6024937E7800DA6873 /* pixel.cpp in Sources */,
