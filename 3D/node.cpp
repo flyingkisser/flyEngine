@@ -99,13 +99,18 @@ void node::setMaterial(material *mt){
 
 void node::updateModel(camera* cameraObj){
     if(_dirtyPos){
+        //移动
         _matModel=glm::translate(glm::mat4(1.0f),_pos);
-        if(_rorate.x)//水平方向上旋转
+        
+        //旋转
+        //想象一个立方体，有6个面，可简化为3个面，所以有3个面上的旋转
+        if(_rorate.x)//水平方向上旋转 沿y轴，顺时针或逆时针旋转  上平面下平面
           _matModel=glm::rotate(_matModel,glm::radians(_rorate.x),glm::vec3(0,1,0));
-        if(_rorate.y)//垂直方向上旋转
+        if(_rorate.y)//垂直方向上旋转 沿x轴，前后旋转  左平面右平面
           _matModel=glm::rotate(_matModel,glm::radians(_rorate.y),glm::vec3(1,0,0));
-        if(_rorate.z)
+        if(_rorate.z)//沿z轴，左右旋转  前平面后平面
           _matModel=glm::rotate(_matModel,glm::radians(_rorate.z),glm::vec3(0,0,1));
+        //缩放
         _matModel=glm::scale(_matModel,_scale);
         _dirtyPos=false;
     }
@@ -120,34 +125,7 @@ void node::updateModel(camera* cameraObj){
 //    }
 //}
 
-void node::glUpdateLight(){
-    //设置环境光
-    ambientLight* lightAM=world::getInstance()->getAmbientLight();
-    lightAM->glUpdate(_gl_program);
-    
-    //点光源初始化
-    std::vector<light*> lightVector=world::getInstance()->getLightVector();
-    int i=0;
-    for(auto c : lightVector){
-        light* lightObj=(light*)c;
-        lightObj->glUpdateForCube(_gl_program,i++);
-    }
-    std::vector<pointLight*> pointLightVector=world::getInstance()->getPointLightVector();
-    i=0;
-    for(auto c : pointLightVector){
-        pointLight* lightObj=(pointLight*)c;
-        lightObj->glUpdateForCube(_gl_program,i++);
-    }
-    //聚光灯初始化
-    std::vector<spotLight*> spotLightVector=world::getInstance()->getSpotLightVector();
-    i=0;
-    for(auto c : spotLightVector){
-       spotLight* lightObj=(spotLight*)c;
-       lightObj->glUpdateForCube(_gl_program,i++,world::getInstance()->getCamera());
-    }
-}
-
-//只带顶点坐标数据
+//只有顶点坐标
 void node::glInitVAO(){
     unsigned int vbo;
     float* verticeArr=g_verticeArr;
@@ -229,4 +207,31 @@ void node::glInitVAOWithTexCoordAndNormal(){
     glBindBuffer(GL_ARRAY_BUFFER,0);
     //解除当前VAO绑定
     glBindVertexArray(0);
+}
+
+void node::glUpdateLight(){
+    //设置环境光
+    ambientLight* lightAM=world::getInstance()->getAmbientLight();
+    lightAM->glUpdate(_gl_program);
+    
+    //点光源初始化
+    std::vector<light*> lightVector=world::getInstance()->getLightVector();
+    int i=0;
+    for(auto c : lightVector){
+        light* lightObj=(light*)c;
+        lightObj->glUpdateForCube(_gl_program,i++);
+    }
+    std::vector<pointLight*> pointLightVector=world::getInstance()->getPointLightVector();
+    i=0;
+    for(auto c : pointLightVector){
+        pointLight* lightObj=(pointLight*)c;
+        lightObj->glUpdateForCube(_gl_program,i++);
+    }
+    //聚光灯初始化
+    std::vector<spotLight*> spotLightVector=world::getInstance()->getSpotLightVector();
+    i=0;
+    for(auto c : spotLightVector){
+       spotLight* lightObj=(spotLight*)c;
+       lightObj->glUpdateForCube(_gl_program,i++,world::getInstance()->getCamera());
+    }
 }

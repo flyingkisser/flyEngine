@@ -13,7 +13,7 @@
 
 void testMainBegin(){
     //node test
-     //test_oneNode();
+     test_oneNode();
 //      test_twoNode();
 //    test_multiNode(3);
     
@@ -42,7 +42,7 @@ void testMainBegin(){
 //    test_oneSpotLight_oneCube();
 //    test_oneSpotLight_multiCube_specularMap();
     
-    test_multiLight_multiCube_specularMap();
+//    test_multiLight_multiCube_specularMap();
    
 
 }

@@ -39,7 +39,7 @@ bool material::setSpecularTex(const char* szTex){
 }
 
 void material::glUpdateForCube(int gl_program){
-   //环境光材质
+    //环境光材质
     shader* sharderObj=shaderMgr::getShader(gl_program);
     sharderObj->setVec3(uniform_name_material_ambient, glm::value_ptr(m_vec3Ambient));
     //漫反射材质
