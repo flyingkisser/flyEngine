@@ -18,6 +18,7 @@ pointLight::pointLight(glm::vec3 color,material* mt,float constant,float linear,
     m_fQuadratic=quadratic;
 }
 
+//支持多个点光源,light_index为点光源序号，从0开始
 void pointLight::glUpdateForCube(int program_id, int light_index){
     int i=light_index;
     char szBuf[128]={0};

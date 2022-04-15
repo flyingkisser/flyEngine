@@ -25,7 +25,7 @@ class cubeTex: public node
 {
 private:
     unsigned int _gl_texture0=0;
-    texture* _texObj;
+    texture* _texObj=NULL;
     const char* _texPath;
 
 public:

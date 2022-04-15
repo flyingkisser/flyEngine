@@ -31,12 +31,14 @@ public:
     glm::vec3 getAmbient(){return m_vec3Ambient;};
     glm::vec3 getDiffuse(){return m_vec3Diffuse;};
     glm::vec3 getSpecular(){return m_vec3Specular;};
+    texture* getTexSpecular(){return m_texSpecular;};
+    texture* getTexDiffuse(){return m_texDiffuse;};
     float getShininess(){return m_fShininess;};
     bool setDiffuseTex(const char* szTex);
     bool setSpecularTex(const char* szTex);
     void glUpdateForCube(int gl_program);
-    void glUpdateForPointLight(int gl_program,int i);
-    void glUpdateForSpotLight(int gl_program,int i);
+//    void glUpdateForPointLight(int gl_program,int i);
+//    void glUpdateForSpotLight(int gl_program,int i);
 };
 
 NS_FLYENGINE_END

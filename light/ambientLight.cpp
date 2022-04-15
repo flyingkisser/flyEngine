@@ -32,7 +32,7 @@ bool ambientLight::init(){
 
 void ambientLight::glUpdate(int program_id){
     shaderMgr::setInt(program_id,uniform_name_light_direction_enabled, 1);
-    shaderMgr::setVec3(program_id,uniform_name_light_direction_direction, glm::value_ptr(m_vec3Direction));
+    shaderMgr::setVec3(program_id,uniform_name_light_direction_direction, (float*)glm::value_ptr(m_vec3Direction));
     shaderMgr::setVec3(program_id,uniform_name_light_direction_color, (float*)glm::value_ptr(getColor()));
     shaderMgr::setVec3(program_id,uniform_name_light_direction_ambient, (float*)glm::value_ptr(m_material->getAmbient()));
     shaderMgr::setVec3(program_id,uniform_name_light_direction_diffuse, (float*)glm::value_ptr(m_material->getDiffuse()));

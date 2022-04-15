@@ -37,8 +37,8 @@ private:
     glm::vec3 _rorate=glm::vec3(0,0,0);
     
 public:
-    shader* _shaderObj;
-    material* m_material;
+    shader* _shaderObj=NULL;
+    material* m_material=NULL;
     unsigned int _gl_program=0;
     unsigned int _gl_vao=0;
     bool _dirtyPos=false;

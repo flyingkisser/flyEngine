@@ -39,7 +39,15 @@ void spotLight::glUpdateForCube(int program_id,int light_index,camera* c){
 
     //光源材质
     material* mt=getMaterial();
-    mt->glUpdateForSpotLight(program_id,i);
+    //mt->glUpdateForSpotLight(program_id,i);
+    
+    //光源材质
+    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_ambient,i);
+    shaderObj->setVec3(szBuf, (float*)glm::value_ptr(mt->getAmbient()));
+    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_diffuse,i);
+    shaderObj->setVec3(szBuf, (float*)glm::value_ptr(mt->getDiffuse()));
+    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_specular,i);
+    shaderObj->setVec3(szBuf, (float*)glm::value_ptr(mt->getSpecular()));
     
     //角度的cos值
     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_cutoff_inner,i);
@@ -50,6 +58,4 @@ void spotLight::glUpdateForCube(int program_id,int light_index,camera* c){
     //方向向量
     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_direction,i);
     shaderMgr::setVec3(program_id, szBuf,(float*)glm::value_ptr(c->getFront()));
-
-
 }

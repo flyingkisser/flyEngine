@@ -30,6 +30,7 @@ bool cubeTex::init(){
     if(_texObj==NULL)
         return false;
     _shaderObj=shaderMgr::get3d1texPongShader();
+    //_shaderObj=shaderMgr::get3d1texShader();
     if(_shaderObj==NULL){
         flylog("cubeTex::init shaderObj is null,return!");
         return false;
@@ -50,7 +51,7 @@ void cubeTex::glInit(){
       flylog("cube::glInit: _gl_texture0 is 0,error!");
       return;
     }
-    _shaderObj->setInt("texture0", _gl_texture0);
+    _shaderObj->setInt("texture0", 0);
 
     node::setPosition(glm::vec3(0,0,-10));
     node::rotateBy(glm::vec3(30,0,30));
@@ -68,8 +69,27 @@ void cubeTex::draw(camera* cameraObj){
     cameraObj->update(_gl_program);
     node::updateModel(cameraObj);
     node::glUpdateLight();
-    if(m_material!=NULL)
-        m_material->glUpdateForCube(_gl_program);
+    if(m_material!=NULL){
+        _shaderObj->setBool(uniform_name_material_enabled, true);
+         //环境光材质
+        _shaderObj->setVec3(uniform_name_material_ambient, (float*)glm::value_ptr(m_material->getAmbient()));
+        //漫反射材质
+        _shaderObj->setVec3(uniform_name_material_diffuse, (float*)glm::value_ptr(m_material->getDiffuse()));
+        //镜面反射材质
+        _shaderObj->setVec3(uniform_name_material_specular, (float*)glm::value_ptr(m_material->getSpecular()),false);
+        //镜面光滑系数
+        _shaderObj->setFloat(uniform_name_material_shininess, m_material->getShininess());
+        //高亮贴图
+        texture* texSpecular=m_material->getTexSpecular();
+       
+        if(texSpecular!=NULL){
+            //sharderObj->setInt(uniform_name_material_specular_tex, m_texSpecular->getTextureID(),false);
+            _shaderObj->setInt(uniform_name_material_specular_tex, 1,false);
+        }
+        //m_material->glUpdateForCube(_gl_program);
+    }else
+         _shaderObj->setBool(uniform_name_material_enabled, false);
+        
     _shaderObj->setInt("texture0", 0);
     
     glEnable(GL_DEPTH_TEST);

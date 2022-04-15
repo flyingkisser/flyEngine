@@ -46,8 +46,21 @@ void light::glUpdateForCube(int program_id,int light_index){
     
     //光源材质
     material* mt=getMaterial();
-    mt->glUpdateForPointLight(program_id,i);
+    //mt->glUpdateForPointLight(program_id,i);
+    
+    memset(szBuf,0,sizeof(szBuf));
+    snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_ambient,i);
+    shaderObj->setVec3(szBuf, (float*)glm::value_ptr(mt->getAmbient()));
+    
+    memset(szBuf,0,sizeof(szBuf));
+    snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_diffuse,i);
+    shaderObj->setVec3(szBuf, (float*)glm::value_ptr(mt->getDiffuse()));
+
+    memset(szBuf,0,sizeof(szBuf));
+    snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_specular,i);
+    shaderObj->setVec3(szBuf, (float*)glm::value_ptr(mt->getSpecular()));
 }
+
 
 void light::draw(camera* cameraObj){
     cubeColor::draw(cameraObj);

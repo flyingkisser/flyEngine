@@ -20,8 +20,10 @@
 #include "camera.h"
 #include "control.h"
 #include "world.h"
+#include "material.h"
 #include "cubeTex.h"
 #include "cubeColor.h"
+#include "ambientLight.h"
 #include "moveBy.h"
 #include "scaleBy.h"
 #include "scaleTo.h"
@@ -42,8 +44,24 @@
 
 USE_NS_FLYENGINE;
 
+static void init_light_ambient(){
+    //设置环境光
+    ambientLight* amLight=new ambientLight(glm::vec3(0.2f,0.2f,0.2f));
+    world::getInstance()->setAmbientLight(amLight);
+    
+    //因为只有环境光，所以设置的比较亮
+    float ambient=1.0;
+    float diffuse=1.0;
+    float specular=1.0;
+    float shineness=0.2;
+    
+    material* mt=new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
+    amLight->setMaterial(mt);
+}
+
 
 void test_oneNode(){
+    init_light_ambient();
     node* cubeObj=new cubeTex("res/fire.png");
     if(!cubeObj->init()){
         flylog("node init failed!");

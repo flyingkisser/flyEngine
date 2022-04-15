@@ -94,6 +94,8 @@ void node::stopAction(action* act){
 
 //材质
 void node::setMaterial(material *mt){
+    if(m_material!=NULL)
+        delete m_material;
     m_material=mt;
 }
 
@@ -212,7 +214,8 @@ void node::glInitVAOWithTexCoordAndNormal(){
 void node::glUpdateLight(){
     //设置环境光
     ambientLight* lightAM=world::getInstance()->getAmbientLight();
-    lightAM->glUpdate(_gl_program);
+    if(lightAM!=NULL)
+        lightAM->glUpdate(_gl_program);
     
     //点光源初始化
     std::vector<light*> lightVector=world::getInstance()->getLightVector();

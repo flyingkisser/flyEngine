@@ -29,8 +29,8 @@ private:
     std::vector<light*> _vector_light;
     std::vector<pointLight*> _vector_point_light;
     std::vector<spotLight*> _vector_spot_light;
-    camera* _camera;
-    ambientLight* m_amLight;
+    camera* _camera=NULL;
+    ambientLight* m_amLight=NULL;
     
 public:
     world();

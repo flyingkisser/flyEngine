@@ -41,7 +41,7 @@ bool flyEngine::texture::init(){
     _height=st.height;
     _format=st.format;
     //_internalFormat=st.internalFormat;
-    _width=st.width;
+    //_width=st.width;
     _dataBuf=st.buf;
     return true;
 }
