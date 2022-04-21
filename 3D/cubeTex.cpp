@@ -26,6 +26,9 @@ cubeTex::cubeTex(const char* texPath){
 }
 
 bool cubeTex::init(){
+    setPosition(glm::vec3(0,0,-10));
+    rotateBy(glm::vec3(30,0,30));
+    
     _texObj=textureMgr::getInstance()->getTexture(_texPath);
     if(_texObj==NULL)
         return false;
@@ -52,9 +55,6 @@ void cubeTex::glInit(){
       return;
     }
     _shaderObj->setInt("texture0", 0);
-
-    node::setPosition(glm::vec3(0,0,-10));
-    node::rotateBy(glm::vec3(30,0,30));
 }
 
 void cubeTex::setShader(shader* shaderObj){

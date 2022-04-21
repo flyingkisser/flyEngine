@@ -44,23 +44,43 @@
 
 USE_NS_FLYENGINE;
 
+static material* createMaterial(float ambient,float diffuse,float specular,float shineness){
+    return new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
+}
+    
+
 static void init_light_ambient(){
     //设置环境光
     ambientLight* amLight=new ambientLight(glm::vec3(0.2f,0.2f,0.2f));
     world::getInstance()->setAmbientLight(amLight);
     
     //因为只有环境光，所以设置的比较亮
-    float ambient=1.0;
-    float diffuse=1.0;
-    float specular=1.0;
-    float shineness=0.2;
-    
-    material* mt=new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
-    amLight->setMaterial(mt);
+    amLight->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
+}
+
+void test_cubeColor(){
+    init_light_ambient();
+    cubeColor* cubeObj=new cubeColor(glm::vec4(0.8,0.2,0,1));
+    if(!cubeObj->init()){
+       flylog("cubeObj init failed!");
+       return;
+    }
+    cubeObj->setPosition(glm::vec3(0.8,0.8,-5));
+    cubeObj->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
+    world::getInstance()->addChild(cubeObj);
+
+    //通过按住鼠标右键，控制模型旋转
+    control* controlObj=world::getInstance()->getControl();
+    controlObj->bindNode(cubeObj);
+
+    timerMgr* timerMgrObj=new timerMgr("light_test_timer");
+    timerMgrObj->exec(0.1,[](node* _node){
+       _node->rotateBy(glm::vec3(0.5f,0,0));
+    },cubeObj);
 }
 
 
-void test_oneNode(){
+void test_oneCubeTex(){
     init_light_ambient();
     node* cubeObj=new cubeTex("res/fire.png");
     if(!cubeObj->init()){
@@ -68,7 +88,8 @@ void test_oneNode(){
         return;
     }
     cubeObj->setPosition(glm::vec3(0,0,-5));
-       
+    cubeObj->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
+    
     world::getInstance()->addChild(cubeObj);
     cubeObj->print();
     
@@ -82,21 +103,25 @@ void test_oneNode(){
     },cubeObj);
 }
 
-void test_twoNode(){
+void test_twoCubeTex(){
+    init_light_ambient();
     node* nodeObj1=new cubeTex("res/fire.png");
     if(!nodeObj1->init()){
       flylog("node1 init failed!");
       return;
     }
-    nodeObj1->setPosition(glm::vec3(-0.5,0,-5));
+    nodeObj1->setPosition(glm::vec3(-0.7,0,-5));
+    nodeObj1->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
     world::getInstance()->addChild(nodeObj1);
 
-    node* nodeObj2=new cubeTex("res/smile.png");
+    //node* nodeObj2=new cubeTex("res/smile.png");
+    node* nodeObj2=new cubeTex("res/fire.png");
     if(!nodeObj2->init()){
       flylog("node2 init failed!");
       return;
     }
-    nodeObj2->setPosition(glm::vec3(0.5,0,-5));
+    nodeObj2->setPosition(glm::vec3(0.7,0,-5));
+    nodeObj2->setMaterial(createMaterial(1.0,1.0,1.0,128));
     world::getInstance()->addChild(nodeObj2);
     
     action* act1=new rotateBy(1,glm::vec3(10,0,0));
@@ -105,7 +130,8 @@ void test_twoNode(){
     nodeObj2->runAction(new forever(1,act2));
 }
 
-void test_multiNode(int count){
+void test_multiCubeTex(int count){
+    init_light_ambient();
     float inner=2.0/count;
     for(int i=0;i<count;i++){
         node* nodeObj=new cubeTex("res/fire.png");
@@ -116,30 +142,12 @@ void test_multiNode(int count){
         float x=-1+inner*(i+1);
         float y=0;
         nodeObj->setPosition(glm::vec3(x,y,-5));
+        nodeObj->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
         world::getInstance()->addChild(nodeObj);
         nodeObj->runAction(new forever(1,new rotateBy(1,glm::vec3(10,0,0))));
     }
 }
 
-void test_cubeColor(){
-    cubeColor* cubeObj=new cubeColor(glm::vec4(0.8,0.2,0,1));
-    if(!cubeObj->init()){
-       flylog("cubeObj init failed!");
-       return;
-    }
-    cubeObj->setPosition(glm::vec3(0.8,0.8,-5));
-      
-    world::getInstance()->addChild(cubeObj);
-
-    //通过按住鼠标右键，控制模型旋转
-    control* controlObj=world::getInstance()->getControl();
-    controlObj->bindNode(cubeObj);
-
-    timerMgr* timerMgrObj=new timerMgr("light_test_timer");
-    timerMgrObj->exec(0.1,[](node* _node){
-       _node->rotateBy(glm::vec3(0.5f,0,0));
-    },cubeObj);
-}
 
 
 void drawCubeRaw(){

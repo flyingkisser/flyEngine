@@ -20,7 +20,7 @@ NS_FLYENGINE_BEGIN
 
 class repeat : public action{
 public:
-    repeat(int actionCount,int repeatCount,...);
+    repeat(int r,int c,...);
     ~repeat();
      
     void start(node* nodeObj);

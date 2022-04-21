@@ -216,7 +216,6 @@ void node::glUpdateLight(){
     ambientLight* lightAM=world::getInstance()->getAmbientLight();
     if(lightAM!=NULL)
         lightAM->glUpdate(_gl_program);
-    
     //点光源初始化
     std::vector<light*> lightVector=world::getInstance()->getLightVector();
     int i=0;

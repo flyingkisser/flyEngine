@@ -18,6 +18,8 @@
 #include "mouseEventMgr.h"
 #include "camera.h"
 #include "control.h"
+#include "ambientLight.h"
+#include "material.h"
 #include "world.h"
 #include "cubeTex.h"
 #include "moveBy.h"
@@ -39,7 +41,21 @@
 
 USE_NS_FLYENGINE
 
+static material* createMaterial(float ambient,float diffuse,float specular,float shineness){
+    return new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
+}
+    
+static void init_light_ambient(){
+    //设置环境光
+    ambientLight* amLight=new ambientLight(glm::vec3(0.2f,0.2f,0.2f));
+    world::getInstance()->setAmbientLight(amLight);
+    
+    //因为只有环境光，所以设置的比较亮
+    amLight->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
+}
+
 void test_actionMove(){
+    init_light_ambient();
     node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -54,6 +70,7 @@ void test_actionMove(){
 }
 
 void test_actionSequence(){
+    init_light_ambient();
     node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -72,6 +89,7 @@ void test_actionSequence(){
 }
 
 void test_actionSpawn(){
+    init_light_ambient();
     node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -89,6 +107,7 @@ void test_actionSpawn(){
 }
 
 void test_actionRepeat(){
+    init_light_ambient();
     node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -100,12 +119,13 @@ void test_actionRepeat(){
     action* act1=new moveBy(1,glm::vec3(0.5,0,0));
     action* act2=new moveBy(1,glm::vec3(0,0.5,0));
     action* act3=new scaleBy(1,glm::vec3(0.1,0.1,0.1));
-    repeat* multiAct=new repeat(3,2,act1,act2,act3);
+    repeat* multiAct=new repeat(10,3,act1,act2,act3);
     
     nodeObj->runAction(multiAct);
 }
 
 void test_actionForever(){
+    init_light_ambient();
     node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -116,14 +136,17 @@ void test_actionForever(){
     
     action* act1=new moveBy(1,glm::vec3(0.5,0,0));
     action* act2=new moveBy(1,glm::vec3(-0.5,0,0));
-    action* act3=new scaleBy(2,glm::vec3(0.1,0.1,0.1));
-    action* act4=new scaleBy(2,glm::vec3(-0.1,-0.1,-0.1));
+    //    action* act3=new scaleBy(2,glm::vec3(0.1,0.1,0.1));
+    //    action* act4=new scaleBy(2,glm::vec3(-0.1,-0.1,-0.1));
+    action* act3=new scaleTo(2,glm::vec3(0.1,0.1,0.1));
+    action* act4=new scaleTo(2,glm::vec3(1,1,1));
     forever* multiAct=new flyEngine::forever(4,act1,act2,act3,act4);
     
     nodeObj->runAction(multiAct);
 }
 
 void test_actionForeverAndStop(){
+    init_light_ambient();
     node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -140,7 +163,7 @@ void test_actionForeverAndStop(){
     
     nodeObj->runAction(multiAct);
     
-    int id=timerMgr::getInstance()->execOnceDelay(3, [&](node* nodeObj,action* act){
+    int id=timerMgr::getInstance()->execOnceDelay(10, [&](node* nodeObj,action* act){
         nodeObj->stopAction(act);
     },nodeObj,multiAct);
     

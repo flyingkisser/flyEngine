@@ -12,11 +12,13 @@
 
 USE_NS_FLYENGINE;
 
-repeat::repeat(int c,int r,...){
+repeat::repeat(int r,int c,...){
     va_list ap;
-    va_start(ap,r);
+    va_start(ap,c);
     for(int i=0;i<c;i++){
         action* act=va_arg(ap, action*);
+        if(act==NULL)
+            break;
         m_vectorActionArr.push_back(act);
     }
     if(r<=0)

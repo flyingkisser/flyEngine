@@ -20,7 +20,7 @@ NS_FLYENGINE_BEGIN
 
 class spawn : public action{
 public:
-    spawn(int count,...);
+    spawn(int c,...);
     ~spawn();
     
     void start(node* nodeObj);

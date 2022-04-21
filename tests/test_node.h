@@ -12,9 +12,9 @@
 #include <stdio.h>
 
 
-void test_oneNode();
-void test_twoNode();
-void test_multiNode(int count);
+void test_oneCubeTex();
+void test_twoCubeTex();
+void test_multiCubeTex(int count);
 void test_cubeColor();
 
 #endif /* test_node_h */

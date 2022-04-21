@@ -22,6 +22,9 @@ cubeColor::cubeColor(glm::vec3 color){
 }
 
 bool cubeColor::init(){
+    setPosition(glm::vec3(0,0,-10));
+    rotateBy(glm::vec3(30,0,30));
+    
     _shaderObj=shaderMgr::get3dColorShader();
     if(_shaderObj==NULL)
        return false;
@@ -32,8 +35,6 @@ bool cubeColor::init(){
 
 void cubeColor::glInit(){
     node::glInitVAO();
-    node::setPosition(glm::vec3(0,0,-10));
-    node::rotateBy(glm::vec3(30,0,30));
 }
 
 void cubeColor::draw(camera* cameraObj){

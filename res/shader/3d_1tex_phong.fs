@@ -96,8 +96,10 @@ void main(){
         vec3 light_vector=normalize(-light_direction.direction);
         diffuse+=light_direction.color*light_direction.diffuse*max(dot(normal_vector,light_vector),0);
         //镜面反射
-        vec3 reflect_vector=reflect(-light_vector,normal_vector);
-        specular+=light_direction.color*light_direction.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess);
+        if(mt.enabled){
+            vec3 reflect_vector=reflect(-light_vector,normal_vector);
+            specular+=light_direction.color*light_direction.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess);
+        }
     }
     
     //点光源
@@ -111,8 +113,10 @@ void main(){
         //漫反射
         diffuse+=light.color*light.diffuse*max(dot(normal_vector,light_vector),0);
         //镜面反射
-        vec3 reflect_vector=reflect(-light_vector,normal_vector);
-        specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess);
+        if(mt.enabled){
+            vec3 reflect_vector=reflect(-light_vector,normal_vector);
+            specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess);
+        }
         if(light.constant!=0){
             //需要计算距离衰减
             float attenuation=calcAttenuation(posFrag,light.pos,light.constant,light.linear,light.quadratic);
@@ -121,54 +125,56 @@ void main(){
             specular*=attenuation;
         }
     }
-//
-//    //聚光灯
-//    for(int i=0;i<SPOT_LIGHT_NUM;i++){
-//       SpotLight light=light_spot_arr[i];
-//       if(!light.enabled)
-//           continue;
-//        if(light.cutoff_inner<=0)
-//            continue;
-//        vec3 light_vector=normalize(light.pos-posFrag);
-//        //vec3 light_direction=normalize(-light.direction);
-//        vec3 light_direction=normalize(light.pos);
-//        float theta=dot(light_vector,light_direction);
-//        //i值的计算：分母：内角的cos值-外角的cos值 分子：内角的cos值-当前角的cos值
-//        //当前角的角度小于内角时，i>1，则正常照亮
-//        //当前角的角度大于外角时，i为负值，不照亮
-//        //位于内角和外角之间时，i在(0,1)之间，进行衰减计算
-//        //最后通过clamp函数把i限制在0到1的范围内
-//        float l=(theta-light.cutoff_outer)/(light.cutoff_inner-light.cutoff_outer);
-//        l=clamp(l,0.0,1.0);
-//        if(l>0.0){
-//            //在角度内
-//            //漫反射
-//            diffuse+=light.color*light.diffuse*max(dot(normal_vector,light_vector),0)*l;
-//            //镜面反射
-//            vec3 reflect_vector=reflect(-light_vector,normal_vector);
-//            specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess)*l;
-//        }
-//
-//        //环境光
-//        ambient+=light.color*light.ambient;
-//
-//        //距离衰减
-//        if(light.constant!=0){
-//            float attenuation=calcAttenuation(posFrag,light.pos,light.constant,light.linear,light.quadratic);
-//            ambient*=attenuation;
-//            diffuse*=attenuation;
-//            specular*=attenuation;
-//        }
-//    }
+
+    //聚光灯
+    for(int i=0;i<SPOT_LIGHT_NUM;i++){
+       SpotLight light=light_spot_arr[i];
+       if(!light.enabled)
+           continue;
+        if(light.cutoff_inner<=0)
+            continue;
+        //环境光
+        ambient+=light.color*light.ambient;
+        
+        vec3 light_vector=normalize(light.pos-posFrag);
+        //vec3 light_direction=normalize(-light.direction);
+        vec3 light_direction=normalize(light.pos);
+        float theta=dot(light_vector,light_direction);
+        //i值的计算：分母：内角的cos值-外角的cos值 分子：内角的cos值-当前角的cos值
+        //当前角的角度小于内角时，i>1，则正常照亮
+        //当前角的角度大于外角时，i为负值，不照亮
+        //位于内角和外角之间时，i在(0,1)之间，进行衰减计算
+        //最后通过clamp函数把i限制在0到1的范围内
+        float l=(theta-light.cutoff_outer)/(light.cutoff_inner-light.cutoff_outer);
+        l=clamp(l,0.0,1.0);
+        if(l>0.0){
+            //在角度内
+            //漫反射
+            diffuse+=light.color*light.diffuse*max(dot(normal_vector,light_vector),0)*l;
+            //镜面反射
+            if(mt.enabled){
+                vec3 reflect_vector=reflect(-light_vector,normal_vector);
+                specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess)*l;
+            }
+        }
+
+        //距离衰减
+        if(light.constant!=0){
+            float attenuation=calcAttenuation(posFrag,light.pos,light.constant,light.linear,light.quadratic);
+            ambient*=attenuation;
+            diffuse*=attenuation;
+            specular*=attenuation;
+        }
+    }
 
 
     //FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse+mt.specular*specular,1)*obj_color;
     //FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse,1)*obj_color+vec4(mt.specular*specular,0);
     
+    //如果物体的材质启用了，要计算物体本身的材质对于光照的影响
     if(mt.enabled)
-        FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse,1)*obj_color+vec4(mt.specular*specular,0);
+        FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse+mt.specular*specular,1)*obj_color;
     else
-        //FragColor=vec4(ambient+diffuse,1)*obj_color+vec4(specular,0);
         FragColor=vec4(ambient+diffuse+specular,1)*obj_color;
    
 }

@@ -25,6 +25,7 @@
 		D810AEB32684A1AF009B774B /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEB22684A1AF009B774B /* texture.cpp */; };
 		D810AEB6268B3BE3009B774B /* logUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEB5268B3BE3009B774B /* logUtil.cpp */; };
 		D810AEB9268B3F1F009B774B /* test_node.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D810AEB8268B3F1F009B774B /* test_node.cpp */; };
+		D813E957280ED6A600EAE10B /* libassimp.5.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = D813E956280ED6A600EAE10B /* libassimp.5.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		D81EF3601EAFA0070003604F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81EF35F1EAFA0070003604F /* main.cpp */; };
 		D81EF3811EAFA1A10003604F /* line.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D81EF37F1EAFA1A10003604F /* line.cpp */; };
 		D81EF3831EAFA4A20003604F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D81EF3821EAFA4A20003604F /* Cocoa.framework */; };
@@ -93,7 +94,6 @@
 		D89600F624D2E10200DF6FD3 /* testTexXDImm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89600F524D2E10200DF6FD3 /* testTexXDImm.cpp */; };
 		D89600F924D40EE100DF6FD3 /* gpuUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89600F824D40EE100DF6FD3 /* gpuUtil.cpp */; };
 		D89B2B6024937E7800DA6873 /* pixel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89B2B5E24937E7800DA6873 /* pixel.cpp */; };
-		D8A247C827FEC5D300CD36A1 /* libassimp.5.dylib in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8A247C727FEC5D300CD36A1 /* libassimp.5.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		D8A2AD8A272AC46400B5FC18 /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A2AD89272AC46400B5FC18 /* stb_image.cpp */; };
 		D8BB1B98255A6A0E00AF9FD5 /* mouseEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B97255A6A0E00AF9FD5 /* mouseEvent.cpp */; };
 		D8BB1B9B255A6D1500AF9FD5 /* mouseEventMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B9A255A6D1500AF9FD5 /* mouseEventMgr.cpp */; };
@@ -114,13 +114,13 @@
 /* Begin PBXCopyFilesBuildPhase section */
 		D81EF35A1EAFA0070003604F /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			dstPath = usr/share/man/man1;
-			dstSubfolderSpec = 11;
+			dstSubfolderSpec = 10;
 			files = (
-				D8A247C827FEC5D300CD36A1 /* libassimp.5.dylib in CopyFiles */,
+				D813E957280ED6A600EAE10B /* libassimp.5.dylib in CopyFiles */,
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
@@ -1567,6 +1567,7 @@
 		D810AEB5268B3BE3009B774B /* logUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = logUtil.cpp; sourceTree = "<group>"; };
 		D810AEB7268B3F1F009B774B /* test_node.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_node.h; sourceTree = "<group>"; };
 		D810AEB8268B3F1F009B774B /* test_node.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_node.cpp; sourceTree = "<group>"; };
+		D813E956280ED6A600EAE10B /* libassimp.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.5.dylib; path = lib_x86/libassimp.5.dylib; sourceTree = "<group>"; };
 		D81EF35C1EAFA0070003604F /* flyEngine */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = flyEngine; sourceTree = BUILT_PRODUCTS_DIR; };
 		D81EF35F1EAFA0070003604F /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		D81EF37A1EAFA0E60003604F /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
@@ -3814,6 +3815,7 @@
 			isa = PBXGroup;
 			children = (
 				D8A247C727FEC5D300CD36A1 /* libassimp.5.dylib */,
+				D813E956280ED6A600EAE10B /* libassimp.5.dylib */,
 				D8BED71E253D70ED006974D3 /* book */,
 				D825DB8724AAEE8600C494E7 /* primitives */,
 				D8BED728253EB965006974D3 /* learnC++ */,

@@ -20,6 +20,12 @@ spawn::spawn(int c,...){
         action* act=va_arg(ap, action*);
         m_vectorActionArr.push_back(act);
     }
+//    while(true){
+//        action* act=va_arg(ap, action*);
+//        if(act==NULL)
+//            return;
+//        m_vectorActionArr.push_back(act);
+//    }
 }
 
 spawn::~spawn(){
