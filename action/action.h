@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "defines.h"
-#include "timerMgr.h"
+#include "timerUtil.h"
 
 
 NS_FLYENGINE_BEGIN
@@ -25,7 +25,7 @@ public:
     virtual void stop(){
         m_bStop=true;
         if(m_intTimerKey>0)
-            timerMgr::getInstance()->stop(m_intTimerKey);
+            timerUtil::getInstance()->stop(m_intTimerKey);
     };
 public:
      bool m_bStop=false;

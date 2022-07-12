@@ -23,7 +23,7 @@
 #include "material.h"
 #include "cubeTex.h"
 #include "cubeColor.h"
-#include "ambientLight.h"
+#include "directionLight.h"
 #include "moveBy.h"
 #include "scaleBy.h"
 #include "scaleTo.h"
@@ -37,7 +37,7 @@
 
 
 #include "logUtil.h"
-#include "timerMgr.h"
+#include "timerUtil.h"
 #include "threadUtil.h"
 #include "window.h"
 
@@ -49,17 +49,17 @@ static material* createMaterial(float ambient,float diffuse,float specular,float
 }
     
 
-static void init_light_ambient(){
+static void init_light_direction(){
     //设置环境光
-    ambientLight* amLight=new ambientLight(glm::vec3(0.2f,0.2f,0.2f));
-    world::getInstance()->setAmbientLight(amLight);
+    directionLight* dirLight=new directionLight(glm::vec3(0.2f,0.2f,0.2f));
+    world::getInstance()->setDirectiontLight(dirLight);
     
     //因为只有环境光，所以设置的比较亮
-    amLight->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
+    //dirLight->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
 }
 
 void test_cubeColor(){
-    init_light_ambient();
+    init_light_direction();
     cubeColor* cubeObj=new cubeColor(glm::vec4(0.8,0.2,0,1));
     if(!cubeObj->init()){
        flylog("cubeObj init failed!");
@@ -73,7 +73,7 @@ void test_cubeColor(){
     control* controlObj=world::getInstance()->getControl();
     controlObj->bindNode(cubeObj);
 
-    timerMgr* timerMgrObj=new timerMgr("light_test_timer");
+    timerUtil* timerMgrObj=new timerUtil("light_test_timer");
     timerMgrObj->exec(0.1,[](node* _node){
        _node->rotateBy(glm::vec3(0.5f,0,0));
     },cubeObj);
@@ -81,7 +81,7 @@ void test_cubeColor(){
 
 
 void test_oneCubeTex(){
-    init_light_ambient();
+    init_light_direction();
     node* cubeObj=new cubeTex("res/fire.png");
     if(!cubeObj->init()){
         flylog("node init failed!");
@@ -97,14 +97,14 @@ void test_oneCubeTex(){
     control* controlObj=world::getInstance()->getControl();
     controlObj->bindNode(cubeObj);
     
-    timerMgr* timerMgrObj=new timerMgr("cube_test_timer");
+    timerUtil* timerMgrObj=new timerUtil("cube_test_timer");
     timerMgrObj->exec(0.1,[](node* _node){
         _node->rotateBy(glm::vec3(0.5f,0,0));
     },cubeObj);
 }
 
 void test_twoCubeTex(){
-    init_light_ambient();
+    init_light_direction();
     node* nodeObj1=new cubeTex("res/fire.png");
     if(!nodeObj1->init()){
       flylog("node1 init failed!");
@@ -131,7 +131,7 @@ void test_twoCubeTex(){
 }
 
 void test_multiCubeTex(int count){
-    init_light_ambient();
+    init_light_direction();
     float inner=2.0/count;
     for(int i=0;i<count;i++){
         node* nodeObj=new cubeTex("res/fire.png");

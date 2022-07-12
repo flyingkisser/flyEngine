@@ -17,7 +17,7 @@
 #include "world.h"
 #include "material.h"
 
-#include "ambientLight.h"
+#include "directionLight.h"
 #include "light.h"
 #include "pointLight.h"
 #include "spotLight.h"
@@ -49,6 +49,10 @@ void node::scaleBy(glm::vec3 v){
 //v里面是旋转的角度，0到360，函数会转成弧度
 void node::rotateBy(glm::vec3 v){
     _rorate+=v;
+    _dirtyPos=true;
+}
+void node::setRotation(glm::vec3 v){
+    _rorate=v;
     _dirtyPos=true;
 }
 
@@ -99,18 +103,23 @@ void node::setMaterial(material *mt){
     m_material=mt;
 }
 
+void node::setShader(shader* shaderObj){
+    _shaderObj=shaderObj;
+    _shaderObj->use();
+    _gl_program=shaderObj->getProgramID();
+}
+
 void node::updateModel(camera* cameraObj){
     if(_dirtyPos){
         //移动
         _matModel=glm::translate(glm::mat4(1.0f),_pos);
         
         //旋转
-        //想象一个立方体，有6个面，可简化为3个面，所以有3个面上的旋转
-        if(_rorate.x)//水平方向上旋转 沿y轴，顺时针或逆时针旋转  上平面下平面
-          _matModel=glm::rotate(_matModel,glm::radians(_rorate.x),glm::vec3(0,1,0));
-        if(_rorate.y)//垂直方向上旋转 沿x轴，前后旋转  左平面右平面
-          _matModel=glm::rotate(_matModel,glm::radians(_rorate.y),glm::vec3(1,0,0));
-        if(_rorate.z)//沿z轴，左右旋转  前平面后平面
+        if(_rorate.x)//沿x轴
+          _matModel=glm::rotate(_matModel,glm::radians(_rorate.x),glm::vec3(1,0,0));
+        if(_rorate.y)//沿y轴
+          _matModel=glm::rotate(_matModel,glm::radians(_rorate.y),glm::vec3(0,1,0));
+        if(_rorate.z)//沿z轴
           _matModel=glm::rotate(_matModel,glm::radians(_rorate.z),glm::vec3(0,0,1));
         //缩放
         _matModel=glm::scale(_matModel,_scale);
@@ -118,14 +127,6 @@ void node::updateModel(camera* cameraObj){
     }
     _shaderObj->setMat4(uniform_name_mat_model, glm::value_ptr(_matModel));
 }
-
-//void node::glInitShader(){
-//    _gl_program=_shaderObj->getProgramID();
-//    if(!_gl_program){
-//        flylog("node::glInitShader: _gl_program is 0,error!");
-//        return;
-//    }
-//}
 
 //只有顶点坐标
 void node::glInitVAO(){
@@ -153,13 +154,15 @@ void node::glInitVAO(){
 }
 
 //顶点坐标，纹理坐标
-void node::glInitVAOWithTexCoord(){
+void node::glInitVAOWithTexCoordByArr(float* verticeArr,int verticeArrSize){
     unsigned int vbo;
-    float* verticeArr=g_verticeArrWithTexCoord;
-    int verticeArrSize=sizeof(g_verticeArrWithTexCoord);
+//    float* verticeArr=g_verticeArrWithTexCoord;
+//    int verticeArrSize=sizeof(g_verticeArrWithTexCoord);
     int numPerVertex=3;  //每个顶点坐标用几个浮点数来表示
     int numPerTex=2;     //每个纹理坐标用几个浮点数来表示
     int stride=5*sizeof(float);
+    _vertice_arr=verticeArr;
+    _vertice_arr_size=verticeArrSize;
 
     //生成VAO
     glGenVertexArrays(1,&_gl_vao);
@@ -180,6 +183,13 @@ void node::glInitVAOWithTexCoord(){
     glBindVertexArray(0);
 }
 
+void node::glInitVAOWithTexCoord(){
+    glInitVAOWithTexCoordByArr(g_verticeArrWithTexCoord,sizeof(g_verticeArrWithTexCoord));
+}
+void node::glInitVAOWithTexCoordForPlain(){
+    glInitVAOWithTexCoordByArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane));
+}
+
 //顶点坐标，纹理坐标，法向量
 void node::glInitVAOWithTexCoordAndNormal(){
     unsigned int vbo;
@@ -189,7 +199,7 @@ void node::glInitVAOWithTexCoordAndNormal(){
     int numPerTex=2;     //每个纹理坐标用几个浮点数来表示
     int numPerNormal=3;  //每个法向量用几个浮点数来表示
     int stride=8*sizeof(float);
-
+    _hasNormal=true;
     //生成VAO
     glGenVertexArrays(1,&_gl_vao);
     glBindVertexArray(_gl_vao);
@@ -212,22 +222,27 @@ void node::glInitVAOWithTexCoordAndNormal(){
 }
 
 void node::glUpdateLight(){
-    //设置环境光
-    ambientLight* lightAM=world::getInstance()->getAmbientLight();
-    if(lightAM!=NULL)
-        lightAM->glUpdate(_gl_program);
-    //点光源初始化
-    std::vector<light*> lightVector=world::getInstance()->getLightVector();
+    //平行光
+    directionLight* lightDir=world::getInstance()->getDirectiontLight();
+    if(lightDir!=NULL)
+        lightDir->glUpdate(_gl_program);
     int i=0;
-    for(auto c : lightVector){
-        light* lightObj=(light*)c;
-        lightObj->glUpdateForCube(_gl_program,i++);
-    }
+    
+//    std::vector<light*> lightVector=world::getInstance()->getLightVector();
+//    int i=0;
+//    for(auto c : lightVector){
+//        light* lightObj=(light*)c;
+//        lightObj->glUpdateForCube(_gl_program,i++);
+//    }
+    //点光源初始化
     std::vector<pointLight*> pointLightVector=world::getInstance()->getPointLightVector();
     i=0;
     for(auto c : pointLightVector){
         pointLight* lightObj=(pointLight*)c;
-        lightObj->glUpdateForCube(_gl_program,i++);
+        if(lightObj->getMaterial()!=nullptr)
+            lightObj->glUpdateUseMaterail(_gl_program,i++);
+        else
+            lightObj->glUpdate(_gl_program,i++);
     }
     //聚光灯初始化
     std::vector<spotLight*> spotLightVector=world::getInstance()->getSpotLightVector();

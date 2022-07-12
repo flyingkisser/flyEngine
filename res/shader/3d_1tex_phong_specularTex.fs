@@ -11,6 +11,7 @@ uniform vec3  camera_pos;
 uniform vec3  global_ambient_color;
 
 struct Material{
+    bool enabled;
     vec3 ambient;
     vec3 diffuse;
     sampler2D specular_tex;
@@ -89,8 +90,10 @@ void main(){
        vec3 light_vector=normalize(-light_direction.direction);
        diffuse+=light_direction.color*light_direction.diffuse*max(dot(normal_vector,light_vector),0);
        //镜面反射
-       vec3 reflect_vector=reflect(-light_vector,normal_vector);
-    specular+=light_direction.color*light_direction.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess);
+        if(mt.enabled){
+            vec3 reflect_vector=reflect(-light_vector,normal_vector);
+            specular+=light_direction.color*light_direction.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess);
+        }
     }
     
     //点光源
@@ -100,14 +103,15 @@ void main(){
             continue;
         vec3 light_vector=normalize(light.pos-posFrag);
         //环境光
-      ambient+=light.color*light.ambient*mt.ambient;
-//        ambient+=light.color*light.ambient;
+        ambient+=light.color*light.ambient;
         //漫反射
-        diffuse+=light.color*light.diffuse*max(dot(normal_vector,light_vector),0)*mt.diffuse;
-//        diffuse+=light.color*light.diffuse*max(dot(normal_vector,light_vector),0);
+        diffuse+=light.color*light.diffuse*max(dot(normal_vector,light_vector),0);
         //镜面反射
         vec3 reflect_vector=reflect(-light_vector,normal_vector);
+       
+        if(mt.enabled){
         specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess)*texture(mt.specular_tex,texCoord).rgb;
+        }
         //衰减计算
         if(light.constant!=0){
            float attenuation=calcAttenuation(posFrag,light.pos,light.constant,light.linear,light.quadratic);
@@ -141,7 +145,9 @@ void main(){
            //镜面反射
            vec3 reflect_vector=reflect(-light_vector,normal_vector);
            //specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess)*l;
-        specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess)*texture(mt.specular_tex,texCoord).rgb*l;
+            if(mt.enabled){
+            specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess)*texture(mt.specular_tex,texCoord).rgb*l;
+            }
         }
 
         //环境光
@@ -156,7 +162,12 @@ void main(){
         }
     }
 
-    FragColor=vec4(ambient+diffuse,1)*obj_color+vec4(specular,0);
+//    FragColor=vec4(ambient+diffuse,1)*obj_color+vec4(specular,0);
     
-//    FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse,1)*obj_color+vec4(specular,0);
+    if(mt.enabled)
+       //FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse,1)*obj_color+vec4(specular,0);
+        FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse+specular,1)*obj_color;
+    else  
+        FragColor=vec4(ambient+diffuse+specular,1)*obj_color;
+    
 }

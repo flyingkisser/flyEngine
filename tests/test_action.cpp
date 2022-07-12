@@ -18,7 +18,7 @@
 #include "mouseEventMgr.h"
 #include "camera.h"
 #include "control.h"
-#include "ambientLight.h"
+#include "directionLight.h"
 #include "material.h"
 #include "world.h"
 #include "cubeTex.h"
@@ -35,7 +35,7 @@
 
 
 #include "logUtil.h"
-#include "timerMgr.h"
+#include "timerUtil.h"
 #include "threadUtil.h"
 #include "window.h"
 
@@ -45,17 +45,17 @@ static material* createMaterial(float ambient,float diffuse,float specular,float
     return new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
 }
     
-static void init_light_ambient(){
+static void init_light_direction(){
     //设置环境光
-    ambientLight* amLight=new ambientLight(glm::vec3(0.2f,0.2f,0.2f));
-    world::getInstance()->setAmbientLight(amLight);
+    directionLight* dirLight=new directionLight(glm::vec3(0.2f,0.2f,0.2f));
+    world::getInstance()->setDirectiontLight(dirLight);
     
     //因为只有环境光，所以设置的比较亮
-    amLight->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
+    //dirLight->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
 }
 
 void test_actionMove(){
-    init_light_ambient();
+    init_light_direction();
     node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -70,7 +70,7 @@ void test_actionMove(){
 }
 
 void test_actionSequence(){
-    init_light_ambient();
+    init_light_direction();
     node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -89,7 +89,7 @@ void test_actionSequence(){
 }
 
 void test_actionSpawn(){
-    init_light_ambient();
+    init_light_direction();
     node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -107,7 +107,7 @@ void test_actionSpawn(){
 }
 
 void test_actionRepeat(){
-    init_light_ambient();
+    init_light_direction();
     node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -125,7 +125,7 @@ void test_actionRepeat(){
 }
 
 void test_actionForever(){
-    init_light_ambient();
+    init_light_direction();
     node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -146,7 +146,7 @@ void test_actionForever(){
 }
 
 void test_actionForeverAndStop(){
-    init_light_ambient();
+    init_light_direction();
     node* nodeObj=new cubeTex("res/fire.png");
     if(!nodeObj->init()){
         flylog("node init failed!");
@@ -163,7 +163,7 @@ void test_actionForeverAndStop(){
     
     nodeObj->runAction(multiAct);
     
-    int id=timerMgr::getInstance()->execOnceDelay(10, [&](node* nodeObj,action* act){
+    int id=timerUtil::getInstance()->execOnceDelay(10, [&](node* nodeObj,action* act){
         nodeObj->stopAction(act);
     },nodeObj,multiAct);
     

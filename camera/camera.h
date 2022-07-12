@@ -29,6 +29,7 @@ public:
     float getPositionX(){return _cameraPos.x;};
     float getPositionY(){return _cameraPos.y;};
     float getPositionZ(){return _cameraPos.z;};
+    glm::vec3 getPosition(){return _cameraPos;};
     
     void setProgrameID(int program){_program=program;};
     void setPosition(glm::vec3 v);

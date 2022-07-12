@@ -38,8 +38,12 @@ private:
     float _height2PI=4000;
     float _yaw=-90;
     float _pitch=0;
+    
+    float _cameraMoveNodeZ=-3;
+    
     camera* _camera=NULL;
     node* _bindNode=NULL;
+    node* _bindNodeWithCameraMove=NULL;
     
     keyboardEvent* _kbEventObj=NULL;
     mouseEvent* _msEventObj=NULL;
@@ -49,6 +53,9 @@ public:
     control(){};
     void bindCamera(camera* c);
     void bindNode(node* nodeObj);
+    //节点一直保持和相机同样的位置
+    void bindNodeWithCameraMove(flyEngine::node* nodeObj);
+    void regOnKeyPress(char key, std::function<void ()> cb);
 };
 
 NS_FLYENGINE_END

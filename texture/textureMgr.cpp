@@ -53,6 +53,7 @@ flyEngine::texture* textureMgr::getTexture(const char *szFileName){
     texture* texObj=new texture(szFileName);
     if(!texObj->init())
         return NULL;
+    texObj->glInit();
     _mapTextureCache[szFileName]=texObj;
     return texObj;
 }
@@ -62,6 +63,13 @@ flyEngine::size textureMgr::getTextureSize(const char* szName){
     if(it!=_mapTextureCache.end())
         return it->second->getSize();
     return flyEngine::size{0,0};
+}
+
+unsigned int textureMgr::getTextureID(const char *szName){
+    flyEngine::texture* texObj=getTexture(szName);
+    if(texObj!=nullptr)
+        return texObj->getTextureID();
+    return 0;
 }
 
 //textureTuple textureMgr::getTextureTuple(const char *szName){

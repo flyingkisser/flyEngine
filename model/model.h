@@ -10,9 +10,11 @@
 #define model_h
 
 #include <stdio.h>
+#include <map>
 
 #include "defines.h"
 #include "mesh.h"
+#include "node.h"
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
@@ -20,21 +22,30 @@
 
 NS_FLYENGINE_BEGIN
 
+class shader;
 
-class model{
+class model : public node{
 private:
     std::vector<mesh> m_vecMeshes;
     std::string dir;
+    std::string mRootDirectory;
+    int m_totalVertics=0;
+    int m_totalMesh=0;
+    std::map<int,std::vector<Texture>> m_mapTexture;
+
     bool loadModel(std::string path);
     void processNode(aiNode* node,const aiScene *scene);
     mesh processMesh(aiMesh* node,const aiScene *scene);
-    std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType type, std::string typeName);
-    
-    std::string mRootDirectory;
+    std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType aiTexType);
+
+
 public:
     model(char* szPath);
-    void draw(shader* objShader);
+
+    bool init();
+    void glInit();
+    void draw(camera* cameraObj);
 };
 
 NS_FLYENGINE_END
-#endif /* model_h */
+#endif

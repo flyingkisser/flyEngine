@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <time.h>
+#include <string>
 #include <sys/time.h>
 
 class timeUtil{
@@ -20,6 +21,7 @@ public:
     static struct tm* getDate();
     static struct tm* getDateBySec(long long secTime);
     static int getTimeZoneDiff();
+    static std::string getTimeStrLong();
 };
 
 #endif /* timeUtil_h */

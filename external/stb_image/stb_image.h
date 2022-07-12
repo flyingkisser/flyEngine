@@ -7872,4 +7872,4 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------------------------
 */
 
-unsigned int TextureFromFile(const char *path, const char* szDirectory, bool gamma);
+unsigned int TextureFromFiles(const char *path, const char* szDirectory, bool gamma);

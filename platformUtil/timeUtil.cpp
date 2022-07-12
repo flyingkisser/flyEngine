@@ -7,6 +7,7 @@
 //
 
 #include "timeUtil.h"
+#include <string>
 
 long long timeUtil::getTimeMS(){
      long long msTime = 0;
@@ -59,4 +60,17 @@ int timeUtil::getTimeZoneDiff()
     if (gmTime)
         return (int)difftime(now, mktime(gmTime));
     return 0;
+}
+
+std::string timeUtil::getTimeStrLong(){
+    char szBuf[1024]={0};
+    std::string s;
+    int timeMS=0;
+    struct tm gmt;
+    time_t timep;
+    time(&timep);
+    gmtime_r(&timep, &gmt);
+    snprintf(szBuf,sizeof(szBuf),"%04d-%02d-%02d %02d:%02d:%02d:%03d ",gmt.tm_year+1900,gmt.tm_mon+1,gmt.tm_mday,
+              gmt.tm_hour,gmt.tm_min,gmt.tm_sec,timeMS);
+    return std::string(szBuf);
 }

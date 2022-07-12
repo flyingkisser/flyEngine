@@ -35,22 +35,40 @@ void control::bindCamera(flyEngine::camera* c){
     //keyboard event
     _kbEventObj->regEvent('w', [&](){
         _camera->setPositionZ(_camera->getPositionZ()-_move_d);
+        if(_bindNodeWithCameraMove!=NULL){
+            _bindNodeWithCameraMove->setPositionZ(_camera->getPositionZ()+_cameraMoveNodeZ);
+        }
     });
 
     _kbEventObj->regEvent('s', [&](){
          _camera->setPositionZ(_camera->getPositionZ()+_move_d);
+        if(_bindNodeWithCameraMove!=NULL){
+            _bindNodeWithCameraMove->setPositionZ(_camera->getPositionZ()+_cameraMoveNodeZ);
+        }
     });
     _kbEventObj->regEvent('a', [&](){
         _camera->setPositionX(_camera->getPositionX()-_move_d);
+        if(_bindNodeWithCameraMove!=NULL){
+            _bindNodeWithCameraMove->setPositionX(_camera->getPositionX());
+        }
       });
     _kbEventObj->regEvent('d', [&](){
         _camera->setPositionX(_camera->getPositionX()+_move_d);
+        if(_bindNodeWithCameraMove!=NULL){
+            _bindNodeWithCameraMove->setPositionX(_camera->getPositionX());
+        }
     });
     _kbEventObj->regEvent('z', [&](){
        _camera->setPositionY(_camera->getPositionY()+_move_d);
+        if(_bindNodeWithCameraMove!=NULL){
+            _bindNodeWithCameraMove->setPositionY(_camera->getPositionY());
+        }
     });
     _kbEventObj->regEvent('x', [&](){
        _camera->setPositionY(_camera->getPositionY()-_move_d);
+        if(_bindNodeWithCameraMove!=NULL){
+            _bindNodeWithCameraMove->setPositionY(_camera->getPositionY());
+        }
     });
 
     _kbEventObj->regEvent('r', [&](){
@@ -99,7 +117,15 @@ void control::bindCamera(flyEngine::camera* c){
     });
 
     _msEventObj->regOnScroll([&](float x,float y){
-      cout<<"on mouse scroll!"<<x<<" "<<y<<endl;
+        cout<<"on mouse scroll!"<<x<<" "<<y<<endl;
+        //move camera deep or shadow accroding to scroll up or down
+        if(y>0)
+            _camera->setPositionZ(_camera->getPositionZ()-_move_d);
+        else
+            _camera->setPositionZ(_camera->getPositionZ()+_move_d);
+        if(_bindNodeWithCameraMove!=NULL){
+            _bindNodeWithCameraMove->setPositionZ(_camera->getPositionZ()+_cameraMoveNodeZ);
+        }
     });
     
     flylog("control::bindCamera finished!");
@@ -127,4 +153,14 @@ void control::bindNode(flyEngine::node* nodeObj){
         _mouseRightLastY=y;
         _bindNode->rotateBy(glm::vec3(rotateX,rotateY,0));
     });
+}
+
+void control::bindNodeWithCameraMove(flyEngine::node* nodeObj){
+    _bindNodeWithCameraMove=nodeObj;
+    nodeObj->setPosition(_camera->getPosition());
+    nodeObj->setPositionZ(_camera->getPositionZ()+_cameraMoveNodeZ);
+}
+
+void control::regOnKeyPress(char key, std::function<void ()> cb){
+    _kbEventObj->regEvent(key,cb);
 }

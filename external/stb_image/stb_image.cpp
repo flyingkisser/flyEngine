@@ -5,7 +5,7 @@
 
 using namespace std;
 
-unsigned int TextureFromFile(const char *path, const char* szDirectory, bool gamma)
+unsigned int TextureFromFiles(const char *path, const char* szDirectory, bool gamma)
 {
     string filename = string(path);
     string directory = string(szDirectory);

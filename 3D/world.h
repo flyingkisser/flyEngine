@@ -10,6 +10,7 @@
 #define world_h
 
 #include <stdio.h>
+#include <functional>
 #include "defines.h"
 
 
@@ -18,7 +19,7 @@ NS_FLYENGINE_BEGIN
 class node;
 class control;
 class camera;
-class ambientLight;
+class directionLight;
 class light;
 class pointLight;
 class spotLight;
@@ -30,7 +31,9 @@ private:
     std::vector<pointLight*> _vector_point_light;
     std::vector<spotLight*> _vector_spot_light;
     camera* _camera=NULL;
-    ambientLight* m_amLight=NULL;
+    directionLight* m_directionLight=NULL;
+    std::function <void()> _cb_before_draw_call=nullptr;
+    std::function <void()> _cb_after_draw_call=nullptr;
     
 public:
     world();
@@ -41,7 +44,7 @@ public:
     void addPointLight(pointLight* node);
     void addSpotLight(spotLight* node);
     void setCamera(camera* c);
-    void setAmbientLight(ambientLight* amLight);
+    void setDirectiontLight(directionLight* directionLight);
     void start_rendering();
     void pause();
     void end();
@@ -51,7 +54,7 @@ public:
     void draw();
     control* getControl();
     
-    ambientLight* getAmbientLight(){return m_amLight;};
+    directionLight* getDirectiontLight(){return m_directionLight;};
     std::vector<light*> getLightVector(){return _vector_light;};
     std::vector<pointLight*> getPointLightVector(){return _vector_point_light;};
     std::vector<spotLight*> getSpotLightVector(){return _vector_spot_light;};
@@ -59,6 +62,8 @@ public:
     camera* getCamera(){return _camera;};
     
     float getFrameRate(){return CONST_FRAME_RATE;};
+    void setCBBeforeDrawCall(std::function<void()> f){_cb_before_draw_call=f;};
+    void setCBAfterDrawCall(std::function<void()> f){_cb_after_draw_call=f;};
 };
 
 NS_FLYENGINE_END

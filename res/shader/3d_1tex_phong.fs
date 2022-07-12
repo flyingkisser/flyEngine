@@ -12,17 +12,18 @@ struct Material{
     vec3 ambient;
     vec3 diffuse;
     vec3 specular;
-    float shininess;
+    float shiness;
 };
 
-
+//环境光 平行光(太阳)
 struct DirectionLight{
     bool enabled;
     vec3 direction;
     vec3 color;
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
+    float ambient;
+    float diffuse;
+    float specular;
+    int shiness;
 };
 
 //点光源
@@ -82,23 +83,25 @@ void main(){
     vec3 ambient=vec3(0,0,0);
     vec3 diffuse=vec3(0,0,0);
     vec3 specular=vec3(0,0,0);
+    bool light_dirty=false;
     
     //环境光
 //    if(any(greaterThan(global_ambient_color,zero_vector))){
 //        ambient=global_ambient_color*mt.ambient;
 //    }
-    //环境光 平行光(太阳)
     
+    //平行光(太阳)
     if(light_direction.enabled){
-        //全局光照
+        light_dirty=true;
+        //环境光
         ambient+=light_direction.color*light_direction.ambient;
         //漫反射
         vec3 light_vector=normalize(-light_direction.direction);
         diffuse+=light_direction.color*light_direction.diffuse*max(dot(normal_vector,light_vector),0);
         //镜面反射
-        if(mt.enabled){
+        if(light_direction.shiness!=0){
             vec3 reflect_vector=reflect(-light_vector,normal_vector);
-            specular+=light_direction.color*light_direction.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess);
+            specular+=light_direction.color*light_direction.specular*pow(max(dot(view_vector,reflect_vector),0),light_direction.shiness);
         }
     }
     
@@ -107,6 +110,7 @@ void main(){
         PointLight light=light_point_arr[i];
         if(!light.enabled)
             continue;
+        light_dirty=true;
         vec3 light_vector=normalize(light.pos-posFrag);
         //环境光
         ambient+=light.color*light.ambient;
@@ -115,7 +119,7 @@ void main(){
         //镜面反射
         if(mt.enabled){
             vec3 reflect_vector=reflect(-light_vector,normal_vector);
-            specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess);
+            specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shiness);
         }
         if(light.constant!=0){
             //需要计算距离衰减
@@ -133,6 +137,7 @@ void main(){
            continue;
         if(light.cutoff_inner<=0)
             continue;
+        light_dirty=true;
         //环境光
         ambient+=light.color*light.ambient;
         
@@ -154,7 +159,7 @@ void main(){
             //镜面反射
             if(mt.enabled){
                 vec3 reflect_vector=reflect(-light_vector,normal_vector);
-                specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shininess)*l;
+                specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shiness)*l;
             }
         }
 
@@ -166,15 +171,16 @@ void main(){
             specular*=attenuation;
         }
     }
-
-
-    //FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse+mt.specular*specular,1)*obj_color;
-    //FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse,1)*obj_color+vec4(mt.specular*specular,0);
     
     //如果物体的材质启用了，要计算物体本身的材质对于光照的影响
-    if(mt.enabled)
-        FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse+mt.specular*specular,1)*obj_color;
-    else
-        FragColor=vec4(ambient+diffuse+specular,1)*obj_color;
-   
+    if(light_dirty){
+        if(mt.enabled)
+            FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse+mt.specular*specular,1)*obj_color;
+        else
+            FragColor=vec4(ambient+diffuse+specular,1)*obj_color;
+    }
+    else{
+        FragColor=obj_color;
+    }
+  
 }

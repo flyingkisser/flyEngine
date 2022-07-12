@@ -16,7 +16,7 @@
 #include "action.h"
 #include "camera.h"
 #include "world.h"
-#include "ambientLight.h"
+#include "directionLight.h"
 #include "material.h"
 
 USE_NS_FLYENGINE
@@ -25,29 +25,39 @@ cubeTex::cubeTex(const char* texPath){
     _texPath=texPath;
 }
 
+void cubeTex::resetPos(){
+    setPosition(glm::vec3(0,0,0));
+    rotateBy(glm::vec3(-30,0,-30));
+}
+
 bool cubeTex::init(){
-    setPosition(glm::vec3(0,0,-10));
-    rotateBy(glm::vec3(30,0,30));
-    
+    return initByVerticeArr(g_verticeArrWithTexCoord,sizeof(g_verticeArrWithTexCoord),false);
+}
+
+void cubeTex::glInit(){
+    glInitByVerticeArr(g_verticeArrWithTexCoord,sizeof(g_verticeArrWithTexCoord),false);
+}
+
+bool cubeTex::initByVerticeArr(float* arr,int arrSize,bool useNormal){
     _texObj=textureMgr::getInstance()->getTexture(_texPath);
     if(_texObj==NULL)
         return false;
     _shaderObj=shaderMgr::get3d1texPongShader();
-    //_shaderObj=shaderMgr::get3d1texShader();
     if(_shaderObj==NULL){
         flylog("cubeTex::init shaderObj is null,return!");
         return false;
     }
     _gl_program=_shaderObj->getProgramID();
-    glInit();
+    glInitByVerticeArr(arr,arrSize,useNormal);
     return true;
 }
 
-void cubeTex::glInit(){
+void cubeTex::glInitByVerticeArr(float* arr,int arrSize,bool useNormal){
     //除了多边形坐标，还增加纹理坐标、法向量
-    node::glInitVAOWithTexCoordAndNormal();
-//    node::glInitVAOWithTexCoord();
-    
+    if(!useNormal)
+        node::glInitVAOWithTexCoordByArr(arr,arrSize);
+    else
+        node::glInitVAOWithTexCoordAndNormal();
     _texObj->glInit();
     _gl_texture0=_texObj->getTextureID();
     if(!_gl_texture0){
@@ -57,15 +67,21 @@ void cubeTex::glInit(){
     _shaderObj->setInt("texture0", 0);
 }
 
-void cubeTex::setShader(shader* shaderObj){
-    _shaderObj=shaderObj;
-    _shaderObj->use();
-    _gl_program=shaderObj->getProgramID();
-}
-
+cubeTex* cubeTex::clone(){
+    cubeTex* n=new cubeTex(_texPath);
+    n->initByVerticeArr(getVerticeArr(),getVerticeSize(),hasNormal());
+    n->setShader(getShader());
+    n->setPosition(getPosition());
+    n->setScale(getScale());
+    n->setRotation(getRotation());
+    n->setMaterial(getMaterial());
+    return n;
+};
 
 void cubeTex::draw(camera* cameraObj){
     _shaderObj->use();
+    if(m_cb_before_draw_call!=nullptr)
+        m_cb_before_draw_call(_shaderObj->getProgramID());
     cameraObj->update(_gl_program);
     node::updateModel(cameraObj);
     node::glUpdateLight();

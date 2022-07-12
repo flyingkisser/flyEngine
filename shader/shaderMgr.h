@@ -28,6 +28,7 @@ public:
     static shader* get3d2texShader();
     static shader* get3d1texPongShader();
     static shader* get3d1texPongWithSpecularTexShader();
+    static shader* getModelShader();
     
     static shader* getShader(const char* szVertFileName,const char* szFragFileName);
     static shader* getShader(int programID);

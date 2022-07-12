@@ -32,7 +32,7 @@ public:
     ~light(){};
     
     bool init();
-    void glUpdateForCube(int program_id,int ligth_index);
+    //void glUpdateForCube(int program_id,int ligth_index);
     
    
     void setColor(glm::vec3 color);

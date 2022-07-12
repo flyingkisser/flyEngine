@@ -22,7 +22,7 @@ shader* shaderMgr::createAndCacheShader(const char* szVertFileName,const char* s
     int programID=shaderObj->getProgramID();
     s_mapShaderCache[key]=shaderObj;
     s_mapShaderCacheByProgram[programID]=shaderObj;
-    flylog("programID %d %s",programID,szVertFileName);
+    flylog("programID %d from %s %s",programID,szVertFileName,szFragFileName);
     return shaderObj;
 }
 
@@ -43,8 +43,8 @@ shader* shaderMgr::getShader(int programID){
 
 shader* shaderMgr::getShaderUniqueue(const char* szVertFileName,const char* szFragFileName){
     shader* shaderObj=new shader(szVertFileName,szFragFileName);
-    if(!shaderObj->init())
-        return NULL;
+//    if(!shaderObj->init())
+//        return NULL;
     return shaderObj;
 }
 
@@ -82,6 +82,11 @@ shader* shaderMgr::get3d1texPongWithSpecularTexShader(){
 shader* shaderMgr::get3d2texShader(){
     return shaderMgr::getShaderUniqueue("./res/shader/3d_2tex.vs","./res/shader/3d_2tex.fs");
 }
+
+shader* shaderMgr::getModelShader(){
+    return shaderMgr::getShaderUniqueue("./res/shader/3d_model.vs","./res/shader/3d_model.fs");
+}
+
 
 unsigned int shaderMgr::createShaderFromFile(const char* szVertFileName,const char* szFragFileName){
     GLuint vertShader,fragShader,idProgram=0;

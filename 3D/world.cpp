@@ -53,8 +53,8 @@ void world::setCamera(camera* c){
     _camera=c;
 }
 
-void world::setAmbientLight(ambientLight* amLight){
-    m_amLight=amLight;
+void world::setDirectiontLight(directionLight* directionLight){
+    m_directionLight=directionLight;
 }
 
 
@@ -66,23 +66,24 @@ control* world::getControl(){
 
 void world::draw(){
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+    glEnable(GL_DEPTH_TEST);
+    if(_cb_before_draw_call!=nullptr)
+        _cb_before_draw_call();
     for(auto c : _vector_child){
         node* nodeObj=c;
         nodeObj->draw(_camera);
-    }
-    for(auto c : _vector_light){
-       node* nodeObj=(node*)c;
-       nodeObj->draw(_camera);
     }
     for(auto c : _vector_point_light){
         node* nodeObj=(node*)c;
         nodeObj->draw(_camera);
     }
     for(auto c : _vector_spot_light){
-          node* nodeObj=(node*)c;
-          nodeObj->draw(_camera);
+        node* nodeObj=(node*)c;
+        nodeObj->draw(_camera);
     }
+    if(_cb_after_draw_call!=nullptr)
+        _cb_after_draw_call();
 }
 
 
@@ -111,3 +112,4 @@ void world::_main_loop(){
    }
 
 }
+

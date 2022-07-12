@@ -21,9 +21,13 @@ struct Vertex{
     glm::vec3 pos_tex;
 };
 
+enum TextureType{
+    TYPE_Diffuse,TYPE_Specular
+};
+
 struct Texture{
     unsigned int id;
-    std::string type;
+    TextureType type;
     std::string path;
 };
 
@@ -32,10 +36,11 @@ public:
     std::vector<Vertex> m_vecVertices;
     std::vector<unsigned int> m_vecIndices;
     std::vector<Texture> m_vecTextures;
-    
+
     mesh(std::vector<Vertex> vecVertices,std::vector<unsigned int> vecIndices,std::vector<Texture> vecTextures);
     void draw(shader* s);
-    
+    int getVerticeCount(){return m_vecVertices.size();};
+
 private:
     unsigned int m_int_vao,m_int_vbo,m_int_ebo;
     void setupMesh();
@@ -44,4 +49,4 @@ private:
 
 NS_FLYENGINE_END
 
-#endif /* mesh_h */
+#endif

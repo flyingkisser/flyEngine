@@ -6,9 +6,12 @@
 //  Copyright © 2021 joe. All rights reserved.
 //
 
-#include "logUtil.h"
+
 #include <stdarg.h>
 #include <string>
+
+#include "logUtil.h"
+#include "timeUtil.h"
 
 
 void logUtil::log(const char* fmt,...){
@@ -41,9 +44,11 @@ void flylog(const char* fmt,...){
     char szFmt[1024*10]={0};
     va_start(argList, fmt);  //将ap指向fmt后的第一个参数
     int strLen=(int)strlen(fmt);
+    std::string strTime=timeUtil::getTimeStrLong();
     if(strLen<=1024*10-2 &&fmt[strLen-1]!='\n'){
-        strcpy(szFmt,fmt);
-        szFmt[strLen]='\n';
+        strcpy(szFmt,strTime.c_str());
+        strcat(szFmt,fmt);
+        szFmt[strlen(szFmt)]='\n';
         vfprintf(stdout,szFmt,argList);
     }else{
         vfprintf(stdout,fmt,argList);

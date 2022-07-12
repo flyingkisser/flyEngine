@@ -11,6 +11,7 @@
 #include "pngUtil.h"
 #include "jpgUtil.h"
 #include "logUtil.h"
+#include "stb_image.h"
 
 using namespace flyEngine;
 
@@ -31,20 +32,60 @@ bool flyEngine::texture::init(){
             flylog("texture.init:png loadFile %s failed",szPath);
             return false;
         }
+        _width=st.width;
+        _height=st.height;
+        _format=st.format;
+        _dataBuf=st.buf;
+        return true;
     }else if(jpgUtil::isJpg(szPath)){
         if(!jpgUtil::loadFile(szPath, &st)){
             flylog("texture.init:jpg loadFile %s failed",szPath);
             return false;
         }
+        _width=st.width;
+        _height=st.height;
+        _format=st.format;
+        _dataBuf=st.buf;
+        return true;
+    }else{
+        int width, height, nrComponents;
+        // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
+        stbi_set_flip_vertically_on_load(true);
+        unsigned char *data = stbi_load(szPath, &width, &height, &nrComponents, 0);
+        _width=width;
+        _height=height;
+        if (nrComponents == 1)
+           _format = GL_RED;
+        else if (nrComponents == 3)
+           _format = GL_RGB;
+        else if (nrComponents == 4)
+           _format = GL_RGBA;
+        _dataBuf=data;
+        return true;
     }
-    _width=st.width;
-    _height=st.height;
-    _format=st.format;
-    //_internalFormat=st.internalFormat;
-    //_width=st.width;
-    _dataBuf=st.buf;
-    return true;
 }
+
+//bool flyEngine::texture::init(){
+//     int width, height, nrComponents;
+//    char* szPath=(char*)_strPath.c_str();
+//    // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
+//    stbi_set_flip_vertically_on_load(true);
+//    unsigned char *data = stbi_load(szPath, &width, &height, &nrComponents, 0);
+//    _width=width;
+//    _height=height;
+//    if (nrComponents == 1)
+//     _format = GL_RED;
+//    else if (nrComponents == 3)
+//     _format = GL_RGB;
+//    else if (nrComponents == 4)
+//     _format = GL_RGBA;
+//    _dataBuf=data;
+//    return true;
+//}
+
+flyEngine::size flyEngine::texture::getSize(){
+  return flyEngine::size{(float)_width,(float)_height};
+};
 
 //texturePos from GL_TEXTURE0,GL_TEXTURE1
 void flyEngine::texture::glInit(int texturePos){
@@ -75,8 +116,10 @@ void flyEngine::texture::glInit(int texturePos){
     //如果在大几何体上使用小贴图，GL_NEAREST会有块状锯齿感，GL_LINEAR则更为平滑
     //GL_TEXTURE_MIN_FILTER表示当贴图需要缩小时使用哪种模式
     //GL_TEXTURE_MAG_FILTER表示当贴图需要放大时使用哪种模式
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _format == GL_RGBA ? GL_CLAMP_TO_EDGE :GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _format == GL_RGBA ? GL_CLAMP_TO_EDGE :GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     
@@ -95,6 +138,44 @@ void flyEngine::texture::glInit(int texturePos){
 //  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, structTex.width, structTex.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, structTex.buf);
 }
 
-flyEngine::size flyEngine::texture::getSize(){
-  return flyEngine::size{(float)_width,(float)_height};
-};
+//unsigned int TextureFromFile(const char *path, const char* szDirectory, bool gamma)
+//{
+//    string filename = string(path);
+//    string directory = string(szDirectory);
+//    filename = directory + '/' + filename;
+//
+//    unsigned int textureID;
+//    glGenTextures(1, &textureID);
+//
+//    int width, height, nrComponents;
+//    unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+//    if (data)
+//    {
+//        GLenum format;
+//        if (nrComponents == 1)
+//            format = GL_RED;
+//        else if (nrComponents == 3)
+//            format = GL_RGB;
+//        else if (nrComponents == 4)
+//            format = GL_RGBA;
+//
+//        glBindTexture(GL_TEXTURE_2D, textureID);
+//        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+//        glGenerateMipmap(GL_TEXTURE_2D);
+//
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//
+//        stbi_image_free(data);
+//    }
+//    else
+//    {
+//        std::cout << "Texture failed to load at path: " << path << std::endl;
+//        stbi_image_free(data);
+//    }
+//
+//    return textureID;
+//}
+

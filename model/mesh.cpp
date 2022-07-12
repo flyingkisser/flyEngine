@@ -36,28 +36,31 @@ void mesh::setupMesh(){
     //纹理坐标
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,sizeof(Vertex),(void*)offsetof(Vertex,pos_tex));
-    
+
     glBindVertexArray(0);
 }
 
 void mesh::draw(shader* s){
-    unsigned int diffuseIndex=1;
-    unsigned int specularIndex=1;
+    unsigned int diffuseIndex=0;
+    unsigned int specularIndex=0;
     for(int i=0;i<m_vecTextures.size();i++){
         glActiveTexture(GL_TEXTURE0+i);
+        glBindTexture(GL_TEXTURE_2D, m_vecTextures[i].id);
         std::string strIndex;
-        std::string strType=m_vecTextures[i].type;
-        if(strType=="texture_diffuse")
-           strIndex=std::to_string(diffuseIndex++);
-        else if(strType=="texture_specular")
+        TextureType texType=m_vecTextures[i].type;
+        if(texType==TYPE_Diffuse){
+            strIndex=std::to_string(diffuseIndex++);
+            s->setInt(("texture_diffuse_"+strIndex).c_str(),i);
+        }
+        else if(texType==TYPE_Specular){
             strIndex=std::to_string(specularIndex++);
-    
-        s->setFloat(("material."+strType+strIndex).c_str(),(float)i);
+            s->setInt(("texture_specular_"+strIndex).c_str(),i);
+        }
     }
-    glActiveTexture(GL_TEXTURE0);
-                
+
     //draw mesh
+    glEnable(GL_DEPTH_TEST);
     glBindVertexArray(m_int_vao);
-    glDrawElements(GL_TRIANGLES,m_vecIndices.size(),GL_UNSIGNED_INT,0);
+    glDrawElements(GL_TRIANGLES,(int)m_vecIndices.size(),GL_UNSIGNED_INT,0);
     glBindVertexArray(0);
 }

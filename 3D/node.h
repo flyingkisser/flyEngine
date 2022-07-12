@@ -36,6 +36,10 @@ private:
     glm::vec3 _scale=glm::vec3(1,1,1);
     glm::vec3 _rorate=glm::vec3(0,0,0);
     
+    float* _vertice_arr=nullptr;
+    int _vertice_arr_size=0;
+    bool _hasNormal=false;
+    
 public:
     shader* _shaderObj=NULL;
     material* m_material=NULL;
@@ -53,8 +57,11 @@ public:
     void print();
     void updateModel(camera* cameraObj);
     
+    
     void glInitVAO();
+    void glInitVAOWithTexCoordByArr(float* verticeArr,int verticeArrSize);
     void glInitVAOWithTexCoord();
+    void glInitVAOWithTexCoordForPlain();
     void glInitVAOWithTexCoordAndNormal();
     
     void glInitShader();
@@ -73,6 +80,7 @@ public:
     glm::vec3& getScale(){return _scale;};
     glm::vec3& getRotation(){return _rorate;};
     
+    void setRotation(glm::vec3 v);
     void setScale(glm::vec3 v);
     void setScale(float v);
     
@@ -87,6 +95,13 @@ public:
     
     void setMaterial(material* mt);
     material* getMaterial(){return m_material;};
+    
+    shader* getShader(){return _shaderObj;};
+    void setShader(shader* shaderObj);
+    
+    float* getVerticeArr(){return _vertice_arr;};
+    int getVerticeSize(){return _vertice_arr_size;};
+    bool hasNormal(){return _hasNormal;};
 };
 
 NS_FLYENGINE_END

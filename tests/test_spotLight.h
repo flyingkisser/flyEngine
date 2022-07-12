@@ -12,4 +12,5 @@
 #include <stdio.h>
 void test_oneSpotLight_oneCube();
 void test_oneSpotLight_multiCube_specularMap();
+void test_oneSpotLight_multiCube_specularMap_cameraControl();
 #endif /* test_spotLight_h */

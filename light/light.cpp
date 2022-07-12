@@ -25,6 +25,14 @@ bool light::init(){
     return cubeColor::init();
 }
 
+void light::draw(camera* cameraObj){
+    cubeColor::draw(cameraObj);
+}
+
+void light::setColor(glm::vec3 color){
+    cubeColor::setColor(color);
+}
+
 //void light::glUpdateForCube(int program_id,int light_index){
 //    int i=light_index;
 //    char szBuf[128]={0};
@@ -60,12 +68,3 @@ bool light::init(){
 //    snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_specular,i);
 //    shaderObj->setVec3(szBuf, (float*)glm::value_ptr(mt->getSpecular()));
 //}
-
-
-void light::draw(camera* cameraObj){
-    cubeColor::draw(cameraObj);
-}
-
-void light::setColor(glm::vec3 color){
-    cubeColor::setColor(color);
-}

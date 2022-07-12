@@ -37,6 +37,8 @@ extern float g_verticeArrWithTexCoord[180];
 extern float g_verticeArrWithNormal[216];
 extern float g_verticeArrWithTexCoordAndNormal[288];
 
+extern float g_verticeArrWithTexCoord_plane[30];
+
 #define uniform_name_camera_pos "camera_pos"
 #define uniform_name_mat_proj   "matProj"
 #define uniform_name_mat_camera "matCamera"
@@ -47,27 +49,32 @@ extern float g_verticeArrWithTexCoordAndNormal[288];
 #define uniform_name_material_diffuse   "mt.diffuse"
 #define uniform_name_material_specular_tex   "mt.specular_tex"
 #define uniform_name_material_specular  "mt.specular"
-#define uniform_name_material_shininess "mt.shininess"
+#define uniform_name_material_shininess "mt.shiness"
 
 //#define uniform_name_global_ambient_color "global_ambient_color"
+//direction light
 #define uniform_name_light_direction_enabled  "light_direction.enabled"
 #define uniform_name_light_direction_direction"light_direction.direction"
 #define uniform_name_light_direction_color    "light_direction.color"
 #define uniform_name_light_direction_ambient  "light_direction.ambient"
 #define uniform_name_light_direction_diffuse  "light_direction.diffuse"
 #define uniform_name_light_direction_specular "light_direction.specular"
+#define uniform_name_light_direction_shiness  "light_direction.shiness"
 
+//point light
 #define uniform_name_light_point_enabled  "light_point_arr[%d].enabled"
 #define uniform_name_light_point_pos      "light_point_arr[%d].pos"
 #define uniform_name_light_point_color    "light_point_arr[%d].color"
 #define uniform_name_light_point_ambient  "light_point_arr[%d].ambient"
 #define uniform_name_light_point_diffuse  "light_point_arr[%d].diffuse"
 #define uniform_name_light_point_specular "light_point_arr[%d].specular"
+#define uniform_name_light_point_shiness  "light_point_arr[%d].shiness"
 #define uniform_name_light_point_constant "light_point_arr[%d].constant"
-#define uniform_name_light_point_linear "light_point_arr[%d].linear"
-#define uniform_name_light_point_quadratic "light_point_arr[%d].quadratic"
+#define uniform_name_light_point_linear   "light_point_arr[%d].linear"
+#define uniform_name_light_point_quadratic"light_point_arr[%d].quadratic"
 
 
+//spot light
 #define uniform_name_light_spot_enabled  "light_spot_arr[%d].enabled"
 #define uniform_name_light_spot_pos      "light_spot_arr[%d].pos"
 #define uniform_name_light_spot_color    "light_spot_arr[%d].color"

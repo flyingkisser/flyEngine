@@ -148,6 +148,16 @@ void shader::setFloat(const char *name, float v,bool debug){
     glUniform1f(pos,v);
 }
 
+void shader::setVec3(const char *name, float* v,bool debug){
+    int pos=glGetUniformLocation(_idProgram, name);
+    if(pos==-1){
+        if(debug)
+            flylog("shader::setVec3 cannot find %s",name);
+       return;
+    }
+    glUniform3fv(pos,1,v);
+}
+
 void shader::setMat4(const char *name, float* v,bool debug){
     int pos=glGetUniformLocation(_idProgram, name);
     if(pos==-1){
@@ -158,12 +168,4 @@ void shader::setMat4(const char *name, float* v,bool debug){
     glUniformMatrix4fv(pos,1,GL_FALSE,v);
 }
 
-void shader::setVec3(const char *name, float* v,bool debug){
-    int pos=glGetUniformLocation(_idProgram, name);
-    if(pos==-1){
-        if(debug)
-            flylog("shader::setVec3 cannot find %s",name);
-       return;
-    }
-    glUniform3fv(pos,1,v);
-}
+

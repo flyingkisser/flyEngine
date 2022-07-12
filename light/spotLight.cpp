@@ -14,28 +14,30 @@
 USE_NS_FLYENGINE
 
 spotLight::spotLight(glm::vec3 color,material* mt,float cutOffEngleInner,float cutOffEngleOuter):light(color,mt){
-    m_fcufOffInner=glm::cos(glm::radians(cutOffEngleInner));
-    m_fcufOffOuter=glm::cos(glm::radians(cutOffEngleOuter));
+    m_fcutOffInner=glm::cos(glm::radians(cutOffEngleInner));
+    m_fcutOffOuter=glm::cos(glm::radians(cutOffEngleOuter));
+    m_fEngleOuter=cutOffEngleOuter;
+    m_fEngleInner=cutOffEngleInner;
 }
 
 void spotLight::glUpdateForCube(int program_id,int light_index,camera* c){
     int i=light_index;
     char szBuf[128]={0};
-    shader* shaderObj=shaderMgr::getShader(program_id);
+    //shader* shaderObj=shaderMgr::getShader(program_id);
 
     //启用光源
     snprintf(szBuf, sizeof(szBuf),uniform_name_light_spot_enabled,i);
-    shaderObj->setInt(szBuf, 1);
+    shaderMgr::setInt(program_id,szBuf, 1);
 
     //光源位置
     snprintf(szBuf, sizeof(szBuf),uniform_name_light_spot_pos,i);
-    shaderObj->setVec3(szBuf, glm::value_ptr(getPosition()));
+    shaderMgr::setVec3(program_id,szBuf, glm::value_ptr(getPosition()));
 
     //光源颜色
     memset(szBuf,0,sizeof(szBuf));
     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_color,i);
     glm::vec3 color=getColor();
-    shaderObj->setVec3(szBuf, glm::value_ptr(color));
+    shaderMgr::setVec3(program_id,szBuf, glm::value_ptr(color));
 
     //光源材质
     material* mt=getMaterial();
@@ -43,19 +45,29 @@ void spotLight::glUpdateForCube(int program_id,int light_index,camera* c){
     
     //光源材质
     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_ambient,i);
-    shaderObj->setVec3(szBuf, (float*)glm::value_ptr(mt->getAmbient()));
+    shaderMgr::setVec3(program_id,szBuf, (float*)glm::value_ptr(mt->getAmbient()));
     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_diffuse,i);
-    shaderObj->setVec3(szBuf, (float*)glm::value_ptr(mt->getDiffuse()));
+    shaderMgr::setVec3(program_id,szBuf, (float*)glm::value_ptr(mt->getDiffuse()));
     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_specular,i);
-    shaderObj->setVec3(szBuf, (float*)glm::value_ptr(mt->getSpecular()));
+    shaderMgr::setVec3(program_id,szBuf, (float*)glm::value_ptr(mt->getSpecular()));
     
     //角度的cos值
     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_cutoff_inner,i);
-    shaderMgr::setFloat(program_id, szBuf, m_fcufOffInner);
+    shaderMgr::setFloat(program_id, szBuf, m_fcutOffInner);
     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_cutoff_outer,i);
-    shaderMgr::setFloat(program_id, szBuf, m_fcufOffOuter);
+    shaderMgr::setFloat(program_id, szBuf, m_fcutOffOuter);
     
     //方向向量
     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_direction,i);
     shaderMgr::setVec3(program_id, szBuf,(float*)glm::value_ptr(c->getFront()));
+    
+    if(m_fConstant){
+        snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_constant,i);
+        shaderMgr::setFloat(program_id, szBuf, m_fConstant);
+        snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_linear,i);
+        shaderMgr::setFloat(program_id, szBuf, m_fLinear);
+        snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_quadratic,i);
+        shaderMgr::setFloat(program_id, szBuf, m_fQuadratic);
+    }
+       
 }
