@@ -88,6 +88,8 @@
 		D8826A5C26C3B28700314F16 /* directionLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8826A5B26C3B28700314F16 /* directionLight.cpp */; };
 		D8826A5F26C3EB9000314F16 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8826A5E26C3EB9000314F16 /* material.cpp */; };
 		D882E05C2869F2A400AB08DB /* test_depth_stencil_blend_facecull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D882E05B2869F2A400AB08DB /* test_depth_stencil_blend_facecull.cpp */; };
+		D8902828287D568300152FFF /* uiText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8902826287D568300152FFF /* uiText.cpp */; };
+		D890282B287D5A9E00152FFF /* fontMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8902829287D5A9E00152FFF /* fontMgr.cpp */; };
 		D89600E924C8541400DF6FD3 /* testAniBySwapBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89600E824C8541400DF6FD3 /* testAniBySwapBuffer.cpp */; };
 		D89600EC24CEC36400DF6FD3 /* test3DPolyhedra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89600EB24CEC36400DF6FD3 /* test3DPolyhedra.cpp */; };
 		D89600F024D1686400DF6FD3 /* curve.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89600EF24D1686400DF6FD3 /* curve.cpp */; };
@@ -107,10 +109,10 @@
 		D8BED72B253EB9F0006974D3 /* std_move_forward.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BED72A253EB9F0006974D3 /* std_move_forward.cpp */; };
 		D8CF0593271EBD3C00D26C07 /* mesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8CF0592271EBD3C00D26C07 /* mesh.cpp */; };
 		D8CF0596271EEB4300D26C07 /* model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8CF0595271EEB4300D26C07 /* model.cpp */; };
-		D8EC7823287C741300415650 /* test_font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EC7821287C741300415650 /* test_font.cpp */; };
+		D8EC7823287C741300415650 /* test_text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EC7821287C741300415650 /* test_text.cpp */; };
 		D8EC7825287C766000415650 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EC7824287C764600415650 /* libfreetype.a */; };
 		D8EC7827287C795900415650 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EC7826287C795900415650 /* libbz2.1.0.tbd */; };
-		D8EC782B287D1D5100415650 /* fontAscii.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EC7829287D1D5100415650 /* fontAscii.cpp */; };
+		D8EC782B287D1D5100415650 /* fontTTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EC7829287D1D5100415650 /* fontTTF.cpp */; };
 		D8EF622F2519E32500B8588F /* stringUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EF622E2519E32500B8588F /* stringUtil.cpp */; };
 		D8F0B7FE25652BCD0034E7B7 /* cameraBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F0B7FD25652BCD0034E7B7 /* cameraBase.cpp */; };
 		D8F37D7626E607D000E5225B /* pointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F37D7526E607D000E5225B /* pointLight.cpp */; };
@@ -1727,6 +1729,15 @@
 		D882E05B2869F2A400AB08DB /* test_depth_stencil_blend_facecull.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_depth_stencil_blend_facecull.cpp; sourceTree = "<group>"; };
 		D882E05D286D851000AB08DB /* 3d_depth_test2.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_depth_test2.fs; sourceTree = "<group>"; };
 		D882E05E286D8D8F00AB08DB /* 3d_depth_test1.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_depth_test1.fs; sourceTree = "<group>"; };
+		D8902823287D48C200152FFF /* font_2d.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = font_2d.vs; sourceTree = "<group>"; };
+		D8902824287D48D000152FFF /* font.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = font.fs; sourceTree = "<group>"; };
+		D8902826287D568300152FFF /* uiText.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = uiText.cpp; sourceTree = "<group>"; };
+		D8902827287D568300152FFF /* uiText.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = uiText.h; sourceTree = "<group>"; };
+		D8902829287D5A9E00152FFF /* fontMgr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fontMgr.cpp; sourceTree = "<group>"; };
+		D890282A287D5A9E00152FFF /* fontMgr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fontMgr.h; sourceTree = "<group>"; };
+		D890282D287D6E7200152FFF /* Almarai.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Almarai.ttf; sourceTree = "<group>"; };
+		D890282E287D6E7200152FFF /* Tahoma.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Tahoma.ttf; sourceTree = "<group>"; };
+		D890282F287D6E7200152FFF /* jozoor.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = jozoor.ttf; sourceTree = "<group>"; };
 		D89600E724C8541400DF6FD3 /* testAniBySwapBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = testAniBySwapBuffer.h; sourceTree = "<group>"; };
 		D89600E824C8541400DF6FD3 /* testAniBySwapBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = testAniBySwapBuffer.cpp; sourceTree = "<group>"; };
 		D89600EA24CEC36400DF6FD3 /* test3DPolyhedra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test3DPolyhedra.h; sourceTree = "<group>"; };
@@ -1896,12 +1907,12 @@
 		D8E9CDED24F8EF990025D62E /* libGLEW.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libGLEW.a; path = lib/libGLEW.a; sourceTree = "<group>"; };
 		D8E9CDEE24F8EF990025D62E /* libGLEW.2.1.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libGLEW.2.1.0.dylib; path = lib/libGLEW.2.1.0.dylib; sourceTree = "<group>"; };
 		D8E9CDF124F8EF9E0025D62E /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
-		D8EC7821287C741300415650 /* test_font.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_font.cpp; sourceTree = "<group>"; };
-		D8EC7822287C741300415650 /* test_font.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_font.h; sourceTree = "<group>"; };
+		D8EC7821287C741300415650 /* test_text.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_text.cpp; sourceTree = "<group>"; };
+		D8EC7822287C741300415650 /* test_text.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_text.h; sourceTree = "<group>"; };
 		D8EC7824287C764600415650 /* libfreetype.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libfreetype.a; path = external/freetype/libfreetype.a; sourceTree = "<group>"; };
 		D8EC7826287C795900415650 /* libbz2.1.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libbz2.1.0.tbd; path = usr/lib/libbz2.1.0.tbd; sourceTree = SDKROOT; };
-		D8EC7829287D1D5100415650 /* fontAscii.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fontAscii.cpp; sourceTree = "<group>"; };
-		D8EC782A287D1D5100415650 /* fontAscii.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fontAscii.h; sourceTree = "<group>"; };
+		D8EC7829287D1D5100415650 /* fontTTF.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fontTTF.cpp; sourceTree = "<group>"; };
+		D8EC782A287D1D5100415650 /* fontTTF.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fontTTF.h; sourceTree = "<group>"; };
 		D8EF622D2519E32500B8588F /* stringUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stringUtil.h; sourceTree = "<group>"; };
 		D8EF622E2519E32500B8588F /* stringUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stringUtil.cpp; sourceTree = "<group>"; };
 		D8F0B7FC25652BCD0034E7B7 /* cameraBase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cameraBase.h; sourceTree = "<group>"; };
@@ -3855,6 +3866,8 @@
 				D8800D292872F37000DA140A /* color_border.fs */,
 				D8800D2A28742D1600DA140A /* 3d_blend_1.fs */,
 				D8800D2B287C0E3500DA140A /* 3d_blend_2.fs */,
+				D8902823287D48C200152FFF /* font_2d.vs */,
+				D8902824287D48D000152FFF /* font.fs */,
 			);
 			path = shader;
 			sourceTree = "<group>";
@@ -3875,6 +3888,7 @@
 				D85253F22638113700D6E4B9 /* camera */,
 				D856FED324E15D8A005A0760 /* shader */,
 				D825DBB824ACA31A00C494E7 /* render */,
+				D8902825287D564B00152FFF /* text */,
 				D825DBA924AC82DF00C494E7 /* texture */,
 				D83EF32E26C298F10007E460 /* light */,
 				D8CF0590271EBD1800D26C07 /* model */,
@@ -3963,6 +3977,7 @@
 			children = (
 				D8B374D82844AE8000C3DF0C /* model */,
 				D809EE1724F502240067189D /* shader */,
+				D890282C287D6E7200152FFF /* font */,
 				D825DB78249CD2D900C494E7 /* test.bmp */,
 				D8CFDE6825359F2B00C3334F /* fire.png */,
 				D8BED71A25399499006974D3 /* smile.png */,
@@ -4136,8 +4151,8 @@
 				D8A8498B28694A0E000E231C /* test_c_plusplus.cpp */,
 				D882E05A2869F2A400AB08DB /* test_depth_stencil_blend_facecull.h */,
 				D882E05B2869F2A400AB08DB /* test_depth_stencil_blend_facecull.cpp */,
-				D8EC7821287C741300415650 /* test_font.cpp */,
-				D8EC7822287C741300415650 /* test_font.h */,
+				D8EC7821287C741300415650 /* test_text.cpp */,
+				D8EC7822287C741300415650 /* test_text.h */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -4316,6 +4331,25 @@
 				D8273E7F2510D3EC00D2BC59 /* testTexXD.cpp */,
 			);
 			path = _not_used;
+			sourceTree = "<group>";
+		};
+		D8902825287D564B00152FFF /* text */ = {
+			isa = PBXGroup;
+			children = (
+				D8902826287D568300152FFF /* uiText.cpp */,
+				D8902827287D568300152FFF /* uiText.h */,
+			);
+			path = text;
+			sourceTree = "<group>";
+		};
+		D890282C287D6E7200152FFF /* font */ = {
+			isa = PBXGroup;
+			children = (
+				D890282D287D6E7200152FFF /* Almarai.ttf */,
+				D890282E287D6E7200152FFF /* Tahoma.ttf */,
+				D890282F287D6E7200152FFF /* jozoor.ttf */,
+			);
+			path = font;
 			sourceTree = "<group>";
 		};
 		D89600ED24D1684A00DF6FD3 /* curve */ = {
@@ -4567,8 +4601,10 @@
 		D8EC7828287D1CE100415650 /* font */ = {
 			isa = PBXGroup;
 			children = (
-				D8EC7829287D1D5100415650 /* fontAscii.cpp */,
-				D8EC782A287D1D5100415650 /* fontAscii.h */,
+				D8EC7829287D1D5100415650 /* fontTTF.cpp */,
+				D8EC782A287D1D5100415650 /* fontTTF.h */,
+				D8902829287D5A9E00152FFF /* fontMgr.cpp */,
+				D890282A287D5A9E00152FFF /* fontMgr.h */,
 			);
 			path = font;
 			sourceTree = "<group>";
@@ -4648,6 +4684,7 @@
 				D825DB9D24AC6BA900C494E7 /* testPixel.cpp in Sources */,
 				D87EBFEE26AA7547004ED7DE /* test3D_old.cpp in Sources */,
 				D881DEEF24D80E2E0011F7B8 /* pngUtil.cpp in Sources */,
+				D890282B287D5A9E00152FFF /* fontMgr.cpp in Sources */,
 				D8BB1B9E255BE08000AF9FD5 /* control.cpp in Sources */,
 				D87EBFDE26A6F0D6004ED7DE /* moveBy.cpp in Sources */,
 				D8BB1B9B255A6D1500AF9FD5 /* mouseEventMgr.cpp in Sources */,
@@ -4673,7 +4710,7 @@
 				D882E05C2869F2A400AB08DB /* test_depth_stencil_blend_facecull.cpp in Sources */,
 				D810AEB9268B3F1F009B774B /* test_node.cpp in Sources */,
 				D87EBFFA26AEDE4A004ED7DE /* rotateBy.cpp in Sources */,
-				D8EC782B287D1D5100415650 /* fontAscii.cpp in Sources */,
+				D8EC782B287D1D5100415650 /* fontTTF.cpp in Sources */,
 				D810AEB6268B3BE3009B774B /* logUtil.cpp in Sources */,
 				D81EF38B1EB253FF0003604F /* points.cpp in Sources */,
 				D827953224BC5FB400261C44 /* matrix.cpp in Sources */,
@@ -4701,7 +4738,7 @@
 				D825DBB324AC929B00C494E7 /* _nouse_node.cpp in Sources */,
 				D8EF622F2519E32500B8588F /* stringUtil.cpp in Sources */,
 				D8B374D72844A8F400C3DF0C /* test_model.cpp in Sources */,
-				D8EC7823287C741300415650 /* test_font.cpp in Sources */,
+				D8EC7823287C741300415650 /* test_text.cpp in Sources */,
 				D89B2B6024937E7800DA6873 /* pixel.cpp in Sources */,
 				D810AEAD26835232009B774B /* glad.c in Sources */,
 				D87EBFF726AEB1D0004ED7DE /* scaleBy.cpp in Sources */,
@@ -4709,6 +4746,7 @@
 				D8F37D7C26E6331200E5225B /* spotLight.cpp in Sources */,
 				D825DBC124AED03300C494E7 /* threadUtil.cpp in Sources */,
 				D8F37D7626E607D000E5225B /* pointLight.cpp in Sources */,
+				D8902828287D568300152FFF /* uiText.cpp in Sources */,
 				D89600F324D169D700DF6FD3 /* testCurve.cpp in Sources */,
 				D87EBFDB26A6F010004ED7DE /* action.cpp in Sources */,
 				D87EBFF126AAAEF2004ED7DE /* sequence.cpp in Sources */,

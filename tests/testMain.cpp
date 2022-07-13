@@ -12,7 +12,7 @@
 #include "test_spotLight.h"
 #include "test_model.h"
 #include "test_depth_stencil_blend_facecull.h"
-#include "test_font.h"
+#include "test_text.h"
 
 void testMainBegin(){
     //code cube test
@@ -60,5 +60,5 @@ void testMainBegin(){
 //    test_blend_1();
 //    test_blend_2();
 //    test_facecull();
-    test_font_ttf();
+    test_text1();
 }
