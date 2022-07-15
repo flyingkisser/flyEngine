@@ -406,17 +406,17 @@ void test_facecull(){
     plainObj->setPosition(glm::vec3(0,0,0.5));
     world::getInstance()->getControl()->bindNode(modelObj);
     camera* cam=world::getInstance()->getCamera();
-//    world::getInstance()->addChild(modelObj);
-//    world::getInstance()->addChild(plainObj);
+    world::getInstance()->addChild(modelObj);
+    world::getInstance()->addChild(plainObj);
     world::getInstance()->setCBBeforeDrawCall([cam,plainObj,modelObj](){
-        glDisable(GL_CULL_FACE);
-        glEnable(GL_DEPTH_TEST);
-        glClear(GL_DEPTH_BUFFER_BIT);
-        plainObj->draw(cam);
-        
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-        modelObj->draw(cam);
+//        glDisable(GL_CULL_FACE);
+//        glEnable(GL_DEPTH_TEST);
+//        glClear(GL_DEPTH_BUFFER_BIT);
+//        plainObj->draw(cam);
+//
+//        glEnable(GL_CULL_FACE);
+//        glCullFace(GL_BACK);
+//        modelObj->draw(cam);
     });
     
     timerUtil::getInstance()->exec(0.1,[](camera* cam,model* modelObj,cubeTex* plainObj){

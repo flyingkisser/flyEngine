@@ -33,6 +33,8 @@ void node::print(){
 node::node(){
 }
 
+
+
 //从当前位置，移动一个指定的距离
 void node::moveBy(glm::vec3 v){
     _pos+=v;

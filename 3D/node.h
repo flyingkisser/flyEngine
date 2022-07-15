@@ -39,6 +39,7 @@ private:
     float* _vertice_arr=nullptr;
     int _vertice_arr_size=0;
     bool _hasNormal=false;
+    bool _bDisableLogState=false;
     
 public:
     shader* _shaderObj=NULL;
@@ -46,6 +47,7 @@ public:
     unsigned int _gl_program=0;
     unsigned int _gl_vao=0;
     bool _dirtyPos=false;
+    bool _bVisible=true;
     
 public:
     node();
@@ -88,7 +90,12 @@ public:
     void scaleBy(glm::vec3 v);
     void rotateBy(glm::vec3 v);
     
+    void setVisible(bool s){_bVisible=s;};
+    bool visible(){return _bVisible;};
     bool isDirty(){return _dirtyPos;};
+    
+    void setLogInStatebool(bool s){_bDisableLogState=!s;};
+    bool isDisableLogState(){return _bDisableLogState;};
     
     void runAction(action* act);
     void stopAction(action* act);

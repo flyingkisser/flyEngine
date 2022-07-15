@@ -11,29 +11,34 @@
 #include "shader.h"
 #include "shaderMgr.h"
 #include "window.h"
+#include "logUtil.h"
 
 using namespace flyEngine;
 using namespace std;
 
 bool fontTTF::init(){
-    _shader2dObj=shaderMgr::getShader("res/shader/font_2d.vs", "res/shader/font.fs");
-    if(_shader2dObj->getProgramID()==0){
-        flylog("init shader font failed!");
-        return false;
-    }
-    
+//    _shader2dObj=shaderMgr::getShader("res/shader/font_2d.vs", "res/shader/font_2d.fs");
+//    if(_shader2dObj->getProgramID()==0){
+//        flylog("init shader font failed!");
+//        return false;
+//    }
+//    _shader2dObj->use();
     if (FT_Init_FreeType(&_ftLib)){
         flylog("could not init FreeType Library");
         return false;
     }
-        
     if (FT_New_Face(_ftLib, _fontPath, 0, &_ftFace)){
         flylog("failed to load font %s",_fontPath);
         FT_Done_FreeType(_ftLib);
         return false;
     }
-        
     FT_Set_Pixel_Sizes(_ftFace, 0, _fontSize);
+    glInit();
+    flylog("create font %s size %d",_fontPath,_fontSize);
+    return true;
+}
+
+void fontTTF::glInit(){
     glPixelStorei(GL_UNPACK_ALIGNMENT,1);
     for(int i=0;i<128;i++){
         GLuint texID=0;
@@ -44,6 +49,7 @@ bool fontTTF::init(){
             continue;
         }
         glGenTextures(1,&texID);
+        glBindTexture(GL_TEXTURE_2D, texID);
         glTexImage2D(GL_TEXTURE_2D,0,GL_RED,
                      _ftFace->glyph->bitmap.width,
                      _ftFace->glyph->bitmap.rows,
@@ -62,13 +68,13 @@ bool fontTTF::init(){
         st.advance=_ftFace->glyph->advance.x;
         _vecStruct.push_back(st);
     }
-    return true;
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void fontTTF::setFontSize(int s){
-    _fontSize=s;
-    FT_Set_Pixel_Sizes(_ftFace, 0, _fontSize);
-}
+//void fontTTF::setFontSize(int s){
+//    _fontSize=s;
+//    FT_Set_Pixel_Sizes(_ftFace, 0, _fontSize);
+//}
 
 texFontStruct fontTTF::getTexStruct(int c){
     return _vecStruct[c];

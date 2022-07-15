@@ -37,7 +37,7 @@ struct texFontStruct{
 
 class fontTTF{
 public:
-    fontTTF(const char* ttfFileName,int fontSize=12){
+    fontTTF(const char* ttfFileName,int fontSize=48){
         _fontPath=(char*)ttfFileName;
         _fontSize=fontSize;
     };
@@ -47,7 +47,8 @@ public:
     };
     
     bool init();
-    void setFontSize(int s);
+    void glInit();
+//    void setFontSize(int s);
     texFontStruct getTexStruct(int c);
     
 private:
@@ -55,7 +56,7 @@ private:
     FT_Face _ftFace;
     int _fontSize;
     char* _fontPath;
-    shader* _shader2dObj;
+//    shader* _shader2dObj;
     std::vector<texFontStruct> _vecStruct;
 };
 

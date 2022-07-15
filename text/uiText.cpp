@@ -14,26 +14,29 @@
 #include "shaderMgr.h"
 #include "window.h"
 #include "fontMgr.h"
+#include "state.h"
 
 using namespace flyEngine;
 using namespace std;
 
-uiText::uiText(const char* strFont,int fontSize,const char* strText){
+uiText::uiText(const char* fontName,int fontSize,const char* strText){
+    _fontName=fontName;
     _fontSize=fontSize;
     _strText=(char*)strText;
     
-    _shader2dObj=shaderMgr::getShader("res/shader/font_2d.vs", "res/shader/font.fs");
-    if(_shader2dObj->getProgramID()==0){
+    _shaderObj=shaderMgr::getShader("res/shader/font_2d.vs", "res/shader/font_2d.fs");
+    if(_shaderObj->getProgramID()==0){
         flylog("uiText: get shader failed!");
         return;
     }
+    setShader(_shaderObj);
     
-    fontTTF* _fontObj=fontMgr::getInstance()->getFontTTF(strFont);
+    _fontObj=fontMgr::getInstance()->getFontTTF(fontName,fontSize);
     if (_fontObj==NULL){
         flylog("uiText: get font obj failed!");
         return;
     }
-    _fontObj->setFontSize(fontSize);
+    init();
 }
 
 bool uiText::init(){
@@ -47,8 +50,8 @@ bool uiText::init(){
 
 void uiText::glInit(){
     glGenVertexArrays(1,&_vao);
-    glBindVertexArray(_vao);
     glGenBuffers(1,&_vbo);
+    glBindVertexArray(_vao);
     glBindBuffer(GL_ARRAY_BUFFER,_vbo);
     glBufferData(GL_ARRAY_BUFFER,4*6*sizeof(float),NULL,GL_DYNAMIC_DRAW);//矩形有2个三角形即6个顶点，每个顶点有2个世界坐标和2个纹理坐标
     glEnableVertexAttribArray(0);
@@ -59,26 +62,50 @@ void uiText::glInit(){
     glBindVertexArray(0);
 }
 
+void uiText::setFontSize(int s){
+    _fontSize=s;
+    _fontObj=fontMgr::getInstance()->getFontTTF(_fontName,_fontSize);
+    if (_fontObj==NULL){
+        flylog("uiText::setFontSize get font obj failed!");
+        return;
+    }
+};
+
 void uiText::draw(camera* cameraObj){
-    int strLen=(int)strlen(_strText);    
-    _shader2dObj->use();
-    glm::mat4 proj=glm::ortho(0,g_winWidth,0,g_winHigh);
-    _shader2dObj->setMat4("matProj", (float*)glm::value_ptr(proj));
-    _shader2dObj->setMat4("matModel", (float*)glm::value_ptr(getPosition()));
-    _shader2dObj->setInt("texture1", 0);
-    glm::vec3 color=glm::vec3(_fontColor.r/255,_fontColor.g/255,_fontColor.b/255);
-    _shader2dObj->setVec3("textColor", (float*)glm::value_ptr(color));
-    
-    glBindVertexArray(_vao);
+    int strLen=(int)strlen(_strText);
     glm::vec3 nodePos=getPosition();
+    
+    if(strLen<=0)
+        return;
+    
+    _shaderObj->use();
+    glm::mat4 proj=glm::ortho(0.0f,(float)g_winWidth,0.0f,(float)g_winHigh);
+    _shaderObj->setMat4("matProj", (float*)glm::value_ptr(proj));
+    
+//    _shader2dObj->setMat4("matModel", (float*)glm::value_ptr(glm::vec3(nodePos.x/g_winWidth,nodePos.y/g_winHigh,0)));
+    updateModel(cameraObj);
+    
+    glm::vec3 color=glm::vec3(_fontColor.r/255,_fontColor.g/255,_fontColor.b/255);
+    _shaderObj->setVec3("textColor", (float*)glm::value_ptr(color));
+    
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    
+    glActiveTexture(GL_TEXTURE0);
+    glBindVertexArray(_vao);
+    
+    
     glm::vec3 scale=getScale();
     glm::vec3 pos=nodePos;
    
+    float start_x=0;
     for(int i=0;i<strLen;i++){
         int k=(int)_strText[i];
         texFontStruct st=_fontObj->getTexStruct(k);
-        float x=pos.x+st.bearingX*scale.x;
-        float y=pos.y-(st.height-st.bearingY)*scale.y;
+//        float x=pos.x+st.bearingX*scale.x;
+//        float y=pos.y-(st.height-st.bearingY)*scale.y;
+        float x=start_x+st.bearingX*scale.x;
+        float y=-(st.height-st.bearingY)*scale.y;
         float w=st.width*scale.x;
         float h=st.height*scale.y;
         float vertices[6][4]={
@@ -94,11 +121,13 @@ void uiText::draw(camera* cameraObj){
         glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(vertices),vertices);
         
         glDrawArrays(GL_TRIANGLES,0,6);
-        pos.x+=(st.advance/6)*scale.x;
+        //pos.x+=(st.advance/64)*scale.x;
+        start_x+=(st.advance/64)*scale.x;
+        if(!isDisableLogState())
+            state::log(6);
     }
     
     glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER,0);
     glBindTexture(GL_TEXTURE_2D,0);
 }
 

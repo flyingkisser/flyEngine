@@ -27,3 +27,11 @@ char* stringUtil::utoa(unsigned x, char* dest, const unsigned base)
     std::reverse(dest, p);
     return dest;
 }
+
+std::string float2Str(float s){
+    char szFmt[32]={0};
+    std::string str;
+    snprintf(szFmt, sizeof(szFmt), "%f",s);
+    return std::string(szFmt);
+    //return std::to_string(s);
+}

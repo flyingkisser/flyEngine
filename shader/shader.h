@@ -11,37 +11,35 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "defines.h"
+//#include "defines.h"
 #include "glRef.h"
 
-NS_FLYENGINE_BEGIN
-
-class shader : public glRef{
-private:
-    unsigned int _idProgram;
-    char* _szVert;
-    char* _szFrag;
-    char* _szVertFileName;
-    char* _szFragFileName;
-
-public:
-    shader(const char* szVertFileName,const char* szFragFileName);
-    ~shader();
-    bool isSuccess();
-    void use();
-    void setBool(const char* name,bool v,bool debug=true);
-    void setInt(const char* name,int v,bool debug=true);
-    void setFloat(const char* name,float v,bool debug=true);
-    void setMat4(const char* name,float* v,bool debug=true);
-    void setVec3(const char* name,float* v,bool debug=true);
+namespace flyEngine {
+    class shader : public glRef{
+    private:
+        unsigned int _idProgram;
+        char* _szVert;
+        char* _szFrag;
+        char* _szVertFileName;
+        char* _szFragFileName;
         
-    unsigned int getProgramID(){return _idProgram;};
-
-    void compile();
-    bool init();
-};
- 
-NS_FLYENGINE_END
+    public:
+        shader(const char* szVertFileName,const char* szFragFileName);
+        ~shader();
+        bool isSuccess();
+        void use();
+        void setBool(const char* name,bool v,bool debug=true);
+        void setInt(const char* name,int v,bool debug=true);
+        void setFloat(const char* name,float v,bool debug=true);
+        void setMat4(const char* name,float* v,bool debug=true);
+        void setVec3(const char* name,float* v,bool debug=true);
+        
+        unsigned int getProgramID(){return _idProgram;};
+        
+        void compile();
+        bool init();
+    };
+}
 
 
 #endif /* shader_h */

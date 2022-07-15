@@ -16,6 +16,7 @@ class stringUtil{
     public :
         static std::string getFileExtName(std::string fileName);
         static char* utoa(unsigned x, char* dest, const unsigned base);
+        static std::string float2Str(float s);
         
 };
 

@@ -22,10 +22,7 @@ public:
     uiText(const char* strFontName,int fontSize,const char* strText);
     void setText(const char* str){_strText=(char*)str;};
     void setFontColor(glm::vec3 color){_fontColor=color;};
-    void setFontSize(int s){
-        _fontSize=s;
-        _fontObj->setFontSize(s);
-    };
+    void setFontSize(int s);
     void draw(camera* cameraObj);
     bool init();
     void glInit();
@@ -36,8 +33,9 @@ public:
     
 private:
     char* _strText;
+    const char* _fontName;
     int _fontSize=12;
-    glm::vec3 _fontColor=glm::vec3(255,255,255);
+    glm::vec3 _fontColor=glm::vec3(255,0,0);
     shader* _shader2dObj;
     fontTTF* _fontObj;
     GLuint _vao;

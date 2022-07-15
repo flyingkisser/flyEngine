@@ -7,6 +7,7 @@
 //
 
 #include "mesh.h"
+#include "state.h"
 
 USE_NS_FLYENGINE;
 
@@ -63,4 +64,6 @@ void mesh::draw(shader* s){
     glBindVertexArray(m_int_vao);
     glDrawElements(GL_TRIANGLES,(int)m_vecIndices.size(),GL_UNSIGNED_INT,0);
     glBindVertexArray(0);
+  
+    state::log((int)m_vecIndices.size());
 }

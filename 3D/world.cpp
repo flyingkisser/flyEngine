@@ -12,6 +12,9 @@
 #include "camera.h"
 #include "threadUtil.h"
 #include "window.h"
+#include "uiText.h"
+#include "timeUtil.h"
+#include "state.h"
 
 //#include "testWindow.h"
 
@@ -64,22 +67,36 @@ control* world::getControl(){
     return _camera->getControl();
 }
 
+void world::removeChild(node *nodeObj){
+    std::vector<node*>::iterator it =std::find(_vector_child.begin(),_vector_child.end(),nodeObj);
+    if(it==_vector_child.end())
+        return;
+    _vector_child.erase(it);
+}
+
 void world::draw(){
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+//    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     if(_cb_before_draw_call!=nullptr)
         _cb_before_draw_call();
     for(auto c : _vector_child){
         node* nodeObj=c;
+        if(!nodeObj->visible())
+            continue;
         nodeObj->draw(_camera);
     }
     for(auto c : _vector_point_light){
         node* nodeObj=(node*)c;
+        if(!nodeObj->visible())
+            continue;
         nodeObj->draw(_camera);
     }
     for(auto c : _vector_spot_light){
         node* nodeObj=(node*)c;
+        if(!nodeObj->visible())
+            continue;
         nodeObj->draw(_camera);
     }
     if(_cb_after_draw_call!=nullptr)
@@ -103,12 +120,20 @@ void world::_main_loop(){
 //    cameraObj->enableControl();
     
     while(!glfwWindowShouldClose(g_window)){
-         threadUtil::sleepMS(CONST_FRAME_RATE*1000);   //1000 means 1ms
+        threadUtil::sleepMS(CONST_FRAME_RATE*1000);   //1000 means 1ms
 
-         worldObj->draw();
+        state::reset();
+        
+        worldObj->draw();
+        if(state::isShowFrameRate()==true)
+            state::displayFrameRate();
+        if(state::isShowDrawCall())
+            state::displayDrawCall();
+        if(state::isShowVertices())
+            state::displayVertices();
 
-         glfwSwapBuffers(g_window);
-         glfwPollEvents();
+        glfwSwapBuffers(g_window);
+        glfwPollEvents();
    }
 
 }

@@ -27,10 +27,10 @@ public:
             s_ins=new fontMgr();
         return s_ins;
     };
-    fontTTF* getFontTTF(const char* fontPath);
+    fontTTF* getFontTTF(const char* fontPath,int fontSize);
     
 private:
-    std::map<std::string,fontTTF*> _mapTTF;
+    std::map<std::string,std::map<int,fontTTF*>> _mapTTF;
 };
 
 

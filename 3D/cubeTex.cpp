@@ -18,6 +18,7 @@
 #include "world.h"
 #include "directionLight.h"
 #include "material.h"
+#include "state.h"
 
 USE_NS_FLYENGINE
 
@@ -113,4 +114,5 @@ void cubeTex::draw(camera* cameraObj){
     glBindTexture(GL_TEXTURE_2D,_gl_texture0);
     glBindVertexArray(_gl_vao);
     glDrawArrays(GL_TRIANGLES,0,36);
+    state::log(36);
 }

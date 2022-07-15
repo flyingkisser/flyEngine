@@ -14,6 +14,7 @@
 #include "shaderMgr.h"
 #include "action.h"
 #include "camera.h"
+#include "state.h"
 
 USE_NS_FLYENGINE
 
@@ -46,4 +47,5 @@ void cubeColor::draw(camera* cameraObj){
     glEnable(GL_DEPTH_TEST);
     glBindVertexArray(_gl_vao);
     glDrawArrays(GL_TRIANGLES,0,36);
+    state::log(36);
 }

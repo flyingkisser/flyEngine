@@ -59,6 +59,6 @@ void testMainBegin(){
 //    test_stencil_2();
 //    test_blend_1();
 //    test_blend_2();
-//    test_facecull();
-    test_text1();
+    test_facecull();
+//    test_text1();
 }

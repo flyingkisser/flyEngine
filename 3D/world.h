@@ -30,16 +30,17 @@ private:
     std::vector<light*> _vector_light;
     std::vector<pointLight*> _vector_point_light;
     std::vector<spotLight*> _vector_spot_light;
-    camera* _camera=NULL;
-    directionLight* m_directionLight=NULL;
     std::function <void()> _cb_before_draw_call=nullptr;
     std::function <void()> _cb_after_draw_call=nullptr;
+    camera* _camera=NULL;
+    directionLight* m_directionLight=NULL;
     
 public:
     world();
     ~world();
     static world* getInstance();
     void addChild(node* node);
+    void removeChild(node* node);
     void addLight(light* node);
     void addPointLight(pointLight* node);
     void addSpotLight(spotLight* node);
@@ -64,6 +65,9 @@ public:
     float getFrameRate(){return CONST_FRAME_RATE;};
     void setCBBeforeDrawCall(std::function<void()> f){_cb_before_draw_call=f;};
     void setCBAfterDrawCall(std::function<void()> f){_cb_after_draw_call=f;};
+  
+
+   
 };
 
 NS_FLYENGINE_END
