@@ -26,25 +26,21 @@ class cubeTex: public node
 private:
     unsigned int _gl_texture0=0;
     texture* _texObj=NULL;
-    const char* _texPath;
+    const char* _texPath=NULL;
     
     std::function <void(int programID)> m_cb_before_draw_call=nullptr;
 
 public:
     cubeTex(const char* texPath);
+    cubeTex(unsigned int texID);
     ~cubeTex(){};
-    
-//    bool init(float* arr=g_verticeArrWithTexCoord,int arrSize=sizeof(g_verticeArrWithTexCoord),bool useNormal=false);
-//    void glInit(float* arr=g_verticeArrWithTexCoord,int arrSize=sizeof(g_verticeArrWithTexCoord),bool useNormal=false);
 
     bool init();
     void glInit();
     
     cubeTex* clone();
     
-    bool initByVerticeArr(float* arr=g_verticeArrWithTexCoord,int arrSize=sizeof(g_verticeArrWithTexCoord),bool useNormal=false);
-    void glInitByVerticeArr(float* arr=g_verticeArrWithTexCoord,int arrSize=sizeof(g_verticeArrWithTexCoord),bool useNormal=false);
-
+    bool initByVerticeArr(float* arr,int arrSize,int descArr[],int descArrSize);
     void resetPos();
     void draw(camera* cameraObj);
     void setCBDrawCall(std::function<void(int programID)> f){m_cb_before_draw_call=f;};

@@ -35,13 +35,14 @@ bool cubeColor::init(){
 }
 
 void cubeColor::glInit(){
-    node::glInitVAO();
+    int descArr[]={3};
+    initVAO(g_verticeArr, sizeof(g_verticeArr), descArr, 1);
 }
 
 void cubeColor::draw(camera* cameraObj){
     _shaderObj->use();
     cameraObj->update(_gl_program);
-    node::updateModel(cameraObj);
+    node::updateModel();
     _shaderObj->setVec3("color", glm::value_ptr(m_vec3Color));
 
     glEnable(GL_DEPTH_TEST);

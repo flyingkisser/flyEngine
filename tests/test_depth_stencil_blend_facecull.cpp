@@ -15,6 +15,9 @@
 #include "camera.h"
 #include "timerUtil.h"
 #include "control.h"
+#include "forever.h"
+#include "rotateBy.h"
+
 using namespace flyEngine;
 void test_depths(){
     cubeTex* cubeObj=new cubeTex("res/metal.png");
@@ -47,7 +50,8 @@ void test_depths(){
     cubeObj2->setScale(0.3);
     
     cubeTex* plainObj=new cubeTex("res/marble.jpg");
-    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane))){
+    int descArr[]={3,2};
+    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane),descArr,2)){
         flylog("init plainObj failed!");
         return;
     }
@@ -93,7 +97,8 @@ void test_depths_2(){
         
 
     cubeTex* plainObj=new cubeTex("res/marble.jpg");
-    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane))){
+    int descArr[]={3,2};
+    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane),descArr,2)){
         flylog("init plainObj failed!");
         return;
     }
@@ -135,7 +140,8 @@ void test_stencil(){
     
     
     cubeTex* plainObj=new cubeTex("res/marble.jpg");
-    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane))){
+    int descArr[]={3,2};
+    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane),descArr,2)){
         flylog("init marbleObj failed!");
         return;
     }
@@ -194,7 +200,8 @@ void test_stencil_2(){
 //    modelObj->setScale(0.3);
     
     cubeTex* plainObj=new cubeTex("res/marble.jpg");
-    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane))){
+    int descArr[]={3,2};
+    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane),descArr,2)){
         flylog("init marbleObj failed!");
         return;
     }
@@ -256,7 +263,8 @@ void test_blend_1(){
        };
 
     cubeTex* cubeObj=new cubeTex("res/grass.png");
-    if(!cubeObj->initByVerticeArr(transparentVertices,sizeof(transparentVertices))){
+    int descArr[]={3,2};
+    if(!cubeObj->initByVerticeArr(transparentVertices,sizeof(transparentVertices),descArr,2)){
         flylog("init cubeObj failed!");
         return;
     }
@@ -276,7 +284,7 @@ void test_blend_1(){
     }
     
     cubeTex* plainObj=new cubeTex("res/marble.jpg");
-    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane))){
+    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane),descArr,2)){
         flylog("init cubeTex failed!");
         return;
     }
@@ -309,7 +317,8 @@ void test_blend_2(){
     
     
     cubeTex* plainObj=new cubeTex("res/marble.jpg");
-    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane))){
+    int descArr[]={3,2};
+    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane),descArr,2)){
         flylog("init marbleObj failed!");
         return;
     }
@@ -330,7 +339,7 @@ void test_blend_2(){
     };
     
     cubeTex* windowObj=new cubeTex("res/window.png");
-    if(!windowObj->initByVerticeArr(windowArr,sizeof(windowArr))){
+    if(!windowObj->initByVerticeArr(windowArr,sizeof(windowArr),descArr,2)){
         flylog("init windowObj failed!");
         return;
     }
@@ -399,7 +408,8 @@ void test_facecull(){
     modelObj->setScale(0.4);
     
     cubeTex* plainObj=new cubeTex("res/marble.jpg");
-    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane))){
+    int descArr[]={3,2};
+    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane),descArr,2)){
         flylog("init marbleObj failed!");
         return;
     }
@@ -426,4 +436,18 @@ void test_facecull(){
         modelObj->setPositionZ(z-8);
         modelObj->rotateBy(glm::vec3(0,0.5,0));
     },cam,modelObj,plainObj);
+}
+
+void test_facecull_2(){
+    cubeTex* cubeObj=new cubeTex("res/wood.png");
+    cubeObj->init();
+    cubeObj->setPosition(glm::vec3(0,0.2,-0.2));
+    world::getInstance()->addChild(cubeObj);
+    cubeObj->runAction(new forever(1,new rotateBy(1,glm::vec3(0,10,0))));
+    world::getInstance()->getControl()->bindNode(cubeObj);
+    world::getInstance()->setCBBeforeDrawCall([](){
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+    });
+
 }

@@ -28,11 +28,11 @@ namespace flyEngine {
         ~shader();
         bool isSuccess();
         void use();
-        void setBool(const char* name,bool v,bool debug=true);
-        void setInt(const char* name,int v,bool debug=true);
-        void setFloat(const char* name,float v,bool debug=true);
-        void setMat4(const char* name,float* v,bool debug=true);
-        void setVec3(const char* name,float* v,bool debug=true);
+        void setBool(const char* name,bool v,bool debug=false);
+        void setInt(const char* name,int v,bool debug=false);
+        void setFloat(const char* name,float v,bool debug=false);
+        void setMat4(const char* name,float* v,bool debug=false);
+        void setVec3(const char* name,float* v,bool debug=false);
         
         unsigned int getProgramID(){return _idProgram;};
         

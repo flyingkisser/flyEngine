@@ -59,7 +59,7 @@ bool pngUtil::isPng(const char *filename)
 }
 
 
- bool pngUtil::loadFile(const char *filename,struct_texture* texinfo)
+ bool pngUtil::loadFile(const char *filename,struct_texture* texinfo,bool bFlipY)
 {
     png_byte magic[8];
     png_structp png_ptr;
@@ -144,8 +144,13 @@ bool pngUtil::isPng(const char *filename)
     texinfo->buf = (GLubyte *)malloc(sizeof(GLubyte) * texinfo->width * texinfo->height * texinfo->internalFormat);
     /* Setup a pointer array. Each one points at the begening of a row. */
     row_pointers = (png_bytep *)malloc(sizeof(png_bytep) * texinfo->height);
-    for (i = 0; i < texinfo->height; ++i)
-        row_pointers[i] = (png_bytep)(texinfo->buf + ((texinfo->height - (i + 1)) * texinfo->width * texinfo->internalFormat));
+    if(bFlipY)
+        for (i = 0; i < texinfo->height; ++i)
+            row_pointers[i] = (png_bytep)(texinfo->buf + (i * texinfo->width * texinfo->internalFormat));
+     else
+         for (i = 0; i < texinfo->height; ++i)
+             row_pointers[i] = (png_bytep)(texinfo->buf + ((texinfo->height - (i + 1)) * texinfo->width * texinfo->internalFormat));
+        
     /* Read pixel data using row pointers */
     png_read_image(png_ptr, row_pointers);
     /* Finish decompression and release memory */

@@ -13,7 +13,10 @@
 #include "test_model.h"
 #include "test_depth_stencil_blend_facecull.h"
 #include "test_text.h"
-
+#include "test_framebuffer.h"
+#include "test_sprite.h"
+#include "test_skybox.h"
+#include "test_ubo.h""
 void testMainBegin(){
     //code cube test
 //    test_cubeColor();
@@ -59,6 +62,17 @@ void testMainBegin(){
 //    test_stencil_2();
 //    test_blend_1();
 //    test_blend_2();
-    test_facecull();
-//    test_text1();
+    //    test_text1();
+//    test_facecull();
+//    test_facecull_2();
+//    test_sprite_1();
+//    test_framebuffer();
+//    test_framebuffer_mirror();
+//    test_framebuffer_kernel();
+//    test_skybox_1();
+//    test_skybox_reflect();
+//    test_skybox_reflect_2();
+//    test_skybox_reflect_3();
+//    test_skybox_refract_1();
+    test_ubo_1();
 }

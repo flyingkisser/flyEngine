@@ -29,8 +29,10 @@ shader* shaderMgr::createAndCacheShader(const char* szVertFileName,const char* s
 shader* shaderMgr::getShader(const char* szVertFileName,const char* szFragFileName){
     std::string key=std::string(szVertFileName)+'_'+std::string(szFragFileName);
     auto it=s_mapShaderCache.find(key);
-    if(it!=s_mapShaderCache.end())
+    if(it!=s_mapShaderCache.end()){
+        flylog("cached programID %d from %s %s",it->second,szVertFileName,szFragFileName);
         return it->second;
+    }
     return shaderMgr::createAndCacheShader(szVertFileName,szFragFileName);
 }
 
@@ -85,6 +87,10 @@ shader* shaderMgr::get3d2texShader(){
 
 shader* shaderMgr::getModelShader(){
     return shaderMgr::getShaderUniqueue("./res/shader/3d_model.vs","./res/shader/3d_model.fs");
+}
+
+shader* shaderMgr::get2d1texShader(){
+    return shaderMgr::getShader("./res/shader/2d_1tex.vs", "./res/shader/2d_1tex.fs");
 }
 
 

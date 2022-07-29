@@ -11,6 +11,7 @@
 #include "control.h"
 #include "shader.h"
 #include "shaderMgr.h"
+#include "window.h"
 
 using namespace flyEngine;
 
@@ -124,13 +125,49 @@ bool camera::init(){
     _matProj=glm::perspective(glm::radians(double(_fov)), (double)_screenRatio, 0.1, 100.0);
     _matProjOrigin=_matProj;
     
+    _matProj2D=glm::ortho(0.0f,(float)g_winWidth,0.0f,(float)g_winHigh);
+    
     _dirtyPos=true;
     _dirtyProj=true;
     return true;
+}
+
+glm::mat4 camera::GetLookAtMatrix(){
+    return _matCamera;
+}
+glm::mat4 camera::GetProjMatrix(){
+    return _matProj;
 }
 
 void camera::update(int programID){
     _program=programID;
     _updateCamera();
     _updateProjection();
+}
+
+void camera::update2D(int programID){
+    if(!programID)
+        return;
+    shaderMgr::setMat4(programID,uniform_name_mat_proj,glm::value_ptr(_matProj2D));
+}
+
+void camera::_updateUBO(){
+    glBindBuffer(GL_UNIFORM_BUFFER,_ubo1);
+    glBufferSubData(GL_UNIFORM_BUFFER,0,16,(void*)glm::value_ptr(_matProj));
+    glBufferSubData(GL_UNIFORM_BUFFER,64,64,(void*)glm::value_ptr(_matCamera));
+    glBufferSubData(GL_UNIFORM_BUFFER,128,16,(void*)glm::value_ptr(_cameraPos));
+    glBindBuffer(GL_UNIFORM_BUFFER,0);
+}
+
+void camera::updateUBO(){
+    if(!_dirtyPos)
+        return;
+    _dirtyPos=false;
+    _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
+    _updateUBO();
+}
+
+void camera::initUBO(){
+    glGenBuffers(1,&_ubo1);
+    _updateUBO();
 }

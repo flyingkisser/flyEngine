@@ -49,6 +49,8 @@ bool model::loadModel(std::string path){
 void model::processNode(aiNode* node,const aiScene *scene){
     for(int i=0;i<node->mNumMeshes;i++){
         mesh meshObj=processMesh(scene->mMeshes[node->mMeshes[i]], scene);
+        if(_cb_before_draw!=NULL)
+            meshObj.setCBBeforeDraw(_cb_before_draw);
         m_vecMeshes.push_back(meshObj);
         flylog("mesh index %d processed![vertices %d]",node->mMeshes[i],meshObj.getVerticeCount());
     }
@@ -131,7 +133,9 @@ std::vector<Texture> model::loadMaterialTextures(aiMaterial *aiMT, aiTextureType
 
 bool model::init(){
     setPosition(glm::vec3(0,0,-5));
-    _shaderObj=shaderMgr::getModelShader();
+    if(_shaderObj==NULL){
+        _shaderObj=shaderMgr::getModelShader();
+    }
     if(_shaderObj==NULL){
         flylog("model::init shaderObj is null,return!");
         return false;
@@ -145,13 +149,10 @@ void model::glInit(){
 
 }
 
-
-
-
 void model::draw(camera* cameraObj){
     _shaderObj->use();
     cameraObj->update(_gl_program);
-    node::updateModel(cameraObj);
+    node::updateModel();
     node::glUpdateLight();
     for(int i=0;i<m_vecMeshes.size();i++){
         m_vecMeshes[i].draw(_shaderObj);

@@ -17,12 +17,6 @@ using namespace flyEngine;
 using namespace std;
 
 bool fontTTF::init(){
-//    _shader2dObj=shaderMgr::getShader("res/shader/font_2d.vs", "res/shader/font_2d.fs");
-//    if(_shader2dObj->getProgramID()==0){
-//        flylog("init shader font failed!");
-//        return false;
-//    }
-//    _shader2dObj->use();
     if (FT_Init_FreeType(&_ftLib)){
         flylog("could not init FreeType Library");
         return false;

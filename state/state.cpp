@@ -89,9 +89,6 @@ void state::incDrawCall(){s_draw_call++;};
 void state::addVertices(int v){s_vertices+=v;};
 
 void state::log(int v){
-    int s1=s_draw_call+1;
-    s_draw_call=s1;
-    s_draw_call=s_draw_call+1;
-    s_vertices=s_vertices+v;
-    
-    };
+    s_draw_call++;
+    s_vertices+=v;
+};

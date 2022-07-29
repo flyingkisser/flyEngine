@@ -83,7 +83,7 @@ void uiText::draw(camera* cameraObj){
     _shaderObj->setMat4("matProj", (float*)glm::value_ptr(proj));
     
 //    _shader2dObj->setMat4("matModel", (float*)glm::value_ptr(glm::vec3(nodePos.x/g_winWidth,nodePos.y/g_winHigh,0)));
-    updateModel(cameraObj);
+    updateModel();
     
     glm::vec3 color=glm::vec3(_fontColor.r/255,_fontColor.g/255,_fontColor.b/255);
     _shaderObj->setVec3("textColor", (float*)glm::value_ptr(color));

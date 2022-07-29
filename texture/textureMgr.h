@@ -32,11 +32,12 @@ public:
      ~textureMgr();
     void clear();
     
-    texture* getTexture(const char* szName);
+    texture* getTexture(const char* szName,bool bFlipY=false);
     size getTextureSize(const char* szName);
     
 
-    unsigned int getTextureID(const char *szName);
+    unsigned int getTextureID(const char *szName,bool bFlipY=false);
+    struct_texture loadTexture(const char* szFileName,bool bFlipY=false);
     
 };
 

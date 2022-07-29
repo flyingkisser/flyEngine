@@ -20,7 +20,7 @@ struct struct_texture
     int format;
     int internalFormat;
     unsigned int id;
-    unsigned char *buf;
+    unsigned char* buf;
 };
 
 

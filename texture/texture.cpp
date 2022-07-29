@@ -20,15 +20,16 @@ flyEngine::texture::~texture(){
         free(_dataBuf);
 }
 
-flyEngine::texture::texture(const char* szPath){
+flyEngine::texture::texture(const char* szPath,bool bFlipY){
     _strPath=szPath;
+    _bFlipY=bFlipY;
 }
 
 bool flyEngine::texture::init(){
     char* szPath=(char*)_strPath.c_str();
     struct_texture st={0};
     if(pngUtil::isPng(szPath)){
-        if(!pngUtil::loadFile(szPath,&st)){
+        if(!pngUtil::loadFile(szPath,&st,_bFlipY)){
             flylog("texture.init:png loadFile %s failed",szPath);
             return false;
         }
@@ -38,7 +39,7 @@ bool flyEngine::texture::init(){
         _dataBuf=st.buf;
         return true;
     }else if(jpgUtil::isJpg(szPath)){
-        if(!jpgUtil::loadFile(szPath, &st)){
+        if(!jpgUtil::loadFile(szPath, &st,_bFlipY)){
             flylog("texture.init:jpg loadFile %s failed",szPath);
             return false;
         }
@@ -50,7 +51,8 @@ bool flyEngine::texture::init(){
     }else{
         int width, height, nrComponents;
         // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-        stbi_set_flip_vertically_on_load(true);
+        if(_bFlipY)
+            stbi_set_flip_vertically_on_load(true);
         unsigned char *data = stbi_load(szPath, &width, &height, &nrComponents, 0);
         _width=width;
         _height=height;
@@ -65,27 +67,10 @@ bool flyEngine::texture::init(){
     }
 }
 
-//bool flyEngine::texture::init(){
-//     int width, height, nrComponents;
-//    char* szPath=(char*)_strPath.c_str();
-//    // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-//    stbi_set_flip_vertically_on_load(true);
-//    unsigned char *data = stbi_load(szPath, &width, &height, &nrComponents, 0);
-//    _width=width;
-//    _height=height;
-//    if (nrComponents == 1)
-//     _format = GL_RED;
-//    else if (nrComponents == 3)
-//     _format = GL_RGB;
-//    else if (nrComponents == 4)
-//     _format = GL_RGBA;
-//    _dataBuf=data;
-//    return true;
-//}
-
 flyEngine::size flyEngine::texture::getSize(){
   return flyEngine::size{(float)_width,(float)_height};
 };
+
 
 //texturePos from GL_TEXTURE0,GL_TEXTURE1
 void flyEngine::texture::glInit(int texturePos){
@@ -137,45 +122,3 @@ void flyEngine::texture::glInit(int texturePos){
        
 //  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, structTex.width, structTex.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, structTex.buf);
 }
-
-//unsigned int TextureFromFile(const char *path, const char* szDirectory, bool gamma)
-//{
-//    string filename = string(path);
-//    string directory = string(szDirectory);
-//    filename = directory + '/' + filename;
-//
-//    unsigned int textureID;
-//    glGenTextures(1, &textureID);
-//
-//    int width, height, nrComponents;
-//    unsigned char *data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-//    if (data)
-//    {
-//        GLenum format;
-//        if (nrComponents == 1)
-//            format = GL_RED;
-//        else if (nrComponents == 3)
-//            format = GL_RGB;
-//        else if (nrComponents == 4)
-//            format = GL_RGBA;
-//
-//        glBindTexture(GL_TEXTURE_2D, textureID);
-//        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-//        glGenerateMipmap(GL_TEXTURE_2D);
-//
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-//        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//
-//        stbi_image_free(data);
-//    }
-//    else
-//    {
-//        std::cout << "Texture failed to load at path: " << path << std::endl;
-//        stbi_image_free(data);
-//    }
-//
-//    return textureID;
-//}
-

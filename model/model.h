@@ -32,7 +32,8 @@ private:
     int m_totalVertics=0;
     int m_totalMesh=0;
     std::map<int,std::vector<Texture>> m_mapTexture;
-
+    std::function<void()> _cb_before_draw=NULL;
+    
     bool loadModel(std::string path);
     void processNode(aiNode* node,const aiScene *scene);
     mesh processMesh(aiMesh* node,const aiScene *scene);
@@ -45,6 +46,8 @@ public:
     bool init();
     void glInit();
     void draw(camera* cameraObj);
+    
+    void setCBBeforeDraw(std::function<void()> cb){_cb_before_draw=cb;};
 };
 
 NS_FLYENGINE_END

@@ -16,6 +16,7 @@
 #include "pngUtil.h"
 #include "jpgUtil.h"
 #include "texture.h"
+#include "stb_image.h"
 
 using namespace std;
 using namespace flyEngine;
@@ -46,11 +47,11 @@ void textureMgr::clear(){
     _mapTextureCache.clear();
 }
 
-flyEngine::texture* textureMgr::getTexture(const char *szFileName){
+flyEngine::texture* textureMgr::getTexture(const char *szFileName,bool bFlipY){
     auto it=_mapTextureCache.find(szFileName);
     if(it!=_mapTextureCache.end())
         return it->second;
-    texture* texObj=new texture(szFileName);
+    texture* texObj=new texture(szFileName,bFlipY);
     if(!texObj->init())
         return NULL;
     texObj->glInit();
@@ -65,30 +66,40 @@ flyEngine::size textureMgr::getTextureSize(const char* szName){
     return flyEngine::size{0,0};
 }
 
-unsigned int textureMgr::getTextureID(const char *szName){
-    flyEngine::texture* texObj=getTexture(szName);
+unsigned int textureMgr::getTextureID(const char *szName,bool bFlipY){
+    flyEngine::texture* texObj=getTexture(szName,bFlipY);
     if(texObj!=nullptr)
         return texObj->getTextureID();
     return 0;
 }
 
-//textureTuple textureMgr::getTextureTuple(const char *szName){
-//    auto it=_mapTextureCache.find(szName);
-//    if(it!=_mapTextureCache.end())
-//        return it->second;
-//    if(_loadTexture(szName))
-//        return _mapTextureCache.find(szName)->second;
-//    return textureTuple{0,0,0,0,0,0};
-//}
-//bool textureMgr::_loadTexture(const char *szFileName){
-//    struct_texture st={0};
-//    if(pngUtil::isPng(szFileName)){
-//        if(!pngUtil::loadFile(szFileName,&st))
-//            return false;
-//    }else if(jpgUtil::isJpg(szFileName)){
-//        if(!jpgUtil::loadFile(szFileName, &st))
-//            return false;
-//    }
-//    _mapTextureCache[szFileName]=textureTuple{st.width,st.height,st.format,st.internalFormat,st.id,st.buf};
-//    return true;
-//}
+struct_texture textureMgr::loadTexture(const char* szPath,bool bFlipY){
+    struct_texture st={0};
+    if(pngUtil::isPng(szPath)){
+        if(!pngUtil::loadFile(szPath,&st,bFlipY)){
+            flylog("texture.init:png loadFile %s failed",szPath);
+        }
+    }else if(jpgUtil::isJpg(szPath)){
+        if(!jpgUtil::loadFile(szPath, &st,bFlipY)){
+            flylog("texture.init:jpg loadFile %s failed",szPath);
+        }
+    }else{
+        int width=0;
+        int height=0;
+        int nrComponents;
+        // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
+        if(bFlipY)
+            stbi_set_flip_vertically_on_load(true);
+        unsigned char *data = stbi_load(szPath, &width, &height, &nrComponents, 0);
+        if (nrComponents == 1)
+            st.format = GL_RED;
+        else if (nrComponents == 3)
+            st.format = GL_RGB;
+        else if (nrComponents == 4)
+            st.format = GL_RGBA;
+        st.width=width;
+        st.height=height;
+        st.buf=data;
+    }
+    return st;
+}

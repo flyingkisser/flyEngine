@@ -30,6 +30,8 @@ public:
     static shader* get3d1texPongWithSpecularTexShader();
     static shader* getModelShader();
     
+    static shader* get2d1texShader();
+    
     static shader* getShader(const char* szVertFileName,const char* szFragFileName);
     static shader* getShader(int programID);
     static shader* getShaderUniqueue(const char* szVertFileName,const char* szFragFileName);

@@ -40,9 +40,10 @@ public:
     mesh(std::vector<Vertex> vecVertices,std::vector<unsigned int> vecIndices,std::vector<Texture> vecTextures);
     void draw(shader* s);
     int getVerticeCount(){return m_vecVertices.size();};
-
+    void setCBBeforeDraw(std::function<void()> cb){_cb_before_draw=cb;};
 private:
     unsigned int m_int_vao,m_int_vbo,m_int_ebo;
+    std::function<void()> _cb_before_draw=NULL;
     void setupMesh();
 };
 

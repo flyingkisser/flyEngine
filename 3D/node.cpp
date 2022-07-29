@@ -33,8 +33,6 @@ void node::print(){
 node::node(){
 }
 
-
-
 //从当前位置，移动一个指定的距离
 void node::moveBy(glm::vec3 v){
     _pos+=v;
@@ -111,7 +109,7 @@ void node::setShader(shader* shaderObj){
     _gl_program=shaderObj->getProgramID();
 }
 
-void node::updateModel(camera* cameraObj){
+void node::updateModel(){
     if(_dirtyPos){
         //移动
         _matModel=glm::translate(glm::mat4(1.0f),_pos);
@@ -130,96 +128,27 @@ void node::updateModel(camera* cameraObj){
     _shaderObj->setMat4(uniform_name_mat_model, glm::value_ptr(_matModel));
 }
 
-//只有顶点坐标
-void node::glInitVAO(){
-    unsigned int vbo;
-    float* verticeArr=g_verticeArr;
-    int verticeArrSize=sizeof(g_verticeArr);
-    int numPerVertex=3;  //每个顶点坐标用几个浮点数来表示
-    int stride=3*sizeof(float);
-  
-    //生成VAO
+void node::initVAO(float* arr,int arrSize,int descArr[],int descArrSize){
+    _vertice_arr=arr;
+    _vertice_arr_size=arrSize;
+    _desc_arr=descArr;
+    _desc_arr_size=descArrSize;
     glGenVertexArrays(1,&_gl_vao);
     glBindVertexArray(_gl_vao);
-    //生成VBO
-    glGenBuffers(1,&vbo);
-    glBindBuffer(GL_ARRAY_BUFFER,vbo);
-    //顶点数据写进显存
-    glBufferData(GL_ARRAY_BUFFER,verticeArrSize,verticeArr,GL_STATIC_DRAW);
-    //设置顶点数组的属性
-    glVertexAttribPointer(0,numPerVertex,GL_FLOAT,GL_FALSE,stride,(void*)0);
-    glEnableVertexAttribArray(0);
-    //解除当前VBO绑定
+    glGenBuffers(1,&_gl_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER,_gl_vbo);
+    glBufferData(GL_ARRAY_BUFFER,arrSize,arr,GL_STATIC_DRAW);
+    int stride=0;
+    for(int i=0;i<descArrSize;i++){
+        stride+=descArr[i];
+    }
+    stride*=sizeof(float);
+    for(int i=0,k=0;i<descArrSize;i++){
+        glVertexAttribPointer(i,descArr[i],GL_FLOAT,GL_FALSE,stride,(void*)(k*sizeof(float)));
+        k+=descArr[i];
+        glEnableVertexAttribArray(i);
+    }
     glBindBuffer(GL_ARRAY_BUFFER,0);
-    //解除当前VAO绑定
-    glBindVertexArray(0);
-}
-
-//顶点坐标，纹理坐标
-void node::glInitVAOWithTexCoordByArr(float* verticeArr,int verticeArrSize){
-    unsigned int vbo;
-//    float* verticeArr=g_verticeArrWithTexCoord;
-//    int verticeArrSize=sizeof(g_verticeArrWithTexCoord);
-    int numPerVertex=3;  //每个顶点坐标用几个浮点数来表示
-    int numPerTex=2;     //每个纹理坐标用几个浮点数来表示
-    int stride=5*sizeof(float);
-    _vertice_arr=verticeArr;
-    _vertice_arr_size=verticeArrSize;
-
-    //生成VAO
-    glGenVertexArrays(1,&_gl_vao);
-    glBindVertexArray(_gl_vao);
-    //生成VBO
-    glGenBuffers(1,&vbo);
-    glBindBuffer(GL_ARRAY_BUFFER,vbo);
-    //顶点数据写进显存
-    glBufferData(GL_ARRAY_BUFFER,verticeArrSize,verticeArr,GL_STATIC_DRAW);
-    //设置顶点数组的属性
-    glVertexAttribPointer(0,numPerVertex,GL_FLOAT,GL_FALSE,stride,(void*)0);
-    glVertexAttribPointer(1,numPerTex,GL_FLOAT,GL_FALSE,stride,(void*)(3*sizeof(float)));
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    //解除当前VBO绑定
-    glBindBuffer(GL_ARRAY_BUFFER,0);
-    //解除当前VAO绑定
-    glBindVertexArray(0);
-}
-
-void node::glInitVAOWithTexCoord(){
-    glInitVAOWithTexCoordByArr(g_verticeArrWithTexCoord,sizeof(g_verticeArrWithTexCoord));
-}
-void node::glInitVAOWithTexCoordForPlain(){
-    glInitVAOWithTexCoordByArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane));
-}
-
-//顶点坐标，纹理坐标，法向量
-void node::glInitVAOWithTexCoordAndNormal(){
-    unsigned int vbo;
-    float* verticeArr=g_verticeArrWithTexCoordAndNormal;
-    int verticeArrSize=sizeof(g_verticeArrWithTexCoordAndNormal);
-    int numPerVertex=3;  //每个顶点坐标用几个浮点数来表示
-    int numPerTex=2;     //每个纹理坐标用几个浮点数来表示
-    int numPerNormal=3;  //每个法向量用几个浮点数来表示
-    int stride=8*sizeof(float);
-    _hasNormal=true;
-    //生成VAO
-    glGenVertexArrays(1,&_gl_vao);
-    glBindVertexArray(_gl_vao);
-    //生成VBO
-    glGenBuffers(1,&vbo);
-    glBindBuffer(GL_ARRAY_BUFFER,vbo);
-    //顶点数据写进显存
-    glBufferData(GL_ARRAY_BUFFER,verticeArrSize,verticeArr,GL_STATIC_DRAW);
-    //设置顶点数组的属性
-    glVertexAttribPointer(0,numPerVertex,GL_FLOAT,GL_FALSE,stride,(void*)0);
-    glVertexAttribPointer(1,numPerTex,GL_FLOAT,GL_FALSE,stride,(void*)(3*sizeof(float)));
-    glVertexAttribPointer(2,numPerNormal,GL_FLOAT,GL_FALSE,stride,(void*)(5*sizeof(float)));
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glEnableVertexAttribArray(2);
-    //解除当前VBO绑定
-    glBindBuffer(GL_ARRAY_BUFFER,0);
-    //解除当前VAO绑定
     glBindVertexArray(0);
 }
 

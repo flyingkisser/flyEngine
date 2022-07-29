@@ -17,7 +17,7 @@
 namespace flyEngine{
 class jpgUtil{
 public:
-    static bool loadFile(const char* szFile,struct_texture* texinfo);
+    static bool loadFile(const char* szFile,struct_texture* texinfo,bool bFlipY=false);
     static bool isJpg(const char* szFile);
 };
 

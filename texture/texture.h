@@ -19,19 +19,6 @@ using namespace std;
 namespace flyEngine{
 
 class texture:glRef{
-public:
-    texture(const char* szPath);
-    ~texture();
-    bool init();
-    flyEngine::size getSize();
-    
-    int getWidth(){return _width;};
-    int getHeight(){return _height;};
-    unsigned char* getBuf(){return _dataBuf;};
-    unsigned int getTextureID(){return _textureID;};
-    unsigned int getTexturePos(){return _texturePos;};
-    void glInit(int texturePos=0);
-    
 private:
     int _width;
     int _height;
@@ -43,9 +30,20 @@ private:
     unsigned int _textureID;
     unsigned char* _dataBuf;
     std::string _strPath;
+    bool _bFlipY=false;
     
+public:
+    texture(const char* szPath,bool _bFlipY=false);
+    ~texture();
+    bool init();
+    flyEngine::size getSize();
     
-    
+    int getWidth(){return _width;};
+    int getHeight(){return _height;};
+    unsigned char* getBuf(){return _dataBuf;};
+    unsigned int getTextureID(){return _textureID;};
+    unsigned int getTexturePos(){return _texturePos;};
+    void glInit(int texturePos=0);
 };
 
 }

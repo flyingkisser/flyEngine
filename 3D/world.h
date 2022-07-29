@@ -32,6 +32,7 @@ private:
     std::vector<spotLight*> _vector_spot_light;
     std::function <void()> _cb_before_draw_call=nullptr;
     std::function <void()> _cb_after_draw_call=nullptr;
+    std::function <void()> _cb_before_render=nullptr;
     camera* _camera=NULL;
     directionLight* m_directionLight=NULL;
     
@@ -63,6 +64,7 @@ public:
     camera* getCamera(){return _camera;};
     
     float getFrameRate(){return CONST_FRAME_RATE;};
+    void setCBBeforeRender(std::function<void()> f){_cb_before_render=f;};
     void setCBBeforeDrawCall(std::function<void()> f){_cb_before_draw_call=f;};
     void setCBAfterDrawCall(std::function<void()> f){_cb_after_draw_call=f;};
   

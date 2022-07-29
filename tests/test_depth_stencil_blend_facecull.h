@@ -17,4 +17,5 @@ void test_stencil_2();
 void test_blend_1();
 void test_blend_2();
 void test_facecull();
+void test_facecull_2();
 #endif /* test_depth_stencil_blend */

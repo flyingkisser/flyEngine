@@ -35,7 +35,7 @@ bool jpgUtil::isJpg(const char *filename)
     return true;
 }
 
-bool jpgUtil::loadFile(const char *filename,struct_texture* texinfo)
+bool jpgUtil::loadFile(const char *filename,struct_texture* texinfo,bool bFlipY)
 {
     struct jpeg_decompress_struct cinfo;
     struct jpeg_error_mgr jerr;
@@ -72,15 +72,17 @@ bool jpgUtil::loadFile(const char *filename,struct_texture* texinfo)
     int bufSize=sizeof(GLubyte) * texinfo->width * texinfo->height * cinfo.num_components;
     texinfo->buf = (GLubyte *)malloc(bufSize);
     memset(texinfo->buf,0,bufSize);
-    printf("jpg allocate buf at 0x%llx size 0x%x %d",texinfo->buf,bufSize,bufSize);
+//    printf("jpg at 0x%llx size 0x%x %d",texinfo->buf,bufSize,bufSize);
     
     //创建每一行数据的指针
     unsigned char** rowPtr = new unsigned char*[texinfo->height];
-//    for (int i=0;i<texinfo->height;i++)
-//        rowPtr[i] = &(texinfo->buf[i*texinfo->width*cinfo.num_components]);
-    //从jpg读取的第一行，放进缓存的最后一行
-    for (int i=0;i<texinfo->height;i++)
-        rowPtr[i] = &(texinfo->buf[(texinfo->height-1-i)*texinfo->width*cinfo.num_components]);
+    if(bFlipY)
+        for (int i=0;i<texinfo->height;i++)
+            rowPtr[i] = &(texinfo->buf[i*texinfo->width*cinfo.num_components]);
+    else
+        //从jpg读取的第一行，放进缓存的最后一行
+        for (int i=0;i<texinfo->height;i++)
+            rowPtr[i] = &(texinfo->buf[(texinfo->height-1-i)*texinfo->width*cinfo.num_components]);
     //读取数据
     int rowsRead = 0;
     while(cinfo.output_scanline < cinfo.output_height)

@@ -47,21 +47,29 @@ public:
     bool init();
 
     void update(int programID);
+    void update2D(int programID);
     
     void enableControl();
     control* getControl();
     
     glm::vec3 getFront(){return _cameraFront;};
-   
+    glm::mat4 GetLookAtMatrix();
+    glm::mat4 GetProjMatrix();
+    
+    void initUBO();
+    void updateUBO();
+    
 private:
     void _updateCamera();
     void _updateProjection();
+    void _updateUBO();
     
     control* _controlObj;
     shader* _shaderObj;
     
     glm::mat4 _matProj;
     glm::mat4 _matProjOrigin;
+    glm::mat4 _matProj2D;
     glm::mat4 _matCamera;
     glm::mat4 _matCameraOrigin;
     
@@ -77,6 +85,9 @@ private:
     float _fov=0;
     float _fovOrigin=0;
     float _screenRatio=0.0;
+    
+    unsigned int _ubo1=0;
+    unsigned int _ubo2=0;
     
 };
 

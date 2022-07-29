@@ -15,7 +15,7 @@
 namespace flyEngine{
 class pngUtil{
 public:
-    static bool loadFile(const char* szFile,struct_texture* texinfo);
+    static bool loadFile(const char* szFile,struct_texture* texinfo,bool bFlipY=false);
     static bool isPng(const char* szFile);
 };
 

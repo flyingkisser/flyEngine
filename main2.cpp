@@ -15,37 +15,160 @@
 #include FT_FREETYPE_H
 // GL includes
 #include "shader.h"
+#include <iostream>
+#include "defines.h"
+#include "stb_image/stb_image.h"
 
-// Properties
-const GLuint WIDTH = 800, HEIGHT = 600;
+#include "cubeTex.h"
+#include "world.h"
+USE_NS_FLYENGINE
+using namespace std;
 
-/// Holds all state information relevant to a character as loaded using FreeType
-struct Character {
-    GLuint TextureID;   // ID handle of the glyph texture
-    glm::ivec2 Size;    // Size of glyph
-    glm::ivec2 Bearing;  // Offset from baseline to left/top of glyph
-    GLuint Advance;    // Horizontal offset to advance to next glyph
+//#include "camera.h"
 
-    int texID;
-    int width;
-    int height;
-    int bearingX;
-    int bearingY;
-    float advance;
+// settings
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 600;
+
+// Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
+enum Camera_Movement {
+    FORWARD,
+    BACKWARD,
+    LEFT,
+    RIGHT
 };
 
-std::map<GLchar, Character> Characters;
-GLuint VAO, VBO;
-int _vao=0;
-int _vbo=0;
-void RenderText(flyEngine::shader* shader, std::string text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
+// Default camera values
+const float YAW         = -90.0f;
+const float PITCH       =  0.0f;
+const float SPEED       =  2.5f;
+const float SENSITIVITY =  0.1f;
+const float ZOOM        =  45.0f;
 
-int g1_screenWidth=0;
-int g1_screenHigh=0;
-int g1_winWidth=800;
-int g1_winHigh=600;
 
-// The MAIN function, from here we start our application and run the Game loop
+// An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
+class Camera
+{
+public:
+    // camera Attributes
+    glm::vec3 Position;
+    glm::vec3 Front;
+    glm::vec3 Up;
+    glm::vec3 Right;
+    glm::vec3 WorldUp;
+    // euler Angles
+    float Yaw;
+    float Pitch;
+    // camera options
+    float MovementSpeed;
+    float MouseSensitivity;
+    float Zoom;
+
+    // constructor with vectors
+    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+    {
+        Position = position;
+        WorldUp = up;
+        Yaw = yaw;
+        Pitch = pitch;
+        updateCameraVectors();
+    }
+    // constructor with scalar values
+    Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch) : Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+    {
+        Position = glm::vec3(posX, posY, posZ);
+        WorldUp = glm::vec3(upX, upY, upZ);
+        Yaw = yaw;
+        Pitch = pitch;
+        updateCameraVectors();
+    }
+
+    // returns the view matrix calculated using Euler Angles and the LookAt Matrix
+    glm::mat4 GetViewMatrix()
+    {
+        return glm::lookAt(Position, Position + Front, Up);
+    }
+
+    // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
+    void ProcessKeyboard(Camera_Movement direction, float deltaTime)
+    {
+        float velocity = MovementSpeed * deltaTime;
+        if (direction == FORWARD)
+            Position += Front * velocity;
+        if (direction == BACKWARD)
+            Position -= Front * velocity;
+        if (direction == LEFT)
+            Position -= Right * velocity;
+        if (direction == RIGHT)
+            Position += Right * velocity;
+    }
+
+    // processes input received from a mouse input system. Expects the offset value in both the x and y direction.
+    void ProcessMouseMovement(float xoffset, float yoffset, GLboolean constrainPitch = true)
+    {
+        xoffset *= MouseSensitivity;
+        yoffset *= MouseSensitivity;
+
+        Yaw   += xoffset;
+        Pitch += yoffset;
+
+        // make sure that when pitch is out of bounds, screen doesn't get flipped
+        if (constrainPitch)
+        {
+            if (Pitch > 89.0f)
+                Pitch = 89.0f;
+            if (Pitch < -89.0f)
+                Pitch = -89.0f;
+        }
+
+        // update Front, Right and Up Vectors using the updated Euler angles
+        updateCameraVectors();
+    }
+
+    // processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
+    void ProcessMouseScroll(float yoffset)
+    {
+        Zoom -= (float)yoffset;
+        if (Zoom < 1.0f)
+            Zoom = 1.0f;
+        if (Zoom > 45.0f)
+            Zoom = 45.0f;
+    }
+
+private:
+    // calculates the front vector from the Camera's (updated) Euler Angles
+    void updateCameraVectors()
+    {
+        // calculate the new Front vector
+        glm::vec3 front;
+        front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+        front.y = sin(glm::radians(Pitch));
+        front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
+        Front = glm::normalize(front);
+        // also re-calculate the Right and Up vector
+        Right = glm::normalize(glm::cross(Front, WorldUp));  // normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
+        Up    = glm::normalize(glm::cross(Right, Front));
+    }
+};
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void processInput(GLFWwindow *window);
+unsigned int loadTexture(const char *path);
+unsigned int loadCubemap(vector<std::string> faces);
+
+//---------------------------------------
+
+Camera cameras(glm::vec3(0.0f, 0.0f, 3.0f));
+float lastX = (float)SCR_WIDTH / 2.0;
+float lastY = (float)SCR_HEIGHT / 2.0;
+bool firstMouse = true;
+
+// timing
+float deltaTime = 0.0f;
+float lastFrame = 0.0f;
+
 int main2()
 {
     char szHomeDir[1024]={0};
@@ -54,245 +177,233 @@ int main2()
     dirUtil::setCurrentWorkDir(szHomeDir);
     printf("main:set current work dir %s\n",szHomeDir);
     
-    // Init GLFW
+    // glfw: initialize and configure
+    // ------------------------------
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
 #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-    
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr); // Windowed
-    glfwMakeContextCurrent(window);
-    if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
-        std::cout<<"gladLoadGLLoader failed!"<<std::endl;
-        glfwTerminate();
-        return 0;
-    }
-    
-    // Define the viewport dimensions
-    glViewport(0, 0, WIDTH, HEIGHT);
-    
-    // Set OpenGL options
-//    glEnable(GL_CULL_FACE);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
-    // Compile and setup the shader
-    flyEngine::shader* shader=new flyEngine::shader("res/shader/font_2d.vs", "res/shader/font.fs");
-//    glm::mat4 proj = glm::ortho(0.0f, static_cast<GLfloat>(WIDTH), 0.0f, static_cast<GLfloat>(HEIGHT));
-    glm::mat4 proj = glm::ortho(0.0f, (float)WIDTH, 0.0f, (float)HEIGHT);
-    shader->use();
-    shader->setMat4("matProj",glm::value_ptr(proj));
-//    glUniformMatrix4fv(glGetUniformLocation(shader->getProgramID(), "matProj"), 1, GL_FALSE, glm::value_ptr(proj));
-    
-    // FreeType
-    FT_Library ft;
-    // All functions return a value different than 0 whenever an error occurred
-    if (FT_Init_FreeType(&ft))
-        std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-    
-    // Load font as face
-    FT_Face face;
-    if (FT_New_Face(ft, "res/font/arial.ttf", 0, &face))
-        std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
-    
-    // Set size to load glyphs as
-    FT_Set_Pixel_Sizes(face, 0, 48);
-    
-    // Disable byte-alignment restriction
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-    
-    // Load first 128 characters of ASCII set
-    for (GLubyte c = 0; c < 128; c++)
+
+    // glfw window creation
+    // --------------------
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+    if (window == NULL)
     {
-        // Load character glyph
-        if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-        {
-            std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
-            continue;
-        }
-        // Generate texture
-        GLuint texture;
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glTexImage2D(
-                     GL_TEXTURE_2D,
-                     0,
-                     GL_RED,
-                     face->glyph->bitmap.width,
-                     face->glyph->bitmap.rows,
-                     0,
-                     GL_RED,
-                     GL_UNSIGNED_BYTE,
-                     face->glyph->bitmap.buffer
-                     );
-        // Set texture options
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        // Now store character for later use
-        Character character = {
-            texture,
-            glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-            glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-            (GLuint)face->glyph->advance.x,
-            (int)texture,
-            (int)face->glyph->bitmap.width,
-            (int)face->glyph->bitmap.rows,
-            (int)face->glyph->bitmap_left,
-            (int)face->glyph->bitmap_top,
-            (float)face->glyph->advance.x
-        };
-
-        // st.texID=texID;
-        // st.width=_ftFace->glyph->bitmap.width;
-        // st.height=_ftFace->glyph->bitmap.rows;
-        // st.bearingX=_ftFace->glyph->bitmap_left;
-        // st.bearingY=_ftFace->glyph->bitmap_top;
-        // st.advance=_ftFace->glyph->advance.x;
-
-        Characters.insert(std::pair<GLchar, Character>(c, character));
+        std::cout << "Failed to create GLFW window" << std::endl;
+        glfwTerminate();
+        return -1;
     }
-    glBindTexture(GL_TEXTURE_2D, 0);
-    // Destroy FreeType once we're finished
-    FT_Done_Face(face);
-    FT_Done_FreeType(ft);
+    glfwMakeContextCurrent(window);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glfwSetCursorPosCallback(window, mouse_callback);
+    glfwSetScrollCallback(window, scroll_callback);
+
+    // tell GLFW to capture our mouse
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+    // glad: load all OpenGL function pointers
+    // ---------------------------------------
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        return -1;
+    }
+
+   
+    // skybox VAO
+        unsigned int skyboxVAO, skyboxVBO;
+        glGenVertexArrays(1, &skyboxVAO);
+        glGenBuffers(1, &skyboxVBO);
+        glBindVertexArray(skyboxVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(g_verticeArr_skybox), &g_verticeArr_skybox, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+        // load textures
+        // -------------
+//        unsigned int cubeTexture = loadTexture(FileSystem::getPath("resources/textures/container.jpg").c_str());
+
+        vector<std::string> faces
+        {
+            "./res/skybox/right.jpg",
+            "./res/skybox/left.jpg",
+            "./res/skybox/top.jpg",
+            "./res/skybox/bottom.jpg",
+            "./res/skybox/front.jpg",
+            "./res/skybox/back.jpg"
+        };
+        unsigned int cubemapTexture = loadCubemap(faces);
+       
+//        shader.use();
+//        shader.setInt("texture1", 0);
+//        skyboxShader.use();
+//        skyboxShader.setInt("skybox", 0);
+        shader* shaderSky=new shader("./res/shader/skybox.vs","./res/shader/skybox.fs");
     
-    
-    // Configure VAO/VBO for texture quads
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glBindVertexArray(VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)(2*sizeof(float)));
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-    _vao=VAO;
-    _vbo=VBO;
-    
-    // Game loop
+   
+   
     while (!glfwWindowShouldClose(window))
     {
-        // Check and call events
-        glfwPollEvents();
+        processInput(window);
+
+        // render
+               // ------
+               glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+               glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+               // draw scene as normal
+//               shaderSky->use();
+//               glm::mat4 model = glm::mat4(1.0f);
+//               glm::mat4 view = cameras.GetViewMatrix();
+               glm::mat4 projection = glm::perspective(glm::radians(cameras.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+//               shader->setMat4("matModel", model);
+//               shader->setMat4("matCamera", view);
+//               shader->setMat4("matProj", projection);
+               // cubes
+//               glBindVertexArray(cubeVAO);
+//               glActiveTexture(GL_TEXTURE0);
+//               glBindTexture(GL_TEXTURE_2D, cubeTexture);
+//               glDrawArrays(GL_TRIANGLES, 0, 36);
+//               glBindVertexArray(0);
+
+               // draw skybox as last
+               glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+               shaderSky->use();
+                glm::mat4 view = glm::mat4(glm::mat3(cameras.GetViewMatrix())); // remove translation from the view matrix
+                shaderSky->setMat4("matCamera", glm::value_ptr(view));
+                shaderSky->setMat4("matProj", glm::value_ptr(projection));
+               // skybox cube
+               glBindVertexArray(skyboxVAO);
+               glActiveTexture(GL_TEXTURE0);
+               glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+               glDrawArrays(GL_TRIANGLES, 0, 36);
+               glBindVertexArray(0);
+               glDepthFunc(GL_LESS); // set depth function back to default
         
-        // Clear the colorbuffer
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        
-        // RenderText(shader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(0.5, 0.8f, 0.2f));
-        // RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 0.7f, 0.9f));
-        RenderText(shader, "This is sample text", 25.0f, 25.0f, 1.0f, glm::vec3(255, 0.8f, 0.2f));
-        RenderText(shader, "(C) LearnOpenGL.com", 540.0f, 570.0f, 0.5f, glm::vec3(0.3, 255, 0.9f));
-        
-        // Swap the buffers
+
         glfwSwapBuffers(window);
+        glfwPollEvents();
     }
-    
     glfwTerminate();
     return 0;
 }
 
-void RenderText(flyEngine::shader* shader, std::string text, GLfloat x, GLfloat y, GLfloat s, glm::vec3 color)
+// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+// ---------------------------------------------------------------------------------------------------------
+void processInput(GLFWwindow *window)
 {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
+}
 
-    // GLfloat scale=s;
-    // shader->use();
-    // glUniform3f(glGetUniformLocation(shader->getProgramID(), "textColor"), color.x/255, color.y/255, color.z/255);
-    // glActiveTexture(GL_TEXTURE0);
-    // glBindVertexArray(VAO);
-   
-    // std::string::const_iterator c;
-    // for (c = text.begin(); c != text.end(); c++)
-    // {
-    //     Character ch = Characters[*c];
-        
-    //     GLfloat xpos = x + ch.Bearing.x * scale;
-    //     GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
-        
-    //     GLfloat w = ch.Size.x * scale;
-    //     GLfloat h = ch.Size.y * scale;
-    //     // Update VBO for each character
-    //     GLfloat vertices[6][4] = {
-    //         { xpos,     ypos + h,   0.0, 0.0 },
-    //         { xpos,     ypos,       0.0, 1.0 },
-    //         { xpos + w, ypos,       1.0, 1.0 },
-            
-    //         { xpos,     ypos + h,   0.0, 0.0 },
-    //         { xpos + w, ypos,       1.0, 1.0 },
-    //         { xpos + w, ypos + h,   1.0, 0.0 }
-    //     };
-    //     // Render glyph texture over quad
-    //     glBindTexture(GL_TEXTURE_2D, ch.TextureID);
-    //     // Update content of VBO memory
-    //     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    //     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
-    //     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //     // Render quad
-    //     glDrawArrays(GL_TRIANGLES, 0, 6);
-    //     // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-    //     x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
-    // }
-    // glBindVertexArray(0);
-    // glBindTexture(GL_TEXTURE_2D, 0);
+// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// ---------------------------------------------------------------------------------------------
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    // make sure the viewport matches the new window dimensions; note that width and
+    // height will be significantly larger than specified on retina displays.
+    glViewport(0, 0, width, height);
+}
 
-    int g_winWidth=800;
-    int g_winHigh=600;
-    shader->use();
-
-    glm::mat4 proj=glm::ortho(0,g_winWidth,0,g_winHigh);
-    // shader->setMat4("matProj", (float*)glm::value_ptr(proj));
-    
-    glViewport(0,0,g_winWidth,g_winHigh);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    color=glm::vec3(color.r/255,color.g/255,color.b/255);
-    const char* _strText=text.c_str();
-    int strLen=(int)strlen(_strText);
-    glm::vec3 nodePos=glm::vec3(x,y,0);
-    glm::vec3 pos=nodePos;
-    glm::vec3 scale=glm::vec3(s,s,s);
-    
-    
-    shader->setVec3("textColor", (float*)glm::value_ptr(color));
-    
-    glActiveTexture(GL_TEXTURE0);
-    glBindVertexArray(_vao);
-    
-   
-    for(int i=0;i<strLen;i++){
-        int k=(int)_strText[i];
-        char c=_strText[i];
-        Character st = Characters[c];
-        // texFontStruct st=_fontObj->getTexStruct(k);
-        float x=pos.x+st.bearingX*scale.x;
-        float y=pos.y-(st.height-st.bearingY)*scale.y;
-        float w=st.width*scale.x;
-        float h=st.height*scale.y;
-        float vertices[6][4]={
-            {x,y+h,0,0},
-            {x,y,0,1},
-            {x+w,y,1,1},
-            {x,y+h,0,0},
-            {x+w,y,1,1},
-            {x+w,y+h,1,0}
-        };
-        glBindTexture(GL_TEXTURE_2D,st.texID);
-        glBindBuffer(GL_ARRAY_BUFFER,_vbo);
-        glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(vertices),vertices);
-        
-        glDrawArrays(GL_TRIANGLES,0,6);
-        pos.x+=(st.advance/64)*scale.x;
+// glfw: whenever the mouse moves, this callback is called
+// -------------------------------------------------------
+void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
+{
+    float xpos = static_cast<float>(xposIn);
+    float ypos = static_cast<float>(yposIn);
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
     }
-    
-    glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D,0);
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+    lastX = xpos;
+    lastY = ypos;
+
+//    camera.ProcessMouseMovement(xoffset, yoffset);
+}
+
+// glfw: whenever the mouse scroll wheel scrolls, this callback is called
+// ----------------------------------------------------------------------
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+//    camera.ProcessMouseScroll(static_cast<float>(yoffset));
+}
+
+// utility function for loading a 2D texture from file
+// ---------------------------------------------------
+unsigned int loadTexture(char const * path)
+{
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+
+    int width, height, nrComponents;
+    unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
+    if (data)
+    {
+        GLenum format;
+        if (nrComponents == 1)
+            format = GL_RED;
+        else if (nrComponents == 3)
+            format = GL_RGB;
+        else if (nrComponents == 4)
+            format = GL_RGBA;
+
+        glBindTexture(GL_TEXTURE_2D, textureID);
+        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        stbi_image_free(data);
+    }
+    else
+    {
+        std::cout << "Texture failed to load at path: " << path << std::endl;
+        stbi_image_free(data);
+    }
+
+    return textureID;
+}
+
+unsigned int loadCubemap(vector<std::string> faces)
+{
+    unsigned int textureID;
+    glGenTextures(1, &textureID);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+
+    int width, height, nrChannels;
+    for (unsigned int i = 0; i < faces.size(); i++)
+    {
+        unsigned char *data = stbi_load(faces[i].c_str(), &width, &height, &nrChannels, 0);
+        if (data)
+        {
+            glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            stbi_image_free(data);
+        }
+        else
+        {
+            std::cout << "Cubemap texture failed to load at path: " << faces[i] << std::endl;
+            stbi_image_free(data);
+        }
+    }
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    return textureID;
 }

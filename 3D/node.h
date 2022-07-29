@@ -29,16 +29,13 @@ class material;
 class node: public glRef
 {
 private:
-    glm::mat4 _matModel;
-    glm::mat4 _matModelOrigin;
+    glm::mat4 _matModel=glm::mat4(1.0f);
+    glm::mat4 _matModelOrigin=glm::mat4(1.0f);
     
     glm::vec3 _pos=glm::vec3(0,0,0);
     glm::vec3 _scale=glm::vec3(1,1,1);
     glm::vec3 _rorate=glm::vec3(0,0,0);
-    
-    float* _vertice_arr=nullptr;
-    int _vertice_arr_size=0;
-    bool _hasNormal=false;
+  
     bool _bDisableLogState=false;
     
 public:
@@ -46,8 +43,13 @@ public:
     material* m_material=NULL;
     unsigned int _gl_program=0;
     unsigned int _gl_vao=0;
+    unsigned int _gl_vbo=0;
     bool _dirtyPos=false;
     bool _bVisible=true;
+    float* _vertice_arr=nullptr;
+    int _vertice_arr_size=0;
+    int* _desc_arr=NULL;
+    int _desc_arr_size=0;
     
 public:
     node();
@@ -57,14 +59,21 @@ public:
     virtual void glInit()=0;
     virtual void draw(camera* cameraObj)=0;
     void print();
-    void updateModel(camera* cameraObj);
+    void updateModel();
     
+    void initVAO(float* arr,int arrSize,int descArr[],int descArrSize);
     
-    void glInitVAO();
-    void glInitVAOWithTexCoordByArr(float* verticeArr,int verticeArrSize);
-    void glInitVAOWithTexCoord();
-    void glInitVAOWithTexCoordForPlain();
-    void glInitVAOWithTexCoordAndNormal();
+//    void glInitVAO();
+//    void glInitVAOByArr(float* verticeArr,int verticeArrSize);
+//    void glInitVAOWithNormalByArr(float *verticeArr,int verticeArrSize);
+//    void glInitVAOWithTexCoordByArr(float* verticeArr,int verticeArrSize);
+//    void glInitVAOWithTexCoordByArr2D(float* verticeArr,int verticeArrSize);
+ 
+//    void glInitVAOByArr(float* verticeArr,int verticeArrSize,int floatNum1,int floatNum2,int floatNum3);
+    
+//    void glInitVAOWithTexCoord();
+//    void glInitVAOWithTexCoordForPlain();
+//    void glInitVAOWithTexCoordAndNormal();
     
     void glInitShader();
     bool glInitMaterial();
@@ -106,9 +115,9 @@ public:
     shader* getShader(){return _shaderObj;};
     void setShader(shader* shaderObj);
     
-    float* getVerticeArr(){return _vertice_arr;};
-    int getVerticeSize(){return _vertice_arr_size;};
-    bool hasNormal(){return _hasNormal;};
+//    float* getVerticeArr(){return _vertice_arr;};
+//    int getVerticeSize(){return _vertice_arr_size;};
+//    bool hasNormal(){return _hasNormal;};
 };
 
 NS_FLYENGINE_END

@@ -38,6 +38,8 @@ extern float g_verticeArrWithNormal[216];
 extern float g_verticeArrWithTexCoordAndNormal[288];
 
 extern float g_verticeArrWithTexCoord_plane[30];
+extern float g_verticeArrWithTexCoord_2d[24];
+extern float g_verticeArr_skybox[108];
 
 #define uniform_name_camera_pos "camera_pos"
 #define uniform_name_mat_proj   "matProj"

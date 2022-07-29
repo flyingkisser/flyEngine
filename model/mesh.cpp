@@ -58,12 +58,12 @@ void mesh::draw(shader* s){
             s->setInt(("texture_specular_"+strIndex).c_str(),i);
         }
     }
-
+    if(_cb_before_draw)
+        _cb_before_draw();
     //draw mesh
     glEnable(GL_DEPTH_TEST);
     glBindVertexArray(m_int_vao);
     glDrawElements(GL_TRIANGLES,(int)m_vecIndices.size(),GL_UNSIGNED_INT,0);
     glBindVertexArray(0);
-  
     state::log((int)m_vecIndices.size());
 }

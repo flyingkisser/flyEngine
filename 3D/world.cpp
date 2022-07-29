@@ -75,12 +75,16 @@ void world::removeChild(node *nodeObj){
 }
 
 void world::draw(){
-//    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glEnable(GL_DEPTH_TEST);
     if(_cb_before_draw_call!=nullptr)
         _cb_before_draw_call();
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    _camera->updateUBO();
+    
+//    glEnable(GL_DEPTH_TEST);
+    if(_cb_before_render!=nullptr)
+        _cb_before_render();
     for(auto c : _vector_child){
         node* nodeObj=c;
         if(!nodeObj->visible())
