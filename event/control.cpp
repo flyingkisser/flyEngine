@@ -147,11 +147,15 @@ void control::bindNode(flyEngine::node* nodeObj){
 
         float dx=x-_mouseRightLastX;
         float dy=y-_mouseRightLastY;
-        float rotateX=360*((_mouseRightOriginX+dx)/_width2PI);
-        float rotateY=360*((_mouseRightOriginY+dy)/_height2PI);
+        float rotateX=360.0f*((dx)/_width2PI);
+        float rotateY=360.0f*((dy)/_height2PI);
         _mouseRightLastX=x;
         _mouseRightLastY=y;
-        _bindNode->rotateBy(glm::vec3(rotateX,rotateY,0));
+        _bindNode->rotateBy(glm::vec3(rotateY,rotateX,0.0f));
+    });
+    _msEventObj->regOnRightClickRelease([&](){
+        _mouseRightOriginX=0;
+        _mouseRightOriginY=0;
     });
 }
 

@@ -82,13 +82,14 @@ void test_cubeColor(){
 
 void test_oneCubeTex(){
     init_light_direction();
-    node* cubeObj=new cubeTex("res/fire.png");
+    node* cubeObj=new cubeTex("res/wood.png");
+    cubeObj->setShader(new shader("./res/shader/3d_1tex_phong.vs","./res/shader/3d_1tex_phong.fs"));
     if(!cubeObj->init()){
         flylog("node init failed!");
         return;
     }
     cubeObj->setPosition(glm::vec3(0,0,-5));
-    cubeObj->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
+//    cubeObj->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
     
     world::getInstance()->addChild(cubeObj);
     cubeObj->print();
@@ -185,7 +186,7 @@ void drawCubeRaw(){
    
     glm::mat4 matModel=glm::translate(glm::mat4(1.0),glm::vec3(0,0,-3));
     flyEngine::camera* cameraObj=new flyEngine::camera();
-    cameraObj->update(shaderID);
+    cameraObj->update();
     cameraObj->print();
     control* controlObj=new control();
     controlObj->bindCamera(cameraObj);

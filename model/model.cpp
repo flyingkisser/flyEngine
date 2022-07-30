@@ -151,7 +151,6 @@ void model::glInit(){
 
 void model::draw(camera* cameraObj){
     _shaderObj->use();
-    cameraObj->update(_gl_program);
     node::updateModel();
     node::glUpdateLight();
     for(int i=0;i<m_vecMeshes.size();i++){

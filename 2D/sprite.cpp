@@ -135,7 +135,7 @@ void sprite::draw(camera *cam){
         _b_dirty_shader=false;
     }
     
-    cam->update2D(_gl_program);
+    cam->update2D();
     updateModel();
     glBindVertexArray(_gl_vao);
     glBindTexture(GL_TEXTURE_2D,_texID);

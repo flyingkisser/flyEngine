@@ -46,18 +46,18 @@ public:
     
     bool init();
 
-    void update(int programID);
-    void update2D(int programID);
+    void update();
+    void update2D();
     
     void enableControl();
     control* getControl();
     
     glm::vec3 getFront(){return _cameraFront;};
-    glm::mat4 GetLookAtMatrix();
-    glm::mat4 GetProjMatrix();
+    glm::mat4 getLookAtMatrix();
+    glm::mat4 getProjMatrix();
     
     void initUBO();
-    void updateUBO();
+//    void updateUBOOnDirty();
     
 private:
     void _updateCamera();
@@ -87,7 +87,6 @@ private:
     float _screenRatio=0.0;
     
     unsigned int _ubo1=0;
-    unsigned int _ubo2=0;
     
 };
 

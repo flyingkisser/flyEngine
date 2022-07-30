@@ -81,7 +81,7 @@ void cubeTex::draw(camera* cameraObj){
     _shaderObj->use();
     if(m_cb_before_draw_call!=nullptr)
         m_cb_before_draw_call(_shaderObj->getProgramID());
-//    cameraObj->update(_gl_program);
+    
     node::updateModel();
     node::glUpdateLight();
     if(m_material!=NULL){

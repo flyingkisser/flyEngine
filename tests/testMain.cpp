@@ -22,7 +22,7 @@ void testMainBegin(){
 //    test_cubeColor();
     
     //texture cube test
-//     test_oneCubeTex();
+     test_oneCubeTex();
 //      test_twoCubeTex();
 //    test_multiCubeTex(3);
     
@@ -63,16 +63,19 @@ void testMainBegin(){
 //    test_blend_1();
 //    test_blend_2();
     //    test_text1();
+    
 //    test_facecull();
 //    test_facecull_2();
 //    test_sprite_1();
+    
 //    test_framebuffer();
 //    test_framebuffer_mirror();
 //    test_framebuffer_kernel();
+    
 //    test_skybox_1();
 //    test_skybox_reflect();
 //    test_skybox_reflect_2();
 //    test_skybox_reflect_3();
 //    test_skybox_refract_1();
-    test_ubo_1();
+//    test_ubo_1();
 }

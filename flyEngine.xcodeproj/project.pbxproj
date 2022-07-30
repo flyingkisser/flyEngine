@@ -3865,6 +3865,7 @@
 			children = (
 				D8B374E22844C41700C3DF0C /* 3d_model.fs */,
 				D8CFC87D288F8F8D007FD43A /* 3d_model_reflect.fs */,
+				D8CFC87E28901790007FD43A /* 3d_model_refract.fs */,
 				D8B374E32844C41700C3DF0C /* 3d_model.vs */,
 				D8691EE726B3FA2100D40717 /* 3d_color.fs */,
 				D8691EE626B3FA2100D40717 /* 3d_color.vs */,
@@ -3915,7 +3916,6 @@
 				D8EC7840288AF23200415650 /* skybox.fs */,
 				D8EC784B288D7AE300415650 /* cubetex_reflect.vs */,
 				D8EC784C288D7DE900415650 /* cubetex_reflect.fs */,
-				D8CFC87E28901790007FD43A /* 3d_model_refract.fs */,
 			);
 			path = shader;
 			sourceTree = "<group>";

@@ -20,23 +20,20 @@ camera::camera(){
 }
 
 void camera::_updateCamera(){
-    if(!_program)
+    if(!_dirtyPos)
         return;
-    if(_dirtyPos){
-        _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
-        _dirtyPos=false;
-    }
-    shaderMgr::setMat4(_program,uniform_name_mat_camera,glm::value_ptr(_matCamera));
-    
-    int pos=glGetUniformLocation(_program, uniform_name_camera_pos);
-    if(pos!=-1)
-        shaderMgr::setVec3(_program,uniform_name_camera_pos,glm::value_ptr(_cameraPos));
+    _dirtyPos=false;
+    _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
+    glBindBuffer(GL_UNIFORM_BUFFER,_ubo1);
+    glBufferSubData(GL_UNIFORM_BUFFER,64,64,(void*)glm::value_ptr(_matCamera));
+    glBufferSubData(GL_UNIFORM_BUFFER,128,16,(void*)glm::value_ptr(_cameraPos));
+    glBindBuffer(GL_UNIFORM_BUFFER,0);
 }
 
 void camera::_updateProjection(){
-    if(!_program)
-        return;
-    shaderMgr::setMat4(_program,uniform_name_mat_proj,glm::value_ptr(_matProj));
+    glBindBuffer(GL_UNIFORM_BUFFER,_ubo1);
+    glBufferSubData(GL_UNIFORM_BUFFER,0,64,(void*)glm::value_ptr(_matProj));
+    glBindBuffer(GL_UNIFORM_BUFFER,0);
 }
 
 
@@ -129,45 +126,72 @@ bool camera::init(){
     
     _dirtyPos=true;
     _dirtyProj=true;
+    
+    initUBO();
     return true;
 }
 
-glm::mat4 camera::GetLookAtMatrix(){
+glm::mat4 camera::getLookAtMatrix(){
     return _matCamera;
 }
-glm::mat4 camera::GetProjMatrix(){
+glm::mat4 camera::getProjMatrix(){
     return _matProj;
 }
 
-void camera::update(int programID){
-    _program=programID;
+void camera::update(){
+    //proj矩阵在共享内存里，在相机初始化已经设置，不需要重复更新
+    //_updateProjection();
     _updateCamera();
-    _updateProjection();
 }
 
-void camera::update2D(int programID){
-    if(!programID)
-        return;
-    shaderMgr::setMat4(programID,uniform_name_mat_proj,glm::value_ptr(_matProj2D));
+void camera::update2D(){
+    glBindBuffer(GL_UNIFORM_BUFFER,_ubo1);
+    glBufferSubData(GL_UNIFORM_BUFFER,0,64,(void*)glm::value_ptr(_matProj2D));
+    glBindBuffer(GL_UNIFORM_BUFFER,0);
 }
 
 void camera::_updateUBO(){
     glBindBuffer(GL_UNIFORM_BUFFER,_ubo1);
-    glBufferSubData(GL_UNIFORM_BUFFER,0,16,(void*)glm::value_ptr(_matProj));
+    glBufferSubData(GL_UNIFORM_BUFFER,0,64,(void*)glm::value_ptr(_matProj));
     glBufferSubData(GL_UNIFORM_BUFFER,64,64,(void*)glm::value_ptr(_matCamera));
     glBufferSubData(GL_UNIFORM_BUFFER,128,16,(void*)glm::value_ptr(_cameraPos));
     glBindBuffer(GL_UNIFORM_BUFFER,0);
 }
 
-void camera::updateUBO(){
-    if(!_dirtyPos)
-        return;
-    _dirtyPos=false;
-    _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
-    _updateUBO();
-}
+//void camera::updateUBOOnDirty(){
+//    if(!_dirtyPos)
+//        return;
+//    _dirtyPos=false;
+//    _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
+//    _updateUBO();
+//}
 
 void camera::initUBO(){
     glGenBuffers(1,&_ubo1);
+    glBindBuffer(GL_UNIFORM_BUFFER,_ubo1);
+    glBufferData(GL_UNIFORM_BUFFER,144,NULL,GL_DYNAMIC_DRAW);
+    glBindBufferRange(GL_UNIFORM_BUFFER,0,_ubo1,0,144);
     _updateUBO();
 }
+
+//void camera::_updateCamera_old(){
+//    if(!_program)
+//        return;
+//    if(_dirtyPos){
+//        _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
+//        _dirtyPos=false;
+//    }
+//    shaderMgr::setMat4(_program,uniform_name_mat_camera,glm::value_ptr(_matCamera));
+//
+//    int pos=glGetUniformLocation(_program, uniform_name_camera_pos);
+//    if(pos!=-1)
+//        shaderMgr::setVec3(_program,uniform_name_camera_pos,glm::value_ptr(_cameraPos));
+//}
+//void camera::_updateProjection_old(){
+//    if(!_program)
+//        return;
+//    glBindBuffer(GL_UNIFORM_BUFFER,_ubo1);
+//    glBufferSubData(GL_UNIFORM_BUFFER,0,64,(void*)glm::value_ptr(_matProj));
+//    glBindBuffer(GL_UNIFORM_BUFFER,0);
+//    shaderMgr::setMat4(_program,uniform_name_mat_proj,glm::value_ptr(_matProj));
+//}

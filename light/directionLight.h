@@ -17,12 +17,9 @@ NS_FLYENGINE_BEGIN
 class directionLight {
     
 public:
-//    directionLight(glm::vec3 color);
     directionLight(glm::vec3 color=glm::vec3(1.0,1.0,1.0),glm::vec3 dir=glm::vec3(-0.2,-1,-0.3),
                                   float am=0.1,float diff=0.1,float spec=0,int shine=0);
     ~directionLight();
-    
-    bool init();
     void glUpdate(int program_id);
 private:
     glm::vec3 m_vec3Dir;

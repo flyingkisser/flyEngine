@@ -17,8 +17,11 @@ NS_FLYENGINE_BEGIN
 class mouseEvent{
 private:
     std::vector<std::function<void(void)>> _vectorOnLeftClick;
+    std::vector<std::function<void(void)>> _vectorOnLeftClickRelease;
     std::vector<std::function<void(void)>> _vectorOnRightClick;
+    std::vector<std::function<void(void)>> _vectorOnRightClickRelease;
     std::vector<std::function<void(void)>> _vectorOnMiddleClick;
+    std::vector<std::function<void(void)>> _vectorOnMiddleClickRelease;
     
     std::vector<std::function<void(float,float)>> _vectorOnMove;
     
@@ -47,11 +50,20 @@ public:
     void regOnLeftClick(std::function<void(void)> cb){
         _vectorOnLeftClick.push_back(cb);
     };
+    void regOnLeftClickRelease(std::function<void(void)> cb){
+        _vectorOnLeftClickRelease.push_back(cb);
+    };
     void regOnRightClick(std::function<void(void)> cb){
          _vectorOnRightClick.push_back(cb);
     };
+    void regOnRightClickRelease(std::function<void(void)> cb){
+        _vectorOnRightClickRelease.push_back(cb);
+    };
     void regOnMiddleClick(std::function<void(void)> cb){
          _vectorOnMiddleClick.push_back(cb);
+    };
+    void regOnMiddleClickRelease(std::function<void(void)> cb){
+        _vectorOnMiddleClickRelease.push_back(cb);
     };
     void regOnMove(std::function<void(float,float)> cb){
          _vectorOnMove.push_back(cb);
@@ -76,13 +88,28 @@ public:
            cb();
         }
     }
+    void onLeftClickRelease(){
+        for(std::function<void(void)> cb : _vectorOnLeftClickRelease){
+            cb();
+        }
+    }
     void onRightClick(){
          for(std::function<void(void)> cb : _vectorOnRightClick){
              cb();
          }
     }
+    void onRightClickRelease(){
+        for(std::function<void(void)> cb : _vectorOnRightClickRelease){
+            cb();
+        }
+    }
     void onMiddleClick(){
          for(std::function<void(void)> cb : _vectorOnMiddleClick){
+            cb();
+        }
+    }
+    void onMiddleClickRelease(){
+        for(std::function<void(void)> cb : _vectorOnMiddleClickRelease){
             cb();
         }
     }

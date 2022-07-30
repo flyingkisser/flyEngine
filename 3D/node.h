@@ -32,9 +32,9 @@ private:
     glm::mat4 _matModel=glm::mat4(1.0f);
     glm::mat4 _matModelOrigin=glm::mat4(1.0f);
     
-    glm::vec3 _pos=glm::vec3(0,0,0);
-    glm::vec3 _scale=glm::vec3(1,1,1);
-    glm::vec3 _rorate=glm::vec3(0,0,0);
+    glm::vec3 _pos=glm::vec3(0.0f,0.0f,0.0f);
+    glm::vec3 _scale=glm::vec3(1.0f,1.0f,1.0f);
+    glm::vec3 _rotate=glm::vec3(0.0f,0.0f,0.0f);
   
     bool _bDisableLogState=false;
     
@@ -89,7 +89,7 @@ public:
     float getPositionZ(){return _pos.z;};
     glm::vec3& getPosition(){return _pos;};
     glm::vec3& getScale(){return _scale;};
-    glm::vec3& getRotation(){return _rorate;};
+    glm::vec3& getRotation(){return _rotate;};
     
     void setRotation(glm::vec3 v);
     void setScale(glm::vec3 v);
@@ -114,6 +114,7 @@ public:
     
     shader* getShader(){return _shaderObj;};
     void setShader(shader* shaderObj);
+    glm::mat4 getModelMatrix(){return _matModel;};
     
 //    float* getVerticeArr(){return _vertice_arr;};
 //    int getVerticeSize(){return _vertice_arr_size;};

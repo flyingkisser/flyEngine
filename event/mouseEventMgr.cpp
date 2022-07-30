@@ -7,6 +7,7 @@
 //
 
 #include "mouseEventMgr.h"
+#include "logUtil.h"
 
 USE_NS_FLYENGINE;
 
@@ -24,22 +25,38 @@ void mouseEventMgr::init(GLFWwindow* window){
     
     //点击回调
     glfwSetMouseButtonCallback(window,[](GLFWwindow* window, int button, int action, int mods){
-        if(action!=GLFW_PRESS)
-            return;
-        if(button==GLFW_MOUSE_BUTTON_LEFT){
-            for(auto it : s_eventChainMap){
-              it.second->onLeftClick();
+        if(action==GLFW_PRESS){
+            if(button==GLFW_MOUSE_BUTTON_LEFT){
+                for(auto it : s_eventChainMap){
+                    it.second->onLeftClick();
+                }
+            }else if(button==GLFW_MOUSE_BUTTON_RIGHT){
+                for(auto it : s_eventChainMap){
+                    it.second->onRightClick();
+                }
             }
-        }else if(button==GLFW_MOUSE_BUTTON_RIGHT){
-            for(auto it : s_eventChainMap){
-                it.second->onRightClick();
+            else if(button==GLFW_MOUSE_BUTTON_MIDDLE){
+                for(auto it : s_eventChainMap){
+                    it.second->onMiddleClick();
+                }
+            }
+        }else if(action==GLFW_RELEASE){
+            if(button==GLFW_MOUSE_BUTTON_LEFT){
+                for(auto it : s_eventChainMap){
+                    it.second->onLeftClickRelease();
+                }
+            }else if(button==GLFW_MOUSE_BUTTON_RIGHT){
+                for(auto it : s_eventChainMap){
+                    it.second->onRightClickRelease();
+                }
+            }
+            else if(button==GLFW_MOUSE_BUTTON_MIDDLE){
+                for(auto it : s_eventChainMap){
+                    it.second->onMiddleClickRelease();
+                }
             }
         }
-        else if(button==GLFW_MOUSE_BUTTON_MIDDLE){
-            for(auto it : s_eventChainMap){
-                it.second->onMiddleClick();
-            }
-        }
+       
     });
 
     //移动回调

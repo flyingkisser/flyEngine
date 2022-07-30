@@ -6,6 +6,12 @@ out vec4 FragColor;
 uniform vec3 camera_pos;
 uniform samplerCube texture0;
 
+layout (std140) uniform mat{
+    mat4 proj;
+    mat4 view;
+    vec3 cam_pos;
+};
+
 void main(){
     vec3 viewDir=normalize(posFrag-camera_pos);
     float f=1/1.63;

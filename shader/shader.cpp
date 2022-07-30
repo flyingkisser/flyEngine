@@ -20,6 +20,16 @@ shader::shader(const char* szVertFileName,const char* szFragFileName){
         return;
     }
     compile();
+    if(_idProgram<=0){
+        flylog("shader::compile failed!");
+        return;
+    }
+    int index=glGetUniformBlockIndex(_idProgram,"mat");
+    if(index<=-1){
+        flylog("shader::can't find interface block \"mat\" in this shader!");
+        return;
+    }
+    glUniformBlockBinding(_idProgram,index,0);
 }
 
 bool shader::init(){

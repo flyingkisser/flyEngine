@@ -10,9 +10,9 @@ layout (std140) uniform mat{
     vec3 cam_pos;
 };
 
-uniform mat4 model;
+uniform mat4 matModel;
 
 void main(){
-    gl_Position=proj*view*model*vec4(aPos,1.0f);
+    gl_Position=proj*view*matModel*vec4(aPos,1.0f);
     texCoord=aTexCoord;
 }

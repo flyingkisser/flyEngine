@@ -1,9 +1,4 @@
 #version 330 core
-in vec2 texCoord;
-in vec3 normalVector;
-in vec3 posFrag;
-out vec4 FragColor;
-
 #define POINT_LIGHT_NUM 4
 #define SPOT_LIGHT_NUM 4
 
@@ -60,10 +55,20 @@ struct SpotLight{
     vec3  direction;    //方向向量
 };
 
-uniform sampler2D texture0;
-uniform vec3  camera_pos;
-uniform Material mt;
+in vec2 texCoord;
+in vec3 normalVector;
+in vec3 posFrag;
+in vec3 uni_cam_pos;
+
+out vec4 FragColor;
+
+
 //uniform vec3  global_ambient_color;
+
+uniform sampler2D texture0;
+//uniform vec3  camera_pos;
+uniform Material mt;
+
 uniform PointLight light_point_arr[POINT_LIGHT_NUM];
 uniform SpotLight light_spot_arr[SPOT_LIGHT_NUM];
 uniform DirectionLight light_direction;
@@ -78,14 +83,14 @@ float calcAttenuation(vec3 posFrag,vec3 posLight,float constant,float linear,flo
 void main(){
     vec4 obj_color=texture(texture0,texCoord);
     vec3 normal_vector=normalize(normalVector);
-    vec3 view_vector=normalize(camera_pos-posFrag);
+    vec3 view_vector=normalize(uni_cam_pos-posFrag);
     vec3 zero_vector=vec3(0,0,0);
     vec3 ambient=vec3(0,0,0);
     vec3 diffuse=vec3(0,0,0);
     vec3 specular=vec3(0,0,0);
     bool light_dirty=false;
-    
-    //环境光
+  
+//环境光
 //    if(any(greaterThan(global_ambient_color,zero_vector))){
 //        ambient=global_ambient_color*mt.ambient;
 //    }
@@ -93,16 +98,18 @@ void main(){
     //平行光(太阳)
     if(light_direction.enabled){
         light_dirty=true;
+       
         //环境光
         ambient+=light_direction.color*light_direction.ambient;
         //漫反射
+         /*
         vec3 light_vector=normalize(-light_direction.direction);
         diffuse+=light_direction.color*light_direction.diffuse*max(dot(normal_vector,light_vector),0);
         //镜面反射
         if(light_direction.shiness!=0){
             vec3 reflect_vector=reflect(-light_vector,normal_vector);
             specular+=light_direction.color*light_direction.specular*pow(max(dot(view_vector,reflect_vector),0),light_direction.shiness);
-        }
+        }*/
     }
     
     //点光源

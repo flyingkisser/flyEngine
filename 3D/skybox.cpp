@@ -71,7 +71,6 @@ bool skybox::init(){
 
 void skybox::draw(camera* cam){
     _shaderObj->use();
-    cam->update(_gl_program);
     
     //skybox的中心在0,0点，所以这里不用updateModel
     glEnable(GL_DEPTH_TEST);

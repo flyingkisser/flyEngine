@@ -33,13 +33,8 @@ void test_framebuffer(){
     
     fboStruct st=fbo::createFBO();
     sprite* sp=new sprite(st.texID);
-
-    //    sp->setPosition(glm::vec3(-g_winWidth/2,-g_winHigh/2,0));
-//    sp->setPosition(glm::vec3(0,0,0));
     sp->flipY(true);
     
-//    float c_z=cam->getPositionZ();
-//    cam->setPositionZ(c_z*5);
     cam->setPosition(glm::vec3(0,0,3));
     world::getInstance()->setCBBeforeDrawCall([st](){
         glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);

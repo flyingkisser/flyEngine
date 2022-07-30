@@ -34,8 +34,8 @@ private:
     float _mouseRightLastX=0;
     float _mouseRightLastY=0;
 
-    float _width2PI=4000;
-    float _height2PI=4000;
+    float _width2PI=4000*4;
+    float _height2PI=4000*4;
     float _yaw=-90;
     float _pitch=0;
     

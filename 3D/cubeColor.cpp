@@ -41,7 +41,6 @@ void cubeColor::glInit(){
 
 void cubeColor::draw(camera* cameraObj){
     _shaderObj->use();
-    cameraObj->update(_gl_program);
     node::updateModel();
     _shaderObj->setVec3("color", glm::value_ptr(m_vec3Color));
 

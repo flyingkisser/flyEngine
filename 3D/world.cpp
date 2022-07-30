@@ -80,7 +80,7 @@ void world::draw(){
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    _camera->updateUBO();
+    _camera->update();
     
 //    glEnable(GL_DEPTH_TEST);
     if(_cb_before_render!=nullptr)

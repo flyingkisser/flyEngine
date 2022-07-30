@@ -16,15 +16,6 @@
 
 USE_NS_FLYENGINE
 
-//directionLight::directionLight(glm::vec3 color){
-//    m_vec3Dir=glm::vec3(-0.2f, -1.0f, -0.3f);
-//    m_vec3Color=color;
-//    m_fAmbient=0.1;
-//    m_fDiffuse=0.1;
-//    m_fSpecular=0.1;
-//    m_IntShiness=0;
-//}
-
 directionLight::directionLight(glm::vec3 color,glm::vec3 dir,float am,float diff,float spec,int shine){
     m_vec3Color=color;
     m_vec3Dir=dir;
@@ -32,7 +23,6 @@ directionLight::directionLight(glm::vec3 color,glm::vec3 dir,float am,float diff
     m_fDiffuse=diff;
     m_fSpecular=spec;
     m_IntShiness=shine;
-      
     
     std::queue<int> q;
     q.push(5);
@@ -41,11 +31,6 @@ directionLight::directionLight(glm::vec3 color,glm::vec3 dir,float am,float diff
     int s2=q.back();
     flylog("queue top is %d end is %d size %d",s,s2,q.size());
 }
-
-//bool directionLight::init(){
-////    return light::init();
-//}
-
 
 void directionLight::glUpdate(int program_id){
     shaderMgr::setInt(program_id,uniform_name_light_direction_enabled, 1);
@@ -56,6 +41,3 @@ void directionLight::glUpdate(int program_id){
     shaderMgr::setFloat(program_id,uniform_name_light_direction_specular, m_fSpecular);
     shaderMgr::setInt(program_id,uniform_name_light_direction_shiness, m_IntShiness);
 }
-
-//void directionLight::draw(camera* cameraObj){
-//}

@@ -28,6 +28,10 @@ void test_ubo_1(){
 //    world::getInstance()->addChild(sky);
 
     shader* sh=new shader("./res/shader/3d_1tex_ubo.vs","./res/shader/3d_1tex.fs");
+    
+    camera* cam=world::getInstance()->getCamera();
+    cam->initUBO();
+
     cubeTex* cube1=new cubeTex("res/wood.png");
     cube1->setShader(sh);
     cube1->init();
@@ -35,7 +39,6 @@ void test_ubo_1(){
     cube1->setRotation(glm::vec3(0,30,30));
     world::getInstance()->addChild(cube1);
     
-    camera* cam=world::getInstance()->getCamera();
-    cam->initUBO();
+   
     
 }
