@@ -45,8 +45,8 @@ void drawPlane1() {
     int texID1=texObj->getTextureID();
     if(!texID1)
         return;
-    size texSize=texObj->getSize();
-    size winSize=getWindowSize();
+    flyEngine::size texSize=texObj->getSize();
+    flyEngine::size winSize=getWindowSize();
     
     float winWidth=winSize.width;
     float winHeight=winSize.height;
@@ -123,8 +123,8 @@ void drawPlane2() {
     int texID2=texObj2->getTextureID();
     if(!texID2 || !texID2)
         return;
-    size texSize=texObj1->getSize();
-    size winSize=getWindowSize();
+    flyEngine::size texSize=texObj1->getSize();
+    flyEngine::size winSize=getWindowSize();
     
     float winWidth=winSize.width;
     float winHeight=winSize.height;

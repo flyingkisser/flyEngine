@@ -9,13 +9,15 @@
 #include "shader.h"
 #include "fileUtil.h"
 #include "logUtil.h"
+#include "uboMgr.h"
+
 using namespace flyEngine;
 
 shader::shader(const char* szVertFileName,const char* szFragFileName){
     _idProgram=0;
     _szVertFileName=(char*)szVertFileName;
     _szFragFileName=(char*)szFragFileName;
-    if(!init()){
+    if(!readFile()){
         flylog("shader:init failed!");
         return;
     }
@@ -24,15 +26,11 @@ shader::shader(const char* szVertFileName,const char* szFragFileName){
         flylog("shader::compile failed!");
         return;
     }
-    int index=glGetUniformBlockIndex(_idProgram,"mat");
-    if(index<=-1){
-        flylog("shader::can't find interface block \"mat\" in this shader!");
-        return;
-    }
-    glUniformBlockBinding(_idProgram,index,0);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"mat", ubo_binding_mat);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_dir", ubo_binding_light_dir);
 }
 
-bool shader::init(){
+bool shader::readFile(){
     _idProgram=0;
 
     char* szVert=(char*)fileUtil::readFile(_szVertFileName);

@@ -12,13 +12,13 @@ struct Material{
 
 //环境光 平行光(太阳)
 struct DirectionLight{
-    bool enabled;
-    vec3 direction;
-    vec3 color;
-    float ambient;
-    float diffuse;
-    float specular;
-    int shiness;
+    bool enabled;   //4
+    vec3 direction; //12
+    vec3 color;     //12
+    float ambient;  //4
+    float diffuse;  //4
+    float specular; //4
+    int shiness;    //4
 };
 
 //点光源
@@ -55,6 +55,10 @@ struct SpotLight{
     vec3  direction;    //方向向量
 };
 
+layout (std140) uniform light_dir{
+    DirectionLight light_direction;
+};
+
 in vec2 texCoord;
 in vec3 normalVector;
 in vec3 posFrag;
@@ -62,16 +66,17 @@ in vec3 uni_cam_pos;
 
 out vec4 FragColor;
 
-
-//uniform vec3  global_ambient_color;
-
 uniform sampler2D texture0;
-//uniform vec3  camera_pos;
 uniform Material mt;
 
 uniform PointLight light_point_arr[POINT_LIGHT_NUM];
 uniform SpotLight light_spot_arr[SPOT_LIGHT_NUM];
-uniform DirectionLight light_direction;
+//uniform DirectionLight light_direction;
+
+//layout (std140) uniform lightPoint{
+//    PointLight light_point_arr[POINT_LIGHT_NUM];
+//};
+
 
 float calcAttenuation(vec3 posFrag,vec3 posLight,float constant,float linear,float quadratic){
     float d    = length(posLight - posFrag);
@@ -94,22 +99,24 @@ void main(){
 //    if(any(greaterThan(global_ambient_color,zero_vector))){
 //        ambient=global_ambient_color*mt.ambient;
 //    }
-    
+
     //平行光(太阳)
     if(light_direction.enabled){
+        
         light_dirty=true;
-       
+      
         //环境光
         ambient+=light_direction.color*light_direction.ambient;
         //漫反射
-         /*
+          /*
         vec3 light_vector=normalize(-light_direction.direction);
         diffuse+=light_direction.color*light_direction.diffuse*max(dot(normal_vector,light_vector),0);
         //镜面反射
         if(light_direction.shiness!=0){
             vec3 reflect_vector=reflect(-light_vector,normal_vector);
             specular+=light_direction.color*light_direction.specular*pow(max(dot(view_vector,reflect_vector),0),light_direction.shiness);
-        }*/
+        }
+        */
     }
     
     //点光源
@@ -119,17 +126,14 @@ void main(){
             continue;
         light_dirty=true;
         vec3 light_vector=normalize(light.pos-posFrag);
-        //环境光
-        ambient+=light.color*light.ambient;
-        //漫反射
-        diffuse+=light.color*light.diffuse*max(dot(normal_vector,light_vector),0);
-        //镜面反射
-        if(mt.enabled){
+    
+        ambient+=light.color*light.ambient;  //环境光
+        diffuse+=light.color*light.diffuse*max(dot(normal_vector,light_vector),0);  //漫反射
+        if(mt.enabled){ //镜面反射
             vec3 reflect_vector=reflect(-light_vector,normal_vector);
-            specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shiness);
+            specular+=light.color*light.specular*pow(max(dot(view_vector,reflect_vector),0),mt.shiness);  
         }
-        if(light.constant!=0){
-            //需要计算距离衰减
+        if(light.constant!=0){  //需要计算距离衰减
             float attenuation=calcAttenuation(posFrag,light.pos,light.constant,light.linear,light.quadratic);
             ambient*=attenuation;
             diffuse*=attenuation;

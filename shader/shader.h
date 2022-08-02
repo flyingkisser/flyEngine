@@ -37,7 +37,7 @@ namespace flyEngine {
         unsigned int getProgramID(){return _idProgram;};
         
         void compile();
-        bool init();
+        bool readFile();
     };
 }
 

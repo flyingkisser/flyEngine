@@ -90,4 +90,13 @@ extern float g_verticeArr_skybox[108];
 #define uniform_name_light_spot_cutoff_outer "light_spot_arr[%d].cutoff_outer"
 #define uniform_name_light_spot_direction "light_spot_arr[%d].direction"
 
+//ubo binding point index
+#define ubo_binding_mat 0
+#define ubo_binding_light_dir 1
+#define ubo_binding_light_point 2
+#define ubo_binding_light_spot 3
+
+#define ubo_size_mat 144
+#define ubo_size_light_dir 52
+
 #endif /* defines_h */

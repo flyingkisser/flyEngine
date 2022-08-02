@@ -40,7 +40,7 @@ std::function<void(int,int,int,int)> s_mouse_click_callback;
 std::function<void(int,int)> s_mouse_clickmove_callback;
 std::function<void(int,int)> s_mouse_move_callback;
 
-size getWindowSize(){
+flyEngine::size getWindowSize(){
     return flyEngine::size{(float)s_intWidth,(float)s_intHeight};
 }
 

@@ -51,7 +51,7 @@ static material* createMaterial(float ambient,float diffuse,float specular,float
 
 static void init_light_direction(){
     //设置环境光
-    directionLight* dirLight=new directionLight(glm::vec3(0.2f,0.2f,0.2f));
+    directionLight* dirLight=new directionLight(glm::vec3(1.0f,1.0f,1.0f));
     world::getInstance()->setDirectiontLight(dirLight);
     
     //因为只有环境光，所以设置的比较亮
@@ -81,9 +81,8 @@ void test_cubeColor(){
 
 
 void test_oneCubeTex(){
-    init_light_direction();
+    
     node* cubeObj=new cubeTex("res/wood.png");
-    cubeObj->setShader(new shader("./res/shader/3d_1tex_phong.vs","./res/shader/3d_1tex_phong.fs"));
     if(!cubeObj->init()){
         flylog("node init failed!");
         return;
@@ -102,6 +101,8 @@ void test_oneCubeTex(){
     timerMgrObj->exec(0.1,[](node* _node){
         _node->rotateBy(glm::vec3(0.5f,0,0));
     },cubeObj);
+    
+    init_light_direction();
 }
 
 void test_twoCubeTex(){

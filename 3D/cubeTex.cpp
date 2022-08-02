@@ -36,8 +36,9 @@ void cubeTex::resetPos(){
 }
 
 bool cubeTex::init(){
-    int desc[]={3,2};
-    return initByVerticeArr(g_verticeArrWithTexCoord,sizeof(g_verticeArrWithTexCoord),desc,2);
+    //默认情况下带有法向量
+    int desc[]={3,2,3};
+    return initByVerticeArr(g_verticeArrWithTexCoordAndNormal,sizeof(g_verticeArrWithTexCoordAndNormal),desc,3);
 }
 
 void cubeTex::glInit(){

@@ -58,7 +58,7 @@ void test_onePointLight_oneCube(){
     
     //光源1
     material* mtLight=new material(glm::vec3(1,1,1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
-    pointLight* lightObj1=new pointLight(glm::vec3(1,1,1),mtLight);
+    pointLight* lightObj1=new pointLight(glm::vec3(1,1,1),mtLight,0);
     if(!lightObj1->init()){
        flylog("point light init failed!");
        return;

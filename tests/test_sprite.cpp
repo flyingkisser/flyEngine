@@ -17,11 +17,11 @@ void test_sprite_1(){
     sprite* sp=new sprite("res/wood.png");
     world::getInstance()->addChild(sp);
     timerUtil::getInstance()->execOnceDelay(3, [](sprite* sp){
-        size s=sp->getContentSize();
+        flyEngine::size s=sp->getContentSize();
         sp->setPosition(glm::vec3((g_winWidth-s.width)/2,(g_winHigh-s.height)/2,0));
     }, sp);
     timerUtil::getInstance()->execOnceDelay(5, [](sprite* sp){
-        size s=sp->getContentSize();
-        sp->setContentSize(size{s.width+20.0f,s.height+10.0f});
+        flyEngine::size s=sp->getContentSize();
+        sp->setContentSize(flyEngine::size{s.width+20.0f,s.height+10.0f});
     }, sp);
 }

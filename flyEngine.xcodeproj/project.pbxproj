@@ -88,6 +88,8 @@
 		D8826A5C26C3B28700314F16 /* directionLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8826A5B26C3B28700314F16 /* directionLight.cpp */; };
 		D8826A5F26C3EB9000314F16 /* material.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8826A5E26C3EB9000314F16 /* material.cpp */; };
 		D882E05C2869F2A400AB08DB /* test_depth_stencil_blend_facecull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D882E05B2869F2A400AB08DB /* test_depth_stencil_blend_facecull.cpp */; };
+		D8847652289920A5004EF587 /* glslUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8847651289920A5004EF587 /* glslUtil.cpp */; };
+		D8880DC82896352A000BCFEE /* uboMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8880DC72896352A000BCFEE /* uboMgr.cpp */; };
 		D8902828287D568300152FFF /* uiText.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8902826287D568300152FFF /* uiText.cpp */; };
 		D890282B287D5A9E00152FFF /* fontMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8902829287D5A9E00152FFF /* fontMgr.cpp */; };
 		D89028392880059800152FFF /* state.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89028382880059800152FFF /* state.cpp */; };
@@ -1737,6 +1739,10 @@
 		D882E05B2869F2A400AB08DB /* test_depth_stencil_blend_facecull.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_depth_stencil_blend_facecull.cpp; sourceTree = "<group>"; };
 		D882E05D286D851000AB08DB /* 3d_depth_test2.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_depth_test2.fs; sourceTree = "<group>"; };
 		D882E05E286D8D8F00AB08DB /* 3d_depth_test1.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_depth_test1.fs; sourceTree = "<group>"; };
+		D8847650289920A5004EF587 /* glslUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = glslUtil.h; sourceTree = "<group>"; };
+		D8847651289920A5004EF587 /* glslUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = glslUtil.cpp; sourceTree = "<group>"; };
+		D8880DC62896352A000BCFEE /* uboMgr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = uboMgr.h; sourceTree = "<group>"; };
+		D8880DC72896352A000BCFEE /* uboMgr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = uboMgr.cpp; sourceTree = "<group>"; };
 		D8902823287D48C200152FFF /* font_2d.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = font_2d.vs; sourceTree = "<group>"; };
 		D8902824287D48D000152FFF /* font_2d.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = font_2d.fs; sourceTree = "<group>"; };
 		D8902826287D568300152FFF /* uiText.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = uiText.cpp; sourceTree = "<group>"; };
@@ -4017,6 +4023,8 @@
 				D87EBFD626A59A46004ED7DE /* timeUtil.cpp */,
 				D87EBFE526A7CA3F004ED7DE /* mathUtil.h */,
 				D87EBFE626A7CA3F004ED7DE /* mathUtil.cpp */,
+				D8847650289920A5004EF587 /* glslUtil.h */,
+				D8847651289920A5004EF587 /* glslUtil.cpp */,
 			);
 			path = platformUtil;
 			sourceTree = "<group>";
@@ -4247,6 +4255,8 @@
 				D85F1BD525022327005390DC /* VAOMgr.cpp */,
 				D8EC783228815CF400415650 /* fbo.h */,
 				D8EC783328815CF400415650 /* fbo.cpp */,
+				D8880DC62896352A000BCFEE /* uboMgr.h */,
+				D8880DC72896352A000BCFEE /* uboMgr.cpp */,
 			);
 			path = render;
 			sourceTree = "<group>";
@@ -4746,6 +4756,7 @@
 				D81EF3931EBCD5A00003604F /* polygon.cpp in Sources */,
 				D825DB6724976F3800C494E7 /* listStr.cpp in Sources */,
 				D8BB1B98255A6A0E00AF9FD5 /* mouseEvent.cpp in Sources */,
+				D8847652289920A5004EF587 /* glslUtil.cpp in Sources */,
 				8E86C9C326638480004B3BB7 /* testPhong.cpp in Sources */,
 				D825DBA524AC6F0100C494E7 /* testWindow.cpp in Sources */,
 				D825DB8624AAEE5100C494E7 /* defines.cpp in Sources */,
@@ -4841,6 +4852,7 @@
 				D827953624BC614800261C44 /* 3DTrans.cpp in Sources */,
 				D856FED624E15DB7005A0760 /* shader.cpp in Sources */,
 				D8EC7843288AF69A00415650 /* test_skybox.cpp in Sources */,
+				D8880DC82896352A000BCFEE /* uboMgr.cpp in Sources */,
 				8ECA453A26916C3E00FDFC7A /* camera.cpp in Sources */,
 				D8273E802510D3EC00D2BC59 /* testTexXD.cpp in Sources */,
 				D825DBB724AC950800C494E7 /* image.cpp in Sources */,
@@ -4862,10 +4874,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
@@ -4911,10 +4924,11 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = NO;
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
