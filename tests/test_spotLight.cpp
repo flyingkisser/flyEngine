@@ -21,6 +21,8 @@
 #include "shaderMgr.h"
 #include "randUtil.h"
 #include "threadUtil.h"
+#include "camera.h"
+#include "glslUtil.h"
 
 USE_NS_FLYENGINE;
 
@@ -37,7 +39,7 @@ static void init_light_direction(){
 }
 
 void test_oneSpotLight_oneCube(){
-    init_light_direction();
+    //init_light_direction();
     
     //普通cube
     node* cubeObj=new cubeTex("res/wood.png");
@@ -53,6 +55,7 @@ void test_oneSpotLight_oneCube(){
     control* controlObj=world::getInstance()->getControl();
     controlObj->bindNode(cubeObj);
     
+    
     //光源1
     material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
     spotLight* lightObj1=new spotLight(glm::vec3(1,1,1),mtLight,15,25);
@@ -60,16 +63,24 @@ void test_oneSpotLight_oneCube(){
        flylog("lightObj1 init failed!");
        return;
     }
-    lightObj1->setPosition(glm::vec3(0,0,-4));
+    lightObj1->setPosition(glm::vec3(0,0,-1));
     lightObj1->setScale(glm::vec3(0.2,0.2,0.2));
+    lightObj1->setDirection(glm::vec3(0,0,-1));
     world::getInstance()->addSpotLight(lightObj1);
-
-    timerUtil* timerMgrObj=new timerUtil("light_test_timer");
-    timerMgrObj->exec(0.1,[](node* lightObj1){
-        float radius=glfwGetTime();
-        lightObj1->setPositionX(2*cos(radius));
-        lightObj1->setPositionY(2*sin(radius));
-    },lightObj1);
+    
+    
+//     flyEngine::camera* cam=world::getInstance()->getCamera();
+//    lightObj1->update(0);
+    
+//    timerUtil* timerMgrObj=new timerUtil("light_test_timer");
+//    timerMgrObj->exec(0.1,[](node* lightObj1){
+//        float radius=glfwGetTime();
+//        lightObj1->setPositionX(2*cos(radius));
+//        lightObj1->setPositionY(2*sin(radius));
+//    },lightObj1);
+    
+    
+//    glslUtil::printAllUniformAndBlock(cubeObj->getShader()->getProgramID());
 }
 
 void test_oneSpotLight_multiCube_specularMap(){

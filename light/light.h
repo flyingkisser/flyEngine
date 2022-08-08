@@ -32,12 +32,10 @@ public:
     ~light(){};
     
     bool init();
-    //void glUpdateForCube(int program_id,int ligth_index);
-    
-   
     void setColor(glm::vec3 color);
 
     void draw(camera* cameraObj);
+    
 };
 
 NS_FLYENGINE_END

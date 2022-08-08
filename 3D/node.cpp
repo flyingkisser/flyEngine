@@ -101,6 +101,7 @@ void node::setMaterial(material *mt){
     if(m_material!=NULL)
         delete m_material;
     m_material=mt;
+    _dirtyMT=true;
 }
 
 void node::setShader(shader* shaderObj){
@@ -153,33 +154,26 @@ void node::initVAO(float* arr,int arrSize,int descArr[],int descArrSize){
 }
 
 void node::glUpdateLight(){
-    //平行光
-    directionLight* lightDir=world::getInstance()->getDirectiontLight();
-    if(lightDir!=NULL)
-        lightDir->glUpdate(_gl_program);
     int i=0;
     
-//    std::vector<light*> lightVector=world::getInstance()->getLightVector();
-//    int i=0;
-//    for(auto c : lightVector){
-//        light* lightObj=(light*)c;
-//        lightObj->glUpdateForCube(_gl_program,i++);
-//    }
+    //平行光
+//    directionLight* lightDir=world::getInstance()->getDirectiontLight();
+//    if(lightDir!=NULL)
+//        lightDir->glUpdate(_gl_program);
+    
+    
     //点光源初始化
+     i=0;
     std::vector<pointLight*> pointLightVector=world::getInstance()->getPointLightVector();
-    i=0;
     for(auto c : pointLightVector){
         pointLight* lightObj=(pointLight*)c;
-        if(lightObj->getMaterial()!=nullptr)
-            lightObj->glUpdateUseMaterail(_gl_program,i++);
-        else
-            lightObj->glUpdate(_gl_program,i++);
+        lightObj->update(i++);
     }
     //聚光灯初始化
-    std::vector<spotLight*> spotLightVector=world::getInstance()->getSpotLightVector();
     i=0;
+    std::vector<spotLight*> spotLightVector=world::getInstance()->getSpotLightVector();
     for(auto c : spotLightVector){
        spotLight* lightObj=(spotLight*)c;
-       lightObj->glUpdateForCube(_gl_program,i++,world::getInstance()->getCamera());
+       lightObj->update(i++);
     }
 }

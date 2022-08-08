@@ -99,12 +99,11 @@ void cubeTex::draw(camera* cameraObj){
         texture* texSpecular=m_material->getTexSpecular();
        
         if(texSpecular!=NULL){
-            //sharderObj->setInt(uniform_name_material_specular_tex, m_texSpecular->getTextureID(),false);
-            _shaderObj->setInt(uniform_name_material_specular_tex, 1,false);
+            _shaderObj->setBool(uniform_name_material_sp_tex_enabled,1);
+            _shaderObj->setInt(uniform_name_material_specular_tex,1);
         }
-        //m_material->glUpdateForCube(_gl_program);
     }else
-         _shaderObj->setBool(uniform_name_material_enabled, false);
+         _shaderObj->setBool(uniform_name_material_enabled,0);
         
     _shaderObj->setInt("texture0", 0);
     

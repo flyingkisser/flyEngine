@@ -9,13 +9,13 @@ out vec3 normalVector;
 out vec3 posFrag;
 out vec3 uni_cam_pos;
 
-uniform mat4 matModel;
-
 layout (std140) uniform mat{
     mat4 proj;
     mat4 view;
     vec3 cam_pos;
 };
+
+uniform mat4 matModel;
 
 void main(){
     gl_Position = proj * view * matModel * vec4(aPos, 1);

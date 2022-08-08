@@ -2,7 +2,7 @@
 in vec2 texCoord;
 out vec4 FragColor;
 
-uniform sampler2D texture1;
+uniform sampler2D texture0;
 uniform bool bFlipX;
 uniform bool bFlipY;
 uniform bool bReverseColor;
@@ -52,14 +52,14 @@ void main(){
 
     vec3 sampleTex[9];
     for(int i = 0; i < 9; i++){
+        vec3 color=vec3(texture(texture0, pos.xy + offsets[i]));
         if(bReverseColor)
-            sampleTex[i] = vec3(1.0-texture(texture1, pos.xy + offsets[i]));
+            sampleTex[i] = vec3(1.0-color);
         else if(bGray){
-            vec3 color = vec3(texture(texture1, pos.xy + offsets[i]));
             float r=0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
             sampleTex[i]=vec3(r,r,r);
         }else
-            sampleTex[i] = vec3(texture(texture1, pos.xy + offsets[i]));
+            sampleTex[i] = color;
     }
     vec3 col = vec3(0.0);
     for(int i = 0; i < 9; i++)

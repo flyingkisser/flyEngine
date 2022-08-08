@@ -78,7 +78,7 @@ private:
     glm::vec3 _cameraUp;
     
     bool _dirtyPos;
-    bool _dirtyProj;
+//    bool _dirtyProj;
     int _program=0;
     float _yaw=0;
     float _pitch=0;
@@ -86,8 +86,9 @@ private:
     float _fovOrigin=0;
     float _screenRatio=0.0;
     
-    unsigned int _ubo1=0;
-    
+    int _ubo_mat=0;
+    int _ubo_mat_2d=0;
+
 };
 
 NS_FLYENGINE_END

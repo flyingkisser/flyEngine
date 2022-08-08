@@ -26,11 +26,11 @@ void rotateBy::start(node* nodeObj){
         m_intLoopCount++;
     }
     m_intLoopIndex=0;
-    flylog("rotateBy:action begin exec timer!");
+    // flylog("rotateBy:action begin exec timer!");
     m_intTimerKey=timerUtil::getInstance()->execWithCount(secRate,m_intLoopCount, [&](action* act, node* nodeObj,glm::vec3& changeInner){
         //如果有回调，且已经到了最后一帧率，则调用回调，返回，这时最后一帧是额外加的
         if(this->m_funcCB!=NULL && ++this->m_intLoopIndex>=this->m_intLoopCount){
-            flylog("rotateBy:action end,call cb!");
+            // flylog("rotateBy:action end,call cb!");
             act->m_funcCB();
             return;
         }

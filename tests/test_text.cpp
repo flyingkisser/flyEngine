@@ -27,6 +27,7 @@ void test_text1(){
     textObj->setPosition(glm::vec3(25,25,0));
     textObj->setFontSize(21);
     world::getInstance()->addChild(textObj);
+    return;
     
     repeat* act=new repeat(99,1,new moveBy(1,glm::vec3(10,10,0)));
     textObj->runAction(act);

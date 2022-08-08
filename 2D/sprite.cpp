@@ -122,7 +122,7 @@ void sprite::setGray(bool s){
 }
 void sprite::draw(camera *cam){
     _shaderObj->use();
-    _shaderObj->setInt("texture1", 0);
+    _shaderObj->setInt("texture0", 0);
     if(_b_dirty_vertices){
         _reInitVertices();
         _b_dirty_vertices=false;
@@ -135,7 +135,7 @@ void sprite::draw(camera *cam){
         _b_dirty_shader=false;
     }
     
-    cam->update2D();
+//    cam->update2D();
     updateModel();
     glBindVertexArray(_gl_vao);
     glBindTexture(GL_TEXTURE_2D,_texID);

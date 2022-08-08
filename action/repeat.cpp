@@ -44,7 +44,7 @@ void repeat::start(node* nodeObj){
            return;
        }
         if(m_intRunIndex>=m_vectorActionArr.size()){
-            flylog("repeat:[round %d] end!",m_intRepeatCur);
+            // flylog("repeat:[round %d] end!",m_intRepeatCur++);
             if(++m_intRepeatCur>=m_intRepeatLimit){
                 flylog("repeat:all end!");
                 if(m_funcCB!=NULL){
@@ -54,7 +54,7 @@ void repeat::start(node* nodeObj){
             }
             m_intRunIndex=0;
         }
-        flylog("repeat:one loop end,start next loop!");
+        // flylog("repeat:one loop end,start next loop!");
         start(m_objNode);
     });
     m_actionCur=act;

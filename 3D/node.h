@@ -37,6 +37,8 @@ private:
     glm::vec3 _rotate=glm::vec3(0.0f,0.0f,0.0f);
   
     bool _bDisableLogState=false;
+    bool _dirtyPos=false;
+    bool _dirtyMT=false;
     
 public:
     shader* _shaderObj=NULL;
@@ -44,7 +46,8 @@ public:
     unsigned int _gl_program=0;
     unsigned int _gl_vao=0;
     unsigned int _gl_vbo=0;
-    bool _dirtyPos=false;
+   
+ 
     bool _bVisible=true;
     float* _vertice_arr=nullptr;
     int _vertice_arr_size=0;
@@ -62,18 +65,6 @@ public:
     void updateModel();
     
     void initVAO(float* arr,int arrSize,int descArr[],int descArrSize);
-    
-//    void glInitVAO();
-//    void glInitVAOByArr(float* verticeArr,int verticeArrSize);
-//    void glInitVAOWithNormalByArr(float *verticeArr,int verticeArrSize);
-//    void glInitVAOWithTexCoordByArr(float* verticeArr,int verticeArrSize);
-//    void glInitVAOWithTexCoordByArr2D(float* verticeArr,int verticeArrSize);
- 
-//    void glInitVAOByArr(float* verticeArr,int verticeArrSize,int floatNum1,int floatNum2,int floatNum3);
-    
-//    void glInitVAOWithTexCoord();
-//    void glInitVAOWithTexCoordForPlain();
-//    void glInitVAOWithTexCoordAndNormal();
     
     void glInitShader();
     bool glInitMaterial();
@@ -101,7 +92,12 @@ public:
     
     void setVisible(bool s){_bVisible=s;};
     bool visible(){return _bVisible;};
-    bool isDirty(){return _dirtyPos;};
+    
+    bool isDirtyPos(){return _dirtyPos;};
+    void setDirtyPos(bool v){_dirtyPos=v;};
+    
+    bool isDirtyMT(){return _dirtyMT;};
+    void setDirtyMT(bool v){_dirtyMT=v;};
     
     void setLogInStatebool(bool s){_bDisableLogState=!s;};
     bool isDisableLogState(){return _bDisableLogState;};

@@ -25,32 +25,20 @@ directionLight::directionLight(glm::vec3 color,glm::vec3 dir,float am,float diff
     m_fSpecular=spec;
     m_IntShiness=shine;
     _ubo=uboMgr::createUBO(ubo_binding_light_dir, ubo_size_light_dir);
+    _dirty=true;
+    update();
 }
 
-void directionLight::glUpdate(int program_id){
-    int v=1;
-    m_fAmbient=1.0f;
-    m_vec3Color=glm::vec3(1.0f,1.0f,1.0f);
-    glBindBuffer(GL_UNIFORM_BUFFER,_ubo);
-    
-    glBufferSubData(GL_UNIFORM_BUFFER,0,4,&v);
-    glBufferSubData(GL_UNIFORM_BUFFER,4,16,glm::value_ptr(m_vec3Dir));
-    glBufferSubData(GL_UNIFORM_BUFFER,20,16,glm::value_ptr(m_vec3Color));
-    glBufferSubData(GL_UNIFORM_BUFFER,36,4,&m_fAmbient);
-    glBindBuffer(GL_UNIFORM_BUFFER,0);
-    return;
-    
-//    int v=0;
-//    m_fAmbient=1.0f;
-//    glBindBuffer(GL_UNIFORM_BUFFER,_ubo);
-//    glBufferSubData(GL_UNIFORM_BUFFER,0,4,&v);
-//    glBufferSubData(GL_UNIFORM_BUFFER,4,12,glm::value_ptr(m_vec3Dir));
-//    glBufferSubData(GL_UNIFORM_BUFFER,16,12,glm::value_ptr(m_vec3Color));
-//    glBufferSubData(GL_UNIFORM_BUFFER,36,4,&m_fAmbient);
-//    return;
-    
-//    uboMgr::writeData(_ubo, 7, <#int *sizeArr#>, <#void **bufArr#>)
+void directionLight::update(){
+    if(!_dirty)
+        return;
+    _dirty=false;
+    glUpdate();
+}
+
+void directionLight::glUpdate(){
     int sizeArr[]={4,12,12,4,4,4,4};
+    int offsetArr[]={0,16,32,44,48,52,56};
     int enabled=1;
     void* bufArr[]={
         &enabled,
@@ -61,7 +49,7 @@ void directionLight::glUpdate(int program_id){
         &m_fSpecular,
         &m_IntShiness
     };
-    uboMgr::writeData(_ubo, 7, sizeArr, bufArr);
+    uboMgr::writeData(_ubo, 7, sizeArr,offsetArr,bufArr);
     
 //    shaderMgr::setInt(program_id,uniform_name_light_direction_enabled, 1);
 //    shaderMgr::setVec3(program_id,uniform_name_light_direction_direction, (float*)glm::value_ptr(m_vec3Dir));

@@ -11,7 +11,6 @@
 #include <string>
 
 const char* gpuUtil::getGPUBrand(){
-    GLubyte* b=(GLubyte*)glGetString(GL_RENDER);
     return (const char*)glGetString(GL_RENDER);
 }
 

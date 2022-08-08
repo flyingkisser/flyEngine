@@ -11,6 +11,7 @@
 #include "window.h"
 #include "world.h"
 #include "testMain.h"
+#include "glslUtil.h"
 
 USE_NS_FLYENGINE;
 
@@ -23,6 +24,7 @@ int main(int argc, char **argv) {
     printf("main:set current work dir %s\n",szHomeDir);
     
     window::init();
+    glslUtil::init();
     
     testMainBegin();
     

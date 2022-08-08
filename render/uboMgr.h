@@ -20,7 +20,7 @@ class uboMgr {
 public:
     static void linkUBOAndBindPoint(int programID,const char* uboName,int bindPoint);
     static int createUBO(int bindPointIndex,int uboSize);
-    static void writeData(unsigned int ubo,int num,int sizeArr[],void* bufArr[],int firstOffset=0);
+    static void writeData(unsigned int ubo,int num,int sizeArr[],int offsetArr[],void* bufArr[]);
 };
 
 #endif /* uboMgr_h */

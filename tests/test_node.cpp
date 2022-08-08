@@ -40,6 +40,7 @@
 #include "timerUtil.h"
 #include "threadUtil.h"
 #include "window.h"
+#include "glslUtil.h"
 
 
 USE_NS_FLYENGINE;
@@ -81,7 +82,6 @@ void test_cubeColor(){
 
 
 void test_oneCubeTex(){
-    
     node* cubeObj=new cubeTex("res/wood.png");
     if(!cubeObj->init()){
         flylog("node init failed!");
@@ -93,6 +93,8 @@ void test_oneCubeTex(){
     world::getInstance()->addChild(cubeObj);
     cubeObj->print();
     
+    //cubeObj->setShader(new shader("./res/shader/3d_1tex.vs","./res/shader/3d_1tex.fs"));
+    
     //通过按住鼠标右键，控制模型旋转
     control* controlObj=world::getInstance()->getControl();
     controlObj->bindNode(cubeObj);
@@ -101,6 +103,13 @@ void test_oneCubeTex(){
     timerMgrObj->exec(0.1,[](node* _node){
         _node->rotateBy(glm::vec3(0.5f,0,0));
     },cubeObj);
+
+    
+    int proID=cubeObj->getShader()->getProgramID();
+//    glslUtil::printAllUniforms(proID);
+   
+    glslUtil::printAllUniformAndBlock(proID);
+ glslUtil::printUniformValue(proID, "matModel");
     
     init_light_direction();
 }
@@ -130,6 +139,9 @@ void test_twoCubeTex(){
     action* act2=new rotateBy(1,glm::vec3(10,0,0));
     nodeObj1->runAction(new forever(1,act1));
     nodeObj2->runAction(new forever(1,act2));
+    
+    world::getInstance()->getControl()->bindNode(nodeObj2);
+    nodeObj2->setShader(new shader("./res/shader/3d_1tex.vs","./res/shader/3d_1tex.fs"));
 }
 
 void test_multiCubeTex(int count){

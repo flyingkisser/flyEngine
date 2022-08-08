@@ -49,9 +49,11 @@ extern float g_verticeArr_skybox[108];
 #define uniform_name_material_enabled   "mt.enabled"
 #define uniform_name_material_ambient   "mt.ambient"
 #define uniform_name_material_diffuse   "mt.diffuse"
-#define uniform_name_material_specular_tex   "mt.specular_tex"
 #define uniform_name_material_specular  "mt.specular"
 #define uniform_name_material_shininess "mt.shiness"
+#define uniform_name_material_sp_tex_enabled   "mt.sp_tex_enabled"
+#define uniform_name_material_specular_tex   "mt.specular_tex"
+
 
 //#define uniform_name_global_ambient_color "global_ambient_color"
 //direction light
@@ -92,11 +94,16 @@ extern float g_verticeArr_skybox[108];
 
 //ubo binding point index
 #define ubo_binding_mat 0
-#define ubo_binding_light_dir 1
-#define ubo_binding_light_point 2
-#define ubo_binding_light_spot 3
+#define ubo_binding_mat_2d 1
+#define ubo_binding_light_dir 11
+#define ubo_binding_light_point 12
+#define ubo_binding_light_spot 13
 
-#define ubo_size_mat 144
-#define ubo_size_light_dir 52
-
+#define ubo_size_mat 140
+#define ubo_size_mat_2d 140
+#define ubo_size_light_dir 60
+#define ubo_size_light_point 112
+#define ubo_size_light_point_arr 112*4
+#define ubo_size_light_spot 128
+#define ubo_size_light_spot_arr 128*4
 #endif /* defines_h */

@@ -56,3 +56,12 @@ void flylog(const char* fmt,...){
     va_end(argList);//将ap置空
 }
 
+void flylogNoTime(const char* fmt,...){
+    va_list argList;
+    char szFmt[1024*10]={0};
+    va_start(argList, fmt);  //将ap指向fmt后的第一个参数
+    strcpy(szFmt,fmt);
+    szFmt[strlen(szFmt)]='\n';
+    vfprintf(stdout,szFmt,argList);
+    va_end(argList);//将ap置空
+}

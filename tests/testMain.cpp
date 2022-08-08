@@ -22,7 +22,8 @@ void testMainBegin(){
 //    test_cubeColor();
     
     //texture cube test
-     test_oneCubeTex();
+//     test_oneCubeTex();
+    
 //      test_twoCubeTex();
 //    test_multiCubeTex(3);
     
@@ -50,7 +51,7 @@ void testMainBegin(){
 //    test_onePointLight_multiCube_specularMap();
     
     //手电筒光源测试
-//    test_oneSpotLight_oneCube();
+    test_oneSpotLight_oneCube();
 //    test_oneSpotLight_multiCube_specularMap();
 //    test_oneSpotLight_multiCube_specularMap_cameraControl();
 //    test_vector();
@@ -62,7 +63,7 @@ void testMainBegin(){
 //    test_stencil_2();
 //    test_blend_1();
 //    test_blend_2();
-    //    test_text1();
+//        test_text1();
     
 //    test_facecull();
 //    test_facecull_2();

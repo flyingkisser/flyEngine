@@ -39,13 +39,13 @@ void sequence::start(node* nodeObj){
             return;
         }
         if(m_vectorActionArr.size()<=0 || m_intRunIndex>=m_vectorActionArr.size()){
-            flylog("sequence:all end!");
+            // flylog("sequence:all end!");
             if(m_funcCB!=NULL){
                 m_funcCB();
             }
             return;
         }
-        flylog("sequence:one action end,start next!");
+        // flylog("sequence:one action end,start next!");
         start(m_objNode);
     });
     m_objActionCur=act;

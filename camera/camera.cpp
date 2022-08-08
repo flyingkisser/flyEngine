@@ -21,34 +21,26 @@ camera::camera(){
 }
 
 void camera::_updateCamera(){
+    int sizeArr[]={64,16};
+    int offsetArr[]={64,128};
     if(!_dirtyPos)
         return;
     _dirtyPos=false;
     _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
-//    glBindBuffer(GL_UNIFORM_BUFFER,_ubo1);
-//    glBufferSubData(GL_UNIFORM_BUFFER,64,64,(void*)glm::value_ptr(_matCamera));
-//    glBufferSubData(GL_UNIFORM_BUFFER,128,16,(void*)glm::value_ptr(_cameraPos));
-//    glBindBuffer(GL_UNIFORM_BUFFER,0);
-    
-    int sizeArr[]={64,16};
     void* bufArr[]={
         (void*)glm::value_ptr(_matCamera),
         (void*)glm::value_ptr(_cameraPos)
     };
-    uboMgr::writeData(_ubo1,2,sizeArr,bufArr,64);
+    uboMgr::writeData(_ubo_mat,2,sizeArr,offsetArr,bufArr);
 }
 
 void camera::_updateProjection(){
-    
-//    glBindBuffer(GL_UNIFORM_BUFFER,_ubo1);
-//    glBufferSubData(GL_UNIFORM_BUFFER,0,64,(void*)glm::value_ptr(_matProj));
-//    glBindBuffer(GL_UNIFORM_BUFFER,0);
-    
     int sizeArr[]={64};
+    int offsetArr[]={0};
     void* bufArr[]={
         (void*)glm::value_ptr(_matProj)
     };
-    uboMgr::writeData(_ubo1,1,sizeArr,bufArr);
+    uboMgr::writeData(_ubo_mat,1,sizeArr,offsetArr,bufArr);
 }
 
 
@@ -139,8 +131,8 @@ bool camera::init(){
     
     _matProj2D=glm::ortho(0.0f,(float)g_winWidth,0.0f,(float)g_winHigh);
     
-    _dirtyPos=true;
-    _dirtyProj=true;
+    _dirtyPos=false;
+//    _dirtyProj=true;
     
     initUBO();
     return true;
@@ -160,67 +152,31 @@ void camera::update(){
 }
 
 void camera::update2D(){
-//    glBindBuffer(GL_UNIFORM_BUFFER,_ubo1);
-//    glBufferSubData(GL_UNIFORM_BUFFER,0,64,(void*)glm::value_ptr(_matProj2D));
-//    glBindBuffer(GL_UNIFORM_BUFFER,0);
-
-    int sizeArr[]={64};
+    int sizeArr[]={64,64,16};
+    int offsetArr[]={0,64,128};
     void* bufArr[]={
-        (void*)glm::value_ptr(_matProj2D)
+        (void*)glm::value_ptr(_matProj2D),
+        (void*)glm::value_ptr(_matCamera),
+        (void*)glm::value_ptr(_cameraPos)
     };
-    uboMgr::writeData(_ubo1,1,sizeArr,bufArr);
+    uboMgr::writeData(_ubo_mat,3,sizeArr,offsetArr,bufArr);
 }
 
 void camera::_updateUBO(){
     int sizeArr[]={64,64,16};
+    int offsetArr[]={0,64,128};
     void* bufArr[]={
         (void*)glm::value_ptr(_matProj),
         (void*)glm::value_ptr(_matCamera),
         (void*)glm::value_ptr(_cameraPos)
     };
-    uboMgr::writeData(_ubo1,3,sizeArr,bufArr);
-
-//    glBindBuffer(GL_UNIFORM_BUFFER,_ubo1);
-//    glBufferSubData(GL_UNIFORM_BUFFER,0,64,(void*)glm::value_ptr(_matProj));
-//    glBufferSubData(GL_UNIFORM_BUFFER,64,64,(void*)glm::value_ptr(_matCamera));
-//    glBufferSubData(GL_UNIFORM_BUFFER,128,16,(void*)glm::value_ptr(_cameraPos));
-//    glBindBuffer(GL_UNIFORM_BUFFER,0);
+    uboMgr::writeData(_ubo_mat,3,sizeArr,offsetArr,bufArr);
+    bufArr[0]=(void*)glm::value_ptr(_matProj2D),
+    uboMgr::writeData(_ubo_mat_2d,3,sizeArr,offsetArr,bufArr);
 }
 
 void camera::initUBO(){
-    _ubo1=uboMgr::createUBO(ubo_binding_mat,ubo_size_mat);
-//    glGenBuffers(1,&_ubo1);
-//    glBindBuffer(GL_UNIFORM_BUFFER,_ubo1);
-//    glBufferData(GL_UNIFORM_BUFFER,144,NULL,GL_DYNAMIC_DRAW);
-//    glBindBufferRange(GL_UNIFORM_BUFFER,0,_ubo1,0,144);
+    _ubo_mat=uboMgr::createUBO(ubo_binding_mat,ubo_size_mat);
+    _ubo_mat_2d=uboMgr::createUBO(ubo_binding_mat_2d,ubo_size_mat_2d);
     _updateUBO();
 }
-
-//void camera::_updateCamera_old(){
-//    if(!_program)
-//        return;
-//    if(_dirtyPos){
-//        _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
-//        _dirtyPos=false;
-//    }
-//    shaderMgr::setMat4(_program,uniform_name_mat_camera,glm::value_ptr(_matCamera));
-//
-//    int pos=glGetUniformLocation(_program, uniform_name_camera_pos);
-//    if(pos!=-1)
-//        shaderMgr::setVec3(_program,uniform_name_camera_pos,glm::value_ptr(_cameraPos));
-//}
-//void camera::_updateProjection_old(){
-//    if(!_program)
-//        return;
-//    glBindBuffer(GL_UNIFORM_BUFFER,_ubo1);
-//    glBufferSubData(GL_UNIFORM_BUFFER,0,64,(void*)glm::value_ptr(_matProj));
-//    glBindBuffer(GL_UNIFORM_BUFFER,0);
-//    shaderMgr::setMat4(_program,uniform_name_mat_proj,glm::value_ptr(_matProj));
-//}
-//void camera::updateUBOOnDirty(){
-//    if(!_dirtyPos)
-//        return;
-//    _dirtyPos=false;
-//    _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
-//    _updateUBO();
-//}

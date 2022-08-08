@@ -30,7 +30,7 @@ shader* shaderMgr::getShader(const char* szVertFileName,const char* szFragFileNa
     std::string key=std::string(szVertFileName)+'_'+std::string(szFragFileName);
     auto it=s_mapShaderCache.find(key);
     if(it!=s_mapShaderCache.end()){
-        flylog("cached programID %d from %s %s",it->second,szVertFileName,szFragFileName);
+        flylog("cached programID %d from %s %s",it->second->getProgramID(),szVertFileName,szFragFileName);
         return it->second;
     }
     return shaderMgr::createAndCacheShader(szVertFileName,szFragFileName);

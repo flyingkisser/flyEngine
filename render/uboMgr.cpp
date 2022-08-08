@@ -17,8 +17,7 @@ void uboMgr::linkUBOAndBindPoint(int programID,const char* uboName,int bindPoint
     int index=glGetUniformBlockIndex(programID,uboName);
     if(index>=0){
         glUniformBlockBinding(programID,index,bindPoint);
-        flylog("uboMgr::set binding%d=%s",bindPoint,uboName);
-//        flylog("shader::can't find interface block \"mat\" in this shader!");
+        flylog("uboMgr::[program %d] bind [block_index %d %s] at %d",programID,index,uboName,bindPoint);
         return;
     }
 }
@@ -30,19 +29,23 @@ int uboMgr::createUBO(int bindPointIndex,int uboSize){
     glBindBuffer(GL_UNIFORM_BUFFER,ubo);
     glBufferData(GL_UNIFORM_BUFFER,uboSize,NULL,GL_DYNAMIC_DRAW);
     glBindBufferRange(GL_UNIFORM_BUFFER,bindPointIndex,ubo,0,uboSize);
+    flylog("uboMgr::create ubo id %d size %d bind at %d",ubo,uboSize,bindPointIndex);
     return ubo;
 }
 
 //写入数据
 //指定ubo，描述变量的大小和内存位置的vector
-void uboMgr::writeData(unsigned int ubo,int num,int sizeArr[],void* bufArr[],int firstOffset){
+void uboMgr::writeData(unsigned int ubo,int num,int sizeArr[],int offsetArr[],void* bufArr[]){
+    int c=0;
     glBindBuffer(GL_UNIFORM_BUFFER,ubo);
-    int offset=firstOffset;
     for(int i=0;i<num;i++){
         int size=sizeArr[i];
+        int offset=offsetArr[i];
         void* buf=bufArr[i];
         glBufferSubData(GL_UNIFORM_BUFFER,offset,size,buf);
-        offset+=size;
+        c+=size;
     }
     glBindBuffer(GL_UNIFORM_BUFFER,0);
+    if(c)
+        flylog("uboMgr::call glBufferSubData %d times total size %d to ubo id %d",num,c,ubo);
 }

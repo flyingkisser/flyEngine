@@ -27,7 +27,10 @@ shader::shader(const char* szVertFileName,const char* szFragFileName){
         return;
     }
     uboMgr::linkUBOAndBindPoint(_idProgram,"mat", ubo_binding_mat);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"mat2d", ubo_binding_mat_2d);
     uboMgr::linkUBOAndBindPoint(_idProgram,"light_dir", ubo_binding_light_dir);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_point", ubo_binding_light_point);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_spot", ubo_binding_light_spot);
 }
 
 bool shader::readFile(){

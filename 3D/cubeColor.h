@@ -24,7 +24,8 @@ class cubeColor: public node
 {
 private:
     glm::vec3 m_vec3Color;
-
+    bool _dirtyColor=false;
+    
 public:
     cubeColor(glm::vec3 color);
     ~cubeColor(){};
@@ -33,8 +34,11 @@ public:
     
     bool init();
     void glInit();
-    void setColor(glm::vec3 color){m_vec3Color=color;};
-
+    void setColor(glm::vec3 color){m_vec3Color=color;_dirtyColor=true;};
+    
+    bool isDirtyColor(){return _dirtyColor;};
+    void setDirtyColor(bool v){_dirtyColor=v;};
+    
     void draw(camera* cameraObj);
 };
 

@@ -27,6 +27,7 @@ forever::~forever(){
         delete a;
     }
     m_vectorActionArr.clear();
+    flylog("forever:~forever()!");
 }
 
 void forever::start(node* nodeObj){
@@ -39,10 +40,10 @@ void forever::start(node* nodeObj){
             return;
         }
         if(m_intRunIndex>=m_vectorActionArr.size()){
-            flylog("forever:[round %d] end!",m_intRepeatCur);
+//            flylog("forever:[round %d] end!",m_intRepeatCur++);
             m_intRunIndex=0;
         }
-        flylog("forever:one loop end,start next loop!");
+//        flylog("forever:one loop end,start next loop!");
         start(m_objNode);
     });
     m_actionCur=act;
@@ -54,6 +55,7 @@ void forever::start(node* nodeObj,std::function<void(void)> cb){
 }
 
 void forever::stop(){
+    flylog("forever:stop!");
     action::stop();
     if(m_actionCur!=NULL)
         m_actionCur->stop();

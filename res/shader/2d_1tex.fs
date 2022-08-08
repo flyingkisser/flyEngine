@@ -2,7 +2,7 @@
 in vec2 texCoord;
 out vec4 FragColor;
 
-uniform sampler2D texture1;
+uniform sampler2D texture0;
 uniform bool bFlipX;
 uniform bool bFlipY;
 uniform bool bReverseColor;
@@ -14,15 +14,14 @@ void main(){
         x=1-texCoord.x;
     if(bFlipY==true)
         y=1-texCoord.y;
-//    FragColor=texture(texture1,vec2(x,y));
     vec2 pos=vec2(x,y);
+    vec4 color=texture(texture0,pos);
     if(bReverseColor)
-        FragColor=vec4(vec3(1.0-texture(texture1,pos)),1.0);  //颜色反转
+        FragColor=vec4(vec3(1.0-color),1.0);  //颜色反转
     else if(bGray){
-        FragColor=texture(texture1, pos);
-        float r=0.2126 * FragColor.r + 0.7152 * FragColor.g + 0.0722 * FragColor.b;
+        float r=0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
         FragColor=vec4(r,r,r,1.0);
     }
     else
-        FragColor=texture(texture1,vec2(x,y));
+        FragColor=color;
 }

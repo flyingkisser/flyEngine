@@ -74,7 +74,7 @@ static void init_light_direction(){
 void test_one_model(){
     init_light_direction();
     
-    pointLight* pLight=new pointLight(glm::vec3(1,1,1),glm::vec3(-0.7,0.6,-0.7),0.1,0.5,0.5,8);
+    pointLight* pLight=new pointLight(glm::vec3(1,1,1),createMaterial(0.2, 1.0, 1.0, 0.2));
     if(!pLight->init()){
          flylog("pLight init failed!");
          return;

@@ -19,5 +19,6 @@ public:
 };
 
 void flylog(const char* szFmt,...);
+void flylogNoTime(const char* fmt,...);
 
 #endif /* logUtil_h */

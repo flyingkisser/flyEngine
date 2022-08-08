@@ -79,9 +79,11 @@ void uiText::draw(camera* cameraObj){
         return;
     
     _shaderObj->use();
+    
     glm::mat4 proj=glm::ortho(0.0f,(float)g_winWidth,0.0f,(float)g_winHigh);
     _shaderObj->setMat4("matProj", (float*)glm::value_ptr(proj));
     
+    //update model matrix
 //    _shader2dObj->setMat4("matModel", (float*)glm::value_ptr(glm::vec3(nodePos.x/g_winWidth,nodePos.y/g_winHigh,0)));
     updateModel();
     
