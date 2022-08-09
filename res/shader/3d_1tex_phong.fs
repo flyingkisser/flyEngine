@@ -157,6 +157,7 @@ void main(){
         //环境光
         ambient+=light.color*light.ambient;
         
+        /*
         vec3 light_vector=normalize(light.pos-posFrag);
         vec3 light_direction=normalize(light.pos);
         float theta=dot(light_vector,light_direction);
@@ -185,7 +186,7 @@ void main(){
             diffuse*=attenuation;
             specular*=attenuation;
         }
-
+        */
     }
     
     //如果物体的材质启用了，要计算物体本身的材质对于光照的影响

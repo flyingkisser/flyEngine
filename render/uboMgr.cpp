@@ -17,19 +17,23 @@ void uboMgr::linkUBOAndBindPoint(int programID,const char* uboName,int bindPoint
     int index=glGetUniformBlockIndex(programID,uboName);
     if(index>=0){
         glUniformBlockBinding(programID,index,bindPoint);
-        flylog("uboMgr::[program %d] bind [block_index %d %s] at %d",programID,index,uboName,bindPoint);
+        flylog("uboMgr::linkUBOAndBindPoint [program %d] bind [block_index %d %s] at %d",programID,index,uboName,bindPoint);
         return;
     }
 }
 
 //指定绑定点序号,ubo内存的大小，
-int uboMgr::createUBO(int bindPointIndex,int uboSize){
+int uboMgr::createUBO(int bindPointIndex,int uboSize,const char* uboName){
     unsigned int ubo;
     glGenBuffers(1,&ubo);
     glBindBuffer(GL_UNIFORM_BUFFER,ubo);
     glBufferData(GL_UNIFORM_BUFFER,uboSize,NULL,GL_DYNAMIC_DRAW);
     glBindBufferRange(GL_UNIFORM_BUFFER,bindPointIndex,ubo,0,uboSize);
-    flylog("uboMgr::create ubo id %d size %d bind at %d",ubo,uboSize,bindPointIndex);
+    if(uboName==NULL)
+       
+        flylog("uboMgr::createUBO ubo id %d size %d bind at %d %s",ubo,uboSize,bindPointIndex);
+    else
+        flylog("uboMgr::createUBO ubo id %d size %d bind at %d %s",ubo,uboSize,bindPointIndex);
     return ubo;
 }
 
@@ -47,5 +51,5 @@ void uboMgr::writeData(unsigned int ubo,int num,int sizeArr[],int offsetArr[],vo
     }
     glBindBuffer(GL_UNIFORM_BUFFER,0);
     if(c)
-        flylog("uboMgr::call glBufferSubData %d times total size %d to ubo id %d",num,c,ubo);
+        flylog("uboMgr::writeData glBufferSubData %d times total size %d to ubo id %d",num,c,ubo);
 }

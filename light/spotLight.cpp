@@ -72,7 +72,6 @@ void spotLight::glUpdate(int light_index){
         (void*)&m_fcutOffOuter,//无法写入
         (void*)glm::value_ptr(_vec3Direction)//无法写入
     };
-    
     for(int i=0;i<num;i++){
         offsetArr[i]=offsetArr[i]*(light_index+1)+ubo_size_light_spot*light_index;
     }
