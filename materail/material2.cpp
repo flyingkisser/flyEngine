@@ -24,17 +24,17 @@ material2::material2(glm::vec3 ambient,glm::vec3 diffuse,glm::vec3 specular,floa
 }
 
 bool material2::setDiffuseTex(const char* szTex){
-   texture2* m_texDiffuse=new texture2(szTex);
-   if(!m_texDiffuse->init())
+    texture2* m_texDiffuse=new texture2(szTex);
+    if(!m_texDiffuse->init())
        return false;
-   m_texDiffuse->glInit();
+    m_texDiffuse->glInit();
     return true;
 }
 
 bool material2::setSpecularTex(const char* szTex){
-   m_texSpecular=new texture2(szTex);
-   if(!m_texSpecular->init())
+    m_texSpecular=new texture2(szTex);
+    if(!m_texSpecular->init())
        return false;
-   m_texSpecular->glInit(GL_TEXTURE1);
+    m_texSpecular->glInit(GL_TEXTURE1);
     return true;
 }
