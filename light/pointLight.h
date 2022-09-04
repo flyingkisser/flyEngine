@@ -17,7 +17,7 @@ NS_FLYENGINE_BEGIN
 
 class pointLight : public light{
 public:
-    pointLight(glm::vec3 color,material* mt,float constant=1,float linear=0.09,float quadratic=0.032);
+    pointLight(glm::vec3 color,material2* mt,float constant=1,float linear=0.09,float quadratic=0.032);
     void glUpdate(int light_index);
     void update(int light_index);
     

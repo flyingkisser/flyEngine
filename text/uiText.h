@@ -12,18 +12,18 @@
 #include <stdio.h>
 #include "defines.h"
 #include "node.h"
-#include "shader.h"
+//#include "shader.h"
 #include "fontTTF.h"
 
 NS_FLYENGINE_BEGIN
 
 class uiText:public node{
 public:
-    uiText(const char* strFontName,int fontSize,const char* strText);
+    uiText(const char* strFontFilePath,int fontSize,const char* strText);
     void setText(const char* str){_strText=(char*)str;};
     void setFontColor(glm::vec3 color){_fontColor=color;};
     void setFontSize(int s);
-    void draw(camera* cameraObj);
+    void draw();
     bool init();
     void glInit();
     
@@ -33,7 +33,7 @@ public:
     
 private:
     char* _strText;
-    const char* _fontName;
+    const char* _fontFilePath;
     int _fontSize=12;
     glm::vec3 _fontColor=glm::vec3(255,0,0);
     shader* _shader2dObj;

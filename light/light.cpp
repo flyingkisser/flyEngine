@@ -7,26 +7,26 @@
 //
 
 #include "light.h"
-#include "material.h"
+#include "material2.h"
 #include "shader.h"
 #include "shaderMgr.h"
 
 USE_NS_FLYENGINE
 
-light::light(glm::vec3 color,material* mt):cubeColor(color){
+light::light(glm::vec3 color,material2* mt):cubeColor(color){
     setMaterial(mt);
 }
 
 light::light(glm::vec3 color):cubeColor(color){
-    setMaterial(new material(glm::vec3(1,1,1),glm::vec3(1,1,1),glm::vec3(1,1,1),1.0f));
+    setMaterial(new material2(glm::vec3(1,1,1),glm::vec3(1,1,1),glm::vec3(1,1,1),1.0f));
 }
 
 bool light::init(){
     return cubeColor::init();
 }
 
-void light::draw(camera* cameraObj){
-    cubeColor::draw(cameraObj);
+void light::draw(){
+    cubeColor::draw();
 }
 
 void light::setColor(glm::vec3 color){

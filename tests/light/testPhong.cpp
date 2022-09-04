@@ -13,7 +13,7 @@
 
 #include "defines.h"
 
-#include "testWindow.h"
+#include "window.h"
 #include "textureMgr.h"
 #include "VAOMgr.h"
 #include "shader.h"

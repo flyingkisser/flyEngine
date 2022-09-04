@@ -10,10 +10,10 @@
 #define fontMgr_h
 
 #include <stdio.h>
-#include "defines.h"
-#include "fontTTF.h"
 #include <map>
 #include <string>
+#include "defines.h"
+#include "fontTTF.h"
 
 NS_FLYENGINE_BEGIN;
 

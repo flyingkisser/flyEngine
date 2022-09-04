@@ -6,8 +6,10 @@
 //  Copyright © 2022 joe. All rights reserved.
 //
 
+#include "defines.h"
 #include "glslUtil.h"
 #include "logUtil.h"
+
 #include <map>
 
 static std::map<int,int> glslTypeSizeMap;
@@ -326,6 +328,7 @@ void glslUtil::_printFloat(int rows,int columns,float *f) {
 }
 
 void glslUtil::printUBOInfo(int program,const char* uboName,const char* uniName) {
+#ifdef BUILD_MAC
     if (!glIsProgram(program)) {
         flylog("%d is not a program", program);
         return;
@@ -377,6 +380,7 @@ void glslUtil::printUBOInfo(int program,const char* uboName,const char* uniName)
         glGetBufferSubData(GL_UNIFORM_BUFFER,uniOffset,totalSize,values);
         _printFloat(rows,columns,(float*)values);
     }
+#endif
 }
 
 void glslUtil::printAllUniforms(int programID){
@@ -399,6 +403,7 @@ void glslUtil::printAllUniforms(int programID){
 }
 
 void glslUtil::_printUniformValueByTypeAndLocation(int programID,int type,int uniLocation){
+#ifdef BUILD_MAC
     int rows=_getRows(type), columns=_getColumns(type);
     int type_enum=_getType(type);
     if (type_enum==glslUtil::TYPE_FLOAT) {
@@ -421,6 +426,7 @@ void glslUtil::_printUniformValueByTypeAndLocation(int programID,int type,int un
         glGetUniformdv(programID, uniLocation, value);
         _printFloat(rows,columns,(float*)value);
     }
+#endif
 }
 
 void glslUtil::printUniformValue(int programID,const char* uniformName){
@@ -438,17 +444,150 @@ void glslUtil::printUniformValue(int programID,const char* uniformName){
     int uniLocation = glGetUniformLocation((int)programID, findName);
     glGetActiveUniform(programID, uniLocation, sizeof(retName), (GLsizei*)&retLen, (GLint*)&retSize,(GLenum*)&retType, retName);
     if (retLen!=0) {
+#ifdef BUILD_MAC
         flylog("[%s]values in program %d %s", uniformName, programID,retName);
         _printUniformValueByTypeAndLocation(programID,retType,uniLocation);
+#elif BUILD_MAC
+        flylog("[%s]uniLocation in program %d %s %d", uniformName, programID,retName,uniLocation);
+#endif
+        
     }
     else
         flylog("%s is not an active uniform in program %u", uniformName, programID);
 }
 
 void glslUtil::printAllUniformAndBlock(int programID){
+//#ifdef BUILD_MAC
     int uniCount=0;
     glGetProgramiv(programID,GL_ACTIVE_UNIFORMS, &uniCount);
     for(int i=0;i<uniCount;i++){
+        char uniName[256]={0};
+        int uniType=0;
+        int uniSize=0;
+        int uniArrayStride=0;
+        int oneSize=0;
+        int uniIndex=0;
+        int retLen=0;
+        glGetActiveUniformsiv(programID, 1, (const GLuint*)&i, GL_UNIFORM_BLOCK_INDEX, &uniIndex);
+        if (uniIndex == -1) {
+            //常规uniform，不是uniform block
+#ifdef BUILD_MAC
+            glGetActiveUniformName(programID, i, sizeof(uniName), &retLen, uniName);
+#elif BUILD_IOS
+            int retSize=0;
+            GLsizei glLen;
+            GLint glSize;
+            GLenum glType;
+            glGetActiveUniform(programID, i, sizeof(uniName), &glLen, &glSize,  &glType, uniName);
+#endif
+            glGetActiveUniformsiv(programID, 1,(const GLuint*)&i, GL_UNIFORM_TYPE, &uniType);
+            glGetActiveUniformsiv(programID, 1,(const GLuint*)&i, GL_UNIFORM_SIZE, &uniSize);
+            glGetActiveUniformsiv(programID, 1,(const GLuint*)&i, GL_UNIFORM_ARRAY_STRIDE, &uniArrayStride);
+            if (uniArrayStride>0)
+                oneSize = uniArrayStride * uniSize;
+            else
+                oneSize = glslTypeSizeMap[uniType];
+            flylogNoTime("[program %d]index %d name %s size %d",programID,i,uniName,oneSize);
+        }
+    }
+    
+    int blockCount=0;
+    glGetProgramiv(programID,GL_ACTIVE_UNIFORM_BLOCKS,&blockCount);
+    for(int i=0;i<blockCount;i++){
+        char blockName[256]={0};
+        int bindIndex=0;
+        int uboID=0;
+        int uniSize=0;
+        int retLen=0;
+        int oneSize=0;
+        glGetActiveUniformBlockName(programID, i, sizeof(blockName),&retLen,blockName);
+        glGetActiveUniformBlockiv(programID, i, GL_UNIFORM_BLOCK_DATA_SIZE, &uniSize);
+        glGetActiveUniformBlockiv(programID, i, GL_UNIFORM_BLOCK_BINDING, &bindIndex);
+        glGetIntegeri_v(GL_UNIFORM_BUFFER_BINDING, bindIndex, &uboID);
+        
+        int uniCount=0;
+        glGetActiveUniformBlockiv(programID, i, GL_UNIFORM_BLOCK_ACTIVE_UNIFORMS, &uniCount);
+        int* indexBuf=(int*)malloc(sizeof(int)*uniCount);
+        glGetActiveUniformBlockiv(programID, i, GL_UNIFORM_BLOCK_ACTIVE_UNIFORM_INDICES,indexBuf);
+        
+        for(int j=0;j<uniCount;j++){
+            char uniName[256]={0};
+            int retLen=0;
+            int uniType=0;
+            int uniSize=0;
+            int uniOffset=0;
+            int uniArrayStride=0;
+            int uniMatStride=0;
+            int oneSize=0;
+            glGetActiveUniformsiv(programID, 1,(const GLuint*)&indexBuf[j], GL_UNIFORM_TYPE, &uniType);
+            glGetActiveUniformsiv(programID, 1,(const GLuint*)&indexBuf[j], GL_UNIFORM_SIZE, &uniSize);
+            glGetActiveUniformsiv(programID, 1,(const GLuint*)&indexBuf[j], GL_UNIFORM_OFFSET, &uniOffset);
+            glGetActiveUniformsiv(programID, 1,(const GLuint*)&indexBuf[j], GL_UNIFORM_ARRAY_STRIDE, &uniArrayStride);
+            glGetActiveUniformsiv(programID, 1,(const GLuint*)&indexBuf[j], GL_UNIFORM_MATRIX_STRIDE, &uniMatStride);
+            oneSize=_getUniformSize(uniSize, uniType, uniArrayStride, uniMatStride);
+            
+#ifdef BUILD_MAC
+            glGetActiveUniformName(programID, indexBuf[j], sizeof(uniName), &retLen, uniName);
+#elif BUILD_IOS
+            int retSize=0;
+            GLsizei glLen;
+            GLint glSize;
+            GLenum glType;
+            glGetActiveUniform(programID, indexBuf[j], sizeof(uniName), &glLen, &glSize,  &glType, uniName);
+            if(glSize!=uniSize)
+                flylog("size not equal!");
+            if(glType!=uniType)
+                flylog("type not equal!");
+            uniSize=glSize;
+            uniType=glType;
+            oneSize=_getUniformSize(uniSize, uniType, uniArrayStride, uniMatStride);
+#endif
+            flylogNoTime("[block %d]index %d name %s size %d offset %d",i,indexBuf[j],uniName,oneSize,uniOffset);
+            
+            int rows = _getRows(uniType);
+            int columns = _getColumns(uniType);
+            if(columns<=0)
+                columns=1;
+#ifdef BUILD_MAC
+            if(uboID>0){
+                // oneSize=12;
+                // columns=3;
+                glBindBuffer(GL_UNIFORM_BUFFER, uboID);
+                int type_enum=_getType(uniType);
+                if(type_enum==glslUtil::TYPE_FLOAT) {
+                    float values[16];
+                    glGetBufferSubData(GL_UNIFORM_BUFFER,uniOffset,oneSize,values);
+                    _printFloat(rows,columns,values);
+                }
+                else if(type_enum==glslUtil::TYPE_INT) {
+                    int values[16];
+                    glGetBufferSubData(GL_UNIFORM_BUFFER,uniOffset,oneSize,values);
+                    _printInt(rows,columns,values);
+                }
+                else if(type_enum==glslUtil::TYPE_UNSIGNED_INT) {
+                    unsigned int values[16];
+                    glGetBufferSubData(GL_UNIFORM_BUFFER,uniOffset,oneSize,values);
+                    _printUnsignedInt(rows,columns,values);
+                }
+                else if(type_enum==glslUtil::TYPE_DOUBLE) {
+                    double values[16];
+                    glGetBufferSubData(GL_UNIFORM_BUFFER,uniOffset,oneSize,values);
+                    _printFloat(rows,columns,(float*)values);
+                }
+            }
+#endif
+        }
+        flylogNoTime("[program %d]index %d block %s size %d",programID,i,blockName,uniSize);
+    }
+//#endif
+}
+
+
+void glslUtil::printAllSSBO(int programID){
+#ifdef BUILD_MAC
+    int ssboCount=16;
+    //glGetProgramiv(programID,GL_ACTIVE_UNIFORMS, &uniCount);
+    for(int i=0;i<ssboCount;i++){
         char uniName[256]={0};
         int uniType=0;
         int uniSize=0;
@@ -515,6 +654,8 @@ void glslUtil::printAllUniformAndBlock(int programID){
                 columns=1;
             
             if(uboID>0){
+                // oneSize=12;
+                // columns=3;
                 glBindBuffer(GL_UNIFORM_BUFFER, uboID);
                 int type_enum=_getType(uniType);
                 if(type_enum==glslUtil::TYPE_FLOAT) {
@@ -541,6 +682,6 @@ void glslUtil::printAllUniformAndBlock(int programID){
         }
         flylogNoTime("[program %d]index %d block %s size %d",programID,i,blockName,oneSize);
     }
+#endif
 }
-
 

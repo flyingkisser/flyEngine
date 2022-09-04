@@ -12,7 +12,7 @@
 #include "pngUtil.h"
 using namespace flyEngine;
 
-static void GetPNGtextureInfo(int color_type,  struct_texture *texinfo)
+static void getPNGTextureInfo(int color_type,  struct_texture *texinfo)
 {
     switch (color_type)
     {
@@ -48,7 +48,7 @@ bool pngUtil::isPng(const char *filename)
     FILE *fp = NULL;
     fp = fopen(filename, "rb");
     if (!fp){
-        fprintf(stderr, "error: couldn't open \"%s\"!\n", filename);
+        fprintf(stderr, "pngUtil::isPng error: couldn't open \"%s\"!\n", filename);
         return false;
     }
     fread(magic, 1, sizeof(magic), fp);
@@ -72,14 +72,14 @@ bool pngUtil::isPng(const char *filename)
     /* Open image file */
     fp = fopen(filename, "rb");
     if (!fp){
-        fprintf(stderr, "error: couldn't open \"%s\"!\n", filename);
+        fprintf(stderr, "pngUtil::loadFile error: couldn't open \"%s\"!\n", filename);
         return false;
     }
     /* Read magic number */
     fread(magic, 1, sizeof(magic), fp);
     /* Check for valid magic number */
     if (!png_check_sig(magic, sizeof(magic))){
-        fprintf(stderr, "error: \"%s\" is not a valid PNG image!\n", filename);
+        fprintf(stderr, "pngUtil::loadFile error: \"%s\" is not a valid PNG image!\n", filename);
         fclose(fp);
         return false;
     }
@@ -102,12 +102,14 @@ bool pngUtil::isPng(const char *filename)
     if (setjmp(png_jmpbuf(png_ptr))){
         fclose(fp);
         png_destroy_read_struct(&png_ptr, &info_ptr, NULL);
-        if (row_pointers) free(row_pointers);
+        if (row_pointers)
+            free(row_pointers);
         if (texinfo) {
             if (texinfo->buf)
                 free(texinfo->buf);
             free(texinfo);
         }
+        fprintf(stderr,"pngUtil::loadFile,error occured!free every buf!!!");
         return false;
     }
     /* Setup libpng for using standard C fread() function with our FILE pointer */
@@ -139,9 +141,10 @@ bool pngUtil::isPng(const char *filename)
     texinfo->width = w;
     texinfo->height = h;
     /* Get image format and components per pixel */
-    GetPNGtextureInfo(color_type, texinfo);
+     getPNGTextureInfo(color_type, texinfo);
     /* We can now allocate memory for storing pixel data */
-    texinfo->buf = (GLubyte *)malloc(sizeof(GLubyte) * texinfo->width * texinfo->height * texinfo->internalFormat);
+    int bufSize=sizeof(GLubyte) * texinfo->width * texinfo->height * texinfo->internalFormat;
+    texinfo->buf = (GLubyte *)malloc(bufSize);
     /* Setup a pointer array. Each one points at the begening of a row. */
     row_pointers = (png_bytep *)malloc(sizeof(png_bytep) * texinfo->height);
     if(bFlipY)
@@ -159,6 +162,6 @@ bool pngUtil::isPng(const char *filename)
     /* We don't need row pointers anymore */
     free(row_pointers);
     fclose(fp);
-    texinfo->format=GL_RGBA;
+//    fprintf(stdout, "pngUtil::alloct buf %d(%x) at %llu for %s\n", bufSize,bufSize,texinfo->buf,filename);
     return true;
 }

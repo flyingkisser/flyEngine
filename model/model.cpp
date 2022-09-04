@@ -12,7 +12,6 @@
 #include "../external/stb_image/stb_image.h"
 
 #include "logUtil.h"
-#include "texture.h"
 #include "textureMgr.h"
 #include "shader.h"
 #include "shaderMgr.h"
@@ -20,7 +19,9 @@
 #include "camera.h"
 #include "world.h"
 #include "directionLight.h"
-#include "material.h"
+#ifdef BUILD_IOS
+#include "ios_dirUtil.h"
+#endif
 
 USE_NS_FLYENGINE
 
@@ -35,6 +36,9 @@ bool model::loadModel(std::string path){
     //aiProcess_OptimizeMeshes 和以上操作相反，合并子mesh，以减少draw call数
     //aiProcess_Triangulate 如果有不是三角形的部分，会把基本的开关转换成三角形
     //aiProcess_FlipUVs 处理纹理坐标时把y进行翻转
+#ifdef BUILD_IOS
+    path=ios_dirUtil::getFileFullPathName(path.c_str());
+#endif
     const aiScene* scene=importer.ReadFile(path,aiProcess_Triangulate|aiProcess_FlipUVs);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode){
         flylog("model::loadModel load %s failed : %s",path.c_str(),importer.GetErrorString());
@@ -121,8 +125,8 @@ std::vector<Texture> model::loadMaterialTextures(aiMaterial *aiMT, aiTextureType
             texture.type=TYPE_Diffuse;
         else if(aiTexType==aiTextureType_SPECULAR)
              texture.type=TYPE_Specular;
-        else if(aiTexType==aiTextureType_SPECULAR)
-             texture.type=TYPE_Specular;
+        else if(aiTexType==aiTextureType_AMBIENT)
+             texture.type=TYPE_Ambient;
         //texture.type= aiTexType==aiTextureType_DIFFUSE? TYPE_Diffuse : TYPE_Specular;
         textures.push_back(texture);
         flylog("load texture %s as type %d id %d",filename.c_str(),texture.type,texture.id);
@@ -135,6 +139,7 @@ bool model::init(){
     setPosition(glm::vec3(0,0,-5));
     if(_shaderObj==NULL){
         _shaderObj=shaderMgr::getModelShader();
+//        _shaderObj=shaderMgr::get3d1texPongShader();
     }
     if(_shaderObj==NULL){
         flylog("model::init shaderObj is null,return!");
@@ -149,7 +154,7 @@ void model::glInit(){
 
 }
 
-void model::draw(camera* cameraObj){
+void model::draw(){
     _shaderObj->use();
     node::updateModel();
     node::glUpdateLight();

@@ -32,6 +32,13 @@ world::world(){
     _camera=new flyEngine::camera();
     _camera->enableControl();
 }
+void world::pause(){
+    
+}
+
+void world::end(){
+    
+}
 
 void world::addChild(node *node){
     _vector_child.push_back(node);
@@ -47,10 +54,7 @@ void world::addSpotLight(spotLight *node){
     _vector_spot_light.push_back(node);
 }
 
-void world::start_rendering(){
-//    threadUtil::createThread(world::_main_loop);
-    world::_main_loop();
-}
+
 
 void world::setCamera(camera* c){
     _camera=c;
@@ -89,56 +93,55 @@ void world::draw(){
         node* nodeObj=c;
         if(!nodeObj->visible())
             continue;
-        nodeObj->draw(_camera);
+        nodeObj->draw();
     }
     for(auto c : _vector_point_light){
         node* nodeObj=(node*)c;
         if(!nodeObj->visible())
             continue;
-        nodeObj->draw(_camera);
+        nodeObj->draw();
     }
     for(auto c : _vector_spot_light){
         node* nodeObj=(node*)c;
         if(!nodeObj->visible())
             continue;
-        nodeObj->draw(_camera);
+        nodeObj->draw();
     }
     if(_cb_after_draw_call!=nullptr)
         _cb_after_draw_call();
 }
 
 
-void world::pause(){
-    
+void world::renderOnce(){
+    state::reset();
+    draw();
+    if(state::isShowFrameRate()==true)
+        state::displayFrameRate();
+    if(state::isShowDrawCall())
+        state::displayDrawCall();
+    if(state::isShowVertices())
+        state::displayVertices();
 }
 
-void world::end(){
-    
-}
-
-
-void world::_main_loop(){
+void world::main_loop(){
+#ifdef BUILD_MAC
 //    flyEngine::camera* cameraObj=new flyEngine::camera();
     flyEngine::world* worldObj=flyEngine::world::getInstance();
 //    worldObj->setCamera(cameraObj);
 //    cameraObj->enableControl();
-    
     while(!glfwWindowShouldClose(g_window)){
         threadUtil::sleepMS(CONST_FRAME_RATE*1000);   //1000 means 1ms
-
-        state::reset();
-        
-        worldObj->draw();
-        if(state::isShowFrameRate()==true)
-            state::displayFrameRate();
-        if(state::isShowDrawCall())
-            state::displayDrawCall();
-        if(state::isShowVertices())
-            state::displayVertices();
-
+        renderOnce();
         glfwSwapBuffers(g_window);
         glfwPollEvents();
    }
-
+#elif BUILD_IOS
+    renderOnce();
+#endif
+    
 }
 
+void world::start_rendering(){
+//    threadUtil::createThread(world::_main_loop);
+    main_loop();
+}

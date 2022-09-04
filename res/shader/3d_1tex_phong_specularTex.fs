@@ -5,9 +5,7 @@ in vec3 posFrag;
 out vec4 FragColor;
 
 uniform sampler2D texture0;
-
 uniform vec3  camera_pos;
-
 uniform vec3  global_ambient_color;
 
 struct Material{

@@ -1,4 +1,5 @@
 #version 330 core
+precision highp float;
 in vec3 posFrag;
 in vec3 normalVector;
 

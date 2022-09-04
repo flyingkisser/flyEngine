@@ -20,12 +20,13 @@ using namespace std;
 
 NS_FLYENGINE_BEGIN
 class shader;
+class texture2;
 
 class cubeTex: public node
 {
 private:
     unsigned int _gl_texture0=0;
-    texture* _texObj=NULL;
+    texture2* _texObj=NULL;
     const char* _texPath=NULL;
     
     std::function <void(int programID)> m_cb_before_draw_call=nullptr;
@@ -42,7 +43,7 @@ public:
     
     bool initByVerticeArr(float* arr,int arrSize,int descArr[],int descArrSize);
     void resetPos();
-    void draw(camera* cameraObj);
+    void draw();
     void setCBDrawCall(std::function<void(int programID)> f){m_cb_before_draw_call=f;};
 };
 

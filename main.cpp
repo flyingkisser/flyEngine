@@ -8,12 +8,14 @@
 #include <iostream>
 #include "defines.h"
 #include "dirUtil.h"
-#include "window.h"
 #include "world.h"
-#include "testMain.h"
+#include "uboMgr.h"
+#include "timeUtil.h"
 #include "glslUtil.h"
 
-USE_NS_FLYENGINE;
+#include "window.h"
+#include "testMain.h"
+USE_NS_FLYENGINE
 
 
 int main(int argc, char **argv) {
@@ -23,8 +25,10 @@ int main(int argc, char **argv) {
     dirUtil::setCurrentWorkDir(szHomeDir);
     printf("main:set current work dir %s\n",szHomeDir);
     
+    timeUtil::init();
     window::init();
     glslUtil::init();
+    uboMgr::initAllUbo();
     
     testMainBegin();
     

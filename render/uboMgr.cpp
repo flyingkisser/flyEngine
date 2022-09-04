@@ -11,31 +11,68 @@
 #include <iostream>
 #include <variant>  //must use c++17
 
+unsigned int g_ubo_id_mat_2d=0;
+unsigned int g_ubo_id_mat_3d=0;
+//unsigned int g_ubo_id_light_dir0=0;
+//unsigned int g_ubo_id_light_point0=0;
+//unsigned int g_ubo_id_light_point1=0;
+//unsigned int g_ubo_id_light_point2=0;
+//unsigned int g_ubo_id_light_point3=0;
+//unsigned int g_ubo_id_light_spot0=0;
+//unsigned int g_ubo_id_light_spot1=0;
+//unsigned int g_ubo_id_light_spot2=0;
+//unsigned int g_ubo_id_light_spot3=0;
+
+unsigned int g_ubo_id_arr[100]={0};
+
 USE_NS_FLYENGINE
 
-void uboMgr::linkUBOAndBindPoint(int programID,const char* uboName,int bindPoint){
-    int index=glGetUniformBlockIndex(programID,uboName);
+//uniform buffer object
+void uboMgr::linkUBOAndBindPoint(int programID,const char* uboNameInShader,int bindPoint){
+    int index=glGetUniformBlockIndex(programID,uboNameInShader);
     if(index>=0){
         glUniformBlockBinding(programID,index,bindPoint);
-        flylog("uboMgr::linkUBOAndBindPoint [program %d] bind [block_index %d %s] at %d",programID,index,uboName,bindPoint);
+        flylog("uboMgr::linkUBOAndBindPoint [program %d] bind [block_index %d %s] at %d",programID,index,uboNameInShader,bindPoint);
         return;
+    }else{
+        flylog("uboMgr::linkUBOAndBindPoint [program %d] cannot find uniform block index of %s,ommit!",programID,uboNameInShader);
     }
 }
 
 //指定绑定点序号,ubo内存的大小，
-int uboMgr::createUBO(int bindPointIndex,int uboSize,const char* uboName){
-    unsigned int ubo;
-    glGenBuffers(1,&ubo);
-    glBindBuffer(GL_UNIFORM_BUFFER,ubo);
-    glBufferData(GL_UNIFORM_BUFFER,uboSize,NULL,GL_DYNAMIC_DRAW);
-    glBindBufferRange(GL_UNIFORM_BUFFER,bindPointIndex,ubo,0,uboSize);
-    if(uboName==NULL)
-       
-        flylog("uboMgr::createUBO ubo id %d size %d bind at %d %s",ubo,uboSize,bindPointIndex);
-    else
-        flylog("uboMgr::createUBO ubo id %d size %d bind at %d %s",ubo,uboSize,bindPointIndex);
-    return ubo;
+int uboMgr::createUBO(int bindPoint,int uboSize,const char* uboNameOnlyForLog){
+   unsigned int ubo;
+   glGenBuffers(1,&ubo);
+   glBindBuffer(GL_UNIFORM_BUFFER,ubo);
+   glBufferData(GL_UNIFORM_BUFFER,uboSize,NULL,GL_DYNAMIC_DRAW);
+   glBindBufferRange(GL_UNIFORM_BUFFER,bindPoint,ubo,0,uboSize);
+   if(uboNameOnlyForLog==NULL)
+       flylog("uboMgr::createUBO ubo id %d size %d bind at %d",ubo,uboSize,bindPoint);
+   else
+       flylog("uboMgr::createUBO ubo id %d size %d bind at %d %s",ubo,uboSize,bindPoint,uboNameOnlyForLog);
+   return ubo;
 }
+
+// int uboMgr::createUBO(int programID,int bindPoint,const char* uboName){
+//     unsigned int ubo;
+//     int blockSize=0;
+//     int blockIndex=0;
+//     blockIndex=glGetUniformBlockIndex(programID, uboName);
+//     if(blockIndex<0){
+//         flylog("createUBO:cannot find block index %s,return!",uboName);
+//         return 0;
+//     }
+//     glGetActiveUniformBlockiv(programID,blockIndex,GL_UNIFORM_BLOCK_DATA_SIZE,&blockSize);
+//     glUniformBlockBinding(programID, blockIndex, bindPoint);
+    
+    
+//     glGenBuffers(1,&ubo);
+//     glBindBuffer(GL_UNIFORM_BUFFER,ubo);
+//     glBufferData(GL_UNIFORM_BUFFER,blockSize,NULL,GL_DYNAMIC_DRAW);
+//     glBindBufferBase(GL_UNIFORM_BUFFER,bindPoint,ubo);
+//     flylog("uboMgr::createUBO ubo id %d size %d bind at %d %s",ubo,blockSize,bindPoint,uboName);
+//     return ubo;
+// }
 
 //写入数据
 //指定ubo，描述变量的大小和内存位置的vector
@@ -50,6 +87,21 @@ void uboMgr::writeData(unsigned int ubo,int num,int sizeArr[],int offsetArr[],vo
         c+=size;
     }
     glBindBuffer(GL_UNIFORM_BUFFER,0);
-    if(c)
-        flylog("uboMgr::writeData glBufferSubData %d times total size %d to ubo id %d",num,c,ubo);
+//    if(c)
+//        flylog("uboMgr::writeData glBufferSubData %d times total size %d to ubo id %d",num,c,ubo);
+}
+
+void uboMgr::initAllUbo(){
+    g_ubo_id_mat_2d=uboMgr::createUBO(ubo_binding_mat_2d,ubo_size_mat_2d,"mat2d");
+    g_ubo_id_mat_3d=uboMgr::createUBO(ubo_binding_mat_3d,ubo_size_mat_3d,"mat3d");
+    g_ubo_id_arr[ubo_binding_light_dir0]=uboMgr::createUBO(ubo_binding_light_dir0, ubo_size_light_dir,"light_direction0");
+    g_ubo_id_arr[ubo_binding_light_point0]=uboMgr::createUBO(ubo_binding_light_point0, ubo_size_light_point,"light_point0");
+    g_ubo_id_arr[ubo_binding_light_point1]=uboMgr::createUBO(ubo_binding_light_point1, ubo_size_light_point,"light_point1");
+    g_ubo_id_arr[ubo_binding_light_point2]=uboMgr::createUBO(ubo_binding_light_point2, ubo_size_light_point,"light_point2");
+    g_ubo_id_arr[ubo_binding_light_point3]=uboMgr::createUBO(ubo_binding_light_point3, ubo_size_light_point,"light_point3");
+    
+    g_ubo_id_arr[ubo_binding_light_spot0]=uboMgr::createUBO(ubo_binding_light_spot0, ubo_size_light_spot,"light_spot0");
+    g_ubo_id_arr[ubo_binding_light_spot1]=uboMgr::createUBO(ubo_binding_light_spot1, ubo_size_light_spot,"light_spot1");
+    g_ubo_id_arr[ubo_binding_light_spot2]=uboMgr::createUBO(ubo_binding_light_spot2, ubo_size_light_spot,"light_spot2");
+    g_ubo_id_arr[ubo_binding_light_spot3]=uboMgr::createUBO(ubo_binding_light_spot3, ubo_size_light_spot,"light_spot3");
 }

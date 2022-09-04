@@ -86,7 +86,8 @@ shader* shaderMgr::get3d2texShader(){
 }
 
 shader* shaderMgr::getModelShader(){
-    return shaderMgr::getShaderUniqueue("./res/shader/3d_model.vs","./res/shader/3d_model.fs");
+//    return shaderMgr::getShaderUniqueue("./res/shader/3d_model.vs","./res/shader/3d_model.fs");
+    return shaderMgr::getShaderUniqueue("./res/shader/3d_model.vs","./res/shader/3d_1tex_phong.fs");
 }
 
 shader* shaderMgr::get2d1texShader(){

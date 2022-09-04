@@ -13,10 +13,10 @@
 #include "defines.h"
 
 extern GLFWwindow* g_window;
-extern int g_winWidth;
-extern int g_winHigh;
-extern int g_screenWidth;
-extern int g_screenHigh;
+extern int g_winWidth;  //device size
+extern int g_winHigh;   //device size
+extern int g_screenWidth;   //resilution size
+extern int g_screenHigh;    //resilution size
 
 NS_FLYENGINE_BEGIN
 

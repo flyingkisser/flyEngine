@@ -7,6 +7,8 @@
 //
 
 #include "fbo.h"
+#include "defines.h"
+
 #include "window.h"
 
 USE_NS_FLYENGINE

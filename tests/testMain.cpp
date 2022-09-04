@@ -5,7 +5,7 @@
 //  Created by joe on 01/07/2020.
 //  Copyright © 2020 joe. All rights reserved.
 //
-#include "test_c_plusplus.h"
+
 #include "test_node.h"
 #include "test_action.h"
 #include "test_pointLight.h"
@@ -45,7 +45,7 @@ void testMainBegin(){
 //    test_onePointLight_twoCube();
 //    test_twoPointLight_oneCube();
     
-    //点光源测试(带高亮贴图)
+    //点光源测试(高亮贴图)
 //    test_onePointLight_oneCube_specularMap();
 //    test_onePointLight_twoCube_specularMap();
 //    test_onePointLight_multiCube_specularMap();

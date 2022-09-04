@@ -5,7 +5,7 @@ layout (location=2) in vec2 aTexCoord;
 
 uniform mat4 matModel;
 
-layout (std140) uniform mat{
+layout (std140) uniform mat3d{
     mat4 proj;
     mat4 view;
     vec3 cam_pos;

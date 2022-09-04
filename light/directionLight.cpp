@@ -9,7 +9,6 @@
 #include "directionLight.h"
 #include "shader.h"
 #include "shaderMgr.h"
-#include "material.h"
 #include "logUtil.h"
 #include "uboMgr.h"
 
@@ -17,14 +16,15 @@
 
 USE_NS_FLYENGINE
 
-directionLight::directionLight(glm::vec3 color,glm::vec3 dir,float am,float diff,float spec,int shine){
+directionLight::directionLight(glm::vec3 color,glm::vec3 dir,float am,float diff,float spec,float shine){
     m_vec3Color=color;
     m_vec3Dir=dir;
     m_fAmbient=am;
     m_fDiffuse=diff;
     m_fSpecular=spec;
-    m_IntShiness=shine;
-    _ubo=uboMgr::createUBO(ubo_binding_light_dir, ubo_size_light_dir);
+    m_fShiness=shine;
+    // _ubo=uboMgr::createUBO(ubo_binding_light_dir, ubo_size_light_dir,"light_direction");
+    _ubo=_ubo=g_ubo_id_arr[ubo_binding_light_dir0];
     _dirty=true;
     update();
 }
@@ -47,7 +47,7 @@ void directionLight::glUpdate(){
         &m_fAmbient,
         &m_fDiffuse,
         &m_fSpecular,
-        &m_IntShiness
+        &m_fShiness
     };
     uboMgr::writeData(_ubo, 7, sizeArr,offsetArr,bufArr);
     

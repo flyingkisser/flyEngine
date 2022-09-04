@@ -40,6 +40,7 @@ public:
     world();
     ~world();
     static world* getInstance();
+    
     void addChild(node* node);
     void removeChild(node* node);
     void addLight(light* node);
@@ -50,8 +51,9 @@ public:
     void start_rendering();
     void pause();
     void end();
+    void renderOnce();
     
-    static void _main_loop();
+    void main_loop();
     
     void draw();
     control* getControl();

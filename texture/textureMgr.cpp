@@ -15,11 +15,12 @@
 #include "bmpUtil.h"
 #include "pngUtil.h"
 #include "jpgUtil.h"
-#include "texture.h"
 #include "stb_image.h"
+#include "texture2.h"
 
 using namespace std;
-using namespace flyEngine;
+
+USE_NS_FLYENGINE
 
 static textureMgr* s_instance;
 
@@ -47,11 +48,11 @@ void textureMgr::clear(){
     _mapTextureCache.clear();
 }
 
-flyEngine::texture* textureMgr::getTexture(const char *szFileName,bool bFlipY){
+texture2* textureMgr::getTexture(const char *szFileName,bool bFlipY){
     auto it=_mapTextureCache.find(szFileName);
     if(it!=_mapTextureCache.end())
-        return it->second;
-    texture* texObj=new texture(szFileName,bFlipY);
+        return (texture2*)it->second;
+    texture2* texObj=new texture2(szFileName,bFlipY);
     if(!texObj->init())
         return NULL;
     texObj->glInit();
@@ -67,7 +68,7 @@ flyEngine::size textureMgr::getTextureSize(const char* szName){
 }
 
 unsigned int textureMgr::getTextureID(const char *szName,bool bFlipY){
-    flyEngine::texture* texObj=getTexture(szName,bFlipY);
+    texture2* texObj=getTexture(szName,bFlipY);
     if(texObj!=nullptr)
         return texObj->getTextureID();
     return 0;

@@ -38,7 +38,7 @@ public:
     ~sprite();
     bool init();
     void glInit();
-    void draw(camera* cam);
+    void draw();
     
     const char* getImageFileName(){return _imgFileName;};
     unsigned int getTexID(){return _texID;};

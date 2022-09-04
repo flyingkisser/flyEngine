@@ -8,26 +8,26 @@
 
 #include "pointLight.h"
 #include "shaderMgr.h"
-#include "material.h"
+#include "material2.h"
 #include "uboMgr.h"
+#include "logUtil.h"
 
 USE_NS_FLYENGINE
 
 
-pointLight::pointLight(glm::vec3 color,material* mt,float constant,float linear,float quadratic):light(color,mt){
+pointLight::pointLight(glm::vec3 color,material2* mt,float constant,float linear,float quadratic):light(color,mt){
     m_fConstant=constant;
     m_fLinear=linear;
     m_fQuadratic=quadratic;
-    _ubo=uboMgr::createUBO(ubo_binding_light_point, ubo_size_light_point_arr);
+    // _ubo=uboMgr::createUBO(ubo_binding_light_point, ubo_size_light_point_arr,"light_point");
+//    _ubo=g_ubo_id_light_point0;
 }
 
 void pointLight::update(int light_index){
-    if(!isDirtyMT() && !isDirtyColor() && !isDirtyPos())
+    if(!isDirtyUBO()){
         return;
-    //有设置过materail或color
-    setDirtyMT(false);
-    setDirtyColor(false);
-//    setDirtyPos(false);   //位置的变化，由light->cubeColor的updateModel来更新dirty状态，这里不能更新
+    }
+    setDirtyUBO(false);
     glUpdate(light_index);
 }
 
@@ -36,7 +36,7 @@ void pointLight::glUpdate(int light_index){
     int offsetArr[]={0,16,32,48,64,80,92,96,100};
     int enabled=1;
     int num=9;
-    material* mt=getMaterial();
+    material2* mt=getMaterial();
     void* bufArr[]={
         &enabled,
         glm::value_ptr(getPosition()),
@@ -48,10 +48,10 @@ void pointLight::glUpdate(int light_index){
         &m_fLinear,
         &m_fQuadratic
     };
-   
     for(int i=0;i<num;i++){
         offsetArr[i]=offsetArr[i]*(light_index+1)+ubo_size_light_point*light_index;
     }
+    _ubo=g_ubo_id_arr[ubo_binding_light_point0+light_index];
     uboMgr::writeData(_ubo, num, sizeArr,offsetArr,bufArr);
 }
 

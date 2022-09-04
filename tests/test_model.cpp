@@ -9,24 +9,24 @@
 
 #include <math.h>
 #include "defines.h"
-
 #include "test_model.h"
-#include "texture.h"
 #include "textureMgr.h"
 #include "VAOMgr.h"
 #include "shader.h"
 #include "shaderMgr.h"
-#include "keyboardEventMgr.h"
-#include "mouseEventMgr.h"
+
+//#include "keyboardEventMgr.h"
+//#include "mouseEventMgr.h"
 #include "camera.h"
 #include "control.h"
 #include "world.h"
-#include "material.h"
+
+#include "material2.h"
+
 #include "cubeTex.h"
 #include "cubeColor.h"
 #include "model.h"
 #include "pointLight.h"
-
 #include "directionLight.h"
 
 #include "moveBy.h"
@@ -40,22 +40,17 @@
 #include "repeat.h"
 #include "forever.h"
 
-
 #include "logUtil.h"
 #include "timerUtil.h"
 #include "threadUtil.h"
 #include "window.h"
+#include "timeUtil.h"
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+USE_NS_FLYENGINE
 
-USE_NS_FLYENGINE;
-
-static material* createMaterial(float ambient,float diffuse,float specular,float shineness){
-    return new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
+static material2* createMaterial(float ambient,float diffuse,float specular,float shineness){
+//    return new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
+    return NULL;
 }
 
 
@@ -68,13 +63,13 @@ static void init_light_direction(){
     world::getInstance()->setDirectiontLight(dirLight);
 
     //因为只有环境光，所以设置的比较亮
-    //dirLight->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
+//    dirLight->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
 }
 
 void test_one_model(){
     init_light_direction();
     
-    pointLight* pLight=new pointLight(glm::vec3(1,1,1),createMaterial(0.2, 1.0, 1.0, 0.2));
+    pointLight* pLight=new pointLight(glm::vec3(1,1,1),createMaterial(1.0, 1.0, 1.0, 2));
     if(!pLight->init()){
          flylog("pLight init failed!");
          return;
@@ -96,9 +91,8 @@ void test_one_model(){
 
     timerUtil* timerMgrObj=new timerUtil("model_test_timer");
     timerMgrObj->exec(0.1,[](node* _node,node* lightObj){
-        _node->rotateBy(glm::vec3(0.5f,0,0));
-        
-        float radius=glfwGetTime();
+        _node->rotateBy(glm::vec3(0,0.5f,0));
+        float radius=timeUtil::getTimeFloatSinceRun();
         lightObj->setPositionX(2*cos(radius));
         lightObj->setPositionZ(8*sin(radius));
     },modelObj,pLight);

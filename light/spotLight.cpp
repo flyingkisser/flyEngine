@@ -9,17 +9,20 @@
 #include "spotLight.h"
 #include "camera.h"
 #include "shaderMgr.h"
-#include "material.h"
+#include "material2.h"
 #include "uboMgr.h"
+#include "ssboMgr.h"
 
 USE_NS_FLYENGINE
 
-spotLight::spotLight(glm::vec3 color,material* mt,float cutOffEngleInner,float cutOffEngleOuter):light(color,mt){
-    m_fcutOffInner=glm::cos(glm::radians(cutOffEngleInner));
+spotLight::spotLight(glm::vec3 color,material2* mt,float cutOffEngleInner,float cutOffEngleOuter):light(color,mt){
+    m_fcutOffInner=(float)glm::cos(glm::radians(cutOffEngleInner));
     m_fcutOffOuter=glm::cos(glm::radians(cutOffEngleOuter));
     m_fEngleOuter=cutOffEngleOuter;
     m_fEngleInner=cutOffEngleInner;
-    _ubo=uboMgr::createUBO(ubo_binding_light_spot, ubo_size_light_spot_arr);
+//     _ubo=uboMgr::createUBO(ubo_binding_light_spot, ubo_size_light_spot_arr,"light_spot");
+//    _ubo=ssboMgr::createSSBO(ubo_binding_light_spot, ubo_size_light_spot_arr,"light_spot");
+//    _ubo=g_ubo_id_light_spot0;
 }
 
 void spotLight::rotateBy(glm::vec3 v){
@@ -42,90 +45,112 @@ void spotLight::rotateBy(glm::vec3 v){
     setDirtyPos(true);
 }
 
-void spotLight::update(int light_index){
-    if(!isDirtyMT() && !isDirtyColor() && !isDirtyPos())
+void spotLight::update(int id,int light_index){
+//    if(!isDirtyMT() && !isDirtyColor() && !isDirtyPos())
+//        return;
+//    //有设置过materail或color
+//    setDirtyMT(false);
+//    setDirtyColor(false);
+//    //    setDirtyPos(false);   //位置的变化，由light->cubeColor的updateModel来更新dirty状态，这里不能更新
+//    glUpdate(id,light_index);
+    
+    if(!isDirtyUBO()){
         return;
-    //有设置过materail或color
-    setDirtyMT(false);
-    setDirtyColor(false);
-    //    setDirtyPos(false);   //位置的变化，由light->cubeColor的updateModel来更新dirty状态，这里不能更新
-    glUpdate(light_index);
+    }
+    setDirtyUBO(false);
+    glUpdate(id,light_index);
 }
 
-void spotLight::glUpdate(int light_index){
-    int sizeArr[]={4,12,12,12,12,12,4,4,4,4,4,12};
-    int offsetArr[]={0,16,32,48,64,80,92,96,100,104,108,112};
-    int enabled=1;
-    int num=12;
-    material* mt=getMaterial();
-    void* bufArr[]={
+
+ void spotLight::glUpdate(int id,int light_index){
+    int sizeArr[]={4,4,4, 12,12,12, 12,12,12, 4,4,4};
+    int offsetArr[]={0,4,8,16,32,48,64,80,96,108,112,116};
+
+     // int sizeArr[]={4,4,4};
+     // int offsetArr[]={0,4,8};
+     int enabled=1;
+     int num=12;
+     // glm::vec3 color=getColor();
+     // float r=color.r;
+     // float g=color.g;
+     // float b=color.b;
+     
+     material2* mt=getMaterial();
+     void* bufArr[]={
         &enabled,
+        &m_fcutOffInner,
+        &m_fcutOffOuter,
+
+        (void*)glm::value_ptr(_vec3Direction),
         glm::value_ptr(getPosition()),
         (void*)glm::value_ptr(getColor()),
+        
         (void*)glm::value_ptr(mt->getAmbient()),
         (void*)glm::value_ptr(mt->getDiffuse()),
         (void*)glm::value_ptr(mt->getSpecular()),
+
         &m_fConstant,
         &m_fLinear,
-        &m_fQuadratic,
-        (void*)&m_fcutOffInner, //无法写入
-        (void*)&m_fcutOffOuter,//无法写入
-        (void*)glm::value_ptr(_vec3Direction)//无法写入
-    };
-    for(int i=0;i<num;i++){
-        offsetArr[i]=offsetArr[i]*(light_index+1)+ubo_size_light_spot*light_index;
-    }
-    uboMgr::writeData(_ubo, num, sizeArr,offsetArr,bufArr);
-}
+        &m_fQuadratic
+     };
 
-//void spotLight::glUpdateForCube(int program_id,int light_index,camera* c){
-//    int i=light_index;
-//    char szBuf[128]={0};
-//    //shader* shaderObj=shaderMgr::getShader(program_id);
-//
-//    //启用光源
-//    snprintf(szBuf, sizeof(szBuf),uniform_name_light_spot_enabled,i);
-//    shaderMgr::setInt(program_id,szBuf, 1);
-//
-//    //光源位置
-//    snprintf(szBuf, sizeof(szBuf),uniform_name_light_spot_pos,i);
-//    shaderMgr::setVec3(program_id,szBuf, glm::value_ptr(getPosition()));
-//
-//    //光源颜色
-//    memset(szBuf,0,sizeof(szBuf));
-//    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_color,i);
-//    glm::vec3 color=getColor();
-//    shaderMgr::setVec3(program_id,szBuf, glm::value_ptr(color));
-//
-//    //光源材质
-//    material* mt=getMaterial();
-//    //mt->glUpdateForSpotLight(program_id,i);
-//
-//    //光源材质
-//    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_ambient,i);
-//    shaderMgr::setVec3(program_id,szBuf, (float*)glm::value_ptr(mt->getAmbient()));
-//    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_diffuse,i);
-//    shaderMgr::setVec3(program_id,szBuf, (float*)glm::value_ptr(mt->getDiffuse()));
-//    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_specular,i);
-//    shaderMgr::setVec3(program_id,szBuf, (float*)glm::value_ptr(mt->getSpecular()));
-//
-//    //角度的cos值
-//    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_cutoff_inner,i);
-//    shaderMgr::setFloat(program_id, szBuf, m_fcutOffInner);
-//    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_cutoff_outer,i);
-//    shaderMgr::setFloat(program_id, szBuf, m_fcutOffOuter);
-//
-//    //方向向量
-//    snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_direction,i);
-//    shaderMgr::setVec3(program_id, szBuf,(float*)glm::value_ptr(c->getFront()));
-//
-//    if(m_fConstant){
-//        snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_constant,i);
-//        shaderMgr::setFloat(program_id, szBuf, m_fConstant);
-//        snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_linear,i);
-//        shaderMgr::setFloat(program_id, szBuf, m_fLinear);
-//        snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_quadratic,i);
-//        shaderMgr::setFloat(program_id, szBuf, m_fQuadratic);
-//    }
-//
-//}
+     for(int i=0;i<num;i++){
+         offsetArr[i]=offsetArr[i]*(light_index+1)+ubo_size_light_spot*light_index;
+     }
+     
+     _ubo=g_ubo_id_arr[ubo_binding_light_spot0+light_index]; 
+     uboMgr::writeData(_ubo, num, sizeArr,offsetArr,bufArr);
+ }
+
+
+// void spotLight::glUpdate(int program_id,int light_index){
+//     int i=light_index;
+//     char szBuf[128]={0};
+//     //shader* shaderObj=shaderMgr::getShader(program_id);
+
+//     //启用光源
+//     snprintf(szBuf, sizeof(szBuf),uniform_name_light_spot_enabled,i);
+//     shaderMgr::setInt(program_id,szBuf, 1);
+
+//     //光源位置
+//     snprintf(szBuf, sizeof(szBuf),uniform_name_light_spot_pos,i);
+//     shaderMgr::setVec3(program_id,szBuf, glm::value_ptr(getPosition()));
+
+//     //光源颜色
+//     memset(szBuf,0,sizeof(szBuf));
+//     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_color,i);
+//     glm::vec3 color=getColor();
+//     shaderMgr::setVec3(program_id,szBuf, glm::value_ptr(color));
+
+//     //光源材质
+//     material* mt=getMaterial();
+//     //mt->glUpdateForSpotLight(program_id,i);
+
+//     //光源材质
+//     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_ambient,i);
+//     shaderMgr::setVec3(program_id,szBuf, (float*)glm::value_ptr(mt->getAmbient()));
+//     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_diffuse,i);
+//     shaderMgr::setVec3(program_id,szBuf, (float*)glm::value_ptr(mt->getDiffuse()));
+//     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_specular,i);
+//     shaderMgr::setVec3(program_id,szBuf, (float*)glm::value_ptr(mt->getSpecular()));
+
+//     //角度的cos值
+//     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_cutoff_inner,i);
+//     shaderMgr::setFloat(program_id, szBuf, m_fcutOffInner);
+//     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_cutoff_outer,i);
+//     shaderMgr::setFloat(program_id, szBuf, m_fcutOffOuter);
+
+//     //方向向量
+//     snprintf(szBuf, sizeof(szBuf), uniform_name_light_spot_direction,i);
+//     shaderMgr::setVec3(program_id, szBuf,(float*)glm::value_ptr(getDirection()));
+
+//     if(m_fConstant){
+//         snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_constant,i);
+//         shaderMgr::setFloat(program_id, szBuf, m_fConstant);
+//         snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_linear,i);
+//         shaderMgr::setFloat(program_id, szBuf, m_fLinear);
+//         snprintf(szBuf, sizeof(szBuf), uniform_name_light_point_quadratic,i);
+//         shaderMgr::setFloat(program_id, szBuf, m_fQuadratic);
+//     }
+
+// }

@@ -18,7 +18,7 @@ class directionLight {
     
 public:
     directionLight(glm::vec3 color=glm::vec3(1.0,1.0,1.0),glm::vec3 dir=glm::vec3(-0.2,-1,-0.3),
-                                  float am=1.0f,float diff=0.1,float spec=0,int shine=0);
+                                  float am=1.0f,float diff=0.1,float spec=0,float shine=0);
     ~directionLight();
     void glUpdate();
     void update();
@@ -28,7 +28,7 @@ private:
     float m_fAmbient;
     float m_fDiffuse;
     float m_fSpecular;
-    int m_IntShiness;
+    float m_fShiness;
     int _ubo;
     bool _dirty=false;
 };

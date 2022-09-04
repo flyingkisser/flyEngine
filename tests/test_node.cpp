@@ -10,17 +10,21 @@
 #include "defines.h"
 
 #include "test_node.h"
-#include "texture.h"
+#include "texture2.h"
 #include "textureMgr.h"
 #include "VAOMgr.h"
 #include "shader.h"
 #include "shaderMgr.h"
+
+#ifdef BUILD_MAC
 #include "keyboardEventMgr.h"
 #include "mouseEventMgr.h"
+#endif
+
 #include "camera.h"
 #include "control.h"
 #include "world.h"
-#include "material.h"
+#include "material2.h"
 #include "cubeTex.h"
 #include "cubeColor.h"
 #include "directionLight.h"
@@ -45,16 +49,15 @@
 
 USE_NS_FLYENGINE;
 
-static material* createMaterial(float ambient,float diffuse,float specular,float shineness){
-    return new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
+static material2* createMaterial(float ambient,float diffuse,float specular,float shineness){
+//    return new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
+    return NULL;
 }
-    
 
 static void init_light_direction(){
     //设置环境光
     directionLight* dirLight=new directionLight(glm::vec3(1.0f,1.0f,1.0f));
     world::getInstance()->setDirectiontLight(dirLight);
-    
     //因为只有环境光，所以设置的比较亮
     //dirLight->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
 }
@@ -82,18 +85,21 @@ void test_cubeColor(){
 
 
 void test_oneCubeTex(){
+    init_light_direction();
+    
     node* cubeObj=new cubeTex("res/wood.png");
     if(!cubeObj->init()){
         flylog("node init failed!");
         return;
     }
     cubeObj->setPosition(glm::vec3(0,0,-5));
+    cubeObj->setRotation(glm::vec3(30,60,30));
 //    cubeObj->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
     
     world::getInstance()->addChild(cubeObj);
     cubeObj->print();
     
-    //cubeObj->setShader(new shader("./res/shader/3d_1tex.vs","./res/shader/3d_1tex.fs"));
+//    cubeObj->setShader(new shader("./res/shader/3d_1tex.vs","./res/shader/3d_1tex.fs"));
     
     //通过按住鼠标右键，控制模型旋转
     control* controlObj=world::getInstance()->getControl();
@@ -109,9 +115,7 @@ void test_oneCubeTex(){
 //    glslUtil::printAllUniforms(proID);
    
     glslUtil::printAllUniformAndBlock(proID);
- glslUtil::printUniformValue(proID, "matModel");
-    
-    init_light_direction();
+    glslUtil::printUniformValue(proID, "matModel");
 }
 
 void test_twoCubeTex(){
@@ -169,8 +173,8 @@ void drawCubeRaw(){
     int texID1,texID2;
     int stride=5*sizeof(float);
 
-    flyEngine::texture* texObj1=(flyEngine::texture*)textureMgr::getInstance()->getTexture("res/fire.png");
-    flyEngine::texture* texObj2=(flyEngine::texture*)textureMgr::getInstance()->getTexture("res/smile.png");
+    texture2* texObj1=textureMgr::getInstance()->getTexture("res/fire.png");
+    texture2* texObj2=textureMgr::getInstance()->getTexture("res/smile.png");
     if(texObj1==NULL || texObj2==NULL)
        return;
 
@@ -215,6 +219,7 @@ void drawCubeRaw(){
     glBindTexture(GL_TEXTURE_2D,texID2);
     glEnable(GL_DEPTH_TEST);
     
+#ifdef BUILD_MAC
     while(!glfwWindowShouldClose(g_window)){
         threadUtil::sleep(0.1);   //1000 means 1ms
 
@@ -230,7 +235,8 @@ void drawCubeRaw(){
         glfwSwapBuffers(g_window);
         glfwPollEvents();
     }
-   
+#endif
+    
 }
 
 /*

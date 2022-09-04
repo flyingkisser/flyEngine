@@ -11,11 +11,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-//#include "defines.h"
+#include "defines.h"
 #include "glRef.h"
 
-namespace flyEngine {
-    class shader : public glRef{
+NS_FLYENGINE_BEGIN
+
+class shader : public glRef{
     private:
         unsigned int _idProgram;
         char* _szVert;
@@ -38,8 +39,9 @@ namespace flyEngine {
         
         void compile();
         bool readFile();
-    };
-}
+};
+
+NS_FLYENGINE_END
 
 
 #endif /* shader_h */

@@ -31,21 +31,25 @@ void camera::_updateCamera(){
         (void*)glm::value_ptr(_matCamera),
         (void*)glm::value_ptr(_cameraPos)
     };
-    uboMgr::writeData(_ubo_mat,2,sizeArr,offsetArr,bufArr);
+    uboMgr::writeData(_ubo_mat_3d,2,sizeArr,offsetArr,bufArr);
 }
 
 void camera::_updateProjection(){
     int sizeArr[]={64};
     int offsetArr[]={0};
     void* bufArr[]={
-        (void*)glm::value_ptr(_matProj)
+        (void*)glm::value_ptr(_matProjPerspective)
     };
-    uboMgr::writeData(_ubo_mat,1,sizeArr,offsetArr,bufArr);
+    uboMgr::writeData(_ubo_mat_3d,1,sizeArr,offsetArr,bufArr);
 }
 
 
 void camera::reset(){
-    shaderMgr::setMat4(_program,uniform_name_mat_camera,glm::value_ptr(_matCameraOrigin));
+//    shaderMgr::setMat4(_program,uniform_name_mat_camera,glm::value_ptr(_matCameraOrigin));
+    _matCamera=_matCameraOrigin;
+    setPosition(_cameraPosOrigin);
+    _updateUBO();
+    
 }
 
 void camera::setPosition(glm::vec3 pos){
@@ -55,17 +59,17 @@ void camera::setPosition(glm::vec3 pos){
     _dirtyPos=true;
 }
 void camera::setPositionX(float v){
-    flylog("camera x:%f->%f",_cameraPos.x,v);
+//    flylog("camera x:%f->%f",_cameraPos.x,v);
     _cameraPos.x=v;
     _dirtyPos=true;
 }
 void camera::setPositionY(float v){
-    flylog("camera y:%f->%f",_cameraPos.y,v);
+//    flylog("camera y:%f->%f",_cameraPos.y,v);
     _cameraPos.y=v;
     _dirtyPos=true;
 }
 void camera::setPositionZ(float v){
-    flylog("camera z:%f->%f",_cameraPos.z,v);
+//    flylog("camera z:%f->%f",_cameraPos.z,v);
     _cameraPos.z=v;
     _dirtyPos=true;
 }
@@ -117,6 +121,7 @@ bool camera::init(){
     _screenRatio=800/600;
     
     _cameraPos=glm::vec3(0,0,3);
+    _cameraPosOrigin=_cameraPos;
     _cameraFront.x=cos(glm::radians(_yaw))*cos(glm::radians(_pitch));
     _cameraFront.y=sin(glm::radians(_pitch));
     _cameraFront.z=sin(glm::radians(_yaw))*cos(glm::radians(_pitch));
@@ -126,10 +131,10 @@ bool camera::init(){
     _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
     _matCameraOrigin=_matCamera;
     
-    _matProj=glm::perspective(glm::radians(double(_fov)), (double)_screenRatio, 0.1, 100.0);
-    _matProjOrigin=_matProj;
+    _matProjPerspective=glm::perspective(glm::radians(double(_fov)), (double)_screenRatio, 0.1, 100.0);
+    _matProjPerspectiveOrigin=_matProjPerspective;
     
-    _matProj2D=glm::ortho(0.0f,(float)g_winWidth,0.0f,(float)g_winHigh);
+    _matProjOrtho=glm::ortho(0.0f,(float)g_winWidth,0.0f,(float)g_winHigh);
     
     _dirtyPos=false;
 //    _dirtyProj=true;
@@ -141,8 +146,8 @@ bool camera::init(){
 glm::mat4 camera::getLookAtMatrix(){
     return _matCamera;
 }
-glm::mat4 camera::getProjMatrix(){
-    return _matProj;
+glm::mat4 camera::getPerspectiveMatrix(){
+    return _matProjPerspective;
 }
 
 void camera::update(){
@@ -155,28 +160,30 @@ void camera::update2D(){
     int sizeArr[]={64,64,16};
     int offsetArr[]={0,64,128};
     void* bufArr[]={
-        (void*)glm::value_ptr(_matProj2D),
+        (void*)glm::value_ptr(_matProjOrtho),
         (void*)glm::value_ptr(_matCamera),
         (void*)glm::value_ptr(_cameraPos)
     };
-    uboMgr::writeData(_ubo_mat,3,sizeArr,offsetArr,bufArr);
+    uboMgr::writeData(_ubo_mat_2d,3,sizeArr,offsetArr,bufArr);
 }
 
 void camera::_updateUBO(){
     int sizeArr[]={64,64,16};
     int offsetArr[]={0,64,128};
     void* bufArr[]={
-        (void*)glm::value_ptr(_matProj),
+        (void*)glm::value_ptr(_matProjPerspective),
         (void*)glm::value_ptr(_matCamera),
         (void*)glm::value_ptr(_cameraPos)
     };
-    uboMgr::writeData(_ubo_mat,3,sizeArr,offsetArr,bufArr);
-    bufArr[0]=(void*)glm::value_ptr(_matProj2D),
+    uboMgr::writeData(_ubo_mat_3d,3,sizeArr,offsetArr,bufArr);
+    bufArr[0]=(void*)glm::value_ptr(_matProjOrtho);
     uboMgr::writeData(_ubo_mat_2d,3,sizeArr,offsetArr,bufArr);
 }
 
 void camera::initUBO(){
-    _ubo_mat=uboMgr::createUBO(ubo_binding_mat,ubo_size_mat);
-    _ubo_mat_2d=uboMgr::createUBO(ubo_binding_mat_2d,ubo_size_mat_2d);
+    // _ubo_mat=uboMgr::createUBO(ubo_binding_mat,ubo_size_mat,"mat");
+    // _ubo_mat_2d=uboMgr::createUBO(ubo_binding_mat_2d,ubo_size_mat_2d,"mat2d");
+    _ubo_mat_2d=g_ubo_id_mat_2d;
+    _ubo_mat_3d=g_ubo_id_mat_3d;
     _updateUBO();
 }

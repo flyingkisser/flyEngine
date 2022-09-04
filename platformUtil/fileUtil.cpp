@@ -42,3 +42,11 @@ int fileUtil::writeFile(const char* szFileName,unsigned char* buf,int size){
     fclose(fFile);
     return written;
 }
+
+bool fileUtil::isExists(const char* szFileName){
+    FILE* fFile=fopen(szFileName, "r");
+       if(fFile==NULL)
+           return false;
+    fclose(fFile);
+    return true;
+}

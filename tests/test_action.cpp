@@ -9,17 +9,20 @@
 #include "test_action.h"
 #include "defines.h"
 
-#include "texture.h"
 #include "textureMgr.h"
 #include "VAOMgr.h"
 #include "shader.h"
 #include "shaderMgr.h"
+#include "material2.h"
+
+#ifdef BUILD_MAC
 #include "keyboardEventMgr.h"
 #include "mouseEventMgr.h"
+#endif
+
 #include "camera.h"
 #include "control.h"
 #include "directionLight.h"
-#include "material.h"
 #include "world.h"
 #include "cubeTex.h"
 #include "moveBy.h"
@@ -42,7 +45,8 @@
 USE_NS_FLYENGINE
 
 static material* createMaterial(float ambient,float diffuse,float specular,float shineness){
-    return new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
+//    return new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
+    return NULL;
 }
     
 static void init_light_direction(){

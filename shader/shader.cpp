@@ -10,13 +10,33 @@
 #include "fileUtil.h"
 #include "logUtil.h"
 #include "uboMgr.h"
+#include "ssboMgr.h"
+#include "stringUtil.h"
+#ifdef BUILD_IOS
+#include "ios_dirUtil.h"
+#endif
 
 using namespace flyEngine;
 
 shader::shader(const char* szVertFileName,const char* szFragFileName){
     _idProgram=0;
+#ifdef BUILD_MAC
     _szVertFileName=(char*)szVertFileName;
     _szFragFileName=(char*)szFragFileName;
+#elif BUILD_IOS
+    std::string strVertFullPath;
+    std::string strFragFullPath;
+    if(szVertFileName[0]!='/'){
+        strVertFullPath=ios_dirUtil::getFileFullPathName(szVertFileName);
+        _szVertFileName=(char*)strVertFullPath.c_str();
+        strFragFullPath=ios_dirUtil::getFileFullPathName(szFragFileName);
+        _szFragFileName=(char*)strFragFullPath.c_str();
+    }else{
+        _szVertFileName=(char*)szVertFileName;
+        _szFragFileName=(char*)szFragFileName;
+    }
+#endif
+    
     if(!readFile()){
         flylog("shader:init failed!");
         return;
@@ -26,16 +46,26 @@ shader::shader(const char* szVertFileName,const char* szFragFileName){
         flylog("shader::compile failed!");
         return;
     }
-    uboMgr::linkUBOAndBindPoint(_idProgram,"mat", ubo_binding_mat);
+    
+    uboMgr::linkUBOAndBindPoint(_idProgram,"mat3d", ubo_binding_mat_3d);
     uboMgr::linkUBOAndBindPoint(_idProgram,"mat2d", ubo_binding_mat_2d);
-    uboMgr::linkUBOAndBindPoint(_idProgram,"light_dir", ubo_binding_light_dir);
-    uboMgr::linkUBOAndBindPoint(_idProgram,"light_point", ubo_binding_light_point);
-    uboMgr::linkUBOAndBindPoint(_idProgram,"light_spot", ubo_binding_light_spot);
+
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_dir0", ubo_binding_light_dir0);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_point0", ubo_binding_light_point0);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_point1", ubo_binding_light_point1);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_point2", ubo_binding_light_point2);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_point3", ubo_binding_light_point3);
+    
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_spot0", ubo_binding_light_spot0);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_spot1", ubo_binding_light_spot1);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_spot2", ubo_binding_light_spot2);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_spot3", ubo_binding_light_spot3);
+
+//  ssboMgr::linkSSBOAndBindPoint(_idProgram,"light_spot", ubo_binding_light_spot);
 }
 
 bool shader::readFile(){
     _idProgram=0;
-
     char* szVert=(char*)fileUtil::readFile(_szVertFileName);
     if(!szVert){
         return false;
@@ -47,6 +77,20 @@ bool shader::readFile(){
     }
     _szVert=szVert;
     _szFrag=szFrag;
+    
+#ifdef BUILD_IOS
+    const char* buf=stringUtil::replace(szVert,"version 330","version 300");
+    if(buf!=NULL){
+        free(szVert);
+        _szVert=(char*)buf;
+    }
+    buf=stringUtil::replace(szFrag,"version 330","version 300");
+    if(buf!=NULL){
+        free(szFrag);
+        _szFrag=(char*)buf;
+    }
+#endif
+    
     return true;
 }
 
@@ -80,6 +124,7 @@ void shader::compile(){
        char* szLog=(char*)malloc(lenLog);
        glGetShaderInfoLog(vertShader,lenLog,&num,szLog);
        fprintf(stderr,"%s\nshader::shader: vertSahder error: %s",_szVertFileName,szLog);
+       fprintf(stderr,_szVert);
        free(szLog);
        return;
     }
@@ -92,6 +137,7 @@ void shader::compile(){
        char* szLog=(char*)malloc(lenLog);
        glGetShaderInfoLog(fragShader,lenLog,&num,szLog);
        fprintf(stderr,"%s\nshader::shader: fragShader error: %s",_szFragFileName,szLog);
+       fprintf(stderr,_szFrag);
        free(szLog);
        glDeleteShader(vertShader);
        return;

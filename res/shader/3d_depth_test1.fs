@@ -1,4 +1,5 @@
 #version 330 core
+precision highp float;
 out vec4 FragColor;
 void main(){
     //gl_FragCoord的z值即最后存储在深度缓存中的z值，范围是[0,1]
@@ -10,9 +11,9 @@ void main(){
     //当z值稍微大一点，转化后，就已经非常接近于1了
     //所以这里使用转化后的z值来显示颜色，因为大部分z值都会比较接近1，所以这里主要会是白色
     float z=gl_FragCoord.z;
-    if(z>=10)
+    if(z>=1.0f)
         FragColor=vec4(vec3(1,0,0),1);
-    else if(z>=1 && z<10)
+    else if(z>=0.95f && z<1.0f)
         FragColor=vec4(vec3(0,1,0),1);
     else
         FragColor=vec4(vec3(z),1);

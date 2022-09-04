@@ -1,4 +1,6 @@
 #version 330 core
+precision highp float;
+
 in vec2 texCoord;
 out vec4 FragColor;
 
@@ -11,9 +13,9 @@ void main(){
     float x=texCoord.x;
     float y=texCoord.y;
     if(bFlipX==true)
-        x=1-texCoord.x;
+        x=1.0f-texCoord.x;
     if(bFlipY==true)
-        y=1-texCoord.y;
+        y=1.0f-texCoord.y;
     vec2 pos=vec2(x,y);
     vec4 color=texture(texture0,pos);
     if(bReverseColor)

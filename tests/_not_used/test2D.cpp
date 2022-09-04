@@ -13,7 +13,6 @@
 #include "defines.h"
 
 #include "testWindow.h"
-#include "texture.h"
 #include "textureMgr.h"
 #include "VAOMgr.h"
 #include "shader.h"
@@ -41,7 +40,7 @@ void drawPlane1() {
     
     int shaderID=shaderMgr::createShaderFromFile("res/shader/1tex.vs","res/shader/1tex.fs");
     
-    flyEngine::texture* texObj=(flyEngine::texture*)flyEngine::textureMgr::getInstance()->getTexture("res/smile.png");
+    texture2* texObj=(texture2*)textureMgr::getInstance()->getTexture("res/smile.png");
     int texID1=texObj->getTextureID();
     if(!texID1)
         return;
@@ -117,8 +116,8 @@ void drawPlane2() {
     
     int shaderID=shaderMgr::createShaderFromFile("res/shader/2tex.vs","res/shader/2tex.fs");
     
-    flyEngine::texture* texObj1=(flyEngine::texture*)flyEngine::textureMgr::getInstance()->getTexture("res/wall.jpg");
-    flyEngine::texture* texObj2=(flyEngine::texture*)flyEngine::textureMgr::getInstance()->getTexture("res/smile.png");
+    texture2* texObj1=(texture2*)textureMgr::getInstance()->getTexture("res/wall.jpg");
+    texture2* texObj2=(texture2*)textureMgr::getInstance()->getTexture("res/smile.png");
     int texID1=texObj1->getTextureID();
     int texID2=texObj2->getTextureID();
     if(!texID2 || !texID2)

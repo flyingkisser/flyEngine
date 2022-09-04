@@ -7,14 +7,23 @@
 //
 
 #include "control.h"
-#include "keyboardEvent.h"
-#include "keyboardEventMgr.h"
-#include "mouseEvent.h"
-#include "mouseEventMgr.h"
 #include "camera.h"
 #include "randUtil.h"
 #include "logUtil.h"
 #include "node.h"
+
+#ifdef BUILD_MAC
+#include "keyboardEvent.h"
+#include "keyboardEventMgr.h"
+#include "mouseEvent.h"
+#include "mouseEventMgr.h"
+#endif
+
+#ifdef BUILD_IOS
+#include "fingerEvent.h"
+#endif
+
+
 
 using namespace flyEngine;
 
@@ -24,8 +33,44 @@ void control::bindCamera(flyEngine::camera* c){
     char szRand[32]={0};
     
     randUtil::getRandStr(6, szRand);
-        
     snprintf(szBuf,sizeof(szBuf),"event_control_%s",szRand);
+    
+#ifdef BUILD_IOS
+    _fingerEventObj=fingerEvent::getInstance();
+    _fingerEventObj->regOnZoom([&](float scale){
+        if(scale>1)
+            scale=1;
+        else
+            scale=-1;
+        _camera->setPositionZ(_camera->getPositionZ()-_move_d*scale/2);
+        if(_bindNodeWithCameraMove!=NULL){
+            _bindNodeWithCameraMove->setPositionZ(_camera->getPositionZ()+_cameraMoveNodeZ);
+        }
+    });
+    _fingerEventObj->regOnMove([&](float x,float y){
+        int isRight=x>0?1:-1;
+        int isUp=y>0?-1:1;
+        if(x!=0){
+            _camera->setPositionX(_camera->getPositionX()+_move_d*isRight/3);
+            if(_bindNodeWithCameraMove!=NULL){
+                _bindNodeWithCameraMove->setPositionX(_camera->getPositionX());
+            }
+        }
+        if(y!=0){
+            _camera->setPositionY(_camera->getPositionY()+_move_d*isUp/3);
+            if(_bindNodeWithCameraMove!=NULL){
+             _bindNodeWithCameraMove->setPositionY(_camera->getPositionY());
+            }
+        }
+    });
+    fingerEvent::getInstance()->regOnTap([&](int c){
+        if(c==2)
+            _camera->reset();
+    });
+  
+#endif
+    
+#ifdef BUILD_MAC
     _kbEventObj=new keyboardEvent();
     keyboardEventMgr::addEvent(string(szBuf),_kbEventObj);
 
@@ -127,15 +172,17 @@ void control::bindCamera(flyEngine::camera* c){
             _bindNodeWithCameraMove->setPositionZ(_camera->getPositionZ()+_cameraMoveNodeZ);
         }
     });
-    
+#endif
     flylog("control::bindCamera finished!");
 }
 
 void control::bindNode(flyEngine::node* nodeObj){
-    if(_msEventObj==NULL)
-        return;
     //move model itself
     _bindNode=nodeObj;
+
+#ifdef BUILD_MAC
+    if(_msEventObj==NULL)
+        return;
     _msEventObj->regOnMoveWithRightHold([&](float x,float y){
         if(_mouseRightOriginX==0){
           _mouseRightOriginX=x;
@@ -144,7 +191,6 @@ void control::bindNode(flyEngine::node* nodeObj){
           _mouseRightLastY=y;
           return;
         }
-
         float dx=x-_mouseRightLastX;
         float dy=y-_mouseRightLastY;
         float rotateX=360.0f*((dx)/_width2PI);
@@ -157,6 +203,13 @@ void control::bindNode(flyEngine::node* nodeObj){
         _mouseRightOriginX=0;
         _mouseRightOriginY=0;
     });
+#endif
+    
+#ifdef BUILD_IOS
+    fingerEvent::getInstance()->regOnRotate([&](float r){
+        _bindNode->rotateBy(glm::vec3(0,0,r));
+    });
+#endif
 }
 
 void control::bindNodeWithCameraMove(flyEngine::node* nodeObj){
@@ -166,5 +219,7 @@ void control::bindNodeWithCameraMove(flyEngine::node* nodeObj){
 }
 
 void control::regOnKeyPress(char key, std::function<void ()> cb){
+#ifdef BUILD_MAC
     _kbEventObj->regEvent(key,cb);
+#endif
 }

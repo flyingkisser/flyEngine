@@ -8,7 +8,6 @@
 
 #include "cubeColor.h"
 #include "logUtil.h"
-#include "texture.h"
 #include "textureMgr.h"
 #include "shader.h"
 #include "shaderMgr.h"
@@ -39,7 +38,7 @@ void cubeColor::glInit(){
     initVAO(g_verticeArr, sizeof(g_verticeArr), descArr, 1);
 }
 
-void cubeColor::draw(camera* cameraObj){
+void cubeColor::draw(){
     _shaderObj->use();
     node::updateModel();
     _shaderObj->setVec3("color", glm::value_ptr(m_vec3Color));

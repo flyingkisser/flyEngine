@@ -45,7 +45,7 @@ public:
 
     bool init();
     void glInit();
-    void draw(camera* cameraObj);
+    void draw();
     
     void setCBBeforeDraw(std::function<void()> cb){_cb_before_draw=cb;};
 };

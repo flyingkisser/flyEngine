@@ -40,12 +40,12 @@ void test_framebuffer(){
         glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);
     });
     world::getInstance()->setCBAfterDrawCall([st,cam,sp,cubeObj](){
-        cubeObj->draw(cam);
+        cubeObj->draw();
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glDisable(GL_DEPTH_TEST);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        sp->draw(cam);
+        sp->draw();
     });
     
     timerUtil::getInstance()->execOnceDelay(3, [](sprite *sp){
@@ -75,13 +75,13 @@ void test_framebuffer_mirror(){
         glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);
     });
     world::getInstance()->setCBAfterDrawCall([st,cam,sp,cubeObj](){
-        cubeObj->draw(cam);
+        cubeObj->draw();
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT);
-        cubeObj->draw(cam);
+        cubeObj->draw();
         glDisable(GL_DEPTH_TEST);
-        sp->draw(cam);
+        sp->draw();
     });
 }
 
@@ -103,12 +103,12 @@ void test_framebuffer_kernel(){
         glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);
     });
     world::getInstance()->setCBAfterDrawCall([st,cam,sp,cubeObj](){
-        cubeObj->draw(cam);
+        cubeObj->draw();
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT);
         glDisable(GL_DEPTH_TEST);
-        sp->draw(cam);
+        sp->draw();
     });
 }
 

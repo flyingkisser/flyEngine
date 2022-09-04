@@ -2,26 +2,37 @@
 //  texture.cpp
 //  flyEngine
 //
-//  Created by joe on 24/06/2021.
-//  Copyright © 2021 joe. All rights reserved.
+//  Created by joe on 04/09/2022.
+//  Copyright © 2022 joe. All rights reserved.
 //
 
 #include "texture.h"
-#include "baseImg.h"
+//#include "baseImg.h"
 #include "pngUtil.h"
 #include "jpgUtil.h"
 #include "logUtil.h"
 #include "stb_image.h"
 
-using namespace flyEngine;
+#ifdef BUILD_IOS
+#include "ios_dirUtil.h"
+#endif
+
+USE_NS_FLYENGINE
 
 flyEngine::texture::~texture(){
-    if(_dataBuf)
+    if(_dataBuf){
         free(_dataBuf);
+        flylog("~texture:_dataBuf %llu freed!",_dataBuf);
+    }
 }
 
 flyEngine::texture::texture(const char* szPath,bool bFlipY){
+#ifdef BUILD_IOS
+    const char* szfullPath=ios_dirUtil::getFileFullPathName(szPath);
+    _strPath=szfullPath;
+#else
     _strPath=szPath;
+#endif
     _bFlipY=bFlipY;
 }
 
@@ -118,7 +129,8 @@ void flyEngine::texture::glInit(int texturePos){
     //参数7:纹理图案中的颜色值类型，GL_RGBA
     //参数8:数据格式
     //参数9:纹理内存
+    flylog("glTexImage2D from buf %llu begin %d*%d %d",_dataBuf,_width,_height,_width*_height);
     glTexImage2D(GL_TEXTURE_2D,0,_format,_width,_height,0,_format,GL_UNSIGNED_BYTE,_dataBuf);
-       
+    flylog("glTexImage2D from buf %llu end",_dataBuf);
 //  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, structTex.width, structTex.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, structTex.buf);
 }

@@ -13,8 +13,27 @@
 #include "window.h"
 #include "logUtil.h"
 
+#ifdef BUILD_IOS
+#include "ios_dirUtil.h"
+#endif
+
 using namespace flyEngine;
 using namespace std;
+
+fontTTF::fontTTF(const char* ttfFileName,int fontSize){
+    _fontSize=fontSize;
+#ifdef BUILD_MAC
+    _fontPath=(char*)ttfFileName;
+#elif BUILD_IOS
+    std::string strFontFullPath;
+    if(ttfFileName[0]!='/'){
+        _fontPath=(char*)ios_dirUtil::getFileFullPathName(ttfFileName);
+//        _fontPath=(char*)strFontFullPath.c_str();
+    }else{
+        _fontPath=(char*)ttfFileName;
+    }
+#endif
+};
 
 bool fontTTF::init(){
     if (FT_Init_FreeType(&_ftLib)){
@@ -44,6 +63,11 @@ void fontTTF::glInit(){
         }
         glGenTextures(1,&texID);
         glBindTexture(GL_TEXTURE_2D, texID);
+//        glTexImage2D(GL_TEXTURE_2D,0,GL_RED,
+//                     _ftFace->glyph->bitmap.width,
+//                     _ftFace->glyph->bitmap.rows,
+//                     0,GL_RED,GL_UNSIGNED_BYTE,_ftFace->glyph->bitmap.buffer
+//                     );
         glTexImage2D(GL_TEXTURE_2D,0,GL_RED,
                      _ftFace->glyph->bitmap.width,
                      _ftFace->glyph->bitmap.rows,
@@ -63,6 +87,7 @@ void fontTTF::glInit(){
         _vecStruct.push_back(st);
     }
     glBindTexture(GL_TEXTURE_2D, 0);
+    flylog("fontTTF::glInit end!");
 }
 
 //void fontTTF::setFontSize(int s){
@@ -71,5 +96,10 @@ void fontTTF::glInit(){
 //}
 
 texFontStruct fontTTF::getTexStruct(int c){
+    if(c>=_vecStruct.size()){
+        flylog("fontTTF::getTexStruct try to get font struct for %d failed!",c);
+        texFontStruct st={0};
+        return st;
+    }
     return _vecStruct[c];
 }

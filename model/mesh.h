@@ -22,7 +22,7 @@ struct Vertex{
 };
 
 enum TextureType{
-    TYPE_Diffuse,TYPE_Specular
+    TYPE_Diffuse,TYPE_Specular,TYPE_Ambient
 };
 
 struct Texture{

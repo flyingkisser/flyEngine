@@ -34,12 +34,16 @@ public:
     
     bool init();
     void glInit();
-    void setColor(glm::vec3 color){m_vec3Color=color;_dirtyColor=true;};
+    void setColor(glm::vec3 color){
+        m_vec3Color=color;
+        _dirtyColor=true;
+        setDirtyUBO(true);
+    };
     
     bool isDirtyColor(){return _dirtyColor;};
     void setDirtyColor(bool v){_dirtyColor=v;};
     
-    void draw(camera* cameraObj);
+    void draw();
 };
 
 NS_FLYENGINE_END

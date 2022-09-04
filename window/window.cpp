@@ -9,8 +9,14 @@
 #include "window.h"
 #include "logUtil.h"
 #include "gpuUtil.h"
+
+#ifdef BUILD_MAC
 #include "keyboardEventMgr.h"
 #include "mouseEventMgr.h"
+#elif BUILD_IOS
+#include "windowUtil.h"
+#include "ios_dirUtil.h"
+#endif
 
 USE_NS_FLYENGINE
 
@@ -42,6 +48,7 @@ static void reshape2D(GLFWwindow* window,int w,int h)
 
 
 void window::init(){
+#ifdef BUILD_MAC
     if(!glfwInit()){
         flylog("glfwInit failed!");
         return;
@@ -83,5 +90,28 @@ void window::init(){
     }
     keyboardEventMgr::init(window);
     mouseEventMgr::init(window);
+#elif BUILD_IOS
+    g_window=0;
+    flyEngine::size st=windowUtil::getWinSize();
+    g_winWidth=st.width;
+    g_winHigh=st.height;
+    st=windowUtil::getResolutionSize();
+    g_screenWidth=st.width;
+    g_screenHigh=st.height;
+    
+//    unsigned int depthRenderbuffer=0;
+//    glGenRenderbuffers(1, &depthRenderbuffer);
+//    glBindRenderbuffer(GL_RENDERBUFFER, depthRenderbuffer);
+//    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, g_winWidth, g_winHigh);
+////    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderbuffer);
+//    GLenum status = glCheckFramebufferStatus(GL_FRAMEBUFFER) ;
+//    if(status != GL_FRAMEBUFFER_COMPLETE) {
+//        flylog("failed to make complete framebuffer object %x", status);
+//    }
+   
+
+    
+#endif
+    
     printGpuInfo();
 }

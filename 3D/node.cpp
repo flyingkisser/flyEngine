@@ -8,14 +8,13 @@
 
 #include "node.h"
 #include "logUtil.h"
-#include "texture.h"
 #include "textureMgr.h"
 #include "shader.h"
 #include "shaderMgr.h"
 #include "action.h"
 #include "camera.h"
 #include "world.h"
-#include "material.h"
+#include "material2.h"
 
 #include "directionLight.h"
 #include "light.h"
@@ -37,6 +36,7 @@ node::node(){
 void node::moveBy(glm::vec3 v){
     _pos+=v;
     _dirtyPos=true;
+    _dirtyUBO=true;
 }
 
 //从当前大小，缩放一个指定的系数
@@ -70,21 +70,25 @@ void node::setScale(float v){
 void node::setPosition(glm::vec3 p){
     _pos=p;
     _dirtyPos=true;
+    _dirtyUBO=true;
 };
 
 void node::setPositionX(float v){
     _pos.x=v;
     _dirtyPos=true;
+    _dirtyUBO=true;
 };
 
 void node::setPositionY(float v){
     _pos.y=v;
     _dirtyPos=true;
+    _dirtyUBO=true;
 };
 
 void node::setPositionZ(float v){
     _pos.z=v;
     _dirtyPos=true;
+    _dirtyUBO=true;
 };
 
 //动画相关
@@ -97,11 +101,12 @@ void node::stopAction(action* act){
 }
 
 //材质
-void node::setMaterial(material *mt){
+void node::setMaterial(material2 *mt){
     if(m_material!=NULL)
         delete m_material;
     m_material=mt;
     _dirtyMT=true;
+    _dirtyUBO=true;
 }
 
 void node::setShader(shader* shaderObj){
@@ -114,7 +119,6 @@ void node::updateModel(){
     if(_dirtyPos){
         //移动
         _matModel=glm::translate(glm::mat4(1.0f),_pos);
-        
         //旋转
         if(_rotate.x)//沿x轴
           _matModel=glm::rotate(_matModel,glm::radians(_rotate.x),glm::vec3(1,0,0));
@@ -168,12 +172,14 @@ void node::glUpdateLight(){
     for(auto c : pointLightVector){
         pointLight* lightObj=(pointLight*)c;
         lightObj->update(i++);
+//        lightObj->glUpdate(i++);
     }
     //聚光灯初始化
     i=0;
     std::vector<spotLight*> spotLightVector=world::getInstance()->getSpotLightVector();
     for(auto c : spotLightVector){
        spotLight* lightObj=(spotLight*)c;
-       lightObj->update(i++);
+//        lightObj->glUpdate(getShader()->getProgramID(),i++);
+       lightObj->update(getShader()->getProgramID(),i++);
     }
 }

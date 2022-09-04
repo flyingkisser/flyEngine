@@ -1,4 +1,5 @@
 #version 330 core
+precision highp float;
 in vec3 normalVector;
 in vec3 posFrag;
 out vec4 FragColor;

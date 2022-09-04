@@ -14,6 +14,7 @@
 #include "model.h"
 #include "camera.h"
 #include "timerUtil.h"
+#include "timeUtil.h"
 #include "control.h"
 #include "forever.h"
 #include "rotateBy.h"
@@ -69,18 +70,13 @@ void test_depths(){
 }
 
 void test_depths_2(){
-    shader* depthShader=new shader("res/shader/3d_model.vs","res/shader/3d_depth_test1.fs");
+    shader* depthShader=new shader("res/shader/3d_1tex_phong.vs","res/shader/3d_depth_test1.fs");
     cubeTex* cubeObj=new cubeTex("res/metal.png");
     if(!cubeObj->init()){
         flylog("init cubeObj failed!");
         return;
     }
 //    cubeObj->resetPos();
-//    cubeObj->rotateBy(glm::vec3(45,0,0));
-//    cubeObj->setScale(glm::vec3(0.5,0.5,0.3));
-//    cubeObj->setPosition(glm::vec3(0,-0.3,0.5));
-
-    cubeObj->resetPos();
     cubeObj->setPosition(glm::vec3(0,-0.3,0.5));
     cubeObj->rotateBy(glm::vec3(60,0,0));
     cubeObj->setScale(0.3);
@@ -90,11 +86,10 @@ void test_depths_2(){
         flylog("init cubeObj2 failed!");
         return;
     }
-    cubeObj2->resetPos();
+//    cubeObj2->resetPos();
+    cubeObj2->setPosition(glm::vec3(0.5,-0.2,0.5));
     cubeObj2->rotateBy(glm::vec3(60,0,0));
     cubeObj2->setScale(0.3);
-    cubeObj2->setPosition(glm::vec3(0.5,-0.2,0.5));
-        
 
     cubeTex* plainObj=new cubeTex("res/marble.jpg");
     int descArr[]={3,2};
@@ -111,6 +106,8 @@ void test_depths_2(){
     world::getInstance()->addChild(cubeObj);
     world::getInstance()->addChild(cubeObj2);
     world::getInstance()->addChild(plainObj);
+    
+    world::getInstance()->getControl()->bindNode(plainObj);
 
     world::getInstance()->setCBBeforeDrawCall([](){
         glDepthFunc(GL_LESS);//GL_LESS是默认值
@@ -161,7 +158,7 @@ void test_stencil(){
         
         //stencil缓存不更新
         glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
-        plainObj->draw(cam);
+        plainObj->draw();
         
         //通过stencil测试的片元，stencil缓存写入1
         glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
@@ -169,8 +166,8 @@ void test_stencil(){
         cubeObj2->setScale(0.3);
         cubeObj->setShader(defShader);
         cubeObj2->setShader(defShader);
-        cubeObj->draw(cam);
-        cubeObj2->draw(cam);
+        cubeObj->draw();
+        cubeObj2->draw();
         
     });
     
@@ -182,8 +179,8 @@ void test_stencil(){
         glStencilFunc(GL_NOTEQUAL,1,0xff);
         cubeObj->setShader(borderShader);
         cubeObj2->setShader(borderShader);
-        cubeObj->draw(cam);
-        cubeObj2->draw(cam);
+        cubeObj->draw();
+        cubeObj2->draw();
     });
 
 }
@@ -221,13 +218,13 @@ void test_stencil_2(){
         
         //stencil缓存不更新
         glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
-        plainObj->draw(cam);
+        plainObj->draw();
         
         //通过stencil测试的片元，stencil缓存写入1
         glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
         modelObj->setScale(0.3);
         modelObj->setShader(defShader);
-        modelObj->draw(cam);
+        modelObj->draw();
     });
     
     
@@ -236,7 +233,7 @@ void test_stencil_2(){
         glDisable(GL_DEPTH_TEST);
         glStencilFunc(GL_NOTEQUAL,1,0xff);
         modelObj->setShader(borderShader);
-        modelObj->draw(cam);
+        modelObj->draw();
     });
 }
 
@@ -270,6 +267,8 @@ void test_blend_1(){
     }
     shader* shaderObj=new shader("res/shader/3d_1tex.vs","res/shader/3d_blend_1.fs");
     cubeObj->setShader(shaderObj);
+//    cubeObj->setPosition(glm::vec3(-1.5f,  0.0f, -0.48f));
+//    world::getInstance()->addChild(cubeObj);
     std::vector<glm::vec3> posVector={
         glm::vec3(-1.5f,  0.0f, -0.48f),
         glm::vec3(1.5f,  0.0f,  0.51f),
@@ -300,7 +299,6 @@ void test_blend_2(){
         flylog("init cubeTex failed!");
         return;
     }
-    cubeObj->resetPos();
     cubeObj->setPosition(glm::vec3(0,-0.3,0.5));
     cubeObj->rotateBy(glm::vec3(60,0,0));
     cubeObj->setScale(0.3);
@@ -310,7 +308,6 @@ void test_blend_2(){
         flylog("init cubeTex failed!");
         return;
     }
-    cubeObj2->resetPos();
     cubeObj2->setPosition(glm::vec3(0.5,-0.2,0.5));
     cubeObj2->rotateBy(glm::vec3(60,0,0));
     cubeObj2->setScale(0.3);
@@ -351,21 +348,23 @@ void test_blend_2(){
         glm::vec3(-0.3f, -0.3f, -2.3f),
         glm::vec3( 0.5f, -0.2f, -0.6f)
     };
-    camera* cam=world::getInstance()->getCamera();
+    
     shader* windowShader=new shader("res/shader/3d_1tex.vs","res/shader/3d_blend_2.fs");
- 
+    windowObj->setShader(windowShader);
+
+    camera* cam=world::getInstance()->getCamera();
     glm::vec3 cameroPos=cam->getPosition();
     std::vector<cubeTex*> vectorWindow;
     for(auto pos:vectorPos){
-        mapPos[glm::length(cameroPos-pos)]=pos;
         cubeTex* windowCube=windowObj->clone();
-        windowCube->setShader(windowShader);
         world::getInstance()->addChild(windowCube);
         windowCube->setPosition(pos);
         windowCube->setScale(0.6);
         windowCube->rotateBy(glm::vec3(0,30,0));
         vectorWindow.push_back(windowCube);
+        mapPos[glm::length(cameroPos-pos)]=pos;
     }
+    
     //同时启用深度测试和GL_BLEND以后，后绘制的物体会找先绘制的颜色
     //如果先添加了近平面的物体，再添加远平面的东西
     //近平面添加以后，因为这时背影没有东西，所以只显示前面物体的颜色
@@ -377,7 +376,7 @@ void test_blend_2(){
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-        
+
         glClear(GL_DEPTH_BUFFER_BIT);
         
         std::map<float,glm::vec3> mapPos;
@@ -430,8 +429,9 @@ void test_facecull(){
     });
     
     timerUtil::getInstance()->exec(0.1,[](camera* cam,model* modelObj,cubeTex* plainObj){
-        float x=2*sin(glfwGetTime());
-        float z=8*cos(glfwGetTime());
+        float t=(float)timeUtil::getTimeMS();
+        float x=2*sin(t);
+        float z=8*cos(t);
         modelObj->setPositionX(x);
         modelObj->setPositionZ(z-8);
         modelObj->rotateBy(glm::vec3(0,0.5,0));

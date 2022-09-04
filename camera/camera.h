@@ -54,7 +54,7 @@ public:
     
     glm::vec3 getFront(){return _cameraFront;};
     glm::mat4 getLookAtMatrix();
-    glm::mat4 getProjMatrix();
+    glm::mat4 getPerspectiveMatrix();
     
     void initUBO();
 //    void updateUBOOnDirty();
@@ -67,13 +67,14 @@ private:
     control* _controlObj;
     shader* _shaderObj;
     
-    glm::mat4 _matProj;
-    glm::mat4 _matProjOrigin;
-    glm::mat4 _matProj2D;
+    glm::mat4 _matProjPerspective;
+    glm::mat4 _matProjPerspectiveOrigin;
+    glm::mat4 _matProjOrtho;
     glm::mat4 _matCamera;
     glm::mat4 _matCameraOrigin;
     
     glm::vec3 _cameraPos;
+    glm::vec3 _cameraPosOrigin;
     glm::vec3 _cameraFront;
     glm::vec3 _cameraUp;
     
@@ -86,7 +87,7 @@ private:
     float _fovOrigin=0;
     float _screenRatio=0.0;
     
-    int _ubo_mat=0;
+    int _ubo_mat_3d=0;
     int _ubo_mat_2d=0;
 
 };

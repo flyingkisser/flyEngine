@@ -13,6 +13,7 @@
 #include "state.h"
 #include "world.h"
 #include "stb_image/stb_image.h"
+#include "camera.h"
 
 USE_NS_FLYENGINE
 
@@ -69,7 +70,7 @@ bool skybox::init(){
     return true;
 }
 
-void skybox::draw(camera* cam){
+void skybox::draw(){
     _shaderObj->use();
     
     //skybox的中心在0,0点，所以这里不用updateModel

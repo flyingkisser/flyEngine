@@ -11,9 +11,16 @@
 
 #include <stdio.h>
 #include <string>
+#include "defines.h"
 
+#ifdef BUILD_MAC
 #include "keyboardEvent.h"
 #include "mouseEvent.h"
+#endif
+
+#ifdef BUILD_IOS
+#include "fingerEvent.h"
+#endif
 
 using namespace std;
 
@@ -45,9 +52,14 @@ private:
     node* _bindNode=NULL;
     node* _bindNodeWithCameraMove=NULL;
     
+#ifdef BUILD_MAC
     keyboardEvent* _kbEventObj=NULL;
     mouseEvent* _msEventObj=NULL;
+#endif
     
+#ifdef BUILD_IOS
+    fingerEvent* _fingerEventObj=NULL;
+#endif
     
 public:
     control(){};

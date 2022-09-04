@@ -2,12 +2,12 @@
 //  texture.h
 //  flyEngine
 //
-//  Created by joe on 24/06/2021.
-//  Copyright © 2021 joe. All rights reserved.
+//  Created by joe on 04/09/2022.
+//  Copyright © 2022 joe. All rights reserved.
 //
 
-#ifndef texture_h
-#define texture_h
+//#ifndef texture_h
+//#define texture_h
 
 #include <stdio.h>
 #include <string>
@@ -16,7 +16,7 @@
 
 using namespace std;
 
-namespace flyEngine{
+NS_FLYENGINE_BEGIN
 
 class texture:glRef{
 private:
@@ -46,5 +46,6 @@ public:
     void glInit(int texturePos=0);
 };
 
-}
-#endif /* texture_h */
+NS_FLYENGINE_END
+
+//#endif /* texture_h */

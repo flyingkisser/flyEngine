@@ -9,7 +9,7 @@
 #include "cubeTex.h"
 
 #include "logUtil.h"
-#include "texture.h"
+
 #include "textureMgr.h"
 #include "shader.h"
 #include "shaderMgr.h"
@@ -17,8 +17,9 @@
 #include "camera.h"
 #include "world.h"
 #include "directionLight.h"
-#include "material.h"
+#include "material2.h"
 #include "state.h"
+#include "texture2.h"
 
 USE_NS_FLYENGINE
 
@@ -36,7 +37,6 @@ void cubeTex::resetPos(){
 }
 
 bool cubeTex::init(){
-    //默认情况下带有法向量
     int desc[]={3,2,3};
     return initByVerticeArr(g_verticeArrWithTexCoordAndNormal,sizeof(g_verticeArrWithTexCoordAndNormal),desc,3);
 }
@@ -69,7 +69,7 @@ bool cubeTex::initByVerticeArr(float* arr,int arrSize,int descArr[],int descArrN
 
 cubeTex* cubeTex::clone(){
     cubeTex* n=new cubeTex(_texPath);
-    n->initVAO(_vertice_arr,_vertice_arr_size,_desc_arr,_desc_arr_size);
+    n->initByVerticeArr(_vertice_arr,_vertice_arr_size,_desc_arr,_desc_arr_size);
     n->setShader(getShader());
     n->setPosition(getPosition());
     n->setScale(getScale());
@@ -78,7 +78,7 @@ cubeTex* cubeTex::clone(){
     return n;
 };
 
-void cubeTex::draw(camera* cameraObj){
+void cubeTex::draw(){
     _shaderObj->use();
     if(m_cb_before_draw_call!=nullptr)
         m_cb_before_draw_call(_shaderObj->getProgramID());
@@ -96,8 +96,7 @@ void cubeTex::draw(camera* cameraObj){
         //镜面光滑系数
         _shaderObj->setFloat(uniform_name_material_shininess, m_material->getShininess());
         //高亮贴图
-        texture* texSpecular=m_material->getTexSpecular();
-       
+        texture2* texSpecular=m_material->getTexSpecular();
         if(texSpecular!=NULL){
             _shaderObj->setBool(uniform_name_material_sp_tex_enabled,1);
             _shaderObj->setInt(uniform_name_material_specular_tex,1);

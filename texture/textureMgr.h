@@ -14,17 +14,17 @@
 #include <tuple>
 #include "defines.h"
 #include "baseImg.h"
-#include "texture.h"
 
 using namespace std;
-class texture;
 
-namespace flyEngine{
+
+NS_FLYENGINE_BEGIN
+class texture2;
 
 class textureMgr{
     
 private:
-    map<string,texture*> _mapTextureCache;
+    map<string,texture2*> _mapTextureCache;
     
 public:
     static textureMgr* getInstance();
@@ -32,7 +32,7 @@ public:
      ~textureMgr();
     void clear();
     
-    texture* getTexture(const char* szName,bool bFlipY=false);
+    texture2* getTexture(const char* szName,bool bFlipY=false);
     size getTextureSize(const char* szName);
     
 
@@ -41,7 +41,7 @@ public:
     
 };
 
-}
+NS_FLYENGINE_END
 
 
 #endif /* textureMgr_h */

@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include "defines.h"
 #include "node.h"
-#include "camera.h"
 #include <vector>
 
 NS_FLYENGINE_BEGIN
@@ -31,7 +30,7 @@ public:
     ~skybox();
     void glInit();
     bool init();
-    void draw(camera* cam);
+    void draw();
     unsigned int getTexID(){return _texID;};
 };
 

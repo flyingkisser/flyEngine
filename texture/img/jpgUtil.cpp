@@ -13,6 +13,23 @@
 #include "jpgUtil.h"
 using namespace flyEngine;
 
+static void getJPGTextureInfo(int num_components,  struct_texture *texinfo){
+    switch (num_components){
+        case 1:
+            texinfo->format = GL_LUMINANCE;
+            break;
+        case 2:
+            texinfo->format = GL_LUMINANCE_ALPHA;
+            break;
+        case 3:
+            texinfo->format = GL_RGB;
+            break;
+        default:
+            /* Badness */
+            break;
+    }
+}
+
 bool jpgUtil::isJpg(const char *filename)
 {
     struct jpeg_decompress_struct cinfo;
@@ -20,7 +37,7 @@ bool jpgUtil::isJpg(const char *filename)
     FILE *fp = NULL;
     fp = fopen(filename, "rb");
     if (!fp){
-        fprintf(stderr, "error: couldn't open \"%s\"!\n", filename);
+        fprintf(stderr, "jpgUtil::isJpg error: couldn't open \"%s\"!\n", filename);
         return false;
     }
     //绑定标准错误处理结构
@@ -44,7 +61,7 @@ bool jpgUtil::loadFile(const char *filename,struct_texture* texinfo,bool bFlipY)
     /* Open image file */
     fp = fopen(filename, "rb");
     if (!fp){
-        fprintf(stderr, "error: couldn't open \"%s\"!\n", filename);
+        fprintf(stderr, "jpgUtil::loadFile error: couldn't open \"%s\"!\n", filename);
         return false;
     }
     //绑定标准错误处理结构
@@ -67,7 +84,8 @@ bool jpgUtil::loadFile(const char *filename,struct_texture* texinfo,bool bFlipY)
     texinfo->width=cinfo.image_width;
     texinfo->height=cinfo.image_height;
     texinfo->internalFormat=cinfo.num_components;
-
+    getJPGTextureInfo(cinfo.num_components,texinfo);
+    
     //分配缓冲区空间
     int bufSize=sizeof(GLubyte) * texinfo->width * texinfo->height * cinfo.num_components;
     texinfo->buf = (GLubyte *)malloc(bufSize);
@@ -93,6 +111,6 @@ bool jpgUtil::loadFile(const char *filename,struct_texture* texinfo,bool bFlipY)
     //释放资源
     jpeg_destroy_decompress(&cinfo);
     fclose(fp);
-    texinfo->format=GL_RGB;
+//    fprintf(stdout, "jpgUtil::alloct buf %d(%x) at %llu for %s\n", bufSize,bufSize,texinfo->buf,filename);
     return true;
 }

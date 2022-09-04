@@ -1,3 +1,4 @@
+
 //
 //  types.h
 //  flyEngine
@@ -9,10 +10,20 @@
 #ifndef types_h
 #define types_h
 
-
+#ifdef BUILD_IOS
+#define GLFWwindow int
+#endif
 
 NS_FLYENGINE_BEGIN
 
+struct size{
+    float width;
+    float height;
+};
+
+
+
+/*
 class vec3{
 public:
     GLfloat _row[3];
@@ -193,12 +204,8 @@ struct structPos4{
     float w;
 };
 
-struct size{
-    float width;
-    float height;
-};
-
 typedef float Matrix4x4 [4][4];
+*/
 
 NS_FLYENGINE_END
 
@@ -213,4 +220,4 @@ extern "C" {
 #endif
 
 
-#endif /* types_h */
+#endif  /* types_h */

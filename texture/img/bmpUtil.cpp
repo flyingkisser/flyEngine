@@ -11,6 +11,7 @@
 using namespace flyEngine;
 
 void bmpUtil::drawBMP(float x,float y,unsigned char* szBuf){
+#ifdef BUILD_MAC
     int a=szBuf[0x12];
     int b=szBuf[0x13];
     int c=szBuf[0x14];
@@ -31,4 +32,5 @@ void bmpUtil::drawBMP(float x,float y,unsigned char* szBuf){
     //width,height,dataFormat,dataType,pixMap
     glDrawPixels(imgWidth,imgHigh,GL_BGR,GL_UNSIGNED_BYTE,bufBMP);
     glFlush();
+#endif
 }

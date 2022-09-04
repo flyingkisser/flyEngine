@@ -22,10 +22,10 @@ using namespace std;
 using namespace flyEngine;
 
 void test_text1(){
-    uiText* textObj=new uiText("res/font/arial.ttf",14,"hello,world");
+    uiText* textObj=new uiText("res/font/arial.ttf",14,"h");
     textObj->setFontColor(glm::vec3(255,0,0));
-    textObj->setPosition(glm::vec3(25,25,0));
-    textObj->setFontSize(21);
+    textObj->setPosition(glm::vec3(100,100,0));
+//    textObj->setFontSize(21);
     world::getInstance()->addChild(textObj);
     return;
     

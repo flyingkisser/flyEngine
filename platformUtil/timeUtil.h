@@ -16,12 +16,17 @@
 
 class timeUtil{
 public:
-    static long long getTime();
-    static long long getTimeMS();
+    static void init();
+    static long long getTimeNS();   //纳秒
+    static long long getTimeUS();   //微秒
+    static unsigned long getTimeMS();//毫秒
+    static float getTimeFloatSinceRun();
+    static unsigned int getTime();
     static struct tm* getDate();
     static struct tm* getDateBySec(long long secTime);
     static int getTimeZoneDiff();
     static std::string getTimeStrLong();
+   
 };
 
 #endif /* timeUtil_h */

@@ -120,7 +120,7 @@ void sprite::setGray(bool s){
     _bGray=s;
     _b_dirty_shader=true;
 }
-void sprite::draw(camera *cam){
+void sprite::draw(){
     _shaderObj->use();
     _shaderObj->setInt("texture0", 0);
     if(_b_dirty_vertices){

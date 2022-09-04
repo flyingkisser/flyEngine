@@ -19,8 +19,8 @@
 using namespace flyEngine;
 using namespace std;
 
-uiText::uiText(const char* fontName,int fontSize,const char* strText){
-    _fontName=fontName;
+uiText::uiText(const char* strFontFilePath,int fontSize,const char* strText){
+    _fontFilePath=strFontFilePath;
     _fontSize=fontSize;
     _strText=(char*)strText;
     
@@ -31,7 +31,7 @@ uiText::uiText(const char* fontName,int fontSize,const char* strText){
     }
     setShader(_shaderObj);
     
-    _fontObj=fontMgr::getInstance()->getFontTTF(fontName,fontSize);
+    _fontObj=fontMgr::getInstance()->getFontTTF(strFontFilePath,fontSize);
     if (_fontObj==NULL){
         flylog("uiText: get font obj failed!");
         return;
@@ -64,14 +64,14 @@ void uiText::glInit(){
 
 void uiText::setFontSize(int s){
     _fontSize=s;
-    _fontObj=fontMgr::getInstance()->getFontTTF(_fontName,_fontSize);
+    _fontObj=fontMgr::getInstance()->getFontTTF(_fontFilePath,_fontSize);
     if (_fontObj==NULL){
         flylog("uiText::setFontSize get font obj failed!");
         return;
     }
 };
 
-void uiText::draw(camera* cameraObj){
+void uiText::draw(){
     int strLen=(int)strlen(_strText);
     glm::vec3 nodePos=getPosition();
     
@@ -80,9 +80,9 @@ void uiText::draw(camera* cameraObj){
     
     _shaderObj->use();
     
-    glm::mat4 proj=glm::ortho(0.0f,(float)g_winWidth,0.0f,(float)g_winHigh);
-    _shaderObj->setMat4("matProj", (float*)glm::value_ptr(proj));
     
+//    glm::mat4 proj=glm::ortho(0.0f,(float)g_winWidth,0.0f,(float)g_winHigh);
+//    _shaderObj->setMat4("matProj2D", (float*)glm::value_ptr(proj));
     //update model matrix
 //    _shader2dObj->setMat4("matModel", (float*)glm::value_ptr(glm::vec3(nodePos.x/g_winWidth,nodePos.y/g_winHigh,0)));
     updateModel();
@@ -90,12 +90,15 @@ void uiText::draw(camera* cameraObj){
     glm::vec3 color=glm::vec3(_fontColor.r/255,_fontColor.g/255,_fontColor.b/255);
     _shaderObj->setVec3("textColor", (float*)glm::value_ptr(color));
     
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
+
+  
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(_vao);
-    
     
     glm::vec3 scale=getScale();
     glm::vec3 pos=nodePos;
@@ -104,6 +107,8 @@ void uiText::draw(camera* cameraObj){
     for(int i=0;i<strLen;i++){
         int k=(int)_strText[i];
         texFontStruct st=_fontObj->getTexStruct(k);
+        if(st.texID<=0)
+            continue;
 //        float x=pos.x+st.bearingX*scale.x;
 //        float y=pos.y-(st.height-st.bearingY)*scale.y;
         float x=start_x+st.bearingX*scale.x;
@@ -118,6 +123,7 @@ void uiText::draw(camera* cameraObj){
             {x+w,y,1,1},
             {x+w,y+h,1,0}
         };
+        
         glBindTexture(GL_TEXTURE_2D,st.texID);
         glBindBuffer(GL_ARRAY_BUFFER,_vbo);
         glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(vertices),vertices);
@@ -128,9 +134,9 @@ void uiText::draw(camera* cameraObj){
         if(!isDisableLogState())
             state::log(6);
     }
-    
-    glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D,0);
+    glDisable(GL_BLEND);
+    // glBindVertexArray(0);
+    // glBindTexture(GL_TEXTURE_2D,0);
 }
 
 

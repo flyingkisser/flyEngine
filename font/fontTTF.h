@@ -37,10 +37,7 @@ struct texFontStruct{
 
 class fontTTF{
 public:
-    fontTTF(const char* ttfFileName,int fontSize=48){
-        _fontPath=(char*)ttfFileName;
-        _fontSize=fontSize;
-    };
+    fontTTF(const char* ttfFileName,int fontSize=48);
     ~fontTTF(){
         FT_Done_Face(_ftFace);
         FT_Done_FreeType(_ftLib);

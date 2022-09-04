@@ -7,7 +7,6 @@
 //
 
 #include "action.h"
-#include "node.h"
 
 USE_NS_FLYENGINE
 

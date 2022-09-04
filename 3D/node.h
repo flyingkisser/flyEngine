@@ -25,7 +25,7 @@ class action;
 class texture;
 class shader;
 class material;
-
+class material2;
 class node: public glRef
 {
 private:
@@ -39,10 +39,13 @@ private:
     bool _bDisableLogState=false;
     bool _dirtyPos=false;
     bool _dirtyMT=false;
+    bool _dirtyUBO=false;
     
 public:
     shader* _shaderObj=NULL;
-    material* m_material=NULL;
+    material2* m_material=NULL;
+    // material2* m_material2=NULL;
+
     unsigned int _gl_program=0;
     unsigned int _gl_vao=0;
     unsigned int _gl_vbo=0;
@@ -60,7 +63,7 @@ public:
     
     virtual bool init()=0;
     virtual void glInit()=0;
-    virtual void draw(camera* cameraObj)=0;
+    virtual void draw()=0;
     void print();
     void updateModel();
     
@@ -99,22 +102,22 @@ public:
     bool isDirtyMT(){return _dirtyMT;};
     void setDirtyMT(bool v){_dirtyMT=v;};
     
+    bool isDirtyUBO(){return _dirtyUBO;};
+    void setDirtyUBO(bool v){_dirtyUBO=v;};
+    
     void setLogInStatebool(bool s){_bDisableLogState=!s;};
     bool isDisableLogState(){return _bDisableLogState;};
     
     void runAction(action* act);
     void stopAction(action* act);
     
-    void setMaterial(material* mt);
-    material* getMaterial(){return m_material;};
+    void setMaterial(material2* mt);
+    material2* getMaterial(){return m_material;};
+    // material2* getMaterial2(){return m_material2;};
     
     shader* getShader(){return _shaderObj;};
     void setShader(shader* shaderObj);
     glm::mat4 getModelMatrix(){return _matModel;};
-    
-//    float* getVerticeArr(){return _vertice_arr;};
-//    int getVerticeSize(){return _vertice_arr_size;};
-//    bool hasNormal(){return _hasNormal;};
 };
 
 NS_FLYENGINE_END

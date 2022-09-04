@@ -15,30 +15,53 @@
 
 NS_FLYENGINE_BEGIN
 
+struct stSpotLight{
+    bool enabled;
+    glm::vec3 pos;
+    glm::vec3 color;
+
+    glm::vec3 ambient;
+    glm::vec3 diffuse;
+    glm::vec3 specular;
+
+    float constant;
+    float linear;
+    float quadratic;
+    
+    float cutoff_inner; //内角的cos值
+    float cutoff_outer; //外角的cos值
+    
+    glm::vec3 direction;    //方向向量
+};
+
 class spotLight:public light{
   
 public:
-    spotLight(glm::vec3 color,material* mt,float cutOffEngleInner=15,float cutOffEngleOuter=20);
+    spotLight(glm::vec3 color,material2* mt,float cutOffEngleInner=15,float cutOffEngleOuter=20);
     void setAttenuationParam(float constant,float linear,float quadratic){
         m_fConstant=constant;
         m_fLinear=linear;
         m_fQuadratic=quadratic;
+        setDirtyPos(true);
     };
     void setCutOffOuter(float cutOffEngleOuter){
         m_fcutOffOuter=glm::cos(glm::radians(cutOffEngleOuter));
         m_fEngleOuter=cutOffEngleOuter;
+        setDirtyPos(true);
     };
     void setCutOffInner(float cutOffEngleInner){
         m_fcutOffInner=glm::cos(glm::radians(cutOffEngleInner));
         m_fEngleInner=cutOffEngleInner;
+        setDirtyPos(true);
     };
     float getCutOffOuter(){return m_fEngleOuter;};
     float getCutOffInner(){return m_fEngleInner;};
 
 
     
-    void glUpdate(int light_index);
-    void update(int light_index);
+    void glUpdate(int id,int light_index);
+    // void glUpdate(int program_id,int light_index);
+    void update(int id,int light_index);
     glm::vec3 getDirection(){return _vec3Direction;};
     void setDirection(glm::vec3 d){_vec3Direction=d;};
     

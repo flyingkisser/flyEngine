@@ -29,6 +29,8 @@ public:
     static void printUniformValue(int programID,const char* uboName);
     static void printUBOInfo(int program,const char* uboName,const char* uniName);
     
+    static void printAllSSBO(int programID);
+    
     
 };
 

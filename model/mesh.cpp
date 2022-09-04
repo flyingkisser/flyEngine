@@ -50,12 +50,15 @@ void mesh::draw(shader* s){
         std::string strIndex;
         TextureType texType=m_vecTextures[i].type;
         if(texType==TYPE_Diffuse){
-            strIndex=std::to_string(diffuseIndex++);
-            s->setInt(("texture_diffuse_"+strIndex).c_str(),i);
+            strIndex=std::to_string(diffuseIndex);
+            s->setInt(("texture"+strIndex).c_str(),diffuseIndex,true);
+            diffuseIndex++;
         }
         else if(texType==TYPE_Specular){
-            strIndex=std::to_string(specularIndex++);
-            s->setInt(("texture_specular_"+strIndex).c_str(),i);
+            strIndex=std::to_string(specularIndex);
+            s->setInt(("texture_specular_mesh_"+strIndex).c_str(),2+specularIndex,true);
+            s->setBool(("texture_specular_mesh_"+strIndex+"_enabled").c_str(),true,true);
+            specularIndex++;
         }
     }
     if(_cb_before_draw)

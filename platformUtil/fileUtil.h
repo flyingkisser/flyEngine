@@ -14,6 +14,7 @@ class fileUtil{
     public :
         static unsigned char* readFile(const char* szFileName);
         static int writeFile(const char*szFileName,unsigned char* buf,int size);
+        static bool isExists(const char*szFileName);
 };
 
 
