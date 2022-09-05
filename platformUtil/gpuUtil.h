@@ -19,6 +19,7 @@ public:
     static const char* getGPUSupportExtensions();
     static bool isSupportETC1();
     static bool isSupportPVR();
+    static int getMaxBinding();
 };
 
 

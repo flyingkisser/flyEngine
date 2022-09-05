@@ -29,8 +29,7 @@
 USE_NS_FLYENGINE;
 
 static material2* createMaterial(float ambient,float diffuse,float specular,float shineness){
-    return NULL;
-//    return new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
+    return new material2(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
 }
 
 static void init_light_direction(){
@@ -53,7 +52,6 @@ void test_oneSpotLight_oneCube(){
     }
     cubeObj->setPosition(glm::vec3(0,0,-6));
     material2* mt=createMaterial(1.0, 0.8, 0.8, 8);
-//    material* mt=new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8);
 //    mt->setSpecularTex("res/wood_specular.png");
     cubeObj->setMaterial(mt);
     world::getInstance()->addChild(cubeObj);
@@ -66,8 +64,8 @@ void test_oneSpotLight_oneCube(){
     float am=0.1f;
     float diff=0.5f;
     float sp=0.9f;
-//    material* mtLight=new material(glm::vec3(am,am,am),glm::vec3(diff,diff,diff),glm::vec3(sp,sp,sp),2);
-    spotLight* lightObj1=new spotLight(glm::vec3(0.8,0.8,0.8),NULL,30,60);
+    material2* mtLight=createMaterial(am, diff, sp, 2);
+    spotLight* lightObj1=new spotLight(glm::vec3(0.8,0.8,0.8),mtLight,30,60);
     if(!lightObj1->init()){
        flylog("lightObj1 init failed!");
        return;
@@ -98,11 +96,8 @@ void test_oneSpotLight_multiCube_specularMap(){
     float am=0.1f;
     float diff=0.3f;
     float sp=0.8f;
-//    material* mt=new material(glm::vec3(am,am,am),glm::vec3(diff,diff,diff),glm::vec3(sp,sp,sp),2);
-//    material* mt=new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8);
-    material2* mt=createMaterial(1,0.8,0.5,8);
-//    material* mt=NULL;
-//    mt->setSpecularTex("res/wood_specular.png");
+    material2* mt=createMaterial(am,diff,sp,2);
+    mt->setSpecularTex("res/wood_specular.png");
     
     for(int i=0;i<50;i++){
         cubeTex* cubeObj=new cubeTex("res/wood.png");
@@ -125,8 +120,8 @@ void test_oneSpotLight_multiCube_specularMap(){
     am=0.1f;
     diff=0.8f;
     sp=0.8f;
-//    material* mtLight=new material(glm::vec3(am,am,am),glm::vec3(diff,diff,diff),glm::vec3(sp,sp,sp),2);
-    spotLight* lightObj1=new spotLight(glm::vec3(1,1.0,1.0),NULL,10,30);
+    material2* mtLight=createMaterial(am,diff,sp,2);
+    spotLight* lightObj1=new spotLight(glm::vec3(1,1.0,1.0),mtLight,10,30);
     if(!lightObj1->init()){
        flylog("lightObj1 init failed!");
        return;
@@ -153,8 +148,8 @@ void test_oneSpotLight_multiCube_specularMap_cameraControl(){
     float am=0.1f;
     float diff=0.3f;
     float sp=0.8f;
-//    material* mt=new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8);
-//    mt->setSpecularTex("res/wood_specular.png");
+    material2* mt=createMaterial(am,diff,sp,2);
+    mt->setSpecularTex("res/wood_specular.png");
     int programID=0;
     
     for(int i=0;i<50;i++){
@@ -169,8 +164,7 @@ void test_oneSpotLight_multiCube_specularMap_cameraControl(){
         cubeObj->setScale(glm::vec3(0.2,0.2,0.2));
         cubeObj->setPosition(glm::vec3(x,y,z));
         flylog("add %f %f",x,y);
-        
-        cubeObj->setMaterial(NULL);
+        cubeObj->setMaterial(mt);
         world::getInstance()->addChild(cubeObj);
         if(!programID)
             programID=cubeObj->getShader()->getProgramID();
@@ -179,8 +173,8 @@ void test_oneSpotLight_multiCube_specularMap_cameraControl(){
     am=0.0f;
     diff=0.3f;
     sp=1.0f;
-//    material* mtLight=new material(glm::vec3(am,am,am),glm::vec3(diff,diff,diff),glm::vec3(sp,sp,sp),2);
-    spotLight* lightObj1=new spotLight(glm::vec3(1,1.0,1.0),NULL,10,20);
+    material2* mtLight=createMaterial(am,diff,sp,2);
+    spotLight* lightObj1=new spotLight(glm::vec3(1,1.0,1.0),mtLight,10,20);
     if(!lightObj1->init()){
        flylog("lightObj1 init failed!");
        return;

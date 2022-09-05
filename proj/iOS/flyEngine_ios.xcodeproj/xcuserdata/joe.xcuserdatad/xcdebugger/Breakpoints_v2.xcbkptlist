@@ -430,9 +430,9 @@
             filePath = "../../common/error.cpp"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "28"
-            endingLineNumber = "28"
-            landmarkName = "checkGLError()"
+            startingLineNumber = "67"
+            endingLineNumber = "67"
+            landmarkName = "checkGLError(pos)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>

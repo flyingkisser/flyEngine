@@ -24,7 +24,7 @@ material2::material2(glm::vec3 ambient,glm::vec3 diffuse,glm::vec3 specular,floa
 }
 
 bool material2::setDiffuseTex(const char* szTex){
-    texture2* m_texDiffuse=new texture2(szTex);
+    m_texDiffuse=new texture2(szTex);
     if(!m_texDiffuse->init())
        return false;
     m_texDiffuse->glInit();

@@ -51,13 +51,13 @@ void testMainBegin(){
 //    test_onePointLight_multiCube_specularMap();
     
     //手电筒光源测试
-    test_oneSpotLight_oneCube();
+//    test_oneSpotLight_oneCube();
 //    test_oneSpotLight_multiCube_specularMap();
 //    test_oneSpotLight_multiCube_specularMap_cameraControl();
 //    test_vector();
 //    test_one_model();
     
-//    test_depths();
+    test_depths();
 //    test_depths_2();
 //    test_stencil();
 //    test_stencil_2();

@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 
-int checkGLError ();
+int checkGLError (const char* str);
 
 #endif /* error_h */
 

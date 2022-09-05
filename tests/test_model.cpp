@@ -49,8 +49,7 @@
 USE_NS_FLYENGINE
 
 static material2* createMaterial(float ambient,float diffuse,float specular,float shineness){
-//    return new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
-    return NULL;
+    return new material2(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
 }
 
 

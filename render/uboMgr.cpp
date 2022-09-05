@@ -41,38 +41,19 @@ void uboMgr::linkUBOAndBindPoint(int programID,const char* uboNameInShader,int b
 
 //指定绑定点序号,ubo内存的大小，
 int uboMgr::createUBO(int bindPoint,int uboSize,const char* uboNameOnlyForLog){
-   unsigned int ubo;
-   glGenBuffers(1,&ubo);
-   glBindBuffer(GL_UNIFORM_BUFFER,ubo);
-   glBufferData(GL_UNIFORM_BUFFER,uboSize,NULL,GL_DYNAMIC_DRAW);
-   glBindBufferRange(GL_UNIFORM_BUFFER,bindPoint,ubo,0,uboSize);
-   if(uboNameOnlyForLog==NULL)
+    unsigned int ubo;
+    glGenBuffers(1,&ubo);
+    glBindBuffer(GL_UNIFORM_BUFFER,ubo);
+    glBufferData(GL_UNIFORM_BUFFER,uboSize,NULL,GL_DYNAMIC_DRAW);
+    glBindBufferRange(GL_UNIFORM_BUFFER,bindPoint,ubo,0,uboSize);
+    checkGLError("createUBO glBindBufferRange");
+    if(uboNameOnlyForLog==NULL)
        flylog("uboMgr::createUBO ubo id %d size %d bind at %d",ubo,uboSize,bindPoint);
-   else
+    else
        flylog("uboMgr::createUBO ubo id %d size %d bind at %d %s",ubo,uboSize,bindPoint,uboNameOnlyForLog);
-   return ubo;
+    return ubo;
 }
 
-// int uboMgr::createUBO(int programID,int bindPoint,const char* uboName){
-//     unsigned int ubo;
-//     int blockSize=0;
-//     int blockIndex=0;
-//     blockIndex=glGetUniformBlockIndex(programID, uboName);
-//     if(blockIndex<0){
-//         flylog("createUBO:cannot find block index %s,return!",uboName);
-//         return 0;
-//     }
-//     glGetActiveUniformBlockiv(programID,blockIndex,GL_UNIFORM_BLOCK_DATA_SIZE,&blockSize);
-//     glUniformBlockBinding(programID, blockIndex, bindPoint);
-    
-    
-//     glGenBuffers(1,&ubo);
-//     glBindBuffer(GL_UNIFORM_BUFFER,ubo);
-//     glBufferData(GL_UNIFORM_BUFFER,blockSize,NULL,GL_DYNAMIC_DRAW);
-//     glBindBufferBase(GL_UNIFORM_BUFFER,bindPoint,ubo);
-//     flylog("uboMgr::createUBO ubo id %d size %d bind at %d %s",ubo,blockSize,bindPoint,uboName);
-//     return ubo;
-// }
 
 //写入数据
 //指定ubo，描述变量的大小和内存位置的vector

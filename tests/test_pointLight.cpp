@@ -27,8 +27,8 @@
 USE_NS_FLYENGINE
 
 static material2* createMaterial(float ambient,float diffuse,float specular,float shineness){
-//    return new material(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
-    return NULL;
+    return new material2(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
+//    return NULL;
 }
 
 static void init_light_direction(){
@@ -57,7 +57,8 @@ void test_onePointLight_oneCube(){
     controlObj->bindNode(cubeObj);
     
     //光源1
-//    material* mtLight=new material(glm::vec3(0.3,0.3,0.3),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.8,0.8),2);
+//    material* mtLight=new material2(glm::vec3(0.3,0.3,0.3),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.8,0.8),2);
+    material2* mtLight=createMaterial(0.3, 0.8, 0.8, 2);
     pointLight* lightObj1=new pointLight(glm::vec3(0.8,0.8,0.8),NULL,0);
     if(!lightObj1->init()){
        flylog("point light init failed!");
@@ -88,7 +89,7 @@ void test_onePointLight_oneCube_changingColor(){
       return;
     }
     cubeObj->setPosition(glm::vec3(0,0,-8));
-//    cubeObj->setMaterial(new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8));
+    cubeObj->setMaterial(new material2(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8));
     world::getInstance()->addChild(cubeObj);
     
     //通过按住鼠标右键，控制模型旋转
@@ -97,7 +98,8 @@ void test_onePointLight_oneCube_changingColor(){
     
     //光源1
 //    material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
-    pointLight* lightObj1=new pointLight(glm::vec3(1,1,1),NULL);
+    material2* mtLight=createMaterial(0.1, 1, 1, 1);
+    pointLight* lightObj1=new pointLight(glm::vec3(1,1,1),mtLight);
     if(!lightObj1->init()){
        flylog("point light init failed!");
        return;
@@ -132,7 +134,7 @@ void test_onePointLight_twoCube(){
     }
     cubeObj1->setPosition(glm::vec3(-1,0,-8));
     cubeObj1->setScale(0.8);
-//    cubeObj1->setMaterial(new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8));
+    cubeObj1->setMaterial(new material2(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8));
     world::getInstance()->addChild(cubeObj1);
     
     //普通cube2
@@ -143,13 +145,14 @@ void test_onePointLight_twoCube(){
     }
     cubeObj2->setPosition(glm::vec3(1,0,-8));
     cubeObj2->setScale(0.8);
-//    cubeObj2->setMaterial(new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),64));
+    cubeObj2->setMaterial(new material2(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),64));
     world::getInstance()->addChild(cubeObj2);
  
     
     //光源1
 //    material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
-    pointLight* lightObj1=new pointLight(glm::vec3(1,1,1),NULL);
+    material2* mtLight=createMaterial(0.1, 1, 1, 1);
+    pointLight* lightObj1=new pointLight(glm::vec3(1,1,1),mtLight);
     if(!lightObj1->init()){
        flylog("lightObj1 init failed!");
        return;
@@ -178,7 +181,7 @@ void test_twoPointLight_oneCube(){
       return;
     }
     cubeObj->setPosition(glm::vec3(0,0,-5));
-//    cubeObj->setMaterial(createMaterial(0.2, 0.8, 0.5, 8));
+    cubeObj->setMaterial(createMaterial(0.2, 0.8, 0.5, 8));
     world::getInstance()->addChild(cubeObj);
     
     //通过按住鼠标右键，控制模型旋转
@@ -189,7 +192,7 @@ void test_twoPointLight_oneCube(){
     material2* mtLight=createMaterial(1,1,1,1);
 //    material* mtLight=NULL;
     //光源1
-    pointLight* lightObj1=new pointLight(glm::vec3(1,0,0),NULL);
+    pointLight* lightObj1=new pointLight(glm::vec3(1,0,0),mtLight);
     if(!lightObj1->init()){
         flylog("lightObj1 init failed!");
         return;
@@ -229,11 +232,8 @@ void test_onePointLight_oneCube_specularMap(){
     cubeObj->setPosition(glm::vec3(0,0,-8));
     
     material2* mt=createMaterial(1,0.8,0.5,8);
-//    material* mt=new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8);
-//    material* mt=NULL;
-//    mt->setSpecularTex("res/wood_specular.png");
+    mt->setSpecularTex("res/wood_specular.png");
     cubeObj->setMaterial(mt);
-//    cubeObj->setShader(shaderMgr::get3d1texPongWithSpecularTexShader());
     world::getInstance()->addChild(cubeObj);
     
     //通过按住鼠标右键，控制模型旋转
@@ -241,8 +241,8 @@ void test_onePointLight_oneCube_specularMap(){
     controlObj->bindNode(cubeObj);
     
     //光源1
-//    material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
-    pointLight* lightObj1=new pointLight(glm::vec3(1,1.0,1.0),NULL);
+    material2* mtLight=createMaterial(0.1, 1, 1, 1);
+    pointLight* lightObj1=new pointLight(glm::vec3(1,1.0,1.0),mtLight);
     if(!lightObj1->init()){
        flylog("lightObj1 init failed!");
        return;
@@ -270,8 +270,6 @@ void test_onePointLight_twoCube_specularMap(){
     }
     cubeObj1->setPosition(glm::vec3(-1,0,-8));
     material2* mt1=createMaterial(1,0.8,0.5,8);
-//    material* mt1=new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8);
-//    material* mt1=NULL;
     cubeObj1->setMaterial(mt1);
     world::getInstance()->addChild(cubeObj1);
     
@@ -282,9 +280,9 @@ void test_onePointLight_twoCube_specularMap(){
         return;
     }
     cubeObj2->setPosition(glm::vec3(1,0,-8));
-//    material* mt2=new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8);
-//    mt2->setSpecularTex("res/wood_specular.png");
-//    cubeObj2->setMaterial(mt2);
+    material2* mt2=new material2(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8);
+    mt2->setSpecularTex("res/wood_specular.png");
+    cubeObj2->setMaterial(mt2);
 
     world::getInstance()->addChild(cubeObj2);
     
@@ -293,8 +291,8 @@ void test_onePointLight_twoCube_specularMap(){
 //    controlObj->bindNode(cubeObj);
     
     //光源1
-//    material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
-    pointLight* lightObj1=new pointLight(glm::vec3(1,1.0,1.0),NULL);
+    material2* mtLight=createMaterial(0.1, 1, 1, 1);
+    pointLight* lightObj1=new pointLight(glm::vec3(1,1.0,1.0),mtLight);
     if(!lightObj1->init()){
        flylog("lightObj1 init failed!");
        return;
@@ -327,14 +325,13 @@ void test_onePointLight_multiCube_specularMap(){
         cubeObj->setPosition(glm::vec3(x,y,-8));
         flylog("add %f %f",x,y);
 //        material* mt=new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8);
-//        mt->setSpecularTex("res/wood_specular.png");
-//        material* mt=NULL;
+        mt->setSpecularTex("res/wood_specular.png");
         cubeObj->setMaterial(mt);
         world::getInstance()->addChild(cubeObj);
     }
    
     //光源1
-//    material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
+    material2* mtLight=createMaterial(0.1, 1, 1, 1);
     pointLight* lightObj1=new pointLight(glm::vec3(1,1.0,1.0),NULL);
     if(!lightObj1->init()){
        flylog("lightObj1 init failed!");
@@ -355,9 +352,7 @@ void test_onePointLight_multiCube_specularMap(){
 void test_multiLight_multiCube_specularMap(){
     float x,y,z;
     init_light_direction();
-//    material* mtLight=NULL;
     material2* mtLight=createMaterial(0.1,1,1,1);
-//    material* mtLight=new material(glm::vec3(0.1,0.1,0.1),glm::vec3(1,1,1),glm::vec3(1,1,1),1);
     timerUtil* timerMgrObj=new timerUtil("light_test_timer");
     //普通cube
     for(int i=0;i<80;i++){
@@ -372,9 +367,9 @@ void test_multiLight_multiCube_specularMap(){
         float z=0.0f;
         cubeObj->setScale(glm::vec3(scale,scale,scale));
         cubeObj->setPosition(glm::vec3(x,y,z));
-//        material* mt=new material(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8);
-//        mt->setSpecularTex("res/wood_specular.png");
-//        cubeObj->setMaterial(mt);
+        material2* mt=new material2(glm::vec3(1.0f,0.9,0.9),glm::vec3(0.8,0.8,0.8),glm::vec3(0.8,0.5,0.5),8);
+        mt->setSpecularTex("res/wood_specular.png");
+        cubeObj->setMaterial(mt);
         cubeObj->setShader(shaderMgr::get3d1texPongWithSpecularTexShader());
         world::getInstance()->addChild(cubeObj);
         flylog("add cube %d %f %f",i,x,y);

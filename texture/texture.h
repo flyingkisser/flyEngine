@@ -6,8 +6,8 @@
 //  Copyright © 2022 joe. All rights reserved.
 //
 
-//#ifndef texture_h
-//#define texture_h
+#ifndef texture_h
+#define texture_h
 
 #include <stdio.h>
 #include <string>
@@ -48,4 +48,4 @@ public:
 
 NS_FLYENGINE_END
 
-//#endif /* texture_h */
+#endif /* texture_h */

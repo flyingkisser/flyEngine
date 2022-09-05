@@ -48,3 +48,8 @@ bool gpuUtil::isSupportPVR(){
     return extStr.find("GL_IMG_texture_compression_pvrtc")!=std::string::npos;
 }
 
+int gpuUtil::getMaxBinding(){
+    int max_binding_point=0;
+    glGetIntegerv(GL_MAX_UNIFORM_BUFFER_BINDINGS,&max_binding_point);
+    return max_binding_point;
+}

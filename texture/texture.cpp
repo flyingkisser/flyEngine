@@ -19,14 +19,14 @@
 
 USE_NS_FLYENGINE
 
-flyEngine::texture::~texture(){
+texture::~texture(){
     if(_dataBuf){
         free(_dataBuf);
         flylog("~texture:_dataBuf %llu freed!",_dataBuf);
     }
 }
 
-flyEngine::texture::texture(const char* szPath,bool bFlipY){
+texture::texture(const char* szPath,bool bFlipY){
 #ifdef BUILD_IOS
     const char* szfullPath=ios_dirUtil::getFileFullPathName(szPath);
     _strPath=szfullPath;
@@ -36,7 +36,7 @@ flyEngine::texture::texture(const char* szPath,bool bFlipY){
     _bFlipY=bFlipY;
 }
 
-bool flyEngine::texture::init(){
+bool texture::init(){
     char* szPath=(char*)_strPath.c_str();
     struct_texture st={0};
     if(pngUtil::isPng(szPath)){
@@ -78,13 +78,13 @@ bool flyEngine::texture::init(){
     }
 }
 
-flyEngine::size flyEngine::texture::getSize(){
+flyEngine::size texture::getSize(){
   return flyEngine::size{(float)_width,(float)_height};
 };
 
 
 //texturePos from GL_TEXTURE0,GL_TEXTURE1
-void flyEngine::texture::glInit(int texturePos){
+void texture::glInit(int texturePos){
     glRef::glInit();
     glGenTextures(1,&_textureID);
     if(texturePos){

@@ -70,6 +70,8 @@
 		D8A5B1AE285F0D0D00B76852 /* main2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5B1AD285F0D0D00B76852 /* main2.cpp */; };
 		D8A6E8B828C4DE0600C3DE56 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A6E8B728C4DE0600C3DE56 /* texture.cpp */; };
 		D8A6E8BB28C4DE6200C3DE56 /* texture2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A6E8BA28C4DE6200C3DE56 /* texture2.cpp */; };
+		D8A6E8C328C4F37700C3DE56 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D85234A028A9549400E69D25 /* shader.cpp */; };
+		D8A6E8C528C4F37700C3DE56 /* shaderMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D852349F28A9549400E69D25 /* shaderMgr.cpp */; };
 		D8A8498C28694A0E000E231C /* test_c_plusplus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A8498B28694A0E000E231C /* test_c_plusplus.cpp */; };
 		D8B374D72844A8F400C3DF0C /* test_model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B374D62844A8F400C3DF0C /* test_model.cpp */; };
 		D8BB1B98255A6A0E00AF9FD5 /* mouseEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B97255A6A0E00AF9FD5 /* mouseEvent.cpp */; };
@@ -4488,6 +4490,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8A6E8C328C4F37700C3DE56 /* shader.cpp in Sources */,
+				D8A6E8C528C4F37700C3DE56 /* shaderMgr.cpp in Sources */,
 				D8BB1B98255A6A0E00AF9FD5 /* mouseEvent.cpp in Sources */,
 				D8847652289920A5004EF587 /* glslUtil.cpp in Sources */,
 				8E86C9C326638480004B3BB7 /* testPhong.cpp in Sources */,
