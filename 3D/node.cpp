@@ -161,10 +161,9 @@ void node::glUpdateLight(){
     int i=0;
     
     //平行光
-//    directionLight* lightDir=world::getInstance()->getDirectiontLight();
-//    if(lightDir!=NULL)
-//        lightDir->glUpdate(_gl_program);
-    
+   directionLight* lightDir=world::getInstance()->getDirectiontLight();
+   if(lightDir!=NULL)
+       lightDir->update(0);
     
     //点光源初始化
      i=0;
@@ -172,14 +171,12 @@ void node::glUpdateLight(){
     for(auto c : pointLightVector){
         pointLight* lightObj=(pointLight*)c;
         lightObj->update(i++);
-//        lightObj->glUpdate(i++);
     }
     //聚光灯初始化
     i=0;
     std::vector<spotLight*> spotLightVector=world::getInstance()->getSpotLightVector();
     for(auto c : spotLightVector){
        spotLight* lightObj=(spotLight*)c;
-//        lightObj->glUpdate(getShader()->getProgramID(),i++);
-       lightObj->update(getShader()->getProgramID(),i++);
+       lightObj->update(i++);
     }
 }

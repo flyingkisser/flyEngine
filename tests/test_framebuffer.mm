@@ -22,6 +22,10 @@
 #include "sprite.h"
 #include "shaderMgr.h"
 
+#ifdef BUILD_IOS
+#import "ViewController.h"
+#endif
+
 USE_NS_FLYENGINE
 
 void test_framebuffer(){
@@ -30,6 +34,7 @@ void test_framebuffer(){
     cubeObj->init();
     cubeObj->setPosition(glm::vec3(0,0,-3));
     cubeObj->setRotation(glm::vec3(30,30,0));
+    world::getInstance()->getControl()->bindNode(cubeObj);
     
     fboStruct st=fbo::createFBO();
     sprite* sp=new sprite(st.texID);
@@ -39,9 +44,21 @@ void test_framebuffer(){
     world::getInstance()->setCBBeforeDrawCall([st](){
         glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);
     });
-    world::getInstance()->setCBAfterDrawCall([st,cam,sp,cubeObj](){
+    
+#ifdef BUILD_IOS
+    GLKView* view=[ViewController getView];
+#else
+    int view=0;
+#endif
+    
+    world::getInstance()->setCBBeforeRender([st,cam,sp,cubeObj,view](){
         cubeObj->draw();
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#ifdef BUILD_MAC
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);   //绑定默认的framebuffer
+#elif BUILD_IOS
+        [view bindDrawable];    //绑定GLKView创建的framebuffer
+#endif
+
         glDisable(GL_DEPTH_TEST);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -63,6 +80,7 @@ void test_framebuffer_mirror(){
     cubeObj->init();
     cubeObj->setPosition(glm::vec3(0,0,-3));
     cubeObj->setRotation(glm::vec3(30,30,0));
+    world::getInstance()->getControl()->bindNode(cubeObj);
     
     fboStruct st=fbo::createFBO();
     sprite* sp=new sprite(st.texID);
@@ -74,9 +92,19 @@ void test_framebuffer_mirror(){
     world::getInstance()->setCBBeforeDrawCall([st](){
         glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);
     });
-    world::getInstance()->setCBAfterDrawCall([st,cam,sp,cubeObj](){
+    
+#ifdef BUILD_IOS
+    GLKView* view=[ViewController getView];
+#else
+    int view=0;
+#endif
+    world::getInstance()->setCBAfterDrawCall([st,cam,sp,cubeObj,view](){
         cubeObj->draw();
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#ifdef BUILD_MAC
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);   //绑定默认的framebuffer
+#elif BUILD_IOS
+        [view bindDrawable];    //绑定GLKView创建的framebuffer
+#endif
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT);
         cubeObj->draw();
@@ -91,6 +119,7 @@ void test_framebuffer_kernel(){
     cubeObj->init();
     cubeObj->setPosition(glm::vec3(0,0,-3));
     cubeObj->setRotation(glm::vec3(30,30,0));
+    world::getInstance()->getControl()->bindNode(cubeObj);
     
     fboStruct st=fbo::createFBO();
     sprite* sp=new sprite(st.texID);
@@ -102,9 +131,18 @@ void test_framebuffer_kernel(){
     world::getInstance()->setCBBeforeDrawCall([st](){
         glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);
     });
-    world::getInstance()->setCBAfterDrawCall([st,cam,sp,cubeObj](){
+#ifdef BUILD_IOS
+    GLKView* view=[ViewController getView];
+#else
+    int view=0;
+#endif
+    world::getInstance()->setCBAfterDrawCall([st,cam,sp,cubeObj,view](){
         cubeObj->draw();
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+#ifdef BUILD_MAC
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);   //绑定默认的framebuffer
+#elif BUILD_IOS
+        [view bindDrawable];    //绑定GLKView创建的framebuffer
+#endif
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT |GL_DEPTH_BUFFER_BIT);
         glDisable(GL_DEPTH_TEST);

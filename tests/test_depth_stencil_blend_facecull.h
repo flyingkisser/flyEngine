@@ -14,6 +14,9 @@ void test_depths();
 void test_depths_2();
 void test_stencil();
 void test_stencil_2();
+void test_stencil_3();
+void test_stencil_4();
+
 void test_blend_1();
 void test_blend_2();
 void test_facecull();

@@ -29,13 +29,9 @@ bool cubeColor::init(){
     if(_shaderObj==NULL)
        return false;
     _gl_program=_shaderObj->getProgramID();
-    glInit();
-    return true;
-}
-
-void cubeColor::glInit(){
     int descArr[]={3};
     initVAO(g_verticeArr, sizeof(g_verticeArr), descArr, 1);
+    return true;
 }
 
 void cubeColor::draw(){

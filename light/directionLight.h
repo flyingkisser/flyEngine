@@ -20,8 +20,8 @@ public:
     directionLight(glm::vec3 color=glm::vec3(1.0,1.0,1.0),glm::vec3 dir=glm::vec3(-0.2,-1,-0.3),
                                   float am=1.0f,float diff=0.1,float spec=0,float shine=0);
     ~directionLight();
-    void glUpdate();
-    void update();
+    void glUpdate(int light_index);
+    void update(int light_index);
 private:
     glm::vec3 m_vec3Dir;
     glm::vec3 m_vec3Color;

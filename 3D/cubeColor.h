@@ -33,7 +33,7 @@ public:
     glm::vec3 getColor(){return m_vec3Color;};
     
     bool init();
-    void glInit();
+    
     void setColor(glm::vec3 color){
         m_vec3Color=color;
         _dirtyColor=true;

@@ -138,8 +138,8 @@ std::vector<Texture> model::loadMaterialTextures(aiMaterial *aiMT, aiTextureType
 bool model::init(){
     setPosition(glm::vec3(0,0,-5));
     if(_shaderObj==NULL){
-//        _shaderObj=shaderMgr::getModelShader();
-        _shaderObj=shaderMgr::get3d1texPongShader();
+        _shaderObj=shaderMgr::getModelShader();
+//        _shaderObj=shaderMgr::get3d1texPongShader();
     }
     if(_shaderObj==NULL){
         flylog("model::init shaderObj is null,return!");
@@ -148,10 +148,6 @@ bool model::init(){
     _gl_program=_shaderObj->getProgramID();
     glInit();
     return true;
-}
-
-void model::glInit(){
-
 }
 
 void model::draw(){

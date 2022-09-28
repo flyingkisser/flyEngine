@@ -13,16 +13,6 @@
 
 unsigned int g_ubo_id_mat_2d=0;
 unsigned int g_ubo_id_mat_3d=0;
-//unsigned int g_ubo_id_light_dir0=0;
-//unsigned int g_ubo_id_light_point0=0;
-//unsigned int g_ubo_id_light_point1=0;
-//unsigned int g_ubo_id_light_point2=0;
-//unsigned int g_ubo_id_light_point3=0;
-//unsigned int g_ubo_id_light_spot0=0;
-//unsigned int g_ubo_id_light_spot1=0;
-//unsigned int g_ubo_id_light_spot2=0;
-//unsigned int g_ubo_id_light_spot3=0;
-
 unsigned int g_ubo_id_arr[100]={0};
 
 USE_NS_FLYENGINE
@@ -75,14 +65,7 @@ void uboMgr::writeData(unsigned int ubo,int num,int sizeArr[],int offsetArr[],vo
 void uboMgr::initAllUbo(){
     g_ubo_id_mat_2d=uboMgr::createUBO(ubo_binding_mat_2d,ubo_size_mat_2d,"mat2d");
     g_ubo_id_mat_3d=uboMgr::createUBO(ubo_binding_mat_3d,ubo_size_mat_3d,"mat3d");
-    g_ubo_id_arr[ubo_binding_light_dir0]=uboMgr::createUBO(ubo_binding_light_dir0, ubo_size_light_dir,"light_direction0");
-    g_ubo_id_arr[ubo_binding_light_point0]=uboMgr::createUBO(ubo_binding_light_point0, ubo_size_light_point,"light_point0");
-    g_ubo_id_arr[ubo_binding_light_point1]=uboMgr::createUBO(ubo_binding_light_point1, ubo_size_light_point,"light_point1");
-    g_ubo_id_arr[ubo_binding_light_point2]=uboMgr::createUBO(ubo_binding_light_point2, ubo_size_light_point,"light_point2");
-    g_ubo_id_arr[ubo_binding_light_point3]=uboMgr::createUBO(ubo_binding_light_point3, ubo_size_light_point,"light_point3");
-    
-    g_ubo_id_arr[ubo_binding_light_spot0]=uboMgr::createUBO(ubo_binding_light_spot0, ubo_size_light_spot,"light_spot0");
-    g_ubo_id_arr[ubo_binding_light_spot1]=uboMgr::createUBO(ubo_binding_light_spot1, ubo_size_light_spot,"light_spot1");
-    g_ubo_id_arr[ubo_binding_light_spot2]=uboMgr::createUBO(ubo_binding_light_spot2, ubo_size_light_spot,"light_spot2");
-    g_ubo_id_arr[ubo_binding_light_spot3]=uboMgr::createUBO(ubo_binding_light_spot3, ubo_size_light_spot,"light_spot3");
+    g_ubo_id_arr[ubo_binding_light_dir]=uboMgr::createUBO(ubo_binding_light_dir, ubo_size_light_dir_arr,"light_dir");
+    g_ubo_id_arr[ubo_binding_light_point]=uboMgr::createUBO(ubo_binding_light_point, ubo_size_light_point_arr,"light_point");
+    g_ubo_id_arr[ubo_binding_light_spot]=uboMgr::createUBO(ubo_binding_light_spot, ubo_size_light_spot_arr,"light_spot");
 }

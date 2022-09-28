@@ -53,6 +53,7 @@
 #define uniform_name_mat_proj   "matProj"
 #define uniform_name_mat_camera "matCamera"
 #define uniform_name_mat_model  "matModel"
+#define uniform_name_mat_model_arr  "matModelArr"
 
 #define uniform_name_material_enabled   "mt.enabled"
 #define uniform_name_material_ambient   "mt.ambient"
@@ -105,22 +106,19 @@
 
 #define ubo_binding_mat_3d 0
 #define ubo_binding_mat_2d 1
-#define ubo_binding_light_dir0 8
-#define ubo_binding_light_point0 10
-#define ubo_binding_light_point1 11
-#define ubo_binding_light_point2 12
-#define ubo_binding_light_point3 13
-#define ubo_binding_light_spot0 20
-#define ubo_binding_light_spot1 21
-#define ubo_binding_light_spot2 22
-#define ubo_binding_light_spot3 23
+#define ubo_binding_light_dir 10
+#define ubo_binding_light_point 11
+#define ubo_binding_light_spot 12
 
 #define ubo_size_mat_3d 140
 #define ubo_size_mat_2d 140
-#define ubo_size_light_dir 60
-#define ubo_size_light_point 112
-#define ubo_size_light_spot 120
 
+#define ubo_size_light_dir 64
+#define ubo_size_light_dir_arr 256
+#define ubo_size_light_point 112
+#define ubo_size_light_point_arr 448
+#define ubo_size_light_spot 128
+#define ubo_size_light_spot_arr 512
 
 extern float g_verticeArr[108];
 extern float g_verticeArrWithTexCoord[180];

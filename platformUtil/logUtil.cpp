@@ -9,6 +9,8 @@
 
 #include <stdarg.h>
 #include <string>
+#include <errno.h>
+#include <string.h>
 
 #include "logUtil.h"
 #include "timeUtil.h"
@@ -64,4 +66,23 @@ void flylogNoTime(const char* fmt,...){
     szFmt[strlen(szFmt)]='\n';
     vfprintf(stdout,szFmt,argList);
     va_end(argList);//将ap置空
+}
+
+void flylogErrno(const char* fmt,...){
+    va_list argList;
+    char szBuf[1024*10]={0};
+    va_start(argList, fmt);  //将ap指向fmt后的第一个参数
+    int strLen=(int)strlen(fmt);
+    std::string strTime=timeUtil::getTimeStrLong();
+    if(strLen<=1024*10-2 &&fmt[strLen-1]!='\n'){
+        strcpy(szBuf,strTime.c_str());
+        strcat(szBuf,fmt);
+//        szBuf[strlen(szBuf)]='\n';
+        vfprintf(stdout,szBuf,argList);
+    }else{
+        vfprintf(stdout,fmt,argList);
+    }
+    va_end(argList);//将ap置空
+    
+    fprintf(stdout, "errno %d : %s\n", errno,strerror(errno));
 }

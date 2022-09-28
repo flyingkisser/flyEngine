@@ -44,6 +44,7 @@ void mesh::setupMesh(){
 void mesh::draw(shader* s){
     unsigned int diffuseIndex=0;
     unsigned int specularIndex=0;
+    bool debug=false;
     for(int i=0;i<m_vecTextures.size();i++){
         glActiveTexture(GL_TEXTURE0+i);
         glBindTexture(GL_TEXTURE_2D, m_vecTextures[i].id);
@@ -51,13 +52,13 @@ void mesh::draw(shader* s){
         TextureType texType=m_vecTextures[i].type;
         if(texType==TYPE_Diffuse){
             strIndex=std::to_string(diffuseIndex);
-            s->setInt(("texture"+strIndex).c_str(),diffuseIndex,true);
+            s->setInt(("texture"+strIndex).c_str(),diffuseIndex,debug);
             diffuseIndex++;
         }
         else if(texType==TYPE_Specular){
             strIndex=std::to_string(specularIndex);
-            s->setInt(("texture_specular_mesh_"+strIndex).c_str(),2+specularIndex,true);
-            s->setBool(("texture_specular_mesh_"+strIndex+"_enabled").c_str(),true,true);
+            s->setInt(("texture_specular_mesh_"+strIndex).c_str(),2+specularIndex,debug);
+            s->setBool(("texture_specular_mesh_"+strIndex+"_enabled").c_str(),true,debug);
             specularIndex++;
         }
     }
@@ -69,4 +70,35 @@ void mesh::draw(shader* s){
     glDrawElements(GL_TRIANGLES,(int)m_vecIndices.size(),GL_UNSIGNED_INT,0);
     glBindVertexArray(0);
     state::log((int)m_vecIndices.size());
+}
+
+void mesh::drawIns(shader* s,int count){
+    unsigned int diffuseIndex=0;
+    unsigned int specularIndex=0;
+    bool debug=false;
+    for(int i=0;i<m_vecTextures.size();i++){
+        glActiveTexture(GL_TEXTURE0+i);
+        glBindTexture(GL_TEXTURE_2D, m_vecTextures[i].id);
+        std::string strIndex;
+        TextureType texType=m_vecTextures[i].type;
+        if(texType==TYPE_Diffuse){
+            strIndex=std::to_string(diffuseIndex);
+            s->setInt(("texture"+strIndex).c_str(),diffuseIndex,debug);
+            diffuseIndex++;
+        }
+        else if(texType==TYPE_Specular){
+            strIndex=std::to_string(specularIndex);
+            s->setInt(("texture_specular_mesh_"+strIndex).c_str(),2+specularIndex,debug);
+            s->setBool(("texture_specular_mesh_"+strIndex+"_enabled").c_str(),true,debug);
+            specularIndex++;
+        }
+    }
+    if(_cb_before_draw)
+        _cb_before_draw();
+    //draw mesh
+    glEnable(GL_DEPTH_TEST);
+    glBindVertexArray(m_int_vao);
+    glDrawElementsInstanced(GL_TRIANGLES,(int)m_vecIndices.size(),GL_UNSIGNED_INT,0,count);
+    glBindVertexArray(0);
+    state::log((int)m_vecIndices.size()*count);
 }

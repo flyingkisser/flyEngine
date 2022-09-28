@@ -39,6 +39,8 @@
 		D84FB80926ABF59B003FDDE1 /* moveTo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84FB80726ABF59B003FDDE1 /* moveTo.cpp */; };
 		D85F1BD625022327005390DC /* VAOMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D85F1BD525022327005390DC /* VAOMgr.cpp */; };
 		D85F22FD27FEBC22007B0C19 /* libassimp.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D85F22FC27FEBC22007B0C19 /* libassimp.5.dylib */; };
+		D87D8E2A28C8710000E30C83 /* test_framebuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = D87D8E2928C870FF00E30C83 /* test_framebuffer.mm */; };
+		D87D8E3028CEF69E00E30C83 /* test_gs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87D8E2F28CEF69E00E30C83 /* test_gs.cpp */; };
 		D87EBFD426A5780B004ED7DE /* timerUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFD326A5780B004ED7DE /* timerUtil.cpp */; };
 		D87EBFD726A59A46004ED7DE /* timeUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFD626A59A46004ED7DE /* timeUtil.cpp */; };
 		D87EBFDB26A6F010004ED7DE /* action.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFDA26A6F010004ED7DE /* action.cpp */; };
@@ -73,6 +75,11 @@
 		D8A6E8C328C4F37700C3DE56 /* shader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D85234A028A9549400E69D25 /* shader.cpp */; };
 		D8A6E8C528C4F37700C3DE56 /* shaderMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D852349F28A9549400E69D25 /* shaderMgr.cpp */; };
 		D8A8498C28694A0E000E231C /* test_c_plusplus.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A8498B28694A0E000E231C /* test_c_plusplus.cpp */; };
+		D8B01CEB28DB3F25004EF910 /* billboard.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B01CE928DB3F25004EF910 /* billboard.cpp */; };
+		D8B01CEE28DB4EC9004EF910 /* cubeTexIns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B01CED28DB4EC9004EF910 /* cubeTexIns.cpp */; };
+		D8B01CF128DDE8A3004EF910 /* test_cubeTexIns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B01CF028DDE8A3004EF910 /* test_cubeTexIns.cpp */; };
+		D8B01CF728E0A3D1004EF910 /* nodeIns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B01CF628E0A3D1004EF910 /* nodeIns.cpp */; };
+		D8B01CFA28E17E4A004EF910 /* modelIns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B01CF928E17E4A004EF910 /* modelIns.cpp */; };
 		D8B374D72844A8F400C3DF0C /* test_model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B374D62844A8F400C3DF0C /* test_model.cpp */; };
 		D8BB1B98255A6A0E00AF9FD5 /* mouseEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B97255A6A0E00AF9FD5 /* mouseEvent.cpp */; };
 		D8BB1B9B255A6D1500AF9FD5 /* mouseEventMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B9A255A6D1500AF9FD5 /* mouseEventMgr.cpp */; };
@@ -88,7 +95,6 @@
 		D8EC7825287C766000415650 /* libfreetype.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EC7824287C764600415650 /* libfreetype.a */; };
 		D8EC7827287C795900415650 /* libbz2.1.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D8EC7826287C795900415650 /* libbz2.1.0.tbd */; };
 		D8EC782B287D1D5100415650 /* fontTTF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EC7829287D1D5100415650 /* fontTTF.cpp */; };
-		D8EC7831288147ED00415650 /* test_framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EC7830288147ED00415650 /* test_framebuffer.cpp */; };
 		D8EC783428815CF400415650 /* fbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EC783328815CF400415650 /* fbo.cpp */; };
 		D8EC78372882147F00415650 /* sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EC78362882147F00415650 /* sprite.cpp */; };
 		D8EC783A2886C24F00415650 /* test_sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8EC78392886C24F00415650 /* test_sprite.cpp */; };
@@ -1605,6 +1611,9 @@
 		D85F22FC27FEBC22007B0C19 /* libassimp.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.5.dylib; path = lib_x86/libassimp.5.dylib; sourceTree = "<group>"; };
 		D8691EE626B3FA2100D40717 /* 3d_color.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_color.vs; sourceTree = "<group>"; };
 		D8691EE726B3FA2100D40717 /* 3d_color.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_color.fs; sourceTree = "<group>"; };
+		D87D8E2928C870FF00E30C83 /* test_framebuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = test_framebuffer.mm; sourceTree = "<group>"; };
+		D87D8E2E28CEF69D00E30C83 /* test_gs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_gs.h; sourceTree = "<group>"; };
+		D87D8E2F28CEF69E00E30C83 /* test_gs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_gs.cpp; sourceTree = "<group>"; };
 		D87EBFD226A5780B004ED7DE /* timerUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = timerUtil.h; sourceTree = "<group>"; };
 		D87EBFD326A5780B004ED7DE /* timerUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = timerUtil.cpp; sourceTree = "<group>"; };
 		D87EBFD526A59A46004ED7DE /* timeUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = timeUtil.h; sourceTree = "<group>"; };
@@ -1689,6 +1698,16 @@
 		D8A6E8BA28C4DE6200C3DE56 /* texture2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = texture2.cpp; sourceTree = "<group>"; };
 		D8A8498A28694A0E000E231C /* test_c_plusplus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_c_plusplus.h; sourceTree = "<group>"; };
 		D8A8498B28694A0E000E231C /* test_c_plusplus.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_c_plusplus.cpp; sourceTree = "<group>"; };
+		D8B01CE928DB3F25004EF910 /* billboard.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = billboard.cpp; sourceTree = "<group>"; };
+		D8B01CEA28DB3F25004EF910 /* billboard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = billboard.h; sourceTree = "<group>"; };
+		D8B01CEC28DB4EC9004EF910 /* cubeTexIns.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = cubeTexIns.h; sourceTree = "<group>"; };
+		D8B01CED28DB4EC9004EF910 /* cubeTexIns.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = cubeTexIns.cpp; sourceTree = "<group>"; };
+		D8B01CEF28DDE8A3004EF910 /* test_cubeTexIns.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_cubeTexIns.h; sourceTree = "<group>"; };
+		D8B01CF028DDE8A3004EF910 /* test_cubeTexIns.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_cubeTexIns.cpp; sourceTree = "<group>"; };
+		D8B01CF528E0A3D1004EF910 /* nodeIns.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = nodeIns.h; sourceTree = "<group>"; };
+		D8B01CF628E0A3D1004EF910 /* nodeIns.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = nodeIns.cpp; sourceTree = "<group>"; };
+		D8B01CF828E17E4A004EF910 /* modelIns.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = modelIns.h; sourceTree = "<group>"; };
+		D8B01CF928E17E4A004EF910 /* modelIns.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = modelIns.cpp; sourceTree = "<group>"; };
 		D8B374D52844A8F400C3DF0C /* test_model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_model.h; sourceTree = "<group>"; };
 		D8B374D62844A8F400C3DF0C /* test_model.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_model.cpp; sourceTree = "<group>"; };
 		D8B374DA2844AE8000C3DF0C /* source_attribution.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = source_attribution.txt; sourceTree = "<group>"; };
@@ -1843,7 +1862,6 @@
 		D8EC7829287D1D5100415650 /* fontTTF.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fontTTF.cpp; sourceTree = "<group>"; };
 		D8EC782A287D1D5100415650 /* fontTTF.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fontTTF.h; sourceTree = "<group>"; };
 		D8EC782F288147ED00415650 /* test_framebuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_framebuffer.h; sourceTree = "<group>"; };
-		D8EC7830288147ED00415650 /* test_framebuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_framebuffer.cpp; sourceTree = "<group>"; };
 		D8EC783228815CF400415650 /* fbo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = fbo.h; sourceTree = "<group>"; };
 		D8EC783328815CF400415650 /* fbo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = fbo.cpp; sourceTree = "<group>"; };
 		D8EC78352882147F00415650 /* sprite.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sprite.h; sourceTree = "<group>"; };
@@ -3907,29 +3925,29 @@
 		D825DB6E249CB3C200C494E7 /* platformUtil */ = {
 			isa = PBXGroup;
 			children = (
-				D825DB6F249CB3EB00C494E7 /* randUtil.cpp */,
-				D825DB70249CB3EB00C494E7 /* randUtil.h */,
-				D825DB74249CC6C900C494E7 /* fileUtil.cpp */,
-				D825DB75249CC6C900C494E7 /* fileUtil.h */,
 				D825DB7924A0C4FA00C494E7 /* dirUtil.cpp */,
 				D825DB7A24A0C4FA00C494E7 /* dirUtil.h */,
-				D825DBAE24AC89DB00C494E7 /* platformUtil.h */,
-				D825DBBF24AED03300C494E7 /* threadUtil.h */,
-				D825DBC024AED03300C494E7 /* threadUtil.cpp */,
-				D89600F724D40EE100DF6FD3 /* gpuUtil.h */,
-				D89600F824D40EE100DF6FD3 /* gpuUtil.cpp */,
-				D8EF622D2519E32500B8588F /* stringUtil.h */,
-				D8EF622E2519E32500B8588F /* stringUtil.cpp */,
-				D810AEB4268B3BE3009B774B /* logUtil.h */,
-				D810AEB5268B3BE3009B774B /* logUtil.cpp */,
-				D87EBFD226A5780B004ED7DE /* timerUtil.h */,
-				D87EBFD326A5780B004ED7DE /* timerUtil.cpp */,
-				D87EBFD526A59A46004ED7DE /* timeUtil.h */,
-				D87EBFD626A59A46004ED7DE /* timeUtil.cpp */,
-				D87EBFE526A7CA3F004ED7DE /* mathUtil.h */,
-				D87EBFE626A7CA3F004ED7DE /* mathUtil.cpp */,
-				D8847650289920A5004EF587 /* glslUtil.h */,
+				D825DB74249CC6C900C494E7 /* fileUtil.cpp */,
+				D825DB75249CC6C900C494E7 /* fileUtil.h */,
 				D8847651289920A5004EF587 /* glslUtil.cpp */,
+				D8847650289920A5004EF587 /* glslUtil.h */,
+				D89600F824D40EE100DF6FD3 /* gpuUtil.cpp */,
+				D89600F724D40EE100DF6FD3 /* gpuUtil.h */,
+				D810AEB5268B3BE3009B774B /* logUtil.cpp */,
+				D810AEB4268B3BE3009B774B /* logUtil.h */,
+				D87EBFE626A7CA3F004ED7DE /* mathUtil.cpp */,
+				D87EBFE526A7CA3F004ED7DE /* mathUtil.h */,
+				D825DBAE24AC89DB00C494E7 /* platformUtil.h */,
+				D825DB6F249CB3EB00C494E7 /* randUtil.cpp */,
+				D825DB70249CB3EB00C494E7 /* randUtil.h */,
+				D8EF622E2519E32500B8588F /* stringUtil.cpp */,
+				D8EF622D2519E32500B8588F /* stringUtil.h */,
+				D825DBC024AED03300C494E7 /* threadUtil.cpp */,
+				D825DBBF24AED03300C494E7 /* threadUtil.h */,
+				D87EBFD326A5780B004ED7DE /* timerUtil.cpp */,
+				D87EBFD226A5780B004ED7DE /* timerUtil.h */,
+				D87EBFD626A59A46004ED7DE /* timeUtil.cpp */,
+				D87EBFD526A59A46004ED7DE /* timeUtil.h */,
 			);
 			path = platformUtil;
 			sourceTree = "<group>";
@@ -4000,13 +4018,17 @@
 				D8EC7821287C741300415650 /* test_text.cpp */,
 				D8EC7822287C741300415650 /* test_text.h */,
 				D8EC782F288147ED00415650 /* test_framebuffer.h */,
-				D8EC7830288147ED00415650 /* test_framebuffer.cpp */,
+				D87D8E2928C870FF00E30C83 /* test_framebuffer.mm */,
 				D8EC78382886C24F00415650 /* test_sprite.h */,
 				D8EC78392886C24F00415650 /* test_sprite.cpp */,
 				D8EC7841288AF69A00415650 /* test_skybox.h */,
 				D8EC7842288AF69A00415650 /* test_skybox.cpp */,
 				D8CFC87F2892B5B8007FD43A /* test_ubo.h */,
 				D8CFC8802892B5B8007FD43A /* test_ubo.cpp */,
+				D87D8E2E28CEF69D00E30C83 /* test_gs.h */,
+				D87D8E2F28CEF69E00E30C83 /* test_gs.cpp */,
+				D8B01CEF28DDE8A3004EF910 /* test_cubeTexIns.h */,
+				D8B01CF028DDE8A3004EF910 /* test_cubeTexIns.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -4063,12 +4085,18 @@
 				8ECA452C2688776400FDFC7A /* world.cpp */,
 				D810AEAE26849DCE009B774B /* node.h */,
 				D810AEAF26849DCE009B774B /* node.cpp */,
-				8E832EC626B675EF0003B019 /* cubeTex.h */,
-				8E832EC526B675EF0003B019 /* cubeTex.cpp */,
+				D8B01CF528E0A3D1004EF910 /* nodeIns.h */,
+				D8B01CF628E0A3D1004EF910 /* nodeIns.cpp */,
 				D8826A5526C3AA0700314F16 /* cubeColor.h */,
 				D8826A5626C3AA0700314F16 /* cubeColor.cpp */,
+				8E832EC626B675EF0003B019 /* cubeTex.h */,
+				8E832EC526B675EF0003B019 /* cubeTex.cpp */,
+				D8B01CEC28DB4EC9004EF910 /* cubeTexIns.h */,
+				D8B01CED28DB4EC9004EF910 /* cubeTexIns.cpp */,
 				D8EC783C288ACA1600415650 /* skybox.h */,
 				D8EC783D288ACA1600415650 /* skybox.cpp */,
+				D8B01CE928DB3F25004EF910 /* billboard.cpp */,
+				D8B01CEA28DB3F25004EF910 /* billboard.h */,
 			);
 			path = 3D;
 			sourceTree = "<group>";
@@ -4255,6 +4283,8 @@
 				D8CF0592271EBD3C00D26C07 /* mesh.cpp */,
 				D8CF0594271EEB4300D26C07 /* model.h */,
 				D8CF0595271EEB4300D26C07 /* model.cpp */,
+				D8B01CF828E17E4A004EF910 /* modelIns.h */,
+				D8B01CF928E17E4A004EF910 /* modelIns.cpp */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -4495,17 +4525,20 @@
 				D8BB1B98255A6A0E00AF9FD5 /* mouseEvent.cpp in Sources */,
 				D8847652289920A5004EF587 /* glslUtil.cpp in Sources */,
 				8E86C9C326638480004B3BB7 /* testPhong.cpp in Sources */,
+				D8B01CEB28DB3F25004EF910 /* billboard.cpp in Sources */,
 				D825DB8624AAEE5100C494E7 /* values.cpp in Sources */,
 				D87EBFFD26B16B70004ED7DE /* repeat.cpp in Sources */,
 				D87EC00026B16B96004ED7DE /* forever.cpp in Sources */,
 				D825DBA824AC7F7300C494E7 /* testMain.cpp in Sources */,
 				D89028392880059800152FFF /* state.cpp in Sources */,
 				D87EBFD726A59A46004ED7DE /* timeUtil.cpp in Sources */,
+				D87D8E2A28C8710000E30C83 /* test_framebuffer.mm in Sources */,
 				D87EC00326B2CF33004ED7DE /* test_action.cpp in Sources */,
 				D881DEEF24D80E2E0011F7B8 /* pngUtil.cpp in Sources */,
 				D8CFC8812892B5B8007FD43A /* test_ubo.cpp in Sources */,
 				D890282B287D5A9E00152FFF /* fontMgr.cpp in Sources */,
 				D8BB1B9E255BE08000AF9FD5 /* control.cpp in Sources */,
+				D87D8E3028CEF69E00E30C83 /* test_gs.cpp in Sources */,
 				D87EBFDE26A6F0D6004ED7DE /* moveBy.cpp in Sources */,
 				D8A6E8BB28C4DE6200C3DE56 /* texture2.cpp in Sources */,
 				D8BB1B9B255A6D1500AF9FD5 /* mouseEventMgr.cpp in Sources */,
@@ -4529,11 +4562,11 @@
 				D810AEB9268B3F1F009B774B /* test_node.cpp in Sources */,
 				D87EBFFA26AEDE4A004ED7DE /* rotateBy.cpp in Sources */,
 				D8EC782B287D1D5100415650 /* fontTTF.cpp in Sources */,
-				D8EC7831288147ED00415650 /* test_framebuffer.cpp in Sources */,
 				D810AEB6268B3BE3009B774B /* logUtil.cpp in Sources */,
 				D810AEB026849DCE009B774B /* node.cpp in Sources */,
 				D881DEF924DA8D180011F7B8 /* jpgUtil.cpp in Sources */,
 				D8A5B1AE285F0D0D00B76852 /* main2.cpp in Sources */,
+				D8B01CFA28E17E4A004EF910 /* modelIns.cpp in Sources */,
 				D8826A5726C3AA0700314F16 /* cubeColor.cpp in Sources */,
 				8ECA452E2688776400FDFC7A /* world.cpp in Sources */,
 				D8F37D7F26EF683600E5225B /* test_spotLight.cpp in Sources */,
@@ -4551,14 +4584,17 @@
 				D8EC7823287C741300415650 /* test_text.cpp in Sources */,
 				D810AEAD26835232009B774B /* glad.c in Sources */,
 				D87EBFF726AEB1D0004ED7DE /* scaleBy.cpp in Sources */,
+				D8B01CEE28DB4EC9004EF910 /* cubeTexIns.cpp in Sources */,
 				D8A6E8B828C4DE0600C3DE56 /* texture.cpp in Sources */,
 				D87EBFF426AAAEFE004ED7DE /* spawn.cpp in Sources */,
 				D8F37D7C26E6331200E5225B /* spotLight.cpp in Sources */,
 				D825DBC124AED03300C494E7 /* threadUtil.cpp in Sources */,
+				D8B01CF728E0A3D1004EF910 /* nodeIns.cpp in Sources */,
 				D8F37D7626E607D000E5225B /* pointLight.cpp in Sources */,
 				D8EC78372882147F00415650 /* sprite.cpp in Sources */,
 				D8902828287D568300152FFF /* uiText.cpp in Sources */,
 				D87EBFDB26A6F010004ED7DE /* action.cpp in Sources */,
+				D8B01CF128DDE8A3004EF910 /* test_cubeTexIns.cpp in Sources */,
 				D87EBFF126AAAEF2004ED7DE /* sequence.cpp in Sources */,
 				D87EBFE726A7CA3F004ED7DE /* mathUtil.cpp in Sources */,
 				D84FB80926ABF59B003FDDE1 /* moveTo.cpp in Sources */,
@@ -4673,7 +4709,10 @@
 		D81EF3641EAFA0070003604F /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = "BUILD_MAC=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BUILD_MAC=1",
+					"GL_VER=330",
+				);
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include/,
 					"$(PROJECT_DIR)/external/",
@@ -4703,7 +4742,10 @@
 		D81EF3651EAFA0070003604F /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				GCC_PREPROCESSOR_DEFINITIONS = "BUILD_MAC=1";
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"BUILD_MAC=1",
+					"GL_VER=330",
+				);
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include/,
 					"$(PROJECT_DIR)/external/",

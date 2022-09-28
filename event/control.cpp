@@ -27,6 +27,7 @@
 
 using namespace flyEngine;
 
+
 void control::bindCamera(flyEngine::camera* c){
     _camera=c;
     char szBuf[512]={0};
@@ -176,10 +177,12 @@ void control::bindCamera(flyEngine::camera* c){
     flylog("control::bindCamera finished!");
 }
 
+static bool s_bNodeBind;
 void control::bindNode(flyEngine::node* nodeObj){
-    //move model itself
-    _bindNode=nodeObj;
-
+    _vecBindNode.push_back(nodeObj);
+    if(s_bNodeBind)
+        return;
+    s_bNodeBind=true;
 #ifdef BUILD_MAC
     if(_msEventObj==NULL)
         return;
@@ -197,7 +200,8 @@ void control::bindNode(flyEngine::node* nodeObj){
         float rotateY=360.0f*((dy)/_height2PI);
         _mouseRightLastX=x;
         _mouseRightLastY=y;
-        _bindNode->rotateBy(glm::vec3(rotateY,rotateX,0.0f));
+        for(auto node:_vecBindNode)
+            node->rotateBy(glm::vec3(rotateY,rotateX,0.0f));
     });
     _msEventObj->regOnRightClickRelease([&](){
         _mouseRightOriginX=0;
@@ -207,7 +211,12 @@ void control::bindNode(flyEngine::node* nodeObj){
     
 #ifdef BUILD_IOS
     fingerEvent::getInstance()->regOnRotate([&](float r){
-        _bindNode->rotateBy(glm::vec3(0,0,r));
+        for(auto node:_vecBindNode){
+            if(r>0)
+                node->rotateBy(glm::vec3(0,0,r));
+            else
+                node->rotateBy(glm::vec3(0,r,0));
+        }
     });
 #endif
 }

@@ -20,6 +20,9 @@ public:
     static bool isSupportETC1();
     static bool isSupportPVR();
     static int getMaxBinding();
+    static int getMaxVSUniform();
+    static int getMaxFSUniform();
+    static void printGpuInfo();
 };
 
 

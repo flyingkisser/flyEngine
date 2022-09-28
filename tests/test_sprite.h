@@ -12,5 +12,6 @@
 #include <stdio.h>
 
 void test_sprite_1();
+void test_sprite_2();
 
 #endif /* test_sprite_h */

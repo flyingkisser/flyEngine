@@ -74,7 +74,7 @@ void test_oneSpotLight_oneCube(){
     lightObj1->setScale(glm::vec3(0.2,0.2,0.2));
     lightObj1->setDirection(glm::vec3(0,0,-1));
     world::getInstance()->addSpotLight(lightObj1);
-    lightObj1->update(cubeObj->getShader()->getProgramID(),0);
+    lightObj1->update(0);
     
     timerUtil* timerMgrObj=new timerUtil("light_test_timer");
     timerMgrObj->exec(0.1,[](node* lightObj1){
@@ -113,6 +113,7 @@ void test_oneSpotLight_multiCube_specularMap(){
         cubeObj->setPosition(glm::vec3(x,y,z));
         cubeObj->setMaterial(mt);
         world::getInstance()->addChild(cubeObj);
+        world::getInstance()->getControl()->bindNode(cubeObj);
         flylog("add %f %f",x,y);
     }
    

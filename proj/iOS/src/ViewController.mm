@@ -17,8 +17,13 @@
 USE_NS_FLYENGINE
 
 static CGPoint s_last_pos={0};
+static GLKView* s_view;
 
 @implementation ViewController
+
++(GLKView*) getView{
+    return s_view;
+}
 
 - (void)viewDidLoad {
     NSLog(@"ViewController:viewDidLoad start!");
@@ -26,6 +31,7 @@ static CGPoint s_last_pos={0};
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     GLKView *view  = (GLKView *)self.view;
+    s_view=view;
     NSAssert([view isKindOfClass:[GLKView class]], @"ViewController's View is Not A GLKView");
     //创建OpenGL ES2.0上下文
     view.context = [[EAGLContext alloc]initWithAPI:kEAGLRenderingAPIOpenGLES3];
@@ -59,19 +65,19 @@ static CGPoint s_last_pos={0};
 }
 
 - (void) onZoom:(UIPinchGestureRecognizer*) sender {
-    CGFloat v = sender.scale; //输出缩放比例的大小数值
+//    CGFloat v = sender.scale; //输出缩放比例的大小数值
 //    NSLog(@"onZoom scale:%f", v); //0--5.x
     fingerEvent::getInstance()->onZoom(sender.scale);
 }
 - (void) onRotate:(UIRotationGestureRecognizer*) sender {
-    CGFloat v = sender.rotation;
+//    CGFloat v = sender.rotation;
 //    NSLog(@"onRotate rotation:%f", v);    //0--1.x
-    fingerEvent::getInstance()->onRotate(v);
+    fingerEvent::getInstance()->onRotate(sender.rotation);
 }
 
 - (void) onMove:(UIPanGestureRecognizer*) sender {
     CGPoint pos = [sender locationInView:self.view];
-    CGPoint speed = [sender velocityInView:self.view];
+//    CGPoint speed = [sender velocityInView:self.view];
 //    NSLog(@"onMove pos:%f %f, speed %f %f", pos.x,pos.y,speed.x,speed.y);
     if(s_last_pos.x==0 && s_last_pos.y==0){
         s_last_pos=pos;
@@ -108,9 +114,9 @@ static CGPoint s_last_pos={0};
 -(void)touchesMoved:(NSSet*)touches withEvent:(UIEvent*)event{
     if(touches.count==1){
         //单指触摸
-        UITouch* touch=touches.anyObject;
-        CGPoint pos=[touch locationInView:nil]; //触摸点在UIWindow的位置
-        CGPoint posOld=[touch previousLocationInView:nil];
+//        UITouch* touch=touches.anyObject;
+//        CGPoint pos=[touch locationInView:nil]; //触摸点在UIWindow的位置
+//        CGPoint posOld=[touch previousLocationInView:nil];
 //        flylog("cur x %f y %f move %f %f",pos.x,pos.y,pos.x-posOld.x,pos.y-posOld.y);
         return;
     }

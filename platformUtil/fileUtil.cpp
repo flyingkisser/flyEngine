@@ -10,11 +10,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "logUtil.h"
 
 unsigned char* fileUtil::readFile(const char* szFileName){
     FILE* fFile=fopen(szFileName, "rb");
-    if(fFile==NULL)
+    if(fFile==NULL){
+        flylogErrno("readFile %s error!!!  ",szFileName);
         return NULL;
+    }
+        
     fseek(fFile,0,SEEK_END);
     long fileSize=ftell(fFile);
     long bufSize=fileSize+1;

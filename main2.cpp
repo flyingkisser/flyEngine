@@ -16,11 +16,13 @@
 // GL includes
 #include "shader.h"
 #include <iostream>
+#include <vector>
 #include "defines.h"
 #include "stb_image/stb_image.h"
 
 #include "cubeTex.h"
 #include "world.h"
+#include "error.h"
 USE_NS_FLYENGINE
 using namespace std;
 
@@ -168,6 +170,7 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+int glError=0;
 
 int main2()
 {
@@ -213,78 +216,111 @@ int main2()
         return -1;
     }
 
-   
-    // skybox VAO
-        unsigned int skyboxVAO, skyboxVBO;
-        glGenVertexArrays(1, &skyboxVAO);
-        glGenBuffers(1, &skyboxVBO);
-        glBindVertexArray(skyboxVAO);
-        glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(g_verticeArr_skybox), &g_verticeArr_skybox, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-        // load textures
-        // -------------
-//        unsigned int cubeTexture = loadTexture(FileSystem::getPath("resources/textures/container.jpg").c_str());
-
-        vector<std::string> faces
-        {
-            "./res/skybox/right.jpg",
-            "./res/skybox/left.jpg",
-            "./res/skybox/top.jpg",
-            "./res/skybox/bottom.jpg",
-            "./res/skybox/front.jpg",
-            "./res/skybox/back.jpg"
-        };
-        unsigned int cubemapTexture = loadCubemap(faces);
-       
-//        shader.use();
-//        shader.setInt("texture1", 0);
-//        skyboxShader.use();
-//        skyboxShader.setInt("skybox", 0);
-        shader* shaderSky=new shader("./res/shader/skybox.vs","./res/shader/skybox.fs");
+  
+    shader* sh=new shader("./res/shader/10.1.instancing.vs", "./res/shader/10.1.instancing.fs");
+    glm::vec2 translations[100];
+   int index = 0;
+   float offset = 0.1f;
+   for (int y = -10; y < 10; y += 2)
+   {
+       for (int x = -10; x < 10; x += 2)
+       {
+           glm::vec2 translation;
+           translation.x = (float)x / 10.0f + offset;
+           translation.y = (float)y / 10.0f + offset;
+           translations[index++] = translation;
+       }
+   }
+    // store instance data in an array buffer
+    // --------------------------------------
+    unsigned int instanceVBO;
+    glGenBuffers(1, &instanceVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 100, &translations[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     
-   
+    unsigned int modelVBO;
+    std::vector<glm::mat4> vecMatModel;
+    vecMatModel.assign(100, glm::mat4((int)0x1));
+    glm::mat4 vecMat1=glm::mat4((int)1);
+
+    glGenBuffers(1, &modelVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, modelVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::mat4) * 100, (float*)vecMatModel.data(), GL_STATIC_DRAW);
+//    void *ptr = glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+//    glUnmapBuffer(GL_ARRAY_BUFFER);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+ 
+
+    
+//    unsigned int modelVBO;
+//    std::vector<glm::vec4> vecMatModel;
+//    vecMatModel.assign(100, glm::vec4(1.0f));
+//    glGenBuffers(1, &modelVBO);
+//    glBindBuffer(GL_ARRAY_BUFFER, modelVBO);
+//    glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec4) * 100, &vecMatModel[0], GL_STATIC_DRAW);
+//    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+    // set up vertex data (and buffer(s)) and configure vertex attributes
+    // ------------------------------------------------------------------
+    float quadVertices[] = {
+        // positions     // colors
+        -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+         0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+        -0.05f, -0.05f,  0.0f, 0.0f, 1.0f,
+
+        -0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+         0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+         0.05f,  0.05f,  0.0f, 1.0f, 1.0f
+    };
+    glEnable(GL_DEPTH_TEST);
+    unsigned int quadVAO, quadVBO;
+    glGenVertexArrays(1, &quadVAO);
+    glGenBuffers(1, &quadVBO);
+    glBindVertexArray(quadVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
+    // also set instance data
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, instanceVBO); // this attribute comes from a different vertex buffer
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glVertexAttribDivisor(2, 1); // tell OpenGL this is an instanced vertex attribute.
+    
+    
+    glBindBuffer(GL_ARRAY_BUFFER, modelVBO); // this attribute comes from a different vertex buffer
+    glEnableVertexAttribArray(3);
+    glEnableVertexAttribArray(4);
+    glEnableVertexAttribArray(5);
+    glEnableVertexAttribArray(6);
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 64, 0);
+    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 64, (void*)16);
+    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 64, (void*)32);
+    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, 64, (void*)48);
+    glVertexAttribDivisor(3, 1); // tell OpenGL this is an instanced vertex attribute.
+    glVertexAttribDivisor(4, 1);
+    glVertexAttribDivisor(5, 1);
+    glVertexAttribDivisor(6, 1);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+
    
     while (!glfwWindowShouldClose(window))
     {
         processInput(window);
 
-        // render
-               // ------
-               glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-               glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-               // draw scene as normal
-//               shaderSky->use();
-//               glm::mat4 model = glm::mat4(1.0f);
-//               glm::mat4 view = cameras.GetViewMatrix();
-               glm::mat4 projection = glm::perspective(glm::radians(cameras.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-//               shader->setMat4("matModel", model);
-//               shader->setMat4("matCamera", view);
-//               shader->setMat4("matProj", projection);
-               // cubes
-//               glBindVertexArray(cubeVAO);
-//               glActiveTexture(GL_TEXTURE0);
-//               glBindTexture(GL_TEXTURE_2D, cubeTexture);
-//               glDrawArrays(GL_TRIANGLES, 0, 36);
-//               glBindVertexArray(0);
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-               // draw skybox as last
-               glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-               shaderSky->use();
-                glm::mat4 view = glm::mat4(glm::mat3(cameras.GetViewMatrix())); // remove translation from the view matrix
-                shaderSky->setMat4("matCamera", glm::value_ptr(view));
-                shaderSky->setMat4("matProj", glm::value_ptr(projection));
-               // skybox cube
-               glBindVertexArray(skyboxVAO);
-               glActiveTexture(GL_TEXTURE0);
-               glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-               glDrawArrays(GL_TRIANGLES, 0, 36);
-               glBindVertexArray(0);
-               glDepthFunc(GL_LESS); // set depth function back to default
-        
+        // draw 100 instanced quads
+        sh->use();
+        glBindVertexArray(quadVAO);
+        glDrawArraysInstanced(GL_TRIANGLES, 0, 6, 100); // 100 triangles of 6 vertices each
+        glBindVertexArray(0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

@@ -38,7 +38,4 @@ void test_ubo_1(){
     cube1->setPosition(glm::vec3(0,0,-10));
     cube1->setRotation(glm::vec3(0,30,30));
     world::getInstance()->addChild(cube1);
-    
-   
-    
 }

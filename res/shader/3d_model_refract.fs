@@ -15,7 +15,7 @@ layout (std140) uniform mat{
 
 void main(){
     vec3 viewDir=normalize(posFrag-camera_pos);
-    float f=1/1.63;
+    float f=1.0/1.63;
     vec3 refractDir=refract(viewDir,normalize(normalVector),f);
     FragColor=vec4(texture(texture0,refractDir).rgb,1.0f);
 }

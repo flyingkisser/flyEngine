@@ -17,6 +17,8 @@
 #include "test_sprite.h"
 #include "test_skybox.h"
 #include "test_ubo.h"
+#include "test_gs.h"
+#include "test_cubeTexIns.h"
 void testMainBegin(){
     //code cube test
 //    test_cubeColor();
@@ -57,17 +59,21 @@ void testMainBegin(){
 //    test_vector();
 //    test_one_model();
     
-    test_depths();
+//    test_depths();
 //    test_depths_2();
 //    test_stencil();
 //    test_stencil_2();
+//    test_stencil_3();
+//    test_stencil_4();
+    
 //    test_blend_1();
 //    test_blend_2();
-//        test_text1();
+//        test_text1(); //not working on ios
     
 //    test_facecull();
 //    test_facecull_2();
 //    test_sprite_1();
+//    test_sprite_2();
     
 //    test_framebuffer();
 //    test_framebuffer_mirror();
@@ -79,4 +85,17 @@ void testMainBegin(){
 //    test_skybox_reflect_3();
 //    test_skybox_refract_1();
 //    test_ubo_1();
+//    test_gs_1();
+//    test_gs_2();
+//    test_gs_model_explode();
+//    test_gs_model_show_normals();
+//    test_gs_model_gen2();
+//    test_sprite_gs();
+    
+//    test_cubeIns_cube_0();
+//    test_cubeIns_cube_1();
+//    test_cubeIns_cube_2();
+//    test_cubeIns_model_0();
+//    test_cubeIns_model_1();
+    test_cubeIns_model_2();
 }

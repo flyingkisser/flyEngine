@@ -1,5 +1,13 @@
 #version 330 core
+//指定默认的精度限定符
+//highp     float(-2^62, 2^62),int(-2^16, 2^16) 32位, 适用于顶点变换
+//mediump   float(-2^14, 2^14),int(-2^10, 2^10) 16位, 适用于uv坐标，比highp快2倍
+//lowp      float(-2, 2),int(-2^8, 2^8)         10位, 适用于颜色，照明和其他高性能计算，是highp的4倍
 precision highp float;
+
+#define DIR_LIGHT_NUM 4
+#define POINT_LIGHTS_NUM 4
+#define SPOT_LIGHT_NUM 4
 
 struct Material{
     bool enabled;
@@ -9,6 +17,15 @@ struct Material{
     float shiness;
     bool sp_tex_enabled;
     sampler2D specular_tex;
+};
+struct DirectionLight{
+    bool enabled;
+    vec3 direction;
+    vec3 color;
+    float ambient;
+    float diffuse;
+    float specular;
+    float shiness;
 };
 struct PointLight{
     bool enabled;
@@ -23,62 +40,33 @@ struct PointLight{
     float linear;
     float quadratic;
 };
+//聚光灯
+struct SpotLight{
+    bool enabled;
+    float cutoff_inner; //内角的cos值
+    float cutoff_outer; //外角的cos值
 
-// layout (std140) uniform light_dir0{
-//     bool dir0_enabled;
-//     vec3 dir0_direction;
-//     vec3 dir0_color;
-//     float dir0_ambient;
-//     float dir0_diffuse;
-//     float dir0_specular;
-//     float dir0_shiness;
-// };
-
-layout (std140) uniform light_point0{
-    bool point0_enabled;   //是否启用
-    vec3 point0_pos;       //位置
-    vec3 point0_color;     //光的颜色
-
-    vec3 point0_ambient;   //环境光材质系数
-    vec3 point0_diffuse;   //漫反射材质系数
-    vec3 point0_specular;  //镜面反射材质系数
+    vec3 direction;
+    vec3 pos;
+    vec3 color;
     
-    float point0_constant;     //距离衰减常量
-    float point0_linear;       //距离衰减一次常量系数
-    float point0_quadratic;    //距离衰减二次常量系数
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    
+    float constant;
+    float linear;
+    float quadratic;
 };
 
-// in VS_OUT{
-//     float point0_enabled;   //是否启用
-//     vec3 point0_pos;       //位置
-//     vec3 point0_color;     //光的颜色
-
-//     vec3 point0_ambient;   //环境光材质系数
-//     vec3 point0_diffuse;   //漫反射材质系数
-//     vec3 point0_specular;  //镜面反射材质系数
-    
-//     float point0_constant;     //距离衰减常量
-//     float point0_linear;       //距离衰减一次常量系数
-//     float point0_quadratic;    //距离衰减二次常量系数
-// } vs_in;
-
-
-layout (std140) uniform light_spot0{
-    bool  spot0_enabled;
-    float spot0_cutoff_inner; //内角的cos值
-    float spot0_cutoff_outer; //外角的cos值
-
-    vec3 spot0_direction;    //方向向量
-    vec3 spot0_pos;
-    vec3 spot0_color;
-
-    vec3 spot0_ambient;
-    vec3 spot0_diffuse;
-    vec3 spot0_specular;
-
-    float spot0_constant;
-    float spot0_linear;
-    float spot0_quadratic;   
+layout (std140) uniform light_dir{
+    DirectionLight   light_dir_arr[DIR_LIGHT_NUM];
+};
+layout (std140) uniform light_point{
+    PointLight   light_point_arr[POINT_LIGHTS_NUM];
+};
+layout (std140) uniform light_spot{
+    SpotLight   light_spot_arr[SPOT_LIGHT_NUM];
 };
 
 in vec2 texCoord;
@@ -94,13 +82,6 @@ uniform Material mt;
 uniform bool texture_specular_mesh_0_enabled;
 uniform sampler2D texture_specular_mesh_0;
 
-uniform float sp0_r;
-uniform float sp0_g;
-uniform float sp0_b;
-
-#define POINT_LIGHTS_NUM_MAX 4
-uniform PointLight light_point_arr[POINT_LIGHTS_NUM_MAX];
-
 vec3 g_normal_vector;
 vec3 g_view_vector;
 vec3 g_ambient=vec3(0,0,0);
@@ -111,7 +92,6 @@ float calcAttenuation(vec3 posFrag,vec3 posLight,float constant,float linear,flo
     float d    = length(posLight - posFrag);
     return 1.0 / (constant + linear * d + quadratic * (d * d));
 }
-
 
 void checkDir(vec3 direction,vec3 color,float light_ambient,float light_diffuse,float light_specular,float light_shiness){
     vec3 ambient=vec3(0,0,0);
@@ -180,9 +160,6 @@ void checkSpot(float cutoff_inner,float cutoff_outer,vec3 direction,vec3 pos,vec
     // l=abs(l);
     l=clamp(l,0.0f,1.0f);
 
-    //cutoff_inner 0.86
-    //cutoff_outer 0.5
-
     if(l>0.0){
         // 在角度内
         // 漫反射
@@ -215,54 +192,35 @@ void main(){
     vec4 obj_color=texture(texture0,texCoord);
     bool light_dirty=false;
 
-    // if(dir0_enabled){
-    //     light_dirty=true;
-    //     checkDir(dir0_direction,dir0_color,dir0_ambient,dir0_diffuse,dir0_specular,dir0_shiness);
-    // }
-
-   if(point0_enabled){
+    for(int i=0;i<DIR_LIGHT_NUM;i++){
+        DirectionLight dir=light_dir_arr[i];
+        if(!dir.enabled)
+            continue;
         light_dirty=true;
-        checkPoint(point0_pos,point0_color,point0_ambient,point0_diffuse,point0_specular,point0_constant,point0_linear,point0_quadratic);
+        checkDir(dir.direction,dir.color,dir.ambient,dir.diffuse,dir.specular,dir.shiness);
     }
 
-    // PointLight p=light_point_arr[0];
-    // if(p.enabled){
-    //     light_dirty=true;
-    //     checkPoint(p.pos,p.color,p.ambient,p.diffuse,p.specular,p.constant,p.linear,p.quadratic);
-    // }
-
-    // PointLight p=light_point_arr[0];
-    // if(point0_enabled){
-    //     light_dirty=true;
-    //     float am=0.2f;
-    //     float diff=0.8f;
-    //     float sp=0.8f;
-    //     // checkPoint(point0_pos,vec3(0.8,0.8,0.8),vec3(am,am,am),vec3(diff,diff,diff),vec3(sp,sp,sp),0.0,0.0,0.0);
-    //     checkPoint(point0_pos,point0_color,point0_ambient,point0_diffuse,point0_specular,0.0,0.0,0.0);
-    // }
-    
-    if(spot0_enabled){
+    for(int i=0;i<POINT_LIGHTS_NUM;i++){
+        PointLight p=light_point_arr[i];
+        if(!p.enabled)
+            continue;
         light_dirty=true;
-        checkSpot(spot0_cutoff_inner,spot0_cutoff_outer,spot0_direction,spot0_pos,spot0_color,spot0_ambient,spot0_diffuse,spot0_specular,spot0_constant,spot0_linear,spot0_quadratic);
+        checkPoint(p.pos,p.color,p.ambient,p.diffuse,p.specular,p.constant,p.linear,p.quadratic);
     }
-  
-    // checkSpot(spot0_cutoff_inner,spot0_cutoff_outer,spot0_direction,spot0_pos,spot0_color,spot0_ambient,spot0_diffuse,spot0_specular,spot0_constant,spot0_linear,spot0_quadratic);
-    // FragColor=vec4(g_ambient+g_diffuse+g_specular,1)*obj_color;
 
-    // vec3 ambient=spot0_color*spot0_ambient;
-    // g_ambient+=ambient;
-    // FragColor=vec4(spot0_color,1)*obj_color;
-    // FragColor=vec4(sp0_r,sp0_g,sp0_b,1)*obj_color;
-
-    // FragColor=vec4(spot0_r,spot0_g,spot0_b,1)*obj_color;
-    // return;
-    // 
+    for(int i=0;i<SPOT_LIGHT_NUM;i++){
+        SpotLight p=light_spot_arr[i];
+        if(!p.enabled)
+            continue;
+        light_dirty=true;
+        checkSpot(p.cutoff_inner,p.cutoff_outer,p.direction,p.pos,p.color,p.ambient,p.diffuse,p.specular,p.constant,p.linear,p.quadratic);   
+    }
 
     //如果物体的材质启用了，要计算物体本身的材质对于光照的影响
     if(light_dirty){
         if(mt.enabled){
             FragColor=vec4(mt.ambient*g_ambient+mt.diffuse*g_diffuse+mt.specular*g_specular,1)*obj_color;
-            //如果单独使用的高亮贴图
+            //如果模型单独使用的高亮贴图
             if(texture_specular_mesh_0_enabled){
                 vec4 spec_color=texture(texture_specular_mesh_0,texCoord);
                 FragColor=vec4(mt.ambient*g_ambient+mt.diffuse*g_diffuse+mt.specular*g_specular,1)*obj_color+vec4(mt.specular*g_specular,1)*spec_color;
@@ -279,5 +237,4 @@ void main(){
     else{
         FragColor=obj_color;
     }
-  
 }

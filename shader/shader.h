@@ -18,14 +18,16 @@ NS_FLYENGINE_BEGIN
 
 class shader : public glRef{
     private:
-        unsigned int _idProgram;
-        char* _szVert;
-        char* _szFrag;
-        char* _szVertFileName;
-        char* _szFragFileName;
+        unsigned int _idProgram=0;
+        char* _szVert=NULL;
+        char* _szFrag=NULL;
+        char* _szGeo=NULL;
+        char* _szVertFileName=NULL;
+        char* _szFragFileName=NULL;
+        char* _szGeometryFileName=NULL;
         
     public:
-        shader(const char* szVertFileName,const char* szFragFileName);
+        shader(const char* szVertFileName,const char* szFragFileName,const char* szGeometry=NULL);
         ~shader();
         bool isSuccess();
         void use();
@@ -33,7 +35,9 @@ class shader : public glRef{
         void setInt(const char* name,int v,bool debug=false);
         void setFloat(const char* name,float v,bool debug=false);
         void setMat4(const char* name,float* v,bool debug=false);
+        void setMat4Multi(const char *name, float* v,int count,bool debug=false);
         void setVec3(const char* name,float* v,bool debug=false);
+        bool bindGeometry(const char* szGeometry);//support on opengl 3.2+
         
         unsigned int getProgramID(){return _idProgram;};
         

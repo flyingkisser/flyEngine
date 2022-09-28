@@ -14,12 +14,24 @@
 #include "world.h"
 #include "stb_image/stb_image.h"
 #include "camera.h"
+#ifdef BUILD_IOS
+#include "ios_dirUtil.h"
+#endif
 
 USE_NS_FLYENGINE
 
 skybox::skybox(const char* imgFileName1,const char* imgFileName2,const char* imgFileName3,
                const char* imgFileName4,const char* imgFileName5,const char* imgFileName6){
     std::vector<const char*> vecFileName;
+#ifdef BUILD_IOS
+    imgFileName1=ios_dirUtil::getFileFullPathName(imgFileName1);
+    imgFileName2=ios_dirUtil::getFileFullPathName(imgFileName2);
+    imgFileName3=ios_dirUtil::getFileFullPathName(imgFileName3);
+    imgFileName4=ios_dirUtil::getFileFullPathName(imgFileName4);
+    imgFileName5=ios_dirUtil::getFileFullPathName(imgFileName5);
+    imgFileName6=ios_dirUtil::getFileFullPathName(imgFileName6);
+#endif
+    
     vecFileName.push_back(imgFileName1);
     vecFileName.push_back(imgFileName2);
     vecFileName.push_back(imgFileName3);

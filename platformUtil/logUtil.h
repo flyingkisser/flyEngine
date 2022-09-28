@@ -18,6 +18,7 @@ public:
     static void logMat4(glm::mat4 mat);
 };
 
+void flylogErrno(const char* fmt,...);
 void flylog(const char* szFmt,...);
 void flylogNoTime(const char* fmt,...);
 

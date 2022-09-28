@@ -14,9 +14,9 @@ void main(){
     float x=texCoord.x;
     float y=texCoord.y;
     if(bFlipX==true)
-        x=1-texCoord.x;
+        x=1.0-texCoord.x;
     if(bFlipY==true)
-        y=1-texCoord.y;
+        y=1.0-texCoord.y;
     vec2 pos=vec2(x,y);
     
     vec2 offsets[9] = vec2[](
@@ -39,9 +39,9 @@ void main(){
     
     //edge
     float kernel[9] = float[](
-        1, 1, 1,
-        1, -8, 1,
-        1, 1, 1
+        1.0, 1.0, 1.0,
+        1.0, -8.0, 1.0,
+        1.0, 1.0, 1.0
     );
     
     //blur kernel

@@ -28,7 +28,7 @@ class material;
 class material2;
 class node: public glRef
 {
-private:
+protected:
     glm::mat4 _matModel=glm::mat4(1.0f);
     glm::mat4 _matModelOrigin=glm::mat4(1.0f);
     
@@ -41,7 +41,6 @@ private:
     bool _dirtyMT=false;
     bool _dirtyUBO=false;
     
-public:
     shader* _shaderObj=NULL;
     material2* m_material=NULL;
     // material2* m_material2=NULL;
@@ -62,7 +61,6 @@ public:
     ~node(){};
     
     virtual bool init()=0;
-    virtual void glInit()=0;
     virtual void draw()=0;
     void print();
     void updateModel();

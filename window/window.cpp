@@ -27,19 +27,6 @@ int g_screenHigh=0;
 int g_winWidth=800;
 int g_winHigh=600;
 
-void window::printGpuInfo(){
-    fprintf(stdout,"gpu brand:%s\ngpu vender:%s\nGL version:%s\nGLSL version:%s\nsupport etc:%d\nsupport pvr:%d\nmax binding point %d\ngpu extension:\n%s\n",
-        gpuUtil::getGPUBrand(),
-        gpuUtil::getGPUVender(),
-        gpuUtil::getGLVersion(),
-        gpuUtil::getGLSLVersion(),
-        gpuUtil::isSupportETC1(),
-        gpuUtil::isSupportPVR(),
-        gpuUtil::getMaxBinding(),
-        gpuUtil::getGPUSupportExtensions()
-           );
-}
-
 static void reshape2D(GLFWwindow* window,int w,int h)
 {
     g_winWidth=w;
@@ -109,10 +96,5 @@ void window::init(){
 //    if(status != GL_FRAMEBUFFER_COMPLETE) {
 //        flylog("failed to make complete framebuffer object %x", status);
 //    }
-   
-
-    
 #endif
-    
-    printGpuInfo();
 }

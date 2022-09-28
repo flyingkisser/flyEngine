@@ -49,7 +49,34 @@ bool gpuUtil::isSupportPVR(){
 }
 
 int gpuUtil::getMaxBinding(){
-    int max_binding_point=0;
-    glGetIntegerv(GL_MAX_UNIFORM_BUFFER_BINDINGS,&max_binding_point);
-    return max_binding_point;
+    int v=0;
+    glGetIntegerv(GL_MAX_UNIFORM_BUFFER_BINDINGS,&v);
+    return v;
+}
+
+
+int gpuUtil::getMaxVSUniform(){
+    int v=0;
+    glGetIntegerv(GL_MAX_VERTEX_UNIFORM_VECTORS,&v);
+    return v;
+}
+int gpuUtil::getMaxFSUniform(){
+    int v=0;
+    glGetIntegerv(GL_MAX_FRAGMENT_UNIFORM_VECTORS,&v);
+    return v;
+}
+
+void gpuUtil::printGpuInfo(){
+    fprintf(stdout,"gpu brand:%s\ngpu vender:%s\nGL version:%s\nGLSL version:%s\nsupport etc:%d\nsupport pvr:%d\nmax binding point %d\nmax vs uniform %d\nmax fs unifrom %d\ngpu extension:\n%s\n",
+        gpuUtil::getGPUBrand(),
+        gpuUtil::getGPUVender(),
+        gpuUtil::getGLVersion(),
+        gpuUtil::getGLSLVersion(),
+        gpuUtil::isSupportETC1(),
+        gpuUtil::isSupportPVR(),
+        gpuUtil::getMaxBinding(),
+        gpuUtil::getMaxVSUniform(),
+        gpuUtil::getMaxFSUniform(),
+        gpuUtil::getGPUSupportExtensions()
+           );
 }

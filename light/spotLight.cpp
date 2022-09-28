@@ -20,6 +20,7 @@ spotLight::spotLight(glm::vec3 color,material2* mt,float cutOffEngleInner,float 
     m_fcutOffOuter=glm::cos(glm::radians(cutOffEngleOuter));
     m_fEngleOuter=cutOffEngleOuter;
     m_fEngleInner=cutOffEngleInner;
+    _ubo=g_ubo_id_arr[ubo_binding_light_spot];
 //     _ubo=uboMgr::createUBO(ubo_binding_light_spot, ubo_size_light_spot_arr,"light_spot");
 //    _ubo=ssboMgr::createSSBO(ubo_binding_light_spot, ubo_size_light_spot_arr,"light_spot");
 //    _ubo=g_ubo_id_light_spot0;
@@ -45,38 +46,22 @@ void spotLight::rotateBy(glm::vec3 v){
     setDirtyPos(true);
 }
 
-void spotLight::update(int id,int light_index){
-//    if(!isDirtyMT() && !isDirtyColor() && !isDirtyPos())
-//        return;
-//    //有设置过materail或color
-//    setDirtyMT(false);
-//    setDirtyColor(false);
-//    //    setDirtyPos(false);   //位置的变化，由light->cubeColor的updateModel来更新dirty状态，这里不能更新
-//    glUpdate(id,light_index);
-    
+void spotLight::update(int light_index){
     if(!isDirtyUBO()){
         return;
     }
     setDirtyUBO(false);
-    glUpdate(id,light_index);
+    glUpdate(light_index);
 }
 
 
- void spotLight::glUpdate(int id,int light_index){
+ void spotLight::glUpdate(int light_index){
     int sizeArr[]={4,4,4, 12,12,12, 12,12,12, 4,4,4};
     int offsetArr[]={0,4,8,16,32,48,64,80,96,108,112,116};
-
-     // int sizeArr[]={4,4,4};
-     // int offsetArr[]={0,4,8};
-     int enabled=1;
-     int num=12;
-     // glm::vec3 color=getColor();
-     // float r=color.r;
-     // float g=color.g;
-     // float b=color.b;
-     
-     material2* mt=getMaterial();
-     void* bufArr[]={
+    int enabled=1;
+    int num=12;
+    material2* mt=getMaterial();
+    void* bufArr[]={
         &enabled,
         &m_fcutOffInner,
         &m_fcutOffOuter,
@@ -84,7 +69,7 @@ void spotLight::update(int id,int light_index){
         (void*)glm::value_ptr(_vec3Direction),
         glm::value_ptr(getPosition()),
         (void*)glm::value_ptr(getColor()),
-        
+
         (void*)glm::value_ptr(mt->getAmbient()),
         (void*)glm::value_ptr(mt->getDiffuse()),
         (void*)glm::value_ptr(mt->getSpecular()),
@@ -92,14 +77,14 @@ void spotLight::update(int id,int light_index){
         &m_fConstant,
         &m_fLinear,
         &m_fQuadratic
-     };
+    };
 
-     for(int i=0;i<num;i++){
-         offsetArr[i]=offsetArr[i]*(light_index+1)+ubo_size_light_spot*light_index;
-     }
-     
-     _ubo=g_ubo_id_arr[ubo_binding_light_spot0+light_index]; 
-     uboMgr::writeData(_ubo, num, sizeArr,offsetArr,bufArr);
+    for(int i=0;i<num;i++){
+        // offsetArr[i]=offsetArr[i]*(light_index+1)+ubo_size_light_spot*light_index;
+        offsetArr[i]=offsetArr[i]+ubo_size_light_spot*light_index;
+    }
+
+    uboMgr::writeData(_ubo, num, sizeArr,offsetArr,bufArr);
  }
 
 

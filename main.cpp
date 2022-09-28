@@ -14,6 +14,8 @@
 #include "glslUtil.h"
 
 #include "window.h"
+#include "gpuUtil.h"
+
 #include "testMain.h"
 USE_NS_FLYENGINE
 
@@ -29,6 +31,8 @@ int main(int argc, char **argv) {
     window::init();
     glslUtil::init();
     uboMgr::initAllUbo();
+    
+    gpuUtil::printGpuInfo();
     
     testMainBegin();
     

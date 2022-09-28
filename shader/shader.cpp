@@ -18,22 +18,29 @@
 
 using namespace flyEngine;
 
-shader::shader(const char* szVertFileName,const char* szFragFileName){
+shader::shader(const char* szVertFileName,const char* szFragFileName,const char* szGeometryFileName){
     _idProgram=0;
 #ifdef BUILD_MAC
     _szVertFileName=(char*)szVertFileName;
     _szFragFileName=(char*)szFragFileName;
+    _szGeometryFileName=(char*)szGeometryFileName;
 #elif BUILD_IOS
     std::string strVertFullPath;
     std::string strFragFullPath;
+    std::string strGeoFullPath;
     if(szVertFileName[0]!='/'){
         strVertFullPath=ios_dirUtil::getFileFullPathName(szVertFileName);
         _szVertFileName=(char*)strVertFullPath.c_str();
         strFragFullPath=ios_dirUtil::getFileFullPathName(szFragFileName);
         _szFragFileName=(char*)strFragFullPath.c_str();
+        if(szGeometryFileName!=NULL){
+            strGeoFullPath=ios_dirUtil::getFileFullPathName(szGeometryFileName);
+            _szGeometryFileName=(char*)strGeoFullPath.c_str();
+        }
     }else{
         _szVertFileName=(char*)szVertFileName;
         _szFragFileName=(char*)szFragFileName;
+        _szGeometryFileName=(char*)szGeometryFileName;
     }
 #endif
     
@@ -49,19 +56,75 @@ shader::shader(const char* szVertFileName,const char* szFragFileName){
     
     uboMgr::linkUBOAndBindPoint(_idProgram,"mat3d", ubo_binding_mat_3d);
     uboMgr::linkUBOAndBindPoint(_idProgram,"mat2d", ubo_binding_mat_2d);
-
-    uboMgr::linkUBOAndBindPoint(_idProgram,"light_dir0", ubo_binding_light_dir0);
-    uboMgr::linkUBOAndBindPoint(_idProgram,"light_point0", ubo_binding_light_point0);
-    uboMgr::linkUBOAndBindPoint(_idProgram,"light_point1", ubo_binding_light_point1);
-    uboMgr::linkUBOAndBindPoint(_idProgram,"light_point2", ubo_binding_light_point2);
-    uboMgr::linkUBOAndBindPoint(_idProgram,"light_point3", ubo_binding_light_point3);
-    
-    uboMgr::linkUBOAndBindPoint(_idProgram,"light_spot0", ubo_binding_light_spot0);
-    uboMgr::linkUBOAndBindPoint(_idProgram,"light_spot1", ubo_binding_light_spot1);
-    uboMgr::linkUBOAndBindPoint(_idProgram,"light_spot2", ubo_binding_light_spot2);
-    uboMgr::linkUBOAndBindPoint(_idProgram,"light_spot3", ubo_binding_light_spot3);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_dir", ubo_binding_light_dir);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_point", ubo_binding_light_point);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_spot", ubo_binding_light_spot);
 
 //  ssboMgr::linkSSBOAndBindPoint(_idProgram,"light_spot", ubo_binding_light_spot);
+}
+
+bool shader::bindGeometry(const char* szGeometryFileName){
+#if GL_VER > 320
+    
+#ifdef BUILD_MAC
+    _szGeometryFileName=(char*)szGeometryFileName;
+#elif BUILD_IOS
+    std::string strGeoFullPath;
+    if(szGeometryFileName[0]!='/'){
+        strGeoFullPath=ios_dirUtil::getFileFullPathName(szGeometryFileName);
+        _szGeometryFileName=(char*)strGeoFullPath.c_str();
+    }else{
+        _szGeometryFileName=(char*)szGeometryFileName;
+    }
+#endif
+    char* szGeo=(char*)fileUtil::readFile(_szGeometryFileName);
+    _szGeo=szGeo;
+    if(!_szGeo)
+        return false;
+#ifdef BUILD_IOS
+    const char* buf=stringUtil::replace(_szGeo,"version 330","version 300");
+    if(buf!=NULL){
+        free(_szGeo);
+        _szGeo=(char*)buf;
+    }
+#endif
+    GLuint geoShader;
+    GLint  gsStatus,programStatus;
+    geoShader=glCreateShader(GL_GEOMETRY_SHADER);
+    glShaderSource(geoShader, 1, &_szGeo, NULL);
+    glCompileShader(geoShader);
+    glGetShaderiv(geoShader, GL_COMPILE_STATUS, &gsStatus);
+    if(gsStatus!=GL_TRUE){
+       int lenLog;
+       GLsizei num;
+       glGetShaderiv(geoShader, GL_INFO_LOG_LENGTH, &lenLog);
+       char* szLog=(char*)malloc(lenLog);
+       glGetShaderInfoLog(geoShader,lenLog,&num,szLog);
+       fprintf(stderr,"%s\nshader::shader: gsShader error: %s",_szGeometryFileName,szLog);
+       fprintf(stderr,_szGeo);
+       free(szLog);
+       return false;
+    }
+    
+    glAttachShader(_idProgram, geoShader);
+    glLinkProgram(_idProgram);
+    
+    glGetProgramiv(_idProgram, GL_LINK_STATUS, &programStatus);
+    if(programStatus!=GL_TRUE){
+       int lenLog;
+       GLsizei num;
+       glGetProgramiv(_idProgram, GL_INFO_LOG_LENGTH, &lenLog);
+       char* szLog=(char*)malloc(lenLog);
+       glGetProgramInfoLog(_idProgram,lenLog,&num,szLog);
+       fprintf(stderr,"shader::shader: program link error: %s",szLog);
+       free(szLog);
+       return false;
+    }
+    glDeleteShader(geoShader);
+    return true;
+#else
+    return false;
+#endif
 }
 
 bool shader::readFile(){
@@ -74,6 +137,10 @@ bool shader::readFile(){
     if(!szFrag){
         free(szVert);
         return false;
+    }
+    if(_szGeometryFileName!=NULL){
+        char* szGeo=(char*)fileUtil::readFile(_szGeometryFileName);
+        _szGeo=szGeo;
     }
     _szVert=szVert;
     _szFrag=szFrag;
@@ -89,8 +156,14 @@ bool shader::readFile(){
         free(szFrag);
         _szFrag=(char*)buf;
     }
+    if(_szGeo){
+        buf=stringUtil::replace(_szGeo,"version 330","version 300");
+        if(buf!=NULL){
+            free(_szGeo);
+            _szGeo=(char*)buf;
+        }
+    }
 #endif
-    
     return true;
 }
 
@@ -107,10 +180,11 @@ shader::~shader(){
 
 void shader::compile(){
     glRef::glInit();
-    GLuint vertShader,fragShader,idProgram;
-    GLint vertStatus,fragStatus,programStatus;
+    GLuint vertShader=0,fragShader=0,geoShader=0,idProgram=0;
+    GLint vertStatus,fragStatus,gsStatus,programStatus;
     vertShader=glCreateShader(GL_VERTEX_SHADER);
     fragShader=glCreateShader(GL_FRAGMENT_SHADER);
+    
     glShaderSource(vertShader, 1, &_szVert, NULL);
     glShaderSource(fragShader, 1, &_szFrag, NULL);
     glCompileShader(vertShader);
@@ -146,6 +220,30 @@ void shader::compile(){
     idProgram=glCreateProgram();
     glAttachShader(idProgram, vertShader);
     glAttachShader(idProgram, fragShader);
+
+#if GL_VER >= 320
+    if(_szGeo){
+        geoShader=glCreateShader(GL_GEOMETRY_SHADER);
+        glShaderSource(geoShader, 1, &_szGeo, NULL);
+        glCompileShader(geoShader);
+        glGetShaderiv(geoShader, GL_COMPILE_STATUS, &gsStatus);
+        if(gsStatus!=GL_TRUE){
+           int lenLog;
+           GLsizei num;
+           glGetShaderiv(geoShader, GL_INFO_LOG_LENGTH, &lenLog);
+           char* szLog=(char*)malloc(lenLog);
+           glGetShaderInfoLog(geoShader,lenLog,&num,szLog);
+           fprintf(stderr,"%s\nshader::shader: gsShader error: %s",_szGeometryFileName,szLog);
+           fprintf(stderr,_szGeo);
+           free(szLog);
+           glDeleteShader(vertShader);
+           glDeleteShader(fragShader);
+           return;
+        }
+        glAttachShader(idProgram, geoShader);
+    }
+#endif
+
     glLinkProgram(idProgram);
 
     glGetProgramiv(idProgram, GL_LINK_STATUS, &programStatus);
@@ -157,13 +255,12 @@ void shader::compile(){
        glGetProgramInfoLog(idProgram,lenLog,&num,szLog);
        fprintf(stderr,"shader::shader: program link error: %s",szLog);
        free(szLog);
-       glDeleteShader(vertShader);
-       glDeleteShader(fragShader);
-       return;
     }
 
     glDeleteShader(vertShader);
     glDeleteShader(fragShader);
+    if(geoShader)
+        glDeleteShader(geoShader);
     _idProgram=idProgram;
 }
 
@@ -225,4 +322,13 @@ void shader::setMat4(const char *name, float* v,bool debug){
     glUniformMatrix4fv(pos,1,GL_FALSE,v);
 }
 
+void shader::setMat4Multi(const char *name, float* v,int count,bool debug){
+    int pos=glGetUniformLocation(_idProgram, name);
+    if(pos==-1){
+        if(debug)
+            flylog("shader::setMat4 cannot find %s",name);
+       return;
+    }
+    glUniformMatrix4fv(pos,count,GL_FALSE,v);
+}
 

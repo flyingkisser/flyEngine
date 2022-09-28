@@ -26,11 +26,6 @@ void test_depths(){
         flylog("init cubeObj failed!");
         return;
     }
-//    cubeObj->resetPos();
-//    cubeObj->rotateBy(glm::vec3(45,0,0));
-//    cubeObj->setScale(glm::vec3(0.5,0.5,0.3));
-//    cubeObj->setPosition(glm::vec3(0,-0.3,0.5));
-    
     cubeObj->resetPos();
     cubeObj->setPosition(glm::vec3(0,-0.3,0.5));
     cubeObj->rotateBy(glm::vec3(60,0,0));
@@ -41,10 +36,6 @@ void test_depths(){
         flylog("init cubeObj2 failed!");
         return;
     }
-//    cubeObj2->resetPos();
-//    cubeObj2->rotateBy(glm::vec3(60,0,0));
-//    cubeObj2->setScale(glm::vec3(0.3,0.3,0.3));
-//    cubeObj2->setPosition(glm::vec3(0.5,-0.2,0.5));
     cubeObj2->resetPos();
     cubeObj2->setPosition(glm::vec3(0.5,-0.2,0.5));
     cubeObj2->rotateBy(glm::vec3(60,0,0));
@@ -61,6 +52,10 @@ void test_depths(){
     world::getInstance()->addChild(cubeObj);
     world::getInstance()->addChild(cubeObj2);
     world::getInstance()->addChild(plainObj);
+    
+    world::getInstance()->getControl()->bindNode(cubeObj);
+    world::getInstance()->getControl()->bindNode(cubeObj2);
+    world::getInstance()->getControl()->bindNode(plainObj);
         
     world::getInstance()->setCBBeforeDrawCall([](){
        // glDepthFunc(GL_ALWAYS);//深度测试无条件通过，这时最后绘制的，会覆盖前面绘制的，GL_LESS是默认值
@@ -70,13 +65,12 @@ void test_depths(){
 }
 
 void test_depths_2(){
-    shader* depthShader=new shader("res/shader/3d_1tex_phong.vs","res/shader/3d_depth_test1.fs");
+    shader* depthShader=new shader("res/shader/3d_1tex_phong.vs","res/shader/3d_depth_test2.fs");
     cubeTex* cubeObj=new cubeTex("res/metal.png");
     if(!cubeObj->init()){
         flylog("init cubeObj failed!");
         return;
     }
-//    cubeObj->resetPos();
     cubeObj->setPosition(glm::vec3(0,-0.3,0.5));
     cubeObj->rotateBy(glm::vec3(60,0,0));
     cubeObj->setScale(0.3);
@@ -86,7 +80,6 @@ void test_depths_2(){
         flylog("init cubeObj2 failed!");
         return;
     }
-//    cubeObj2->resetPos();
     cubeObj2->setPosition(glm::vec3(0.5,-0.2,0.5));
     cubeObj2->rotateBy(glm::vec3(60,0,0));
     cubeObj2->setScale(0.3);
@@ -114,6 +107,7 @@ void test_depths_2(){
     });
 }
 
+//只绘制两个物体的边
 void test_stencil(){
     cubeTex* cubeObj=new cubeTex("res/metal.png");
     if(!cubeObj->init()){
@@ -144,6 +138,10 @@ void test_stencil(){
     }
     plainObj->setPosition(glm::vec3(0,0,0.5));
     
+    world::getInstance()->getControl()->bindNode(cubeObj);
+    world::getInstance()->getControl()->bindNode(cubeObj2);
+    world::getInstance()->getControl()->bindNode(plainObj);
+  
     shader* defShader=plainObj->getShader();
     shader* borderShader=new shader("res/shader/3d_1tex.vs","res/shader/color_border.fs");
     camera* cam=world::getInstance()->getCamera();
@@ -153,14 +151,26 @@ void test_stencil(){
         glEnable(GL_STENCIL_TEST);
         glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
         
+        //定义stencil测试通过的条件
+        //定义了ref值为1，stencil and 0xff以后与1进行比较
+        //如果GL_ALWAYS了，则通过测试，即永远通过
         glStencilFunc(GL_ALWAYS,1,0xff);
+        
+        //测试通过后,ref值与0xff相与
         glStencilMask(0xff);
         
         //stencil缓存不更新
+        //第一个GL_KEEP:深度和stencil测试都没有通过，如何修改stencil缓存(不更新)
+        //第二个GL_KEEP:深度通过，stencil没有通过，如何修改stencil缓存(不更新)
+        //第三个GL_KEEP:深度和stencil测试都通过，如何修改stencil缓存(不更新)
+        //指定了GL_KEEP,即不改变缓存的值
         glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
         plainObj->draw();
         
-        //通过stencil测试的片元，stencil缓存写入1
+        //第一个GL_KEEP:深度和stencil测试都没有通过，如何修改stencil缓存(不更新)
+        //第二个GL_KEEP:深度通过，stencil没有通过，如何修改stencil缓存(不更新)
+        //第三个GL_REPLACE:深度和stencil测试都通过，如何修改stencil缓存(ref值&0xff写入)
+        //通过stencil和深度测试的片元，即需要绘制的片元，在stencil缓存中写入1
         glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
         cubeObj->setScale(0.3);
         cubeObj2->setScale(0.3);
@@ -168,33 +178,53 @@ void test_stencil(){
         cubeObj2->setShader(defShader);
         cubeObj->draw();
         cubeObj2->draw();
-        
     });
+    //在setCBBeforeDrawCall之后，会调用glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //即清除颜色和深度缓存，所以上面这些操作只是记录下来了stencil缓存
     
-    
+    //让多出来的片元通过stencil测试，绘制出来描边的效果
     world::getInstance()->setCBAfterDrawCall([cubeObj,cubeObj2,cam,borderShader](){
         cubeObj->setScale(0.31);
         cubeObj2->setScale(0.31);
         glDisable(GL_DEPTH_TEST);
+      
+        //上面对两个cubeObj进行绘制的片元相应缓存位置写入了1
+        //这次物体放大了一点，缓存不为1的部分，即是和上面绘制相比多出来的部分，才能通过stencil测试
+        
+        //定义stencil测试通过的条件
+        //定义了ref值为1，stencil and 0xff以后与1进行比较
+        //GL_NOTEQUAL，与当前缓存中的值不相等，通过测试，即多出来的边，才能通过测试
         glStencilFunc(GL_NOTEQUAL,1,0xff);
+        
         cubeObj->setShader(borderShader);
         cubeObj2->setShader(borderShader);
         cubeObj->draw();
         cubeObj2->draw();
     });
-
 }
 
-//对于加载的对象，绘制出描边效果
+//正常绘制，两个物体描边
 void test_stencil_2(){
-    model* modelObj=new model("res/model/backpack/backpack.obj");
-    if(!modelObj->init()){
-        flylog("init model failed!");
+    cubeTex* cubeObj=new cubeTex("res/metal.png");
+    if(!cubeObj->init()){
+        flylog("init cubeTex failed!");
         return;
     }
-    modelObj->setPosition(glm::vec3(0,0,-0.5));
-//    modelObj->rotateBy(glm::vec3(60,0,0));
-//    modelObj->setScale(0.3);
+    cubeObj->resetPos();
+    cubeObj->setPosition(glm::vec3(0,-0.3,0.5));
+    cubeObj->rotateBy(glm::vec3(60,0,0));
+    cubeObj->setScale(0.3);
+    
+    cubeTex* cubeObj2=new cubeTex("res/metal.png");
+    if(!cubeObj2->init()){
+        flylog("init cubeTex failed!");
+        return;
+    }
+    cubeObj2->resetPos();
+    cubeObj2->setPosition(glm::vec3(0.5,-0.2,0.5));
+    cubeObj2->rotateBy(glm::vec3(60,0,0));
+    cubeObj2->setScale(0.3);
+    
     
     cubeTex* plainObj=new cubeTex("res/marble.jpg");
     int descArr[]={3,2};
@@ -204,17 +234,142 @@ void test_stencil_2(){
     }
     plainObj->setPosition(glm::vec3(0,0,0.5));
     
+    world::getInstance()->getControl()->bindNode(cubeObj);
+    world::getInstance()->getControl()->bindNode(cubeObj2);
+    world::getInstance()->getControl()->bindNode(plainObj);
+  
+    shader* defShader=plainObj->getShader();
+    shader* borderShader=new shader("res/shader/3d_1tex.vs","res/shader/color_border.fs");
+    camera* cam=world::getInstance()->getCamera();
+    
+    //让多出来的片元通过stencil测试，绘制出来描边的效果
+    world::getInstance()->setCBAfterDrawCall([plainObj,cubeObj,cubeObj2,cam,defShader,borderShader](){
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_STENCIL_TEST);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glStencilFunc(GL_ALWAYS,1,0xff);
+        glStencilMask(0xff);
+        glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
+        plainObj->draw();
+        glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
+        cubeObj->setScale(0.3);
+        cubeObj2->setScale(0.3);
+        cubeObj->setShader(defShader);
+        cubeObj2->setShader(defShader);
+        cubeObj->draw();
+        cubeObj2->draw();
+        
+        cubeObj->setScale(0.31);
+        cubeObj2->setScale(0.31);
+        glDisable(GL_DEPTH_TEST);
+        glStencilFunc(GL_NOTEQUAL,1,0xff);
+        cubeObj->setShader(borderShader);
+        cubeObj2->setShader(borderShader);
+        cubeObj->draw();
+        cubeObj2->draw();
+    });
+}
+
+//正常绘制，三个物体描边
+void test_stencil_3(){
+    cubeTex* cubeObj=new cubeTex("res/metal.png");
+    if(!cubeObj->init()){
+        flylog("init cubeTex failed!");
+        return;
+    }
+    cubeObj->resetPos();
+    cubeObj->setPosition(glm::vec3(0,-0.3,0.5));
+    cubeObj->rotateBy(glm::vec3(60,0,0));
+    cubeObj->setScale(0.3);
+    
+    cubeTex* cubeObj2=new cubeTex("res/metal.png");
+    if(!cubeObj2->init()){
+        flylog("init cubeTex failed!");
+        return;
+    }
+    cubeObj2->resetPos();
+    cubeObj2->setPosition(glm::vec3(0.5,-0.2,0.5));
+    cubeObj2->rotateBy(glm::vec3(60,0,0));
+    cubeObj2->setScale(0.3);
+    
+    
+    cubeTex* plainObj=new cubeTex("res/marble.jpg");
+    int descArr[]={3,2};
+    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane),descArr,2)){
+        flylog("init marbleObj failed!");
+        return;
+    }
+    plainObj->setPosition(glm::vec3(0,0,0.5));
+    
+    world::getInstance()->getControl()->bindNode(cubeObj);
+    world::getInstance()->getControl()->bindNode(cubeObj2);
+    world::getInstance()->getControl()->bindNode(plainObj);
+  
+    shader* defShader=plainObj->getShader();
+    shader* borderShader=new shader("res/shader/3d_1tex.vs","res/shader/color_border.fs");
+    camera* cam=world::getInstance()->getCamera();
+    
+    //让多出来的片元通过stencil测试，绘制出来描边的效果
+    world::getInstance()->setCBAfterDrawCall([plainObj,cubeObj,cubeObj2,cam,defShader,borderShader](){
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_STENCIL_TEST);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        glStencilFunc(GL_ALWAYS,1,0xff);
+        glStencilMask(0xff);
+//        glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
+//        plainObj->draw();
+        glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
+        cubeObj->setScale(0.3);
+        cubeObj2->setScale(0.3);
+        plainObj->setScale(1);
+        cubeObj->setShader(defShader);
+        cubeObj2->setShader(defShader);
+        plainObj->setShader(defShader);
+        cubeObj->draw();
+        cubeObj2->draw();
+        plainObj->draw();
+        
+        cubeObj->setScale(0.31);
+        cubeObj2->setScale(0.31);
+        plainObj->setScale(1.01);
+        glDisable(GL_DEPTH_TEST);
+        glStencilFunc(GL_NOTEQUAL,1,0xff);
+        cubeObj->setShader(borderShader);
+        cubeObj2->setShader(borderShader);
+        plainObj->setShader(borderShader);
+        cubeObj->draw();
+        cubeObj2->draw();
+        plainObj->draw();
+    });
+}
+
+
+//绘制模型和底面的描边
+void test_stencil_4(){
+    model* modelObj=new model("res/model/backpack/backpack.obj");
+    if(!modelObj->init()){
+        flylog("init model failed!");
+        return;
+    }
+    modelObj->setPosition(glm::vec3(0,0,-0.5));
+    
+    cubeTex* plainObj=new cubeTex("res/marble.jpg");
+    int descArr[]={3,2};
+    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane),descArr,2)){
+        flylog("init marbleObj failed!");
+        return;
+    }
+    plainObj->setPosition(glm::vec3(0,0,0.5));
+    
+    world::getInstance()->getControl()->bindNode(modelObj);
+    world::getInstance()->getControl()->bindNode(plainObj);
+    
     shader* defShader=modelObj->getShader();
     shader* borderShader=new shader("res/shader/3d_1tex.vs","res/shader/color_border.fs");
     flyEngine::camera* cam=world::getInstance()->getCamera();
 
     world::getInstance()->setCBBeforeDrawCall([modelObj,plainObj,cam,defShader,borderShader](){
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_STENCIL_TEST);
-        glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-        
-        glStencilFunc(GL_ALWAYS,1,0xff);
-        glStencilMask(0xff);
+       
         
         //stencil缓存不更新
         glStencilOp(GL_KEEP,GL_KEEP,GL_KEEP);
@@ -227,13 +382,29 @@ void test_stencil_2(){
         modelObj->draw();
     });
     
-    
-    world::getInstance()->setCBAfterDrawCall([modelObj,cam,borderShader](){
-        modelObj->setScale(0.31);
+    world::getInstance()->setCBAfterDrawCall([modelObj,plainObj,defShader,borderShader](){
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_STENCIL_TEST);
+        glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        
+        glStencilFunc(GL_ALWAYS,1,0xff);
+        glStencilMask(0xff);
+        glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
+        modelObj->setScale(0.3);
+        plainObj->setScale(1);
+        modelObj->setShader(defShader);
+        plainObj->setShader(defShader);
+        modelObj->draw();
+        plainObj->draw();
+        
         glDisable(GL_DEPTH_TEST);
         glStencilFunc(GL_NOTEQUAL,1,0xff);
+        modelObj->setScale(0.31);
+        plainObj->setScale(1.01);
         modelObj->setShader(borderShader);
+        plainObj->setShader(borderShader);
         modelObj->draw();
+        plainObj->draw();
     });
 }
 
@@ -280,6 +451,7 @@ void test_blend_1(){
         cubeTex* cube=cubeObj->clone();
         cube->setPosition(it);
         world::getInstance()->addChild(cube);
+        world::getInstance()->getControl()->bindNode(cube);
     }
     
     cubeTex* plainObj=new cubeTex("res/marble.jpg");
@@ -289,7 +461,6 @@ void test_blend_1(){
     }
     plainObj->setPosition(glm::vec3(0,0,0.5));
     world::getInstance()->addChild(plainObj);
-    
 }
 
 
@@ -358,6 +529,7 @@ void test_blend_2(){
     for(auto pos:vectorPos){
         cubeTex* windowCube=windowObj->clone();
         world::getInstance()->addChild(windowCube);
+        world::getInstance()->getControl()->bindNode(windowCube);
         windowCube->setPosition(pos);
         windowCube->setScale(0.6);
         windowCube->rotateBy(glm::vec3(0,30,0));
@@ -389,9 +561,7 @@ void test_blend_2(){
         for(auto it:mapPos){
             vectorWindow[i++]->setPosition(it.second);
         }
-        
     });
-
 }
 
 
@@ -413,29 +583,31 @@ void test_facecull(){
         return;
     }
     plainObj->setPosition(glm::vec3(0,0,0.5));
-    world::getInstance()->getControl()->bindNode(modelObj);
-    camera* cam=world::getInstance()->getCamera();
+
+//    world::getInstance()->addChild(plainObj);
+    
     world::getInstance()->addChild(modelObj);
-    world::getInstance()->addChild(plainObj);
-    world::getInstance()->setCBBeforeDrawCall([cam,plainObj,modelObj](){
-//        glDisable(GL_CULL_FACE);
-//        glEnable(GL_DEPTH_TEST);
-//        glClear(GL_DEPTH_BUFFER_BIT);
-//        plainObj->draw(cam);
-//
-//        glEnable(GL_CULL_FACE);
-//        glCullFace(GL_BACK);
-//        modelObj->draw(cam);
+    world::getInstance()->getControl()->bindNode(modelObj);
+    
+    world::getInstance()->setCBBeforeRender([plainObj,modelObj](){
+        glDisable(GL_CULL_FACE);
+        glEnable(GL_DEPTH_TEST);
+        glClear(GL_DEPTH_BUFFER_BIT);
+        //需要disable掉cull_face再绘制平面
+        plainObj->draw();
+
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
     });
     
-    timerUtil::getInstance()->exec(0.1,[](camera* cam,model* modelObj,cubeTex* plainObj){
-        float t=(float)timeUtil::getTimeMS();
+    timerUtil::getInstance()->exec(0.1,[](model* modelObj,cubeTex* plainObj){
+        float t=(float)timeUtil::getTimeFloatSinceRun();
         float x=2*sin(t);
         float z=8*cos(t);
         modelObj->setPositionX(x);
         modelObj->setPositionZ(z-8);
         modelObj->rotateBy(glm::vec3(0,0.5,0));
-    },cam,modelObj,plainObj);
+    },modelObj,plainObj);
 }
 
 void test_facecull_2(){
@@ -445,7 +617,7 @@ void test_facecull_2(){
     world::getInstance()->addChild(cubeObj);
     cubeObj->runAction(new forever(1,new rotateBy(1,glm::vec3(0,10,0))));
     world::getInstance()->getControl()->bindNode(cubeObj);
-    world::getInstance()->setCBBeforeDrawCall([](){
+    world::getInstance()->setCBBeforeRender([](){
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
     });

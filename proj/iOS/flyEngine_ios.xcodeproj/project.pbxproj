@@ -62,6 +62,7 @@
 		D852363C28AA336700E69D25 /* repeat.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D852362C28AA336700E69D25 /* repeat.cpp */; };
 		D852363D28AA336700E69D25 /* rotateTo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D852363028AA336700E69D25 /* rotateTo.cpp */; };
 		D852363E28AA336700E69D25 /* action.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D852363128AA336700E69D25 /* action.cpp */; };
+		D87D8E2B28CEC98C00E30C83 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88A455628AA8523007CD3C0 /* GLKit.framework */; };
 		D88A453228AA373E007CD3C0 /* uboMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88A452828AA373D007CD3C0 /* uboMgr.cpp */; };
 		D88A453328AA373E007CD3C0 /* fbo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88A452D28AA373D007CD3C0 /* fbo.cpp */; };
 		D88A453428AA373E007CD3C0 /* render.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88A452E28AA373D007CD3C0 /* render.cpp */; };
@@ -75,13 +76,12 @@
 		D88A455128AA8021007CD3C0 /* skybox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88A454F28AA8020007CD3C0 /* skybox.cpp */; };
 		D88A455328AA84FD007CD3C0 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88A455228AA84FD007CD3C0 /* OpenGLES.framework */; };
 		D88A455528AA850C007CD3C0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88A455428AA850C007CD3C0 /* UIKit.framework */; };
-		D88A455728AA8523007CD3C0 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D88A455628AA8523007CD3C0 /* GLKit.framework */; };
 		D88A455C28AA90F6007CD3C0 /* windowUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = D88A455B28AA90F6007CD3C0 /* windowUtil.mm */; };
 		D88A456228AA9182007CD3C0 /* ios_dirUtil.mm in Sources */ = {isa = PBXBuildFile; fileRef = D88A456128AA9182007CD3C0 /* ios_dirUtil.mm */; };
 		D88A45C328AB4760007CD3C0 /* res in Resources */ = {isa = PBXBuildFile; fileRef = D88A45C228AB4760007CD3C0 /* res */; };
 		D88A45D628AC9904007CD3C0 /* test_ubo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88A45C428AC9901007CD3C0 /* test_ubo.cpp */; };
 		D88A45D728AC9904007CD3C0 /* test_spotLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88A45C628AC9901007CD3C0 /* test_spotLight.cpp */; };
-		D88A45D828AC9904007CD3C0 /* test_framebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88A45C728AC9902007CD3C0 /* test_framebuffer.cpp */; };
+		D88A45D828AC9904007CD3C0 /* test_framebuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = D88A45C728AC9902007CD3C0 /* test_framebuffer.mm */; };
 		D88A45D928AC9904007CD3C0 /* test_text.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88A45C828AC9902007CD3C0 /* test_text.cpp */; };
 		D88A45DA28AC9904007CD3C0 /* test_sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88A45C928AC9902007CD3C0 /* test_sprite.cpp */; };
 		D88A45DB28AC9904007CD3C0 /* test_depth_stencil_blend_facecull.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88A45CA28AC9902007CD3C0 /* test_depth_stencil_blend_facecull.cpp */; };
@@ -96,6 +96,11 @@
 		D88A45F428AE0B1E007CD3C0 /* bmpUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D88A45F128AE0B1E007CD3C0 /* bmpUtil.cpp */; };
 		D8A6E8BE28C4ED5700C3DE56 /* material2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A6E8BD28C4ED5700C3DE56 /* material2.cpp */; };
 		D8A6E8C128C4ED8C00C3DE56 /* texture2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A6E8C028C4ED8C00C3DE56 /* texture2.cpp */; };
+		D8B01CFD28E18FE3004EF910 /* nodeIns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B01CFB28E18FE3004EF910 /* nodeIns.cpp */; };
+		D8B01D0028E18FF1004EF910 /* cubeTexIns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B01CFE28E18FF1004EF910 /* cubeTexIns.cpp */; };
+		D8B01D0328E1901F004EF910 /* modelIns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B01D0128E1901F004EF910 /* modelIns.cpp */; };
+		D8B01D0628E19038004EF910 /* test_cubeTexIns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B01D0428E19038004EF910 /* test_cubeTexIns.cpp */; };
+		D8B01D0928E192B9004EF910 /* test_gs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B01D0728E192B9004EF910 /* test_gs.cpp */; };
 		D8D7800028AFEA54009D5AA5 /* fingerEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D77FFF28AFEA54009D5AA5 /* fingerEvent.cpp */; };
 		D8D7800328B1EC21009D5AA5 /* test_model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8D7800128B1EC21009D5AA5 /* test_model.cpp */; };
 		D8EDFA6728B387BE00F0C2B0 /* libfreetype-arm64.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D85234DE28AA2A3A00E69D25 /* libfreetype-arm64.a */; };
@@ -1754,7 +1759,7 @@
 		D88A45C428AC9901007CD3C0 /* test_ubo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_ubo.cpp; path = ../../tests/test_ubo.cpp; sourceTree = "<group>"; };
 		D88A45C528AC9901007CD3C0 /* test_sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_sprite.h; path = ../../tests/test_sprite.h; sourceTree = "<group>"; };
 		D88A45C628AC9901007CD3C0 /* test_spotLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_spotLight.cpp; path = ../../tests/test_spotLight.cpp; sourceTree = "<group>"; };
-		D88A45C728AC9902007CD3C0 /* test_framebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_framebuffer.cpp; path = ../../tests/test_framebuffer.cpp; sourceTree = "<group>"; };
+		D88A45C728AC9902007CD3C0 /* test_framebuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = test_framebuffer.mm; path = ../../tests/test_framebuffer.mm; sourceTree = "<group>"; };
 		D88A45C828AC9902007CD3C0 /* test_text.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_text.cpp; path = ../../tests/test_text.cpp; sourceTree = "<group>"; };
 		D88A45C928AC9902007CD3C0 /* test_sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_sprite.cpp; path = ../../tests/test_sprite.cpp; sourceTree = "<group>"; };
 		D88A45CA28AC9902007CD3C0 /* test_depth_stencil_blend_facecull.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_depth_stencil_blend_facecull.cpp; path = ../../tests/test_depth_stencil_blend_facecull.cpp; sourceTree = "<group>"; };
@@ -1786,6 +1791,16 @@
 		D8A6E8BD28C4ED5700C3DE56 /* material2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = material2.cpp; sourceTree = "<group>"; };
 		D8A6E8BF28C4ED8B00C3DE56 /* texture2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = texture2.h; path = ../../texture/texture2.h; sourceTree = "<group>"; };
 		D8A6E8C028C4ED8C00C3DE56 /* texture2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = texture2.cpp; path = ../../texture/texture2.cpp; sourceTree = "<group>"; };
+		D8B01CFB28E18FE3004EF910 /* nodeIns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = nodeIns.cpp; path = ../../3D/nodeIns.cpp; sourceTree = "<group>"; };
+		D8B01CFC28E18FE3004EF910 /* nodeIns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nodeIns.h; path = ../../3D/nodeIns.h; sourceTree = "<group>"; };
+		D8B01CFE28E18FF1004EF910 /* cubeTexIns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = cubeTexIns.cpp; path = ../../3D/cubeTexIns.cpp; sourceTree = "<group>"; };
+		D8B01CFF28E18FF1004EF910 /* cubeTexIns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = cubeTexIns.h; path = ../../3D/cubeTexIns.h; sourceTree = "<group>"; };
+		D8B01D0128E1901F004EF910 /* modelIns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = modelIns.cpp; path = ../../model/modelIns.cpp; sourceTree = "<group>"; };
+		D8B01D0228E1901F004EF910 /* modelIns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = modelIns.h; path = ../../model/modelIns.h; sourceTree = "<group>"; };
+		D8B01D0428E19038004EF910 /* test_cubeTexIns.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_cubeTexIns.cpp; path = ../../tests/test_cubeTexIns.cpp; sourceTree = "<group>"; };
+		D8B01D0528E19038004EF910 /* test_cubeTexIns.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_cubeTexIns.h; path = ../../tests/test_cubeTexIns.h; sourceTree = "<group>"; };
+		D8B01D0728E192B9004EF910 /* test_gs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_gs.cpp; path = ../../tests/test_gs.cpp; sourceTree = "<group>"; };
+		D8B01D0828E192B9004EF910 /* test_gs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = test_gs.h; path = ../../tests/test_gs.h; sourceTree = "<group>"; };
 		D8D77FFE28AFEA54009D5AA5 /* fingerEvent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = fingerEvent.h; path = ../../event/fingerEvent.h; sourceTree = "<group>"; };
 		D8D77FFF28AFEA54009D5AA5 /* fingerEvent.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = fingerEvent.cpp; path = ../../event/fingerEvent.cpp; sourceTree = "<group>"; };
 		D8D7800128B1EC21009D5AA5 /* test_model.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = test_model.cpp; path = ../../tests/test_model.cpp; sourceTree = "<group>"; };
@@ -1798,9 +1813,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8EDFA6728B387BE00F0C2B0 /* libfreetype-arm64.a in Frameworks */,
+				D87D8E2B28CEC98C00E30C83 /* GLKit.framework in Frameworks */,
 				D88A45E928ACAF51007CD3C0 /* libassimp.a in Frameworks */,
 				D88A455528AA850C007CD3C0 /* UIKit.framework in Frameworks */,
-				D88A455728AA8523007CD3C0 /* GLKit.framework in Frameworks */,
 				D88A455328AA84FD007CD3C0 /* OpenGLES.framework in Frameworks */,
 				D852356C28AA2FAA00E69D25 /* libbz2.1.0.8.tbd in Frameworks */,
 				D852348928A9527500E69D25 /* libz.tbd in Frameworks */,
@@ -3786,10 +3801,14 @@
 				D85234CD28A9F1A900E69D25 /* world.cpp */,
 				D852354C28AA2B0200E69D25 /* node.h */,
 				D852354B28AA2B0200E69D25 /* node.cpp */,
+				D8B01CFB28E18FE3004EF910 /* nodeIns.cpp */,
+				D8B01CFC28E18FE3004EF910 /* nodeIns.h */,
 				D852356128AA2C9300E69D25 /* cubeColor.h */,
 				D852356028AA2C9300E69D25 /* cubeColor.cpp */,
 				D88A454D28AA8015007CD3C0 /* cubeTex.h */,
 				D88A454C28AA8015007CD3C0 /* cubeTex.cpp */,
+				D8B01CFF28E18FF1004EF910 /* cubeTexIns.h */,
+				D8B01CFE28E18FF1004EF910 /* cubeTexIns.cpp */,
 				D88A455028AA8021007CD3C0 /* skybox.h */,
 				D88A454F28AA8020007CD3C0 /* skybox.cpp */,
 			);
@@ -4080,30 +4099,34 @@
 		D88A453D28AA7F33007CD3C0 /* tests */ = {
 			isa = PBXGroup;
 			children = (
-				D88A45CC28AC9902007CD3C0 /* test_action.cpp */,
-				D88A45CD28AC9902007CD3C0 /* test_action.h */,
-				D88A45CA28AC9902007CD3C0 /* test_depth_stencil_blend_facecull.cpp */,
-				D88A45D428AC9903007CD3C0 /* test_depth_stencil_blend_facecull.h */,
-				D88A45C728AC9902007CD3C0 /* test_framebuffer.cpp */,
-				D88A45D028AC9903007CD3C0 /* test_framebuffer.h */,
-				D8D7800128B1EC21009D5AA5 /* test_model.cpp */,
-				D8D7800228B1EC21009D5AA5 /* test_model.h */,
-				D88A454928AA7FB6007CD3C0 /* test_node.cpp */,
-				D88A454A28AA7FB6007CD3C0 /* test_node.h */,
-				D88A45D228AC9903007CD3C0 /* test_pointLight.cpp */,
-				D88A45CE28AC9902007CD3C0 /* test_pointLight.h */,
-				D88A45D328AC9903007CD3C0 /* test_skybox.cpp */,
-				D88A45CF28AC9903007CD3C0 /* test_skybox.h */,
-				D88A45C628AC9901007CD3C0 /* test_spotLight.cpp */,
-				D88A45CB28AC9902007CD3C0 /* test_spotLight.h */,
-				D88A45C928AC9902007CD3C0 /* test_sprite.cpp */,
-				D88A45C528AC9901007CD3C0 /* test_sprite.h */,
-				D88A45C828AC9902007CD3C0 /* test_text.cpp */,
-				D88A45D528AC9903007CD3C0 /* test_text.h */,
-				D88A45C428AC9901007CD3C0 /* test_ubo.cpp */,
-				D88A45D128AC9903007CD3C0 /* test_ubo.h */,
 				D88A454028AA7F60007CD3C0 /* testMain.cpp */,
 				D88A453F28AA7F60007CD3C0 /* testMain.h */,
+				D88A45CD28AC9902007CD3C0 /* test_action.h */,
+				D88A45CC28AC9902007CD3C0 /* test_action.cpp */,
+				D88A45D428AC9903007CD3C0 /* test_depth_stencil_blend_facecull.h */,
+				D88A45CA28AC9902007CD3C0 /* test_depth_stencil_blend_facecull.cpp */,
+				D88A45D028AC9903007CD3C0 /* test_framebuffer.h */,
+				D88A45C728AC9902007CD3C0 /* test_framebuffer.mm */,
+				D8D7800228B1EC21009D5AA5 /* test_model.h */,
+				D8D7800128B1EC21009D5AA5 /* test_model.cpp */,
+				D88A454A28AA7FB6007CD3C0 /* test_node.h */,
+				D88A454928AA7FB6007CD3C0 /* test_node.cpp */,
+				D88A45CE28AC9902007CD3C0 /* test_pointLight.h */,
+				D88A45D228AC9903007CD3C0 /* test_pointLight.cpp */,
+				D88A45CF28AC9903007CD3C0 /* test_skybox.h */,
+				D88A45D328AC9903007CD3C0 /* test_skybox.cpp */,
+				D88A45CB28AC9902007CD3C0 /* test_spotLight.h */,
+				D88A45C628AC9901007CD3C0 /* test_spotLight.cpp */,
+				D88A45C528AC9901007CD3C0 /* test_sprite.h */,
+				D88A45C928AC9902007CD3C0 /* test_sprite.cpp */,
+				D88A45D528AC9903007CD3C0 /* test_text.h */,
+				D88A45C828AC9902007CD3C0 /* test_text.cpp */,
+				D88A45D128AC9903007CD3C0 /* test_ubo.h */,
+				D88A45C428AC9901007CD3C0 /* test_ubo.cpp */,
+				D8B01D0828E192B9004EF910 /* test_gs.h */,
+				D8B01D0728E192B9004EF910 /* test_gs.cpp */,
+				D8B01D0528E19038004EF910 /* test_cubeTexIns.h */,
+				D8B01D0428E19038004EF910 /* test_cubeTexIns.cpp */,
 			);
 			name = tests;
 			sourceTree = "<group>";
@@ -4126,6 +4149,8 @@
 				D88A45E428AC9B52007CD3C0 /* mesh.h */,
 				D88A45E228AC9B51007CD3C0 /* model.cpp */,
 				D88A45E328AC9B51007CD3C0 /* model.h */,
+				D8B01D0228E1901F004EF910 /* modelIns.h */,
+				D8B01D0128E1901F004EF910 /* modelIns.cpp */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -4285,10 +4310,12 @@
 				D852363E28AA336700E69D25 /* action.cpp in Sources */,
 				D852356228AA2C9300E69D25 /* cubeColor.cpp in Sources */,
 				D852356A28AA2D5400E69D25 /* state.cpp in Sources */,
+				D8B01CFD28E18FE3004EF910 /* nodeIns.cpp in Sources */,
 				D852341C28A948C400E69D25 /* fileUtil.cpp in Sources */,
 				D88A455C28AA90F6007CD3C0 /* windowUtil.mm in Sources */,
 				D8A6E8C128C4ED8C00C3DE56 /* texture2.cpp in Sources */,
 				D88A45F328AE0B1E007CD3C0 /* jpgUtil.cpp in Sources */,
+				D8B01D0928E192B9004EF910 /* test_gs.cpp in Sources */,
 				D88A45DE28AC9904007CD3C0 /* test_skybox.cpp in Sources */,
 				D88A45DC28AC9904007CD3C0 /* test_action.cpp in Sources */,
 				D852348E28A953AE00E69D25 /* texture.cpp in Sources */,
@@ -4324,7 +4351,7 @@
 				D852342228A948E600E69D25 /* gpuUtil.cpp in Sources */,
 				D88A45D928AC9904007CD3C0 /* test_text.cpp in Sources */,
 				D82AB4D928A404A2000C8479 /* ViewController.mm in Sources */,
-				D88A45D828AC9904007CD3C0 /* test_framebuffer.cpp in Sources */,
+				D88A45D828AC9904007CD3C0 /* test_framebuffer.mm in Sources */,
 				D852354D28AA2B0300E69D25 /* node.cpp in Sources */,
 				D8D7800028AFEA54009D5AA5 /* fingerEvent.cpp in Sources */,
 				D85234BE28A9DC5E00E69D25 /* values.cpp in Sources */,
@@ -4342,11 +4369,14 @@
 				D852355D28AA2C8200E69D25 /* directionLight.cpp in Sources */,
 				D88A453428AA373E007CD3C0 /* render.cpp in Sources */,
 				D88A45E628AC9B52007CD3C0 /* model.cpp in Sources */,
+				D8B01D0028E18FF1004EF910 /* cubeTexIns.cpp in Sources */,
 				D852363B28AA336700E69D25 /* moveBy.cpp in Sources */,
+				D8B01D0328E1901F004EF910 /* modelIns.cpp in Sources */,
 				D8522F7B28A8058B00E69D25 /* glm.cpp in Sources */,
 				D85233D528A89F0D00E69D25 /* error.cpp in Sources */,
 				D88A45DA28AC9904007CD3C0 /* test_sprite.cpp in Sources */,
 				D88A45E728AC9B52007CD3C0 /* mesh.cpp in Sources */,
+				D8B01D0628E19038004EF910 /* test_cubeTexIns.cpp in Sources */,
 				D82AB4E428A404A4000C8479 /* main.mm in Sources */,
 				D88A454228AA7F60007CD3C0 /* testMain.cpp in Sources */,
 				D88A45DB28AC9904007CD3C0 /* test_depth_stencil_blend_facecull.cpp in Sources */,
@@ -4536,6 +4566,13 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = FD6FZ3T932;
 				ENABLE_BITCODE = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+					"GLES_SILENCE_DEPRECATION=1",
+					"BUILD_IOS=1",
+					"GL_VER=300",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/../../external/",

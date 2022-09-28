@@ -49,8 +49,9 @@ private:
     float _cameraMoveNodeZ=-3;
     
     camera* _camera=NULL;
-    node* _bindNode=NULL;
+//    node* _bindNode=NULL;
     node* _bindNodeWithCameraMove=NULL;
+    std::vector<node*> _vecBindNode;
     
 #ifdef BUILD_MAC
     keyboardEvent* _kbEventObj=NULL;

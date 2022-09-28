@@ -57,11 +57,8 @@ public:
     float getCutOffOuter(){return m_fEngleOuter;};
     float getCutOffInner(){return m_fEngleInner;};
 
-
-    
-    void glUpdate(int id,int light_index);
-    // void glUpdate(int program_id,int light_index);
-    void update(int id,int light_index);
+    void glUpdate(int light_index);
+    void update(int light_index);
     glm::vec3 getDirection(){return _vec3Direction;};
     void setDirection(glm::vec3 d){_vec3Direction=d;};
     

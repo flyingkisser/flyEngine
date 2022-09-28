@@ -7,9 +7,7 @@
 //
 
 #include "cubeTex.h"
-
 #include "logUtil.h"
-
 #include "textureMgr.h"
 #include "shader.h"
 #include "shaderMgr.h"
@@ -41,9 +39,7 @@ bool cubeTex::init(){
     return initByVerticeArr(g_verticeArrWithTexCoordAndNormal,sizeof(g_verticeArrWithTexCoordAndNormal),desc,3);
 }
 
-void cubeTex::glInit(){
 
-}
 
 bool cubeTex::initByVerticeArr(float* arr,int arrSize,int descArr[],int descArrNum){
     if(_texPath!=NULL){
@@ -78,7 +74,7 @@ cubeTex* cubeTex::clone(){
     return n;
 };
 
-void cubeTex::draw(){
+void cubeTex::setPipelineValue(){
     _shaderObj->use();
     if(m_cb_before_draw_call!=nullptr)
         m_cb_before_draw_call(_shaderObj->getProgramID());
@@ -105,12 +101,18 @@ void cubeTex::draw(){
          _shaderObj->setBool(uniform_name_material_enabled,0);
         
     _shaderObj->setInt("texture0", 0);
-    
+}
+
+void cubeTex::drawCall(){
     glEnable(GL_DEPTH_TEST);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,_gl_texture0);
-//    glBindTexture(GL_TEXTURE_CUBE_MAP,_gl_texture0);
     glBindVertexArray(_gl_vao);
     glDrawArrays(GL_TRIANGLES,0,36);
+}
+
+void cubeTex::draw(){
+    setPipelineValue();
+    drawCall();
     state::log(36);
 }

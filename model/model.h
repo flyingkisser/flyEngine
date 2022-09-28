@@ -44,7 +44,7 @@ public:
     model(char* szPath);
 
     bool init();
-    void glInit();
+
     void draw();
     
     void setCBBeforeDraw(std::function<void()> cb){_cb_before_draw=cb;};

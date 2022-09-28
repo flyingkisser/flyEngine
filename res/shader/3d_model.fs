@@ -1,7 +1,6 @@
 #version 330 core
+#define POINT_LIGHT_NUM 4
 precision highp float;
-
-
 struct Material{
     bool enabled;
     vec3 ambient;

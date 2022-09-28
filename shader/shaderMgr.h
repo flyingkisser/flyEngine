@@ -27,8 +27,14 @@ public:
     static shader* get3d1texShader();
     static shader* get3d2texShader();
     static shader* get3d1texPongShader();
+    
+    static shader* get3d1texInsPongShader();
+    static shader* get3d1texInsByVBOPongShader();
+    
     static shader* get3d1texPongWithSpecularTexShader();
     static shader* getModelShader();
+    static shader* getModelInsShader();
+    static shader* getModelInsByVBOShader();
     
     static shader* get2d1texShader();
     
