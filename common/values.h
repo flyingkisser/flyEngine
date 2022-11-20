@@ -47,6 +47,7 @@
 #define GL_UNSIGNED_INT_SAMPLER_2D_MULTISAMPLE_ARRAY 0x910D
 #define GL_UNSIGNED_INT_SAMPLER_BUFFER 0x8DD8
 #define GL_UNSIGNED_INT_SAMPLER_2D_RECT 0x8DD5
+#define GL_FRAMEBUFFER_SRGB 0x8DB9
 #endif
 
 #define uniform_name_camera_pos "camera_pos"
@@ -106,11 +107,13 @@
 
 #define ubo_binding_mat_3d 0
 #define ubo_binding_mat_2d 1
+#define ubo_binding_mat_3d_shadow 2
 #define ubo_binding_light_dir 10
 #define ubo_binding_light_point 11
 #define ubo_binding_light_spot 12
 
 #define ubo_size_mat_3d 140
+#define ubo_size_mat_3d_shadow 140
 #define ubo_size_mat_2d 140
 
 #define ubo_size_light_dir 64
@@ -120,13 +123,27 @@
 #define ubo_size_light_spot 128
 #define ubo_size_light_spot_arr 512
 
+//texture id
+#define texture0 0
+#define mt_specular_tex 1
+#define texture_specular_mesh_0 2
+#define texture_normal_mesh_0 3
+#define texture_shadow 4
+#define texture_depth_cube 5
+
 extern float g_verticeArr[108];
 extern float g_verticeArrWithTexCoord[180];
 extern float g_verticeArrWithNormal[216];
 extern float g_verticeArrWithTexCoordAndNormal[288];
+extern float g_verticeArrWithNormalAndTexCoord[288];
+
+extern float g_verticeArrWithTexCoordAndNormalReverse[288];
 
 extern float g_verticeArrWithTexCoord_plane[30];
+extern float g_verticeArrWithTexCoordAndNormal_plane[54];
 extern float g_verticeArrWithTexCoord_2d[24];
+extern float g_verticeArrWithTexCoord_quad[20];
 extern float g_verticeArr_skybox[108];
+
 
 #endif /* values_h */

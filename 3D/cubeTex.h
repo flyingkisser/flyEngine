@@ -27,7 +27,7 @@ private:
     texture2* _texObj=NULL;
     const char* _texPath=NULL;
     
-    std::function <void(int programID)> m_cb_before_draw_call=nullptr;
+    
 
 public:
     unsigned int _gl_texture0=0;
@@ -46,7 +46,7 @@ public:
     void draw();
     void setPipelineValue();
     void drawCall();
-    void setCBDrawCall(std::function<void(int programID)> f){m_cb_before_draw_call=f;};
+    
 };
 
 NS_FLYENGINE_END

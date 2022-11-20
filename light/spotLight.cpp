@@ -61,6 +61,8 @@ void spotLight::update(int light_index){
     int enabled=1;
     int num=12;
     material2* mt=getMaterial();
+    glm::vec3 sp=mt->getSpecular();
+
     void* bufArr[]={
         &enabled,
         &m_fcutOffInner,
@@ -72,7 +74,7 @@ void spotLight::update(int light_index){
 
         (void*)glm::value_ptr(mt->getAmbient()),
         (void*)glm::value_ptr(mt->getDiffuse()),
-        (void*)glm::value_ptr(mt->getSpecular()),
+        (void*)glm::value_ptr(sp),
 
         &m_fConstant,
         &m_fLinear,

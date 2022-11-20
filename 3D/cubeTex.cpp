@@ -39,8 +39,6 @@ bool cubeTex::init(){
     return initByVerticeArr(g_verticeArrWithTexCoordAndNormal,sizeof(g_verticeArrWithTexCoordAndNormal),desc,3);
 }
 
-
-
 bool cubeTex::initByVerticeArr(float* arr,int arrSize,int descArr[],int descArrNum){
     if(_texPath!=NULL){
         _texObj=textureMgr::getInstance()->getTexture(_texPath);
@@ -75,7 +73,13 @@ cubeTex* cubeTex::clone(){
 };
 
 void cubeTex::setPipelineValue(){
+    //shader use must be called before any glDraw***
     _shaderObj->use();
+    
+    //nothing to set uniform if everything is not dirty!
+//    if(!isDirtyAll())
+//        return;
+   
     if(m_cb_before_draw_call!=nullptr)
         m_cb_before_draw_call(_shaderObj->getProgramID());
     
@@ -94,18 +98,20 @@ void cubeTex::setPipelineValue(){
         //高亮贴图
         texture2* texSpecular=m_material->getTexSpecular();
         if(texSpecular!=NULL){
-            _shaderObj->setBool(uniform_name_material_sp_tex_enabled,1);
-            _shaderObj->setInt(uniform_name_material_specular_tex,1);
+            _shaderObj->setBool(uniform_name_material_sp_tex_enabled,true);
+            _shaderObj->setInt(uniform_name_material_specular_tex,mt_specular_tex);
         }
     }else
-         _shaderObj->setBool(uniform_name_material_enabled,0);
+         _shaderObj->setBool(uniform_name_material_enabled,false);
         
     _shaderObj->setInt("texture0", 0);
+    //once uniform updated, should reset all dirty state!
+//    setDirtyAll(false);
 }
 
 void cubeTex::drawCall(){
     glEnable(GL_DEPTH_TEST);
-    glActiveTexture(GL_TEXTURE0);
+    // glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,_gl_texture0);
     glBindVertexArray(_gl_vao);
     glDrawArrays(GL_TRIANGLES,0,36);
@@ -115,4 +121,5 @@ void cubeTex::draw(){
     setPipelineValue();
     drawCall();
     state::log(36);
+//    flylog("cubeTex::draw end");
 }

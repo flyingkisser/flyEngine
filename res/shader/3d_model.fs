@@ -106,12 +106,12 @@ void main()
                 sp*=texture(mt.specular_tex,texCoord).rgb;
             specular+=sp;
         }
-        if(light.constant!=0.0f){  //需要计算距离衰减
-            float attenuation=calcAttenuation(posFrag,light.pos,light.constant,light.linear,light.quadratic);
-            ambient*=attenuation;
-            diffuse*=attenuation;
-            specular*=attenuation;
-        }
+        // if(light.constant!=0.0f){  //需要计算距离衰减
+        //     float attenuation=calcAttenuation(posFrag,light.pos,light.constant,light.linear,light.quadratic);
+        //     ambient*=attenuation;
+        //     diffuse*=attenuation;
+        //     specular*=attenuation;
+        // }
     }
     
     if(light_dirty){
@@ -119,6 +119,7 @@ void main()
             FragColor=vec4(mt.ambient*ambient+mt.diffuse*diffuse+mt.specular*specular,1)*obj_color+vec4(mt.specular*specular,1)*spec_color;
         else
             FragColor=vec4(ambient+diffuse,1)*obj_color+vec4(specular,1)*spec_color;
+            // FragColor=vec4(ambient+diffuse,1)*obj_color;
     }
     else{
         FragColor=obj_color;

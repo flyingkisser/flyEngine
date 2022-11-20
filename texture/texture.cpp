@@ -119,7 +119,6 @@ void texture::glInit(int texturePos){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     
-    glEnable(GL_TEXTURE_2D);
     //参数1:GL_TEXTURE_2D
     //参数2:指定为0，表示不是某一个大纹理数组的缩减
     //参数3:纹理的每一个颜色的格式

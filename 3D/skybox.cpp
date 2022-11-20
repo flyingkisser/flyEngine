@@ -84,6 +84,8 @@ bool skybox::init(){
 
 void skybox::draw(){
     _shaderObj->use();
+    if(m_cb_before_draw_call!=nullptr)
+        m_cb_before_draw_call(_shaderObj->getProgramID());
     
     //skybox的中心在0,0点，所以这里不用updateModel
     glEnable(GL_DEPTH_TEST);

@@ -11,8 +11,14 @@
 
 #include <stdio.h>
 #include <functional>
+#include <vector>
+#include <tuple>
+
 #include "defines.h"
 
+#ifdef BUILD_IOS
+#import "ViewController.h"
+#endif
 
 NS_FLYENGINE_BEGIN
 
@@ -23,6 +29,7 @@ class directionLight;
 class light;
 class pointLight;
 class spotLight;
+class shader;
 
 class world{
 private:
@@ -30,11 +37,20 @@ private:
     std::vector<light*> _vector_light;
     std::vector<pointLight*> _vector_point_light;
     std::vector<spotLight*> _vector_spot_light;
+    std::function <void()> _cb_before_any_gl_call=nullptr;
+    std::function <void()> _cb_after_any_gl_call=nullptr;
     std::function <void()> _cb_before_draw_call=nullptr;
-    std::function <void()> _cb_after_draw_call=nullptr;
-    std::function <void()> _cb_before_render=nullptr;
     camera* _camera=NULL;
     directionLight* m_directionLight=NULL;
+    std::vector<std::tuple<unsigned int,shader*,std::function<void()>>> _vector_pass;
+#ifdef BUILD_IOS
+    GLKView* _view=NULL;
+#endif
+    
+    void _drawAllChild(shader* sh);
+    void _main_loop();
+    void _draw();
+    void _renderOnce();
     
 public:
     world();
@@ -51,11 +67,7 @@ public:
     void start_rendering();
     void pause();
     void end();
-    void renderOnce();
-    
-    void main_loop();
-    
-    void draw();
+   
     control* getControl();
     
     directionLight* getDirectiontLight(){return m_directionLight;};
@@ -66,11 +78,11 @@ public:
     camera* getCamera(){return _camera;};
     
     float getFrameRate(){return CONST_FRAME_RATE;};
-    void setCBBeforeRender(std::function<void()> f){_cb_before_render=f;};
     void setCBBeforeDrawCall(std::function<void()> f){_cb_before_draw_call=f;};
-    void setCBAfterDrawCall(std::function<void()> f){_cb_after_draw_call=f;};
+    void setCBBeforeAnyGLCall(std::function<void()> f){_cb_before_any_gl_call=f;};
+    void setCBAfterAnyGLCall(std::function<void()> f){_cb_after_any_gl_call=f;};
   
-
+    void addPass(unsigned int fbo,shader* sh,std::function<void()> f);
    
 };
 

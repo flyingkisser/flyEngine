@@ -50,23 +50,21 @@ bool modelIns::loadModel(std::string path){
     return true;
 }
 
+
+
 void modelIns::processNode(aiNode* node,const aiScene *scene){
     for(int i=0;i<node->mNumMeshes;i++){
-        mesh meshObj=processMesh(scene->mMeshes[node->mMeshes[i]], scene);
-        if(_cb_before_draw!=NULL)
-            meshObj.setCBBeforeDraw(_cb_before_draw);
-        m_vecMeshes.push_back(meshObj);
-        flylog("mesh index %d processed![vertices %d]",node->mMeshes[i],meshObj.getVerticeCount());
+        int c=processMesh(scene->mMeshes[node->mMeshes[i]], scene);
+        flylog("mesh index %d processed![vertices %d]",node->mMeshes[i],c);
     }
     for(int i=0;i<node->mNumChildren;i++)
         processNode(node->mChildren[i], scene);
+    _meshObj=new mesh(_vertices,_indices,_textures);
+    if(_cb_before_draw!=NULL)
+        _meshObj->setCBBeforeDraw(_cb_before_draw);
 }
 
-//构造Mesh对象
-mesh modelIns::processMesh(aiMesh* ai_mesh,const aiScene *scene){
-    std::vector<Vertex> vertices;
-    std::vector<unsigned int> indices;
-    std::vector<Texture> textures;
+int modelIns::processMesh(aiMesh* ai_mesh,const aiScene *scene){
     //处理顶点坐标，法向量，纹理坐标，构造Vertex结构体
     for(int i=0;i<ai_mesh->mNumVertices;i++){
         Vertex vertex;
@@ -78,38 +76,49 @@ mesh modelIns::processMesh(aiMesh* ai_mesh,const aiScene *scene){
         vertex.normal.y=ai_mesh->mNormals[i].y;
         vertex.normal.z=ai_mesh->mNormals[i].z;
 
+        vertex.tangent.x=ai_mesh->mTangents[i].x;
+        vertex.tangent.y=ai_mesh->mTangents[i].y;
+        vertex.tangent.z=ai_mesh->mTangents[i].z;
+        
+        vertex.bitangent.x=ai_mesh->mBitangents[i].x;
+        vertex.bitangent.y=ai_mesh->mBitangents[i].y;
+        vertex.bitangent.z=ai_mesh->mBitangents[i].z;
+
         if(ai_mesh->mTextureCoords[0]){
-            vertex.pos_tex.x=ai_mesh->mTextureCoords[0][i].x;
-            vertex.pos_tex.y=ai_mesh->mTextureCoords[0][i].y;
+            vertex.pos_texcoord.x=ai_mesh->mTextureCoords[0][i].x;
+            vertex.pos_texcoord.y=ai_mesh->mTextureCoords[0][i].y;
         }else{
-            vertex.pos_tex.x=0;
-            vertex.pos_tex.y=0;
+            vertex.pos_texcoord.x=0;
+            vertex.pos_texcoord.y=0;
         }
-        vertices.push_back(vertex);
+        _vertices.push_back(vertex);
         m_totalVertics++;
     }
     //处理顶点坐标的索引
+    int offset=_indices.size();
     for(int i=0;i<ai_mesh->mNumFaces;i++){
         aiFace face=ai_mesh->mFaces[i];
         for(int j=0;j<face.mNumIndices;j++)
-            indices.push_back(face.mIndices[j]);
+            _indices.push_back(face.mIndices[j]+offset);
     }
     //处理纹理对象
     if(ai_mesh->mMaterialIndex>=0){
         aiMaterial* aiMT=scene->mMaterials[ai_mesh->mMaterialIndex];
         std::map<int,std::vector<Texture>>::iterator it=m_mapTexture.find(ai_mesh->mMaterialIndex);
         if(it!=m_mapTexture.end()){
-            textures=it->second;
+            _textures=it->second;
         }else{
             std::vector<Texture> diffuseMaps=loadMaterialTextures(aiMT, aiTextureType_DIFFUSE);
-            textures.insert(textures.end(), diffuseMaps.begin(),diffuseMaps.end());
+            _textures.insert(_textures.end(), diffuseMaps.begin(),diffuseMaps.end());
             std::vector<Texture> specularMaps=loadMaterialTextures(aiMT, aiTextureType_SPECULAR);
-            textures.insert(textures.end(), specularMaps.begin(),specularMaps.end());
-            m_mapTexture[ai_mesh->mMaterialIndex]=textures;
+            _textures.insert(_textures.end(), specularMaps.begin(),specularMaps.end());
+            std::vector<Texture> normalMaps=loadMaterialTextures(aiMT, aiTextureType_HEIGHT);
+            _textures.insert(_textures.end(), normalMaps.begin(),normalMaps.end());
+            m_mapTexture[ai_mesh->mMaterialIndex]=_textures;
             flylog("material index %d processed!",ai_mesh->mMaterialIndex);
         }
     }
-    return mesh(vertices,indices,textures);
+    return ai_mesh->mNumVertices;
 }
 
 std::vector<Texture> modelIns::loadMaterialTextures(aiMaterial *aiMT, aiTextureType aiTexType){
@@ -127,6 +136,9 @@ std::vector<Texture> modelIns::loadMaterialTextures(aiMaterial *aiMT, aiTextureT
              texture.type=TYPE_Specular;
         else if(aiTexType==aiTextureType_AMBIENT)
              texture.type=TYPE_Ambient;
+        else if(aiTexType==aiTextureType_HEIGHT)
+             texture.type=TYPE_Normal;
+
         //texture.type= aiTexType==aiTextureType_DIFFUSE? TYPE_Diffuse : TYPE_Specular;
         textures.push_back(texture);
         flylog("load texture %s as type %d id %d",filename.c_str(),texture.type,texture.id);
@@ -138,7 +150,7 @@ std::vector<Texture> modelIns::loadMaterialTextures(aiMaterial *aiMT, aiTextureT
 bool modelIns::init(){
     setPosition(glm::vec3(0,0,-5));
     if(_shaderObj==NULL){
-        _shaderObj=shaderMgr::getModelInsShader();
+        _shaderObj=shaderMgr::getModelInstancedShader();
     }
     if(_shaderObj==NULL){
         flylog("model::init shaderObj is null,return!");
@@ -149,16 +161,80 @@ bool modelIns::init(){
     return true;
 }
 
-void modelIns::useInsByVBO(){
-    setShader(shaderMgr::getModelInsByVBOShader());
-    nodeIns::useInsByVBO(3);
+void modelIns::useInstancedByVBO(){
+    _gl_vao=_meshObj->getVAO();
+    setShader(shaderMgr::getModelInstancedByVBOShader());
+    nodeIns::useInstancedByVBO(3);
 }
 
 void modelIns::draw(){
     _shaderObj->use();
     nodeIns::updateModel();
     nodeIns::glUpdateLight();
-    for(int i=0;i<m_vecMeshes.size();i++){
-        m_vecMeshes[i].drawIns(_shaderObj,_insCount);
-    }
+    // for(int i=0;i<m_vecMeshes.size();i++){
+    //     m_vecMeshes[i].drawIns(_shaderObj,_insCount);
+    // }
+     _meshObj->drawInstanced(_shaderObj,_insCount);
 }
+
+//void modelIns::processNode(aiNode* node,const aiScene *scene){
+//    for(int i=0;i<node->mNumMeshes;i++){
+//        mesh meshObj=processMesh(scene->mMeshes[node->mMeshes[i]], scene);
+//        if(_cb_before_draw!=NULL)
+//            meshObj.setCBBeforeDraw(_cb_before_draw);
+//        m_vecMeshes.push_back(meshObj);
+//        flylog("mesh index %d processed![vertices %d]",node->mMeshes[i],meshObj.getVerticeCount());
+//    }
+//    for(int i=0;i<node->mNumChildren;i++)
+//        processNode(node->mChildren[i], scene);
+//}
+//
+////构造Mesh对象
+//mesh modelIns::processMesh(aiMesh* ai_mesh,const aiScene *scene){
+//    std::vector<Vertex> vertices;
+//    std::vector<unsigned int> indices;
+//    std::vector<Texture> textures;
+//    //处理顶点坐标，法向量，纹理坐标，构造Vertex结构体
+//    for(int i=0;i<ai_mesh->mNumVertices;i++){
+//        Vertex vertex;
+//        vertex.pos_vetex.x=ai_mesh->mVertices[i].x;
+//        vertex.pos_vetex.y=ai_mesh->mVertices[i].y;
+//        vertex.pos_vetex.z=ai_mesh->mVertices[i].z;
+//
+//        vertex.normal.x=ai_mesh->mNormals[i].x;
+//        vertex.normal.y=ai_mesh->mNormals[i].y;
+//        vertex.normal.z=ai_mesh->mNormals[i].z;
+//
+//        if(ai_mesh->mTextureCoords[0]){
+//            vertex.pos_tex.x=ai_mesh->mTextureCoords[0][i].x;
+//            vertex.pos_tex.y=ai_mesh->mTextureCoords[0][i].y;
+//        }else{
+//            vertex.pos_tex.x=0;
+//            vertex.pos_tex.y=0;
+//        }
+//        vertices.push_back(vertex);
+//        m_totalVertics++;
+//    }
+//    //处理顶点坐标的索引
+//    for(int i=0;i<ai_mesh->mNumFaces;i++){
+//        aiFace face=ai_mesh->mFaces[i];
+//        for(int j=0;j<face.mNumIndices;j++)
+//            indices.push_back(face.mIndices[j]);
+//    }
+//    //处理纹理对象
+//    if(ai_mesh->mMaterialIndex>=0){
+//        aiMaterial* aiMT=scene->mMaterials[ai_mesh->mMaterialIndex];
+//        std::map<int,std::vector<Texture>>::iterator it=m_mapTexture.find(ai_mesh->mMaterialIndex);
+//        if(it!=m_mapTexture.end()){
+//            textures=it->second;
+//        }else{
+//            std::vector<Texture> diffuseMaps=loadMaterialTextures(aiMT, aiTextureType_DIFFUSE);
+//            textures.insert(textures.end(), diffuseMaps.begin(),diffuseMaps.end());
+//            std::vector<Texture> specularMaps=loadMaterialTextures(aiMT, aiTextureType_SPECULAR);
+//            textures.insert(textures.end(), specularMaps.begin(),specularMaps.end());
+//            m_mapTexture[ai_mesh->mMaterialIndex]=textures;
+//            flylog("material index %d processed!",ai_mesh->mMaterialIndex);
+//        }
+//    }
+//    return mesh(vertices,indices,textures);
+//}

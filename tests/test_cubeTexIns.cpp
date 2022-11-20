@@ -30,6 +30,9 @@
 #include "glslUtil.h"
 #include "window.h"
 #include "model.h"
+#include "randUtil.h"
+#include "mathUtil.h"
+
 USE_NS_FLYENGINE
 
 static material2* createMaterial(float ambient,float diffuse,float specular,float shineness){
@@ -160,7 +163,7 @@ void test_cubeIns_cube_2(){
       flylog("node init failed!");
       return;
     }
-    cubeObj->useInsByVBO();
+    cubeObj->useInstancedByVBO();
     
     cubeObj->setMaterial(createMaterial(1,1,1,2));
     world::getInstance()->addChild(cubeObj);
@@ -308,7 +311,7 @@ void test_cubeIns_model_2(){
       return;
     }
     world::getInstance()->addChild(modelObj);
-    modelObj->useInsByVBO();
+    modelObj->useInstancedByVBO();
 
     float inner=1;
     float indexI=0;
@@ -346,4 +349,161 @@ void test_cubeIns_model_2(){
         lightObj1->setPositionY(1.5*sin(radius));
         modelObj->setRotation(glm::vec3(10*cos(radius),5*cos(radius),0));
     },lightObj1,modelObj);
+}
+
+void test_cubeIns_asteroid_1(){
+    init_light_direction();
+    int max=256;
+    float radius = 6.0;
+    float offset = 2.5f;
+    model* modelPlanet=new model("res/model/planet/planet.obj");
+    if(!modelPlanet->init()){
+      flylog("modelPlanet init failed!");
+      return;
+    }
+    modelPlanet->setPosition(glm::vec3(0,0,-25));
+    
+    glm::vec3 posCenter=modelPlanet->getPosition();
+    float x0=posCenter.x;
+    float y0=posCenter.y;
+    float z0=posCenter.z;
+    
+    modelIns* modelAsteroid=new modelIns("res/model/rock/rock.obj",max);
+    if(!modelAsteroid->init()){
+      flylog("modelAsteroid init failed!");
+      return;
+    }
+    
+    world::getInstance()->addChild(modelPlanet);
+    world::getInstance()->addChild(modelAsteroid);
+    
+    srand(timeUtil::getTimeFloatSinceRun());
+   
+    
+    std::vector<float> vecAngle;
+    vecAngle.assign(max, 0);
+    
+    for(int i=0;i<max;i++){
+        float r=randUtil::getRand(0.1f, 360.0f);
+        vecAngle[i]=r;
+        float x=x0-radius*cos(r);
+        float z=z0-radius*sin(r);
+        float y=randUtil::getRand(-0.5f, 0.5f);
+        float rotAngle = randUtil::getRand(0.0f, 360.0f);
+        float scale=randUtil::getRand(0.1f, 0.3f);
+        
+        modelAsteroid->setPosition(i,glm::vec3(x,y,z));
+        modelAsteroid->setScale(i,scale);
+        modelAsteroid->setRotation(i,glm::vec3(rotAngle*0.4,rotAngle*0.6,rotAngle*0.8));
+    }
+    
+    //通过按住鼠标右键，控制模型旋转
+    control* controlObj=world::getInstance()->getControl();
+    controlObj->bindNode(modelAsteroid);
+    controlObj->bindNode(modelPlanet);
+    
+    //光源1
+    material2* mtLight=createMaterial(0.3, 0.8, 0.8, 2);
+    pointLight* lightObj1=new pointLight(glm::vec3(0.8,0.8,0.8),mtLight,0);
+    if(!lightObj1->init()){
+       flylog("point light init failed!");
+       return;
+    }
+    lightObj1->setPosition(glm::vec3(0,0,-4));
+    lightObj1->setScale(glm::vec3(0.2,0.2,0.2));
+    world::getInstance()->addPointLight(lightObj1);
+    
+    timerUtil* timerMgrObj=new timerUtil("light_test_timer");
+    timerMgrObj->exec(0.1,[](node* lightObj1,model* modelPlanet,modelIns* modelAsteroid,glm::vec3 posCenter,float radius,std::vector<float> vecAngle){
+        float v=timeUtil::getTimeFloatSinceRun();
+        v=v/30;
+        lightObj1->setPositionX(1.5*cos(v));
+        lightObj1->setPositionY(1.5*sin(v));
+        for(int i=0;i<modelAsteroid->getCount();i++){
+            float inner=v;
+            modelAsteroid->setPositionX(i, posCenter.x-radius*cos(vecAngle[i]+inner)-2);
+            modelAsteroid->setPositionZ(i, posCenter.z-radius*sin(vecAngle[i]+inner));
+        }
+        modelPlanet->setPosition(glm::vec3(-posCenter.x,-posCenter.y,-posCenter.z));
+        modelPlanet->rotateBy(glm::vec3(0,0.05,0));
+        modelPlanet->setPosition(posCenter);
+    },lightObj1,modelPlanet,modelAsteroid,posCenter,radius,vecAngle);
+}
+
+void test_cubeIns_asteroid_2(){
+    init_light_direction();
+    int max=30000;
+    float radius = 30;
+    model* modelPlanet=new model("res/model/planet/planet.obj");
+    if(!modelPlanet->init()){
+      flylog("modelPlanet init failed!");
+      return;
+    }
+    modelPlanet->setPosition(glm::vec3(0,0,-60));
+    
+    glm::vec3 posCenter=modelPlanet->getPosition();
+    float x0=posCenter.x;
+    float y0=posCenter.y;
+    float z0=posCenter.z;
+    
+    modelIns* modelAsteroid=new modelIns("res/model/rock/rock.obj",max);
+    if(!modelAsteroid->init()){
+      flylog("modelAsteroid init failed!");
+      return;
+    }
+    modelAsteroid->useInstancedByVBO();
+    
+    world::getInstance()->addChild(modelPlanet);
+    world::getInstance()->addChild(modelAsteroid);
+    
+    srand(timeUtil::getTimeFloatSinceRun());
+   
+    
+    std::vector<float> vecAngle;
+    vecAngle.assign(max, 0);
+    
+    for(int i=0;i<max;i++){
+        float r=randUtil::getRand(0.1f, 360.0f);
+        vecAngle[i]=r;
+        float x=x0-radius*cos(r);
+        float z=z0-radius*sin(r);
+        float y=randUtil::getRand(-0.7f, 0.7f);
+        float rotAngle = randUtil::getRand(0.0f, 360.0f);
+        float scale=randUtil::getRand(0.001f, 0.05f);
+        
+        modelAsteroid->setPosition(i,glm::vec3(x,y,z));
+        modelAsteroid->setScale(i,scale);
+        modelAsteroid->setRotation(i,glm::vec3(rotAngle*0.4,rotAngle*0.6,rotAngle*0.8));
+    }
+    
+    //通过按住鼠标右键，控制模型旋转
+    control* controlObj=world::getInstance()->getControl();
+    controlObj->bindNode(modelAsteroid);
+    controlObj->bindNode(modelPlanet);
+    
+    //光源1
+    material2* mtLight=createMaterial(0.3, 0.8, 0.8, 2);
+    pointLight* lightObj1=new pointLight(glm::vec3(0.8,0.8,0.8),mtLight,0);
+    if(!lightObj1->init()){
+       flylog("point light init failed!");
+       return;
+    }
+    lightObj1->setPosition(glm::vec3(0,0,-4));
+    lightObj1->setScale(glm::vec3(0.2,0.2,0.2));
+    world::getInstance()->addPointLight(lightObj1);
+    
+    timerUtil* timerMgrObj=new timerUtil("light_test_timer");
+    timerMgrObj->exec(0.1,[](node* lightObj1,model* modelPlanet,modelIns* modelAsteroid,glm::vec3 posCenter,float radius,std::vector<float> vecAngle){
+        float v=timeUtil::getTimeFloatSinceRun();
+        v=v/100;
+        lightObj1->setPositionX(1.5*cos(v));
+        lightObj1->setPositionY(1.5*sin(v));
+        for(int i=0;i<modelAsteroid->getCount();i++){
+            modelAsteroid->setPositionX(i, posCenter.x-radius*cos(vecAngle[i]+v)-3);
+            modelAsteroid->setPositionZ(i, posCenter.z-radius*sin(vecAngle[i]+v));
+        }
+        modelPlanet->setPosition(glm::vec3(-posCenter.x,-posCenter.y,-posCenter.z));
+        modelPlanet->rotateBy(glm::vec3(0,0.09,0));
+        modelPlanet->setPosition(posCenter);
+    },lightObj1,modelPlanet,modelAsteroid,posCenter,radius,vecAngle);
 }

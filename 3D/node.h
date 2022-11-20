@@ -55,6 +55,7 @@ protected:
     int _vertice_arr_size=0;
     int* _desc_arr=NULL;
     int _desc_arr_size=0;
+    std::function <void(int programID)> m_cb_before_draw_call=nullptr;
     
 public:
     node();
@@ -100,6 +101,15 @@ public:
     bool isDirtyMT(){return _dirtyMT;};
     void setDirtyMT(bool v){_dirtyMT=v;};
     
+    void setDirtyAll(bool v){
+        setDirtyMT(v);
+        setDirtyUBO(v);
+        setDirtyPos(v);
+    };
+    bool isDirtyAll(){
+        return isDirtyPos() || isDirtyMT() || isDirtyUBO();
+    };
+    
     bool isDirtyUBO(){return _dirtyUBO;};
     void setDirtyUBO(bool v){_dirtyUBO=v;};
     
@@ -116,6 +126,10 @@ public:
     shader* getShader(){return _shaderObj;};
     void setShader(shader* shaderObj);
     glm::mat4 getModelMatrix(){return _matModel;};
+    
+    void setPosRange(float v);
+    
+    void setCBBeforeDrawCall(std::function<void(int programID)> f){m_cb_before_draw_call=f;};
 };
 
 NS_FLYENGINE_END

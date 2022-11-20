@@ -38,9 +38,10 @@ void pointLight::glUpdate(int light_index){
     int enabled=1;
     int num=9;
     material2* mt=getMaterial();
+    glm::vec3 pos=getPosition();
     void* bufArr[]={
         &enabled,
-        glm::value_ptr(getPosition()),
+        glm::value_ptr(pos),
         (void*)glm::value_ptr(getColor()),
         (void*)glm::value_ptr(mt->getAmbient()),
         (void*)glm::value_ptr(mt->getDiffuse()),
@@ -54,6 +55,7 @@ void pointLight::glUpdate(int light_index){
         offsetArr[i]=offsetArr[i]+ubo_size_light_point*light_index;
     }
     uboMgr::writeData(_ubo, num, sizeArr,offsetArr,bufArr);
+    flylog("pointLight ubo updated pos %f %f %f!",pos.x,pos.y,pos.z);
 }
 
 

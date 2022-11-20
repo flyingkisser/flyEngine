@@ -39,6 +39,7 @@ public:
     bool init();
     void glInit();
     void draw();
+    void drawByType(int type,int verticeNum);
     
     const char* getImageFileName(){return _imgFileName;};
     unsigned int getTexID(){return _texID;};

@@ -91,7 +91,6 @@ void texture2::glInit(int texturePos){
         glActiveTexture(texturePos);
         _texturePos=texturePos-GL_TEXTURE0;
     }
-       
     glBindTexture(GL_TEXTURE_2D,_textureID);
     //GL_TEXTURE_WRAP_S表示纹理坐标的横向方向
     //GL_TEXTURE_WRAP_T表示纹理坐标的纵向方向
@@ -103,23 +102,24 @@ void texture2::glInit(int texturePos){
     //float borderColor[] = { 1.0f, 1.0f, 0.0f, 1.0f };
     //glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
     
+    //如果在大几何体上使用小贴图，GL_NEAREST会有块状锯齿感，GL_LINEAR则更为平滑
+    //GL_TEXTURE_MIN_FILTER表示当贴图需要缩小时使用哪种模式
+    //GL_TEXTURE_MAG_FILTER表示当贴图需要放大时使用哪种模式
     //GL_NEAREST    计算离坐标点最近的一个纹理像素，取这个像素的色值（即计算纹理坐标点与纹理像素中心点的距离，找到最近的纹理像素）
     //GL_LINEAR     找到坐标点最近的四个纹理像素，取这四个像素色值的混合，距离越近，像素占比越大
     //GL_NEAREST_MIPMAP_NEAREST    找到尺寸最接近的mipmap，然后使用NEAREST的方式取样
     //GL_LINEAR_MIPMAP_NEAREST     找到尺寸最接近的mipmap，然后使用LINEAR的方式取样
     //GL_NEAREST_MIPMAP_LINEAR     找到尺寸最近的两个mipmap混合，然后使用NEAREST的方式取样
     //GL_LINEAR_MIPMAP_LINEAR      找到尺寸最近的两个mipmap混合，然后使用LINEAR的方式取样
-    //如果在大几何体上使用小贴图，GL_NEAREST会有块状锯齿感，GL_LINEAR则更为平滑
-    //GL_TEXTURE_MIN_FILTER表示当贴图需要缩小时使用哪种模式
-    //GL_TEXTURE_MAG_FILTER表示当贴图需要放大时使用哪种模式
+ 
 //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 //    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, _format == GL_RGBA ? GL_CLAMP_TO_EDGE :GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, _format == GL_RGBA ? GL_CLAMP_TO_EDGE :GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    glEnable(GL_TEXTURE_2D);
+
     //参数1:GL_TEXTURE_2D
     //参数2:指定为0，表示不是某一个大纹理数组的缩减
     //参数3:纹理的每一个颜色的格式
@@ -131,6 +131,7 @@ void texture2::glInit(int texturePos){
     //参数9:纹理内存
     flylog("glTexImage2D from buf %llu begin %d*%d %d",_dataBuf,_width,_height,_width*_height);
     glTexImage2D(GL_TEXTURE_2D,0,_format,_width,_height,0,_format,GL_UNSIGNED_BYTE,_dataBuf);
+    checkGLError();
     flylog("glTexImage2D from buf %llu end",_dataBuf);
 //  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, structTex.width, structTex.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, structTex.buf);
 }

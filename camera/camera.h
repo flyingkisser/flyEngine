@@ -30,13 +30,22 @@ public:
     float getPositionY(){return _cameraPos.y;};
     float getPositionZ(){return _cameraPos.z;};
     glm::vec3 getPosition(){return _cameraPos;};
-    
+    glm::vec3 getFront(){return _cameraFront;};
+    float getYaw(){return _yaw;};
+    float getPitch(){return _pitch;};
+    float getFov(){return _fov;};
+
     void setProgrameID(int program){_program=program;};
     void setPosition(glm::vec3 v);
     void setPositionX(float v);
     void setPositionY(float v);
     void setPositionZ(float v);
-    void setPositionFront(glm::vec3 v);
+ 
+    void setYaw(float v);
+    void setPitch(float v);
+    
+    void setFocusPos(glm::vec3 p){_focusPos=glm::normalize(p);_bFocus=true;_dirtyPos=true;};
+    void disableFocus(){_bFocus=false;};
 
     void moveBy(glm::vec3 v);
     void rotate(glm::vec3 v);
@@ -52,17 +61,19 @@ public:
     void enableControl();
     control* getControl();
     
-    glm::vec3 getFront(){return _cameraFront;};
     glm::mat4 getLookAtMatrix();
     glm::mat4 getPerspectiveMatrix();
+    glm::mat4 getLightSpaceMat();
     
     void initUBO();
-//    void updateUBOOnDirty();
+    void updateUBOForShadow(glm::vec3 lightPos);
     
 private:
     void _updateCamera();
     void _updateProjection();
     void _updateUBO();
+    
+    void _updateFront();
     
     control* _controlObj;
     shader* _shaderObj;
@@ -77,9 +88,10 @@ private:
     glm::vec3 _cameraPosOrigin;
     glm::vec3 _cameraFront;
     glm::vec3 _cameraUp;
+    glm::vec3 _focusPos;
+    bool _bFocus;
     
     bool _dirtyPos;
-//    bool _dirtyProj;
     int _program=0;
     float _yaw=0;
     float _pitch=0;
@@ -89,7 +101,7 @@ private:
     
     int _ubo_mat_3d=0;
     int _ubo_mat_2d=0;
-
+    int _ubo_mat_3d_shadow=0;
 };
 
 NS_FLYENGINE_END

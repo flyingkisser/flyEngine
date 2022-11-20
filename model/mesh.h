@@ -18,11 +18,13 @@ NS_FLYENGINE_BEGIN
 struct Vertex{
     glm::vec3 pos_vetex;
     glm::vec3 normal;
-    glm::vec3 pos_tex;
+    glm::vec2 pos_texcoord;
+    glm::vec3 tangent;
+    glm::vec3 bitangent;
 };
 
 enum TextureType{
-    TYPE_Diffuse,TYPE_Specular,TYPE_Ambient
+    TYPE_Diffuse,TYPE_Specular,TYPE_Ambient,TYPE_Normal
 };
 
 struct Texture{
@@ -39,9 +41,10 @@ public:
 
     mesh(std::vector<Vertex> vecVertices,std::vector<unsigned int> vecIndices,std::vector<Texture> vecTextures);
     void draw(shader* s);
-    void drawIns(shader* s,int count);
+    void drawInstanced(shader* s,int count);
     int getVerticeCount(){return m_vecVertices.size();};
     void setCBBeforeDraw(std::function<void()> cb){_cb_before_draw=cb;};
+    unsigned int getVAO(){return m_int_vao;};
 private:
     unsigned int m_int_vao,m_int_vbo,m_int_ebo;
     std::function<void()> _cb_before_draw=NULL;

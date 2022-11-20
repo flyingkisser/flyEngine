@@ -36,7 +36,13 @@ void mesh::setupMesh(){
     glVertexAttribPointer(1,3,GL_FLOAT,GL_FALSE,sizeof(Vertex),(void*)offsetof(Vertex,normal));
     //纹理坐标
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,sizeof(Vertex),(void*)offsetof(Vertex,pos_tex));
+    glVertexAttribPointer(2,2,GL_FLOAT,GL_FALSE,sizeof(Vertex),(void*)offsetof(Vertex,pos_texcoord));
+    //tagnent
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3,3,GL_FLOAT,GL_FALSE,sizeof(Vertex),(void*)offsetof(Vertex,tangent));
+    //bitangent
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4,3,GL_FLOAT,GL_FALSE,sizeof(Vertex),(void*)offsetof(Vertex,bitangent));
 
     glBindVertexArray(0);
 }
@@ -44,22 +50,34 @@ void mesh::setupMesh(){
 void mesh::draw(shader* s){
     unsigned int diffuseIndex=0;
     unsigned int specularIndex=0;
-    bool debug=false;
+    unsigned int normalIndex=0;
+    bool debug=true;
+    s->use();
     for(int i=0;i<m_vecTextures.size();i++){
-        glActiveTexture(GL_TEXTURE0+i);
-        glBindTexture(GL_TEXTURE_2D, m_vecTextures[i].id);
         std::string strIndex;
         TextureType texType=m_vecTextures[i].type;
         if(texType==TYPE_Diffuse){
             strIndex=std::to_string(diffuseIndex);
-            s->setInt(("texture"+strIndex).c_str(),diffuseIndex,debug);
+            glActiveTexture(GL_TEXTURE0+texture0+diffuseIndex);
+            glBindTexture(GL_TEXTURE_2D, m_vecTextures[i].id);
+            s->setInt(("texture"+strIndex).c_str(),texture0+diffuseIndex,debug);
             diffuseIndex++;
         }
         else if(texType==TYPE_Specular){
             strIndex=std::to_string(specularIndex);
-            s->setInt(("texture_specular_mesh_"+strIndex).c_str(),2+specularIndex,debug);
+            glActiveTexture(GL_TEXTURE0+texture_specular_mesh_0+specularIndex);
+            glBindTexture(GL_TEXTURE_2D, m_vecTextures[i].id);
+            s->setInt(("texture_specular_mesh_"+strIndex).c_str(),texture_specular_mesh_0+specularIndex,debug);
             s->setBool(("texture_specular_mesh_"+strIndex+"_enabled").c_str(),true,debug);
             specularIndex++;
+        }
+        else if(texType==TYPE_Normal){
+            strIndex=std::to_string(normalIndex);
+            glActiveTexture(GL_TEXTURE0+texture_normal_mesh_0+normalIndex);
+            glBindTexture(GL_TEXTURE_2D, m_vecTextures[i].id);
+            s->setInt(("texture_normal_mesh_"+strIndex).c_str(),texture_normal_mesh_0+normalIndex,debug);
+            s->setBool(("texture_normal_mesh_"+strIndex+"_enabled").c_str(),true,debug);
+            normalIndex++;
         }
     }
     if(_cb_before_draw)
@@ -72,25 +90,36 @@ void mesh::draw(shader* s){
     state::log((int)m_vecIndices.size());
 }
 
-void mesh::drawIns(shader* s,int count){
+void mesh::drawInstanced(shader* s,int count){
     unsigned int diffuseIndex=0;
     unsigned int specularIndex=0;
+    unsigned int normalIndex=0;
     bool debug=false;
     for(int i=0;i<m_vecTextures.size();i++){
-        glActiveTexture(GL_TEXTURE0+i);
-        glBindTexture(GL_TEXTURE_2D, m_vecTextures[i].id);
         std::string strIndex;
         TextureType texType=m_vecTextures[i].type;
         if(texType==TYPE_Diffuse){
             strIndex=std::to_string(diffuseIndex);
-            s->setInt(("texture"+strIndex).c_str(),diffuseIndex,debug);
+            glActiveTexture(GL_TEXTURE0+texture0+diffuseIndex);
+            glBindTexture(GL_TEXTURE_2D, m_vecTextures[i].id);
+            s->setInt(("texture"+strIndex).c_str(),texture0+diffuseIndex,debug);
             diffuseIndex++;
         }
         else if(texType==TYPE_Specular){
             strIndex=std::to_string(specularIndex);
-            s->setInt(("texture_specular_mesh_"+strIndex).c_str(),2+specularIndex,debug);
+            glActiveTexture(GL_TEXTURE0+texture_specular_mesh_0+specularIndex);
+            glBindTexture(GL_TEXTURE_2D, m_vecTextures[i].id);
+            s->setInt(("texture_specular_mesh_"+strIndex).c_str(),texture_specular_mesh_0+specularIndex,debug);
             s->setBool(("texture_specular_mesh_"+strIndex+"_enabled").c_str(),true,debug);
             specularIndex++;
+        }
+        else if(texType==TYPE_Normal){
+            strIndex=std::to_string(normalIndex);
+            glActiveTexture(GL_TEXTURE0+texture_normal_mesh_0+normalIndex);
+            glBindTexture(GL_TEXTURE_2D, m_vecTextures[i].id);
+            s->setInt(("texture_normal_mesh_"+strIndex).c_str(),texture_normal_mesh_0+normalIndex,debug);
+            s->setBool(("texture_normal_mesh_"+strIndex+"_enabled").c_str(),true,debug);
+            normalIndex++;
         }
     }
     if(_cb_before_draw)

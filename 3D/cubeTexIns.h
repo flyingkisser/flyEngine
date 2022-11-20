@@ -33,7 +33,7 @@ public:
     cubeTexIns(const char* texPath,int count);
     cubeTexIns(unsigned int texID,int count);
     bool init();
-    void useInsByVBO();
+    void useInstancedByVBO();
   
     
     void draw();

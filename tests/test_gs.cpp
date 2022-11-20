@@ -40,7 +40,7 @@ void test_gs_1(){
     glBufferData(GL_ARRAY_BUFFER,sizeof(posArr),&posArr,GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,2*sizeof(float),(void*)0);
-    world::getInstance()->setCBBeforeRender([sh,vao](){
+    world::getInstance()->setCBBeforeDrawCall([sh,vao](){
         sh->use();
         glBindVertexArray(vao);
         glDrawArrays(GL_POINTS,0,4);
@@ -64,7 +64,7 @@ void test_gs_2(){
     glBufferData(GL_ARRAY_BUFFER,sizeof(posArr),&posArr,GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0,2,GL_FLOAT,GL_FALSE,2*sizeof(float),(void*)0);
-    world::getInstance()->setCBBeforeRender([sh,vao](){
+    world::getInstance()->setCBBeforeDrawCall([sh,vao](){
         sh->use();
         glBindVertexArray(vao);
         glDrawArrays(GL_POINTS,0,4);
@@ -82,7 +82,7 @@ void test_gs_model_explode(){
     
     world::getInstance()->addChild(modelObj);
     world::getInstance()->getControl()->bindNode(modelObj);
-    world::getInstance()->setCBBeforeRender([sh](){
+    world::getInstance()->setCBBeforeDrawCall([sh](){
         float t=timeUtil::getTimeFloatSinceRun();
         sh->use();
         sh->setFloat("time",t,true);
@@ -97,7 +97,7 @@ void test_gs_model_show_normals(){
     shader* newShader=new shader("./res/shader/3d_model_normal.vs","./res/shader/3d_model_normal.fs","./res/shader/3d_model_normal.gs");
     shader* oldShader=modelObj->getShader();
     world::getInstance()->getControl()->bindNode(modelObj);
-    world::getInstance()->setCBBeforeRender([newShader,oldShader,modelObj](){
+    world::getInstance()->setCBBeforeDrawCall([newShader,oldShader,modelObj](){
         modelObj->setShader(oldShader);
         modelObj->draw();
         modelObj->setShader(newShader);

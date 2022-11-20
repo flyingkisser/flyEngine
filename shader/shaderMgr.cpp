@@ -74,10 +74,10 @@ shader* shaderMgr::get3dColorShader(){
 shader* shaderMgr::get3d1texShader(){
     return shaderMgr::getShader("./res/shader/3d_1tex.vs","./res/shader/3d_1tex.fs");
 }
-shader* shaderMgr::get3d1texInsPongShader(){
+shader* shaderMgr::get3d1texInstancedPongShader(){
     return shaderMgr::getShader("./res/shader/3d_1tex_phong_ins.vs","./res/shader/3d_1tex_phong.fs");
 }
-shader* shaderMgr::get3d1texInsByVBOPongShader(){
+shader* shaderMgr::get3d1texInstancedByVBOPongShader(){
     return shaderMgr::getShader("./res/shader/3d_1tex_phong_ins_by_vbo.vs","./res/shader/3d_1tex_phong.fs");
 }
 shader* shaderMgr::get3d1texPongShader(){
@@ -95,15 +95,18 @@ shader* shaderMgr::getModelShader(){
 //    return shaderMgr::getShaderUniqueue("./res/shader/3d_model.vs","./res/shader/3d_model.fs");
     return shaderMgr::getShaderUniqueue("./res/shader/3d_model.vs","./res/shader/3d_1tex_phong.fs");
 }
-shader* shaderMgr::getModelInsShader(){
+shader* shaderMgr::getModelInstancedShader(){
     return shaderMgr::getShaderUniqueue("./res/shader/3d_model_ins.vs","./res/shader/3d_1tex_phong.fs");
 }
-shader* shaderMgr::getModelInsByVBOShader(){
+shader* shaderMgr::getModelInstancedByVBOShader(){
     return shaderMgr::getShaderUniqueue("./res/shader/3d_model_ins_vbo.vs","./res/shader/3d_1tex_phong.fs");
 }
 
 shader* shaderMgr::get2d1texShader(){
     return shaderMgr::getShader("./res/shader/2d_1tex.vs", "./res/shader/2d_1tex.fs");
+}
+shader* shaderMgr::get2dQuadShader(){
+    return shaderMgr::getShader("./res/shader/2d_quad.vs", "./res/shader/2d_quad.fs");
 }
 
 

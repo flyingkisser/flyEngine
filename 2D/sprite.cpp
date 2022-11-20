@@ -36,7 +36,7 @@ bool sprite::init(){
         flylog("sprite:get _texID %d",_texID);
     }
     if(_texID<=0){
-        flylog("sprite:get texture failed!return!");
+        flylog("sprite:_texID %d<=0!return!",_texID);
         return false;
     }
     if(_imgFileName)
@@ -120,8 +120,10 @@ void sprite::setGray(bool s){
     _bGray=s;
     _b_dirty_shader=true;
 }
-void sprite::draw(){
+void sprite::drawByType(int type,int verticeNum){
     _shaderObj->use();
+    if(m_cb_before_draw_call!=nullptr)
+        m_cb_before_draw_call(_shaderObj->getProgramID());
     _shaderObj->setInt("texture0", 0);
     if(_b_dirty_vertices){
         _reInitVertices();
@@ -138,7 +140,12 @@ void sprite::draw(){
 //    cam->update2D();
     updateModel();
     glBindVertexArray(_gl_vao);
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,_texID);
-    glDrawArrays(GL_TRIANGLES,0,6);
-    state::log(6);
+    glDrawArrays(type,0,verticeNum);
+    state::log(verticeNum);
+}
+
+void sprite::draw(){
+    drawByType(GL_TRIANGLES,6);
 }

@@ -39,13 +39,13 @@ bool model::loadModel(std::string path){
 #ifdef BUILD_IOS
     path=ios_dirUtil::getFileFullPathName(path.c_str());
 #endif
-    const aiScene* scene=importer.ReadFile(path,aiProcess_Triangulate|aiProcess_FlipUVs);
+    const aiScene* scene=importer.ReadFile(path,aiProcess_Triangulate|aiProcess_FlipUVs|aiProcess_CalcTangentSpace);
     if(!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode){
         flylog("model::loadModel load %s failed : %s",path.c_str(),importer.GetErrorString());
         return false;
     }
     mRootDirectory = path.substr(0, path.find_last_of('/'));
-    processNode(scene->mRootNode, scene);
+    processNode2(scene->mRootNode, scene);
     flylog("model %s have total vertices %d",path.c_str(),m_totalVertics);
     return true;
 }
@@ -77,13 +77,21 @@ mesh model::processMesh(aiMesh* ai_mesh,const aiScene *scene){
         vertex.normal.x=ai_mesh->mNormals[i].x;
         vertex.normal.y=ai_mesh->mNormals[i].y;
         vertex.normal.z=ai_mesh->mNormals[i].z;
+        
+        vertex.tangent.x=ai_mesh->mTangents[i].x;
+        vertex.tangent.y=ai_mesh->mTangents[i].y;
+        vertex.tangent.z=ai_mesh->mTangents[i].z;
+        
+        vertex.bitangent.x=ai_mesh->mBitangents[i].x;
+        vertex.bitangent.y=ai_mesh->mBitangents[i].y;
+        vertex.bitangent.z=ai_mesh->mBitangents[i].z;
 
         if(ai_mesh->mTextureCoords[0]){
-            vertex.pos_tex.x=ai_mesh->mTextureCoords[0][i].x;
-            vertex.pos_tex.y=ai_mesh->mTextureCoords[0][i].y;
+            vertex.pos_texcoord.x=ai_mesh->mTextureCoords[0][i].x;
+            vertex.pos_texcoord.y=ai_mesh->mTextureCoords[0][i].y;
         }else{
-            vertex.pos_tex.x=0;
-            vertex.pos_tex.y=0;
+            vertex.pos_texcoord.x=0;
+            vertex.pos_texcoord.y=0;
         }
         vertices.push_back(vertex);
         m_totalVertics++;
@@ -105,11 +113,82 @@ mesh model::processMesh(aiMesh* ai_mesh,const aiScene *scene){
             textures.insert(textures.end(), diffuseMaps.begin(),diffuseMaps.end());
             std::vector<Texture> specularMaps=loadMaterialTextures(aiMT, aiTextureType_SPECULAR);
             textures.insert(textures.end(), specularMaps.begin(),specularMaps.end());
+            std::vector<Texture> normalMaps=loadMaterialTextures(aiMT, aiTextureType_HEIGHT);
+            textures.insert(textures.end(), normalMaps.begin(),normalMaps.end());
             m_mapTexture[ai_mesh->mMaterialIndex]=textures;
             flylog("material index %d processed!",ai_mesh->mMaterialIndex);
         }
     }
     return mesh(vertices,indices,textures);
+}
+
+void model::processNode2(aiNode* node,const aiScene *scene){
+    for(int i=0;i<node->mNumMeshes;i++){
+        int c=processMesh2(scene->mMeshes[node->mMeshes[i]], scene);
+        flylog("mesh index %d processed![vertices %d]",node->mMeshes[i],c);
+    }
+    for(int i=0;i<node->mNumChildren;i++)
+        processNode2(node->mChildren[i], scene);
+    _meshObj=new mesh(_vertices,_indices,_textures);
+    if(_cb_before_draw!=NULL)
+        _meshObj->setCBBeforeDraw(_cb_before_draw);
+}
+
+int model::processMesh2(aiMesh* ai_mesh,const aiScene *scene){
+    //处理顶点坐标，法向量，纹理坐标，构造Vertex结构体
+    for(int i=0;i<ai_mesh->mNumVertices;i++){
+        Vertex vertex;
+        vertex.pos_vetex.x=ai_mesh->mVertices[i].x;
+        vertex.pos_vetex.y=ai_mesh->mVertices[i].y;
+        vertex.pos_vetex.z=ai_mesh->mVertices[i].z;
+
+        vertex.normal.x=ai_mesh->mNormals[i].x;
+        vertex.normal.y=ai_mesh->mNormals[i].y;
+        vertex.normal.z=ai_mesh->mNormals[i].z;
+
+        vertex.tangent.x=ai_mesh->mTangents[i].x;
+        vertex.tangent.y=ai_mesh->mTangents[i].y;
+        vertex.tangent.z=ai_mesh->mTangents[i].z;
+        
+        vertex.bitangent.x=ai_mesh->mBitangents[i].x;
+        vertex.bitangent.y=ai_mesh->mBitangents[i].y;
+        vertex.bitangent.z=ai_mesh->mBitangents[i].z;
+
+        if(ai_mesh->mTextureCoords[0]){
+            vertex.pos_texcoord.x=ai_mesh->mTextureCoords[0][i].x;
+            vertex.pos_texcoord.y=ai_mesh->mTextureCoords[0][i].y;
+        }else{
+            vertex.pos_texcoord.x=0;
+            vertex.pos_texcoord.y=0;
+        }
+        _vertices.push_back(vertex);
+        m_totalVertics++;
+    }
+    //处理顶点坐标的索引
+    int offset=_indices.size();
+    for(int i=0;i<ai_mesh->mNumFaces;i++){
+        aiFace face=ai_mesh->mFaces[i];
+        for(int j=0;j<face.mNumIndices;j++)
+            _indices.push_back(face.mIndices[j]+offset);
+    }
+    //处理纹理对象
+    if(ai_mesh->mMaterialIndex>=0){
+        aiMaterial* aiMT=scene->mMaterials[ai_mesh->mMaterialIndex];
+        std::map<int,std::vector<Texture>>::iterator it=m_mapTexture.find(ai_mesh->mMaterialIndex);
+        if(it!=m_mapTexture.end()){
+            _textures=it->second;
+        }else{
+            std::vector<Texture> diffuseMaps=loadMaterialTextures(aiMT, aiTextureType_DIFFUSE);
+            _textures.insert(_textures.end(), diffuseMaps.begin(),diffuseMaps.end());
+            std::vector<Texture> specularMaps=loadMaterialTextures(aiMT, aiTextureType_SPECULAR);
+            _textures.insert(_textures.end(), specularMaps.begin(),specularMaps.end());
+            std::vector<Texture> normalMaps=loadMaterialTextures(aiMT, aiTextureType_HEIGHT);
+            _textures.insert(_textures.end(), normalMaps.begin(),normalMaps.end());
+            m_mapTexture[ai_mesh->mMaterialIndex]=_textures;
+            flylog("material index %d processed!",ai_mesh->mMaterialIndex);
+        }
+    }
+    return ai_mesh->mNumVertices;
 }
 
 std::vector<Texture> model::loadMaterialTextures(aiMaterial *aiMT, aiTextureType aiTexType){
@@ -127,6 +206,8 @@ std::vector<Texture> model::loadMaterialTextures(aiMaterial *aiMT, aiTextureType
              texture.type=TYPE_Specular;
         else if(aiTexType==aiTextureType_AMBIENT)
              texture.type=TYPE_Ambient;
+        else if(aiTexType==aiTextureType_HEIGHT)
+             texture.type=TYPE_Normal;
         //texture.type= aiTexType==aiTextureType_DIFFUSE? TYPE_Diffuse : TYPE_Specular;
         textures.push_back(texture);
         flylog("load texture %s as type %d id %d",filename.c_str(),texture.type,texture.id);
@@ -136,7 +217,8 @@ std::vector<Texture> model::loadMaterialTextures(aiMaterial *aiMT, aiTextureType
 
 
 bool model::init(){
-    setPosition(glm::vec3(0,0,-5));
+//    setPosition(glm::vec3(0,0,-5));
+    setDirtyPos(true);
     if(_shaderObj==NULL){
         _shaderObj=shaderMgr::getModelShader();
 //        _shaderObj=shaderMgr::get3d1texPongShader();
@@ -152,9 +234,13 @@ bool model::init(){
 
 void model::draw(){
     _shaderObj->use();
-    node::updateModel();
-    node::glUpdateLight();
-    for(int i=0;i<m_vecMeshes.size();i++){
-        m_vecMeshes[i].draw(_shaderObj);
-    }
+//    if(isDirtyAll()){
+        node::updateModel();
+        node::glUpdateLight();
+//        setDirtyAll(false);
+//    }
+//    for(int i=0;i<m_vecMeshes.size();i++){
+//        m_vecMeshes[i].draw(_shaderObj);
+//    }
+    _meshObj->draw(_shaderObj);
 }

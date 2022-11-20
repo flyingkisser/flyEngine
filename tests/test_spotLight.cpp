@@ -90,6 +90,58 @@ void test_oneSpotLight_oneCube(){
     glslUtil::printAllUniformAndBlock(cubeObj->getShader()->getProgramID());
 }
 
+
+void test_oneSpotLight_oneCube_BlinnPhong(){
+    //init_light_direction();
+    
+    //普通cube
+    node* cubeObj=new cubeTex("res/wood.png");
+    if(!cubeObj->init()){
+      flylog("node init failed!");
+      return;
+    }
+    cubeObj->setPosition(glm::vec3(0,0,-6));
+    material2* mt=createMaterial(1.0, 0.8, 1.0f, 1);
+    mt->setSpecularTex("res/wood_specular.png");
+    cubeObj->setMaterial(mt);
+    shader* sh=cubeObj->getShader();
+    sh->setBool("bUseBlinnPhong",true);
+    world::getInstance()->addChild(cubeObj);
+    
+    //通过按住鼠标右键，控制模型旋转
+    control* controlObj=world::getInstance()->getControl();
+    controlObj->bindNode(cubeObj);
+
+    //光源1
+    float am=0.2f;
+    float diff=0.2f;
+    float sp=0.8f;
+    material2* mtLight=createMaterial(am, diff, sp, 1);
+    spotLight* lightObj1=new spotLight(glm::vec3(1.0,1.0,1.0),mtLight,30,60);
+    if(!lightObj1->init()){
+       flylog("lightObj1 init failed!");
+       return;
+    }
+    lightObj1->setPosition(glm::vec3(0,0,-2));
+    lightObj1->setScale(glm::vec3(0.2,0.2,0.2));
+    lightObj1->setDirection(glm::vec3(0,0,-1));
+    world::getInstance()->addSpotLight(lightObj1);
+    lightObj1->update(0);
+    
+    timerUtil* timerMgrObj=new timerUtil("light_test_timer");
+    timerMgrObj->exec(0.1,[](node* lightObj1){
+        float radius=timeUtil::getTimeFloatSinceRun();
+        lightObj1->setPositionX(1*cos(radius));
+        lightObj1->setPositionY(1*sin(radius));
+        
+//        lightObj1->setPositionX(1*cos(radius));
+//        lightObj1->setPositionZ(2*sin(radius));
+    },lightObj1);
+    
+//    cubeObj->getShader()->use();
+//    glslUtil::printAllUniformAndBlock(cubeObj->getShader()->getProgramID());
+}
+
 void test_oneSpotLight_multiCube_specularMap(){
     init_light_direction();
     //普通cube

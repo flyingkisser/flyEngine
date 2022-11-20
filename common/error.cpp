@@ -67,7 +67,10 @@ int checkGLError(const char *pos)
 #elif BUILD_IOS
     error = glGetError();
     if (error!=GL_NO_ERROR){
-        fprintf( stderr, "OpenGL error code : %d %s [%s]\n", error, getGLErrorStr(error),pos);
+        if(pos!=NULL)
+            fprintf( stderr, "OpenGL error code : %d %s [%s]\n", error, getGLErrorStr(error),pos);
+        else
+            fprintf( stderr, "OpenGL error code : %d %s\n", error, getGLErrorStr(error));
     }
 #endif
     return error;

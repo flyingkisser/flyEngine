@@ -15,7 +15,7 @@ layout (std140) uniform mat3d{
     vec3 cam_pos;
 };
 
-uniform mat4 matModelArr[100];
+uniform mat4 matModelArr[256];
 
 void main(){
     mat4 matModel=matModelArr[gl_InstanceID];

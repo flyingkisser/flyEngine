@@ -38,6 +38,16 @@ public:
     bool setDiffuseTex(const char* szTex);
     bool setSpecularTex(const char* szTex);
     void glUpdateForCube(int gl_program);
+    
+    float getAmbientFloat(){return m_vec3Ambient.x;};
+    float getDiffuseFloat(){return m_vec3Diffuse.x;};
+    float getSpecularFloat(){return m_vec3Specular.x;};
+    float getShiness(){return m_fShininess;};
+    void setAmbient(float v){m_vec3Ambient=glm::vec3(v);};
+    void setDiffuse(float v){m_vec3Diffuse=glm::vec3(v);};
+    void setSpecular(float v){m_vec3Specular=glm::vec3(v);};
+    void setShiness(float v){m_fShininess=v;};
+ 
 };
 
 NS_FLYENGINE_END

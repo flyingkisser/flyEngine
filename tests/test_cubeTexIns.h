@@ -18,4 +18,6 @@ void test_cubeIns_model_0();
 void test_cubeIns_model_1();
 void test_cubeIns_model_2();
 
+void test_cubeIns_asteroid_1();
+void test_cubeIns_asteroid_2();
 #endif /* test_cubeTexIns_hpp */

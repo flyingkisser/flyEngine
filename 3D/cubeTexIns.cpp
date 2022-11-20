@@ -46,7 +46,7 @@ bool cubeTexIns::init(){
         return false;
     }
     if(_shaderObj==NULL)
-        _shaderObj=shaderMgr::get3d1texInsPongShader();
+        _shaderObj=shaderMgr::get3d1texInstancedPongShader();
     if(_shaderObj==NULL){
         flylog("cubeTexIns::init shaderObj is null,return!");
         return false;
@@ -56,9 +56,9 @@ bool cubeTexIns::init(){
     return true;
 }
 
-void cubeTexIns::useInsByVBO(){
-    setShader(shaderMgr::get3d1texInsByVBOPongShader());
-    nodeIns::useInsByVBO(3);
+void cubeTexIns::useInstancedByVBO(){
+    setShader(shaderMgr::get3d1texInstancedByVBOPongShader());
+    nodeIns::useInstancedByVBO(3);
 }
 
 void cubeTexIns::drawCall(){
@@ -71,6 +71,8 @@ void cubeTexIns::drawCall(){
 
 void cubeTexIns::draw(){
     updateModel();
+    if(m_cb_before_draw_call!=nullptr)
+        m_cb_before_draw_call(_shaderObj->getProgramID());
     drawCall();
     state::log(36*_insCount);
 }

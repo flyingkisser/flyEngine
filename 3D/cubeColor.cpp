@@ -36,6 +36,8 @@ bool cubeColor::init(){
 
 void cubeColor::draw(){
     _shaderObj->use();
+    if(m_cb_before_draw_call!=nullptr)
+        m_cb_before_draw_call(_shaderObj->getProgramID());
     node::updateModel();
     _shaderObj->setVec3("color", glm::value_ptr(m_vec3Color));
 

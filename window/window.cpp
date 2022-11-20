@@ -26,8 +26,10 @@ int g_screenHigh=0;
 
 int g_winWidth=800;
 int g_winHigh=600;
+int g_shadowWidth=1024;
+int g_shadowHigh=1024;
 
-static void reshape2D(GLFWwindow* window,int w,int h)
+static void reshape2D(GLFWwindow* win,int w,int h)
 {
     g_winWidth=w;
     g_winHigh=h;
@@ -49,6 +51,8 @@ void window::init(){
     #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
+    //设置msaa一个像素点进行4次采样
+//    glfwWindowHint(GLFW_SAMPLES, 4);
 
     int monitorCount=0;
     //获取第一个屏幕的大小
@@ -59,7 +63,9 @@ void window::init(){
         g_screenHigh=mode->height;
         break;
     }
-
+    g_winWidth=g_screenWidth/2;
+    g_winHigh=g_screenHigh/2;
+   
     GLFWwindow* window=glfwCreateWindow(g_winWidth, g_winHigh, "openGL test", NULL, NULL);
     if(!window){
        std::cout<<"glfwCreateWindow failed!"<<std::endl;
@@ -78,6 +84,9 @@ void window::init(){
     }
     keyboardEventMgr::init(window);
     mouseEventMgr::init(window);
+    
+    reshape2D(NULL,g_screenWidth,g_screenHigh);
+    
 #elif BUILD_IOS
     g_window=0;
     flyEngine::size st=windowUtil::getWinSize();
@@ -86,6 +95,8 @@ void window::init(){
     st=windowUtil::getResolutionSize();
     g_screenWidth=st.width;
     g_screenHigh=st.height;
+    g_shadowWidth=g_screenWidth;
+    g_shadowHigh=g_screenHigh;
     
 //    unsigned int depthRenderbuffer=0;
 //    glGenRenderbuffers(1, &depthRenderbuffer);

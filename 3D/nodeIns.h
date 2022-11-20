@@ -34,11 +34,11 @@ protected:
     
 public:
     nodeIns(int count);
-    void setCBDrawCall(std::function<void()> f){_cb_before_draw=f;};
+    void setCBBeforeDrawCall(std::function<void()> f){_cb_before_draw=f;};
     
     void updateModel();
-    void useInsByVBO(int attribIndex);
-    void updateInsVBO();
+    void useInstancedByVBO(int attribIndex);
+    void updateInstancedVBO();
     
     void setCount(int count);
     void setPosition(int i,glm::vec3 p);
@@ -48,6 +48,9 @@ public:
     void setRotation(int i,glm::vec3 v);
     void setScale(int i,glm::vec3 v);
     void setScale(int i,float v);
+    
+    glm::vec3 getPosition(int i);
+    int getCount(){return _insCount;};
 
     void moveBy(int i,glm::vec3 v);
     void scaleBy(int i,glm::vec3 v);

@@ -64,9 +64,12 @@ USE_NS_FLYENGINE
     
     timeUtil::init();
     window::init();
+    checkGLError();
     glslUtil::init();
+    checkGLError();
     uboMgr::initAllUbo();
-
+    checkGLError();
+    
     testMainBegin();
     return YES;
 }

@@ -7,6 +7,7 @@
 //
 
 #include "mathUtil.h"
+#include <cmath>
 
 int mathUtil::ceil(float v){
     int high=(int)v;
@@ -73,6 +74,17 @@ float mathUtil::abs(float v){
     return v>=0?v:-v;
 }
 
+float mathUtil::sqrt(float v){
+    if(v<=0)
+        return 0;
+    return std::sqrt(v);
+}
+
+float mathUtil::pow(float v,float s){
+    return std::pow(v,s);
+}
+
+
 void mathUtil::test(){
 //    int v=0;
 //    float vf=0;
@@ -96,4 +108,18 @@ void mathUtil::test(){
 //    vf=max(1.7f,-1.7f);
 //    v=min(2,0);
 //    v=max(3,10);
+}
+
+
+void mathUtil::extendPosRange(float* arr,int rows,int columns,float v){
+    if(v==0)
+        return;
+    float s=v/arr[0];
+    if(s<0)
+        s=-s;
+    for(int i=0;i<rows;i++){
+        for(int j=0;j<3;j++){
+            arr[i*columns+j]*=s;
+        }
+    }
 }

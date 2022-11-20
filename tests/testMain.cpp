@@ -19,6 +19,11 @@
 #include "test_ubo.h"
 #include "test_gs.h"
 #include "test_cubeTexIns.h"
+#include "test_msaa.h"
+#include "test_gamma.h"
+#include "test_shadow_mapping.h"
+#include "test_normal_parallax_mapping.h"
+
 void testMainBegin(){
     //code cube test
 //    test_cubeColor();
@@ -26,7 +31,7 @@ void testMainBegin(){
     //texture cube test
 //     test_oneCubeTex();
     
-//      test_twoCubeTex();
+//     test_twoCubeTex();
 //    test_multiCubeTex(3);
     
     //action test
@@ -43,6 +48,8 @@ void testMainBegin(){
     
     //点光源测试
 //    test_onePointLight_oneCube();
+//    test_onePointLight_oneCube_BlinnPhong();
+
 // test_onePointLight_oneCube_changingColor();
 //    test_onePointLight_twoCube();
 //    test_twoPointLight_oneCube();
@@ -54,10 +61,14 @@ void testMainBegin(){
     
     //手电筒光源测试
 //    test_oneSpotLight_oneCube();
+//         test_oneSpotLight_oneCube_BlinnPhong();
+        
 //    test_oneSpotLight_multiCube_specularMap();
 //    test_oneSpotLight_multiCube_specularMap_cameraControl();
 //    test_vector();
 //    test_one_model();
+//    test_one_model_onePointLight_BlinnPhong();
+//    test_onePointLight_oneCube_BlinnPhong_2();
     
 //    test_depths();
 //    test_depths_2();
@@ -74,6 +85,7 @@ void testMainBegin(){
 //    test_facecull_2();
 //    test_sprite_1();
 //    test_sprite_2();
+//    test_quad_1();
     
 //    test_framebuffer();
 //    test_framebuffer_mirror();
@@ -97,5 +109,26 @@ void testMainBegin(){
 //    test_cubeIns_cube_2();
 //    test_cubeIns_model_0();
 //    test_cubeIns_model_1();
-    test_cubeIns_model_2();
+//    test_cubeIns_model_2();
+//    test_cubeIns_asteroid_1();
+//    test_cubeIns_asteroid_2();
+//    test_msaa_1();
+//    test_msaa_framebuffer_no_msaa();
+//    test_msaa_framebuffer_normal();
+//    test_msaa_framebuffer_texture();
+    
+//    test_gamma_1();
+//    test_gamma_2();
+//    test_shadow_mapping_1();
+//    test_shadow_mapping_to_tex();
+//    test_shadow_mapping_normal();
+//    test_shadow_mapping_use_pass();
+//    test_shadow_mapping_shadow_static();
+//    test_shadow_mapping_light_move();
+//    test_shadow_cubemap_light_move();
+    
+//    test_normal_mapping_1();
+//    test_normal_mapping_2();
+//    test_normal_mapping_3();
+     test_normal_mapping_model();
 }

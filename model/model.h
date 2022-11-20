@@ -23,6 +23,7 @@
 NS_FLYENGINE_BEGIN
 
 class shader;
+class mesh;
 
 class model : public node{
 private:
@@ -37,9 +38,16 @@ private:
     bool loadModel(std::string path);
     void processNode(aiNode* node,const aiScene *scene);
     mesh processMesh(aiMesh* node,const aiScene *scene);
+    void processNode2(aiNode* node,const aiScene *scene);
+    int processMesh2(aiMesh* ai_mesh,const aiScene *scene);
     std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType aiTexType);
 
 
+    std::vector<Vertex> _vertices;
+    std::vector<unsigned int> _indices;
+    std::vector<Texture> _textures;
+    mesh* _meshObj;
+    
 public:
     model(char* szPath);
 

@@ -96,6 +96,11 @@ void test_oneCubeTex(){
     cubeObj->setRotation(glm::vec3(30,60,30));
     cubeObj->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
     
+    shader* sh=cubeObj->getShader();
+    sh->use();
+//    sh->setBool("bCheckShadow", false);
+//    sh->setBool("bCheckShadowByCubemap", false);
+    sh->setInt("texture_depth_cube", 4);    //samplerCube类型的uniform必须手动设置一下
     world::getInstance()->addChild(cubeObj);
     cubeObj->print();
     
@@ -111,11 +116,9 @@ void test_oneCubeTex(){
     },cubeObj);
 
     
-    int proID=cubeObj->getShader()->getProgramID();
-//    glslUtil::printAllUniforms(proID);
-   
-    glslUtil::printAllUniformAndBlock(proID);
-    glslUtil::printUniformValue(proID, "matModel");
+//    int proID=cubeObj->getShader()->getProgramID();
+//    glslUtil::printAllUniformAndBlock(proID);
+//    glslUtil::printUniformValue(proID, "matModel");
 }
 
 void test_twoCubeTex(){
@@ -129,8 +132,8 @@ void test_twoCubeTex(){
     nodeObj1->setMaterial(createMaterial(1.0,1.0,1.0,0.2));
     world::getInstance()->addChild(nodeObj1);
 
-    //node* nodeObj2=new cubeTex("res/smile.png");
-    node* nodeObj2=new cubeTex("res/fire.png");
+    node* nodeObj2=new cubeTex("res/smile.png");
+    // node* nodeObj2=new cubeTex("res/fire.png");
     if(!nodeObj2->init()){
       flylog("node2 init failed!");
       return;

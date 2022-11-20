@@ -13,5 +13,6 @@
 
 void test_sprite_1();
 void test_sprite_2();
+void test_quad_1();
 
 #endif /* test_sprite_h */

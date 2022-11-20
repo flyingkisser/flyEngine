@@ -28,15 +28,16 @@ public:
     static shader* get3d2texShader();
     static shader* get3d1texPongShader();
     
-    static shader* get3d1texInsPongShader();
-    static shader* get3d1texInsByVBOPongShader();
+    static shader* get3d1texInstancedPongShader();
+    static shader* get3d1texInstancedByVBOPongShader();
     
     static shader* get3d1texPongWithSpecularTexShader();
     static shader* getModelShader();
-    static shader* getModelInsShader();
-    static shader* getModelInsByVBOShader();
+    static shader* getModelInstancedShader();
+    static shader* getModelInstancedByVBOShader();
     
     static shader* get2d1texShader();
+    static shader* get2dQuadShader();
     
     static shader* getShader(const char* szVertFileName,const char* szFragFileName);
     static shader* getShader(int programID);

@@ -23,7 +23,9 @@ public:
     
     static float abs(float v);
     static int abs(int v);
-    
+    static float sqrt(float v);
+    static float pow(float v,float s);
+    static void extendPosRange(float* arr,int rows,int columns,float v);
     static void test();
 };
 

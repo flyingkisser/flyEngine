@@ -4,6 +4,7 @@ layout (location=0) in vec3 aPos;
 layout (location=1) in vec2 aTexCoord;
 
 out vec2 texCoord;
+out vec4 posProj;
 
 layout (std140) uniform mat3d{
     mat4 proj;
@@ -15,5 +16,6 @@ uniform mat4 matModel;
 
 void main(){
     gl_Position = proj * view * matModel * vec4(aPos, 1);
+    posProj=gl_Position;
     texCoord=aTexCoord;
 }

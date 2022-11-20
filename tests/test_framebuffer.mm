@@ -41,7 +41,8 @@ void test_framebuffer(){
     sp->flipY(true);
     
     cam->setPosition(glm::vec3(0,0,3));
-    world::getInstance()->setCBBeforeDrawCall([st](){
+    
+    world::getInstance()->setCBBeforeAnyGLCall([st](){
         glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);
     });
     
@@ -51,7 +52,7 @@ void test_framebuffer(){
     int view=0;
 #endif
     
-    world::getInstance()->setCBBeforeRender([st,cam,sp,cubeObj,view](){
+    world::getInstance()->setCBBeforeDrawCall([st,cam,sp,cubeObj,view](){
         cubeObj->draw();
 #ifdef BUILD_MAC
         glBindFramebuffer(GL_FRAMEBUFFER, 0);   //绑定默认的framebuffer
@@ -84,12 +85,15 @@ void test_framebuffer_mirror(){
     
     fboStruct st=fbo::createFBO();
     sprite* sp=new sprite(st.texID);
+    
+    fboStruct st2=fbo::createFBO();
+    sprite* sp2=new sprite(st2.texID);
 
     sp->flipY(true);
     sp->setScale(0.8);
     
     cam->setPosition(glm::vec3(0,0,3));
-    world::getInstance()->setCBBeforeDrawCall([st](){
+    world::getInstance()->setCBBeforeAnyGLCall([st](){
         glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);
     });
     
@@ -98,7 +102,7 @@ void test_framebuffer_mirror(){
 #else
     int view=0;
 #endif
-    world::getInstance()->setCBAfterDrawCall([st,cam,sp,cubeObj,view](){
+    world::getInstance()->setCBAfterAnyGLCall([st,cam,sp,cubeObj,view](){
         cubeObj->draw();
 #ifdef BUILD_MAC
         glBindFramebuffer(GL_FRAMEBUFFER, 0);   //绑定默认的framebuffer
@@ -128,7 +132,7 @@ void test_framebuffer_kernel(){
     sp->setShader(shaderMgr::getShader("./res/shader/2d_1tex.vs","./res/shader/2d_1tex_kernel.fs"));
     
     cam->setPosition(glm::vec3(0,0,3));
-    world::getInstance()->setCBBeforeDrawCall([st](){
+    world::getInstance()->setCBBeforeAnyGLCall([st](){
         glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);
     });
 #ifdef BUILD_IOS
@@ -136,7 +140,7 @@ void test_framebuffer_kernel(){
 #else
     int view=0;
 #endif
-    world::getInstance()->setCBAfterDrawCall([st,cam,sp,cubeObj,view](){
+    world::getInstance()->setCBAfterAnyGLCall([st,cam,sp,cubeObj,view](){
         cubeObj->draw();
 #ifdef BUILD_MAC
         glBindFramebuffer(GL_FRAMEBUFFER, 0);   //绑定默认的framebuffer

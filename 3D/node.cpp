@@ -115,29 +115,20 @@ void node::setShader(shader* shaderObj){
     _gl_program=shaderObj->getProgramID();
 }
 
-void node::updateModel(){
-    if(_dirtyPos){
-        //移动
-        _matModel=glm::translate(glm::mat4(1.0f),_pos);
-        //旋转
-        if(_rotate.x)//沿x轴
-          _matModel=glm::rotate(_matModel,glm::radians(_rotate.x),glm::vec3(1,0,0));
-        if(_rotate.y)//沿y轴
-          _matModel=glm::rotate(_matModel,glm::radians(_rotate.y),glm::vec3(0,1,0));
-        if(_rotate.z)//沿z轴
-          _matModel=glm::rotate(_matModel,glm::radians(_rotate.z),glm::vec3(0,0,1));
-        //缩放
-        _matModel=glm::scale(_matModel,_scale);
-        _dirtyPos=false;
-    }
-    _shaderObj->setMat4(uniform_name_mat_model, glm::value_ptr(_matModel));
-}
-
 void node::initVAO(float* arr,int arrSize,int descArr[],int descArrSize){
     _vertice_arr=arr;
     _vertice_arr_size=arrSize;
     _desc_arr=descArr;
     _desc_arr_size=descArrSize;
+    if(_gl_vao>0){
+        glDeleteVertexArrays(1,&_gl_vao);
+        _gl_vao=0;
+    }
+        
+    if(_gl_vbo>0){
+        glDeleteBuffers(1,&_gl_vbo);
+        _gl_vbo=0;
+    }
     glGenVertexArrays(1,&_gl_vao);
     glBindVertexArray(_gl_vao);
     glGenBuffers(1,&_gl_vbo);
@@ -155,6 +146,24 @@ void node::initVAO(float* arr,int arrSize,int descArr[],int descArrSize){
     }
     glBindBuffer(GL_ARRAY_BUFFER,0);
     glBindVertexArray(0);
+}
+
+void node::updateModel(){
+    if(_dirtyPos){
+        //移动
+        _matModel=glm::translate(glm::mat4(1.0f),_pos);
+        //旋转
+        if(_rotate.x)//沿x轴
+          _matModel=glm::rotate(_matModel,glm::radians(_rotate.x),glm::vec3(1,0,0));
+        if(_rotate.y)//沿y轴
+          _matModel=glm::rotate(_matModel,glm::radians(_rotate.y),glm::vec3(0,1,0));
+        if(_rotate.z)//沿z轴
+          _matModel=glm::rotate(_matModel,glm::radians(_rotate.z),glm::vec3(0,0,1));
+        //缩放
+        _matModel=glm::scale(_matModel,_scale);
+        _dirtyPos=false;
+    }
+    _shaderObj->setMat4(uniform_name_mat_model, glm::value_ptr(_matModel));
 }
 
 void node::glUpdateLight(){

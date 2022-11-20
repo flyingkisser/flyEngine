@@ -17,6 +17,7 @@
 #include "keyboardEventMgr.h"
 #include "mouseEvent.h"
 #include "mouseEventMgr.h"
+#include "nodeIns.h"
 #endif
 
 #ifdef BUILD_IOS
@@ -151,11 +152,13 @@ void control::bindCamera(flyEngine::camera* c){
         
         _yaw+=rotateX;
         _pitch+=rotateY;
-        glm::vec3 posFront;
-        posFront.x=cos(glm::radians(_yaw))*cos(glm::radians(_pitch));
-        posFront.y=sin(glm::radians(_pitch));
-        posFront.z=sin(glm::radians(_yaw))*cos(glm::radians(_pitch));
-        _camera->setPositionFront(glm::normalize(posFront));
+        _camera->setYaw(_yaw);
+        _camera->setPitch(_pitch);
+//        glm::vec3 posFront;
+//        posFront.x=cos(glm::radians(_yaw))*cos(glm::radians(_pitch));
+//        posFront.y=sin(glm::radians(_pitch));
+//        posFront.z=sin(glm::radians(_yaw))*cos(glm::radians(_pitch));
+//        _camera->setPositionFront(glm::normalize(posFront));
     });
 
     _msEventObj->regOnMoveWithMiddleHold([&](float x,float y){
@@ -200,8 +203,15 @@ void control::bindNode(flyEngine::node* nodeObj){
         float rotateY=360.0f*((dy)/_height2PI);
         _mouseRightLastX=x;
         _mouseRightLastY=y;
-        for(auto node:_vecBindNode)
-            node->rotateBy(glm::vec3(rotateY,rotateX,0.0f));
+        for(auto node:_vecBindNode){
+            nodeIns* nodeInstanced=dynamic_cast<nodeIns*>(node);
+            if(nodeInstanced==NULL)
+                node->rotateBy(glm::vec3(rotateY,rotateX,0.0f));
+            else
+                nodeInstanced->rotateBy(glm::vec3(rotateY,rotateX,0.0f));
+
+        }
+            
     });
     _msEventObj->regOnRightClickRelease([&](){
         _mouseRightOriginX=0;

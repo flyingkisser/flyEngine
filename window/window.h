@@ -10,11 +10,14 @@
 #define window_h
 
 #include <stdio.h>
+#include <functional>
 #include "defines.h"
 
 extern GLFWwindow* g_window;
 extern int g_winWidth;  //device size
 extern int g_winHigh;   //device size
+extern int g_shadowWidth;  //device size
+extern int g_shadowHigh;   //device size
 extern int g_screenWidth;   //resilution size
 extern int g_screenHigh;    //resilution size
 

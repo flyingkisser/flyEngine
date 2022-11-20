@@ -22,6 +22,9 @@ struct fboStruct{
 class fbo{
 public:
     static fboStruct createFBO();
+    static fboStruct createFBOMSAA();
+    static fboStruct createFBOForDepth();
+    static fboStruct createFBOForDepthWithCubemap();
 };
 
 NS_FLYENGINE_END

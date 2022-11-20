@@ -13,19 +13,21 @@
 
 unsigned int g_ubo_id_mat_2d=0;
 unsigned int g_ubo_id_mat_3d=0;
+unsigned int g_ubo_id_mat_3d_shadow=0;
 unsigned int g_ubo_id_arr[100]={0};
 
 USE_NS_FLYENGINE
 
 //uniform buffer object
-void uboMgr::linkUBOAndBindPoint(int programID,const char* uboNameInShader,int bindPoint){
+void uboMgr::linkUBOAndBindPoint(int programID,const char* uboNameInShader,int bindPoint,bool debug){
     int index=glGetUniformBlockIndex(programID,uboNameInShader);
     if(index>=0){
         glUniformBlockBinding(programID,index,bindPoint);
         flylog("uboMgr::linkUBOAndBindPoint [program %d] bind [block_index %d %s] at %d",programID,index,uboNameInShader,bindPoint);
         return;
     }else{
-        flylog("uboMgr::linkUBOAndBindPoint [program %d] cannot find uniform block index of %s,ommit!",programID,uboNameInShader);
+        if(debug)
+            flylog("uboMgr::linkUBOAndBindPoint [program %d] cannot find uniform block index of %s,ommit!",programID,uboNameInShader);
     }
 }
 
@@ -65,6 +67,7 @@ void uboMgr::writeData(unsigned int ubo,int num,int sizeArr[],int offsetArr[],vo
 void uboMgr::initAllUbo(){
     g_ubo_id_mat_2d=uboMgr::createUBO(ubo_binding_mat_2d,ubo_size_mat_2d,"mat2d");
     g_ubo_id_mat_3d=uboMgr::createUBO(ubo_binding_mat_3d,ubo_size_mat_3d,"mat3d");
+    g_ubo_id_mat_3d_shadow=uboMgr::createUBO(ubo_binding_mat_3d_shadow,ubo_size_mat_3d_shadow,"mat3d_shadow");
     g_ubo_id_arr[ubo_binding_light_dir]=uboMgr::createUBO(ubo_binding_light_dir, ubo_size_light_dir_arr,"light_dir");
     g_ubo_id_arr[ubo_binding_light_point]=uboMgr::createUBO(ubo_binding_light_point, ubo_size_light_point_arr,"light_point");
     g_ubo_id_arr[ubo_binding_light_spot]=uboMgr::createUBO(ubo_binding_light_spot, ubo_size_light_spot_arr,"light_spot");

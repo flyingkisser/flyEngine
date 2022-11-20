@@ -58,7 +58,7 @@ static void init_light_direction(){
 //    directionLight* dirLight=new directionLight(glm::vec3(1,1,1),glm::vec3(-0.2,-1,-0.3),0.1,0.5,0.1,8);
     glm::vec3 light_pos=glm::vec3(0,0.2,0.2);
     glm::vec3 light_dir=light_pos-glm::vec3(0,0,0);
-    directionLight* dirLight=new directionLight(glm::vec3(1,1,1),light_dir,0.1,0.5,0.8,8);
+    directionLight* dirLight=new directionLight(glm::vec3(1,1,1),light_dir,0.1,0.1,0.1,1);
     world::getInstance()->setDirectiontLight(dirLight);
 
     //因为只有环境光，所以设置的比较亮
@@ -97,3 +97,41 @@ void test_one_model(){
     },modelObj,pLight);
 }
 
+void test_one_model_onePointLight_BlinnPhong(){
+    init_light_direction();
+    
+    pointLight* pLight=new pointLight(glm::vec3(1,1,1),createMaterial(0.2, 0.2, 1, 1),0);
+    if(!pLight->init()){
+         flylog("pLight init failed!");
+         return;
+    }
+    pLight->setPosition(glm::vec3(-0.7,0.6,-22));
+    world::getInstance()->addPointLight(pLight);
+
+    model* modelObj=new model("res/model/backpack/backpack.obj");
+    if(!modelObj->init()){
+       flylog("modelObj init failed!");
+       return;
+    }
+    modelObj->rotateBy(glm::vec3(0,30,0));
+    modelObj->setPosition(glm::vec3(0,0,-20));
+    shader* sh=modelObj->getShader();
+    sh->setBool("bUseBlinnPhong",true);
+    world::getInstance()->addChild(modelObj);
+    world::getInstance()->setCBBeforeDrawCall([](){
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    });
+    
+    //通过按住鼠标右键，控制模型旋转
+    control* controlObj=world::getInstance()->getControl();
+    controlObj->bindNode(modelObj);
+
+    timerUtil* timerMgrObj=new timerUtil("model_test_timer");
+    timerMgrObj->exec(0.1,[](node* _node,node* lightObj){
+//        _node->rotateBy(glm::vec3(0,0.5f,0));
+        float radius=timeUtil::getTimeFloatSinceRun();
+        lightObj->setPositionX(2*cos(radius));
+        lightObj->setPositionZ(8*sin(radius)-16);
+    },modelObj,pLight);
+}

@@ -54,11 +54,16 @@ shader::shader(const char* szVertFileName,const char* szFragFileName,const char*
         return;
     }
     
+    //setup inital values
     uboMgr::linkUBOAndBindPoint(_idProgram,"mat3d", ubo_binding_mat_3d);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"mat3d_shadow", ubo_binding_mat_3d_shadow);
     uboMgr::linkUBOAndBindPoint(_idProgram,"mat2d", ubo_binding_mat_2d);
     uboMgr::linkUBOAndBindPoint(_idProgram,"light_dir", ubo_binding_light_dir);
     uboMgr::linkUBOAndBindPoint(_idProgram,"light_point", ubo_binding_light_point);
     uboMgr::linkUBOAndBindPoint(_idProgram,"light_spot", ubo_binding_light_spot);
+    use();
+    setInt("texture_shadow", texture_shadow);
+    setInt("texture_depth_cube", texture_depth_cube);
 
 //  ssboMgr::linkSSBOAndBindPoint(_idProgram,"light_spot", ubo_binding_light_spot);
 }
@@ -280,6 +285,29 @@ void shader::setBool(const char *name, bool v,bool debug){
         return;
     }
     glUniform1i(pos, (int)v);
+}
+
+bool shader::getBool(const char* name,bool debug){
+    unsigned int value[16]={0};
+    int pos=glGetUniformLocation(_idProgram, name);
+    if(pos==-1){
+        if(debug)
+            flylog("shader::getBool cannot find %s",name);
+        return false;
+    }
+    glGetUniformuiv(_idProgram,pos,value);
+    return (bool)value[0];
+}
+float shader::getFloat(const char* name,bool debug){
+    float value[16]={0};
+    int pos=glGetUniformLocation(_idProgram, name);
+    if(pos==-1){
+        if(debug)
+            flylog("shader::getFloat cannot find %s",name);
+        return false;
+    }
+    glGetUniformfv(_idProgram,pos,value);
+    return value[0];
 }
 
 void shader::setInt(const char *name, int v,bool debug){

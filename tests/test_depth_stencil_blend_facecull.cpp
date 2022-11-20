@@ -57,7 +57,7 @@ void test_depths(){
     world::getInstance()->getControl()->bindNode(cubeObj2);
     world::getInstance()->getControl()->bindNode(plainObj);
         
-    world::getInstance()->setCBBeforeDrawCall([](){
+    world::getInstance()->setCBBeforeAnyGLCall([](){
        // glDepthFunc(GL_ALWAYS);//深度测试无条件通过，这时最后绘制的，会覆盖前面绘制的，GL_LESS是默认值
         glDepthFunc(GL_LESS);
     });
@@ -102,7 +102,7 @@ void test_depths_2(){
     
     world::getInstance()->getControl()->bindNode(plainObj);
 
-    world::getInstance()->setCBBeforeDrawCall([](){
+    world::getInstance()->setCBBeforeAnyGLCall([](){
         glDepthFunc(GL_LESS);//GL_LESS是默认值
     });
 }
@@ -146,7 +146,7 @@ void test_stencil(){
     shader* borderShader=new shader("res/shader/3d_1tex.vs","res/shader/color_border.fs");
     camera* cam=world::getInstance()->getCamera();
     
-    world::getInstance()->setCBBeforeDrawCall([cubeObj,cubeObj2,plainObj,cam,defShader,borderShader](){
+    world::getInstance()->setCBBeforeAnyGLCall([cubeObj,cubeObj2,plainObj,cam,defShader,borderShader](){
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_STENCIL_TEST);
         glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -179,11 +179,11 @@ void test_stencil(){
         cubeObj->draw();
         cubeObj2->draw();
     });
-    //在setCBBeforeDrawCall之后，会调用glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    //在setCBBeforeAnyGLCall之后，会调用glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     //即清除颜色和深度缓存，所以上面这些操作只是记录下来了stencil缓存
     
     //让多出来的片元通过stencil测试，绘制出来描边的效果
-    world::getInstance()->setCBAfterDrawCall([cubeObj,cubeObj2,cam,borderShader](){
+    world::getInstance()->setCBAfterAnyGLCall([cubeObj,cubeObj2,cam,borderShader](){
         cubeObj->setScale(0.31);
         cubeObj2->setScale(0.31);
         glDisable(GL_DEPTH_TEST);
@@ -243,7 +243,7 @@ void test_stencil_2(){
     camera* cam=world::getInstance()->getCamera();
     
     //让多出来的片元通过stencil测试，绘制出来描边的效果
-    world::getInstance()->setCBAfterDrawCall([plainObj,cubeObj,cubeObj2,cam,defShader,borderShader](){
+    world::getInstance()->setCBAfterAnyGLCall([plainObj,cubeObj,cubeObj2,cam,defShader,borderShader](){
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_STENCIL_TEST);
         glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -310,7 +310,7 @@ void test_stencil_3(){
     camera* cam=world::getInstance()->getCamera();
     
     //让多出来的片元通过stencil测试，绘制出来描边的效果
-    world::getInstance()->setCBAfterDrawCall([plainObj,cubeObj,cubeObj2,cam,defShader,borderShader](){
+    world::getInstance()->setCBAfterAnyGLCall([plainObj,cubeObj,cubeObj2,cam,defShader,borderShader](){
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_STENCIL_TEST);
         glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -368,7 +368,7 @@ void test_stencil_4(){
     shader* borderShader=new shader("res/shader/3d_1tex.vs","res/shader/color_border.fs");
     flyEngine::camera* cam=world::getInstance()->getCamera();
 
-    world::getInstance()->setCBBeforeDrawCall([modelObj,plainObj,cam,defShader,borderShader](){
+    world::getInstance()->setCBBeforeAnyGLCall([modelObj,plainObj,cam,defShader,borderShader](){
        
         
         //stencil缓存不更新
@@ -382,7 +382,7 @@ void test_stencil_4(){
         modelObj->draw();
     });
     
-    world::getInstance()->setCBAfterDrawCall([modelObj,plainObj,defShader,borderShader](){
+    world::getInstance()->setCBAfterAnyGLCall([modelObj,plainObj,defShader,borderShader](){
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_STENCIL_TEST);
         glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
@@ -544,7 +544,7 @@ void test_blend_2(){
     //所以整体的效果就是放在前面有透明的物体如玻璃，显示不出来后面的物体
     //所以需要按先后顺序进行绘制（即DrawCall)
     //先绘制后面的，再绘制前面的带透明效果的
-    world::getInstance()->setCBBeforeDrawCall([vectorPos,vectorWindow](){
+    world::getInstance()->setCBBeforeAnyGLCall([vectorPos,vectorWindow](){
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
@@ -589,7 +589,7 @@ void test_facecull(){
     world::getInstance()->addChild(modelObj);
     world::getInstance()->getControl()->bindNode(modelObj);
     
-    world::getInstance()->setCBBeforeRender([plainObj,modelObj](){
+    world::getInstance()->setCBBeforeDrawCall([plainObj,modelObj](){
         glDisable(GL_CULL_FACE);
         glEnable(GL_DEPTH_TEST);
         glClear(GL_DEPTH_BUFFER_BIT);
@@ -617,7 +617,7 @@ void test_facecull_2(){
     world::getInstance()->addChild(cubeObj);
     cubeObj->runAction(new forever(1,new rotateBy(1,glm::vec3(0,10,0))));
     world::getInstance()->getControl()->bindNode(cubeObj);
-    world::getInstance()->setCBBeforeRender([](){
+    world::getInstance()->setCBBeforeDrawCall([](){
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
     });

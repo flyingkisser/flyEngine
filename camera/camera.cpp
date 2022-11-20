@@ -21,12 +21,14 @@ camera::camera(){
 }
 
 void camera::_updateCamera(){
-    int sizeArr[]={64,16};
+    int sizeArr[]={64,12};
     int offsetArr[]={64,128};
     if(!_dirtyPos)
         return;
     _dirtyPos=false;
     _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
+    if(_bFocus)
+        _matCamera=glm::lookAt(_cameraPos, _focusPos, _cameraUp);
     void* bufArr[]={
         (void*)glm::value_ptr(_matCamera),
         (void*)glm::value_ptr(_cameraPos)
@@ -74,13 +76,26 @@ void camera::setPositionZ(float v){
     _dirtyPos=true;
 }
 
-void camera::setPositionFront(glm::vec3 pos){
-    _cameraFront.x=pos.x;
-    _cameraFront.y=pos.y;
-    _cameraFront.z=pos.z;
+void camera::_updateFront(){
+    glm::vec3 posFront;
+    posFront.x=cos(glm::radians(_yaw))*cos(glm::radians(_pitch));
+    posFront.y=sin(glm::radians(_pitch));
+    posFront.z=sin(glm::radians(_yaw))*cos(glm::radians(_pitch));
+    posFront=glm::normalize(posFront);
+    _cameraFront.x=posFront.x;
+    _cameraFront.y=posFront.y;
+    _cameraFront.z=posFront.z;
     _dirtyPos=true;
 }
 
+void camera::setYaw(float v){
+    _yaw=v;
+    _updateFront();
+}
+void camera::setPitch(float v){
+    _pitch=v;
+    _updateFront();
+}
 
 void camera::moveBy(glm::vec3 v){
     _cameraPos.x+=v.x;
@@ -114,9 +129,9 @@ void camera::print(){
 
 
 bool camera::init(){
-    _yaw=-90;
+    _yaw=-90;//points to -z
     _pitch=0;
-    _fov=30.0;
+    _fov=30.0;  //field of view,in short:fov, you can see more with high fov, ex 45.0;
     _fovOrigin=_fov;
     _screenRatio=800/600;
     
@@ -137,11 +152,11 @@ bool camera::init(){
     _matProjOrtho=glm::ortho(0.0f,(float)g_winWidth,0.0f,(float)g_winHigh);
     
     _dirtyPos=false;
-//    _dirtyProj=true;
-    
     initUBO();
     return true;
 }
+
+
 
 glm::mat4 camera::getLookAtMatrix(){
     return _matCamera;
@@ -157,7 +172,7 @@ void camera::update(){
 }
 
 void camera::update2D(){
-    int sizeArr[]={64,64,16};
+    int sizeArr[]={64,64,12};
     int offsetArr[]={0,64,128};
     void* bufArr[]={
         (void*)glm::value_ptr(_matProjOrtho),
@@ -168,7 +183,7 @@ void camera::update2D(){
 }
 
 void camera::_updateUBO(){
-    int sizeArr[]={64,64,16};
+    int sizeArr[]={64,64,12};
     int offsetArr[]={0,64,128};
     void* bufArr[]={
         (void*)glm::value_ptr(_matProjPerspective),
@@ -180,10 +195,34 @@ void camera::_updateUBO(){
     uboMgr::writeData(_ubo_mat_2d,3,sizeArr,offsetArr,bufArr);
 }
 
+void camera::updateUBOForShadow(glm::vec3 lightPos){
+    float near_plane=1.0f;
+    float far_plane=7.5f;
+    glm::mat4 matProjOrthoForDir=glm::ortho(-10.0f,10.0f,-10.0f,10.0f,near_plane,far_plane);
+    glm::mat4 matCamera=glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));   //look at center of scene
+    int sizeArr[]={64,64,12};
+    int offsetArr[]={0,64,128};
+    void* bufArr[]={
+        (void*)glm::value_ptr(matProjOrthoForDir),
+        (void*)glm::value_ptr(matCamera),
+        (void*)glm::value_ptr(_cameraPos)
+    };
+    uboMgr::writeData(_ubo_mat_3d_shadow,3,sizeArr,offsetArr,bufArr);
+}
+//glm::mat4 camera::getLightSpaceMat(glm::vec3 lightPos){
+//    float near_plane=1.0f;
+//    float far_plane=7.5f;
+//    glm::mat4 matProj=glm::ortho(-10.0f,10.0f,-10.0f,10.0f,near_plane,far_plane);
+////    glm::mat4 matCamera=glm::lookAt(lightPos,_cameraPos+_cameraFront, _cameraUp);   //look at center of scene
+//    glm::mat4 matCamera=glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));   //look at center of scene
+//    return matProj*matCamera;
+//}
+
 void camera::initUBO(){
     // _ubo_mat=uboMgr::createUBO(ubo_binding_mat,ubo_size_mat,"mat");
     // _ubo_mat_2d=uboMgr::createUBO(ubo_binding_mat_2d,ubo_size_mat_2d,"mat2d");
     _ubo_mat_2d=g_ubo_id_mat_2d;
     _ubo_mat_3d=g_ubo_id_mat_3d;
+    _ubo_mat_3d_shadow=g_ubo_id_mat_3d_shadow;
     _updateUBO();
 }

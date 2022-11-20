@@ -11,6 +11,9 @@
 
 #include <stdio.h>
 void test_onePointLight_oneCube();
+void test_onePointLight_oneCube_BlinnPhong();
+void test_onePointLight_oneCube_BlinnPhong_2();
+
 void test_onePointLight_oneCube_changingColor();
 void test_onePointLight_twoCube();
 void test_twoPointLight_oneCube();

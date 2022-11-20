@@ -39,6 +39,8 @@ class shader : public glRef{
         void setVec3(const char* name,float* v,bool debug=false);
         bool bindGeometry(const char* szGeometry);//support on opengl 3.2+
         
+        float getFloat(const char* name,bool debug=false);
+        bool getBool(const char* name,bool debug=false);
         unsigned int getProgramID(){return _idProgram;};
         
         void compile();

@@ -59,6 +59,31 @@ void nodeIns::setPosition(int i,glm::vec3 v){
     _dirtyUBOVec[i]=true;
     _dirtyPos=true;
 }
+void nodeIns::setPositionX(int i,float v){
+    if(!_safeIndex(i))
+        return;
+    _posVec[i].x=v;
+    _dirtyPosVec[i]=true;
+    _dirtyUBOVec[i]=true;
+    _dirtyPos=true;
+}
+void nodeIns::setPositionY(int i,float v){
+    if(!_safeIndex(i))
+        return;
+    _posVec[i].y=v;
+    _dirtyPosVec[i]=true;
+    _dirtyUBOVec[i]=true;
+    _dirtyPos=true;
+}
+void nodeIns::setPositionZ(int i,float v){
+    if(!_safeIndex(i))
+        return;
+    _posVec[i].z=v;
+    _dirtyPosVec[i]=true;
+    _dirtyUBOVec[i]=true;
+    _dirtyPos=true;
+}
+
 
 void nodeIns::setRotation(int i, glm::vec3 v){
     if(!_safeIndex(i))
@@ -72,6 +97,14 @@ void nodeIns::setScale(int i, glm::vec3 v){
     if(!_safeIndex(i))
         return;
     _scaleVec[i]=v;
+    _dirtyPosVec[i]=true;
+    _dirtyUBOVec[i]=true;
+    _dirtyPos=true;
+}
+void nodeIns::setScale(int i, float v){
+    if(!_safeIndex(i))
+        return;
+    _scaleVec[i]=glm::vec3(v,v,v);
     _dirtyPosVec[i]=true;
     _dirtyUBOVec[i]=true;
     _dirtyPos=true;
@@ -129,12 +162,15 @@ void nodeIns::setPositionZ(float v){
     }
 }
 
+glm::vec3 nodeIns::getPosition(int i){
+    return _posVec[i];
+}
 
-void nodeIns::useInsByVBO(int attribIndex){
+void nodeIns::useInstancedByVBO(int attribIndex){
     if(_insVBO>0)
         return;
     if(_gl_vao<=0){
-        flylog("nodeIns::useInsByVBO _gl_vao is not created yet!");
+        flylog("nodeIns::useInstancedByVBO _gl_vao is not created yet!");
         return;
     }
     _insVBOIndex=attribIndex;
@@ -149,7 +185,7 @@ void nodeIns::useInsByVBO(int attribIndex){
     }
     glBindBuffer(GL_ARRAY_BUFFER,0);
 }
-void nodeIns::updateInsVBO(){
+void nodeIns::updateInstancedVBO(){
     glBindBuffer(GL_ARRAY_BUFFER,_insVBO);
     glBufferData(GL_ARRAY_BUFFER,sizeof(glm::mat4)*_insCount,(float*)_matModelVec.data(),GL_STATIC_DRAW);
 }
@@ -181,7 +217,7 @@ void nodeIns::updateModel(){
     }
     _shaderObj->use();
     if(_insVBO>0){
-        updateInsVBO();
+        updateInstancedVBO();
     }
     else
         _shaderObj->setMat4Multi(uniform_name_mat_model_arr,(float*)_matModelVec.data(),_insCount,true);

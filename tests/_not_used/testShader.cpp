@@ -74,7 +74,6 @@ static void beginDraw3DByPng(float rotateX,float rotateY){
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  //当纹理需要放大时，使用线性混合纹理颜色
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);  //当纹理需要缩小时，使用线性混合纹理颜色
-    glEnable(GL_TEXTURE_2D);
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, structTex.width, structTex.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, structTex.buf);
     glBegin(GL_QUADS);
