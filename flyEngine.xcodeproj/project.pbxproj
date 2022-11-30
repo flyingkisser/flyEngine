@@ -39,6 +39,7 @@
 		D84FB80926ABF59B003FDDE1 /* moveTo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84FB80726ABF59B003FDDE1 /* moveTo.cpp */; };
 		D85F1BD625022327005390DC /* VAOMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D85F1BD525022327005390DC /* VAOMgr.cpp */; };
 		D85F22FD27FEBC22007B0C19 /* libassimp.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D85F22FC27FEBC22007B0C19 /* libassimp.5.dylib */; };
+		D8670BBE2931B60600DD7791 /* test_hdr_bloom.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8670BBD2931B60600DD7791 /* test_hdr_bloom.mm */; };
 		D86CE57528F2ABB0006797C4 /* test_gamma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57328F2ABB0006797C4 /* test_gamma.cpp */; };
 		D86CE57828F2E891006797C4 /* test_shadow_mapping.mm in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57728F2E891006797C4 /* test_shadow_mapping.mm */; };
 		D86CE57B28F3B71D006797C4 /* quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57A28F3B71D006797C4 /* quad.cpp */; };
@@ -1614,6 +1615,8 @@
 		D85F22F827FEBBB9007B0C19 /* libassimp.5.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.5.0.0.dylib; path = lib_x86/libassimp.5.0.0.dylib; sourceTree = "<group>"; };
 		D85F22FA27FEBBF7007B0C19 /* libassimp.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.dylib; path = lib_x86/libassimp.dylib; sourceTree = "<group>"; };
 		D85F22FC27FEBC22007B0C19 /* libassimp.5.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libassimp.5.dylib; path = lib_x86/libassimp.5.dylib; sourceTree = "<group>"; };
+		D8670BBC2931B60600DD7791 /* test_hdr_bloom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_hdr_bloom.h; sourceTree = "<group>"; };
+		D8670BBD2931B60600DD7791 /* test_hdr_bloom.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = test_hdr_bloom.mm; sourceTree = "<group>"; };
 		D8691EE626B3FA2100D40717 /* 3d_color.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_color.vs; sourceTree = "<group>"; };
 		D8691EE726B3FA2100D40717 /* 3d_color.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_color.fs; sourceTree = "<group>"; };
 		D86CE57328F2ABB0006797C4 /* test_gamma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_gamma.cpp; sourceTree = "<group>"; };
@@ -4054,6 +4057,8 @@
 				D86CE57728F2E891006797C4 /* test_shadow_mapping.mm */,
 				D8F4E672291A4F0D0051037D /* test_normal_parallax_mapping.h */,
 				D8F4E673291A4F0D0051037D /* test_normal_parallax_mapping.cpp */,
+				D8670BBC2931B60600DD7791 /* test_hdr_bloom.h */,
+				D8670BBD2931B60600DD7791 /* test_hdr_bloom.mm */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -4565,6 +4570,7 @@
 				D890282B287D5A9E00152FFF /* fontMgr.cpp in Sources */,
 				D8BB1B9E255BE08000AF9FD5 /* control.cpp in Sources */,
 				D87D8E3028CEF69E00E30C83 /* test_gs.cpp in Sources */,
+				D8670BBE2931B60600DD7791 /* test_hdr_bloom.mm in Sources */,
 				D87EBFDE26A6F0D6004ED7DE /* moveBy.cpp in Sources */,
 				D8A6E8BB28C4DE6200C3DE56 /* texture2.cpp in Sources */,
 				D8BB1B9B255A6D1500AF9FD5 /* mouseEventMgr.cpp in Sources */,

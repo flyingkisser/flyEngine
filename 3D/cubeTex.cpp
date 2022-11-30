@@ -39,6 +39,11 @@ bool cubeTex::init(){
     return initByVerticeArr(g_verticeArrWithTexCoordAndNormal,sizeof(g_verticeArrWithTexCoordAndNormal),desc,3);
 }
 
+//bool cubeTex::init2(){
+//    int desc[]={3,3,2};
+//    return initByVerticeArr(g_verticeArrWithNormalAndTexCoord,sizeof(g_verticeArrWithNormalAndTexCoord),desc,3);
+//}
+
 bool cubeTex::initByVerticeArr(float* arr,int arrSize,int descArr[],int descArrNum){
     if(_texPath!=NULL){
         _texObj=textureMgr::getInstance()->getTexture(_texPath);

@@ -18,7 +18,7 @@ class camera;
 class shader;
 
 class sprite : public node{
-private:
+protected:
     unsigned int _texID=0;
     const char* _imgFileName=NULL;
     size _size=size{0,0};
@@ -51,6 +51,7 @@ public:
     void setGray(bool s);
     void setScale(glm::vec3 s);
     void setScale(float s);
+    void setTexID(unsigned int v){_texID=v;};
 };
 
 NS_FLYENGINE_END

@@ -20,6 +20,8 @@ pointLight::pointLight(glm::vec3 color,material2* mt,float constant,float linear
     m_fLinear=linear;
     m_fQuadratic=quadratic;
     _ubo=g_ubo_id_arr[ubo_binding_light_point];
+    if(!init())
+        flylog("pointLight init failed!!");
     // _ubo=uboMgr::createUBO(ubo_binding_light_point, ubo_size_light_point_arr,"light_point");
 //    _ubo=g_ubo_id_light_point0;
 }

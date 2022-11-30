@@ -34,6 +34,7 @@ static void reshape2D(GLFWwindow* win,int w,int h)
     g_winWidth=w;
     g_winHigh=h;
     glViewport(0,0,w,h);
+    flylog("reshape2D:set view port %d,%d",w,h);
 }
 
 
@@ -85,7 +86,7 @@ void window::init(){
     keyboardEventMgr::init(window);
     mouseEventMgr::init(window);
     
-    reshape2D(NULL,g_screenWidth,g_screenHigh);
+    reshape2D(NULL,g_winWidth,g_winHigh);
     
 #elif BUILD_IOS
     g_window=0;

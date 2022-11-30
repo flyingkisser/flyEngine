@@ -315,13 +315,13 @@ void test_normal_mapping_3(){
     }, cam,plight,spObj);
 }
 
-//
+//对于模型，使用法向贴图进行光照计算
 void test_normal_mapping_model(){
     camera* cam=world::getInstance()->getCamera();
   
     float am=0.1;
     float diff=0.1;
-    float sp=10;
+    float sp=1;
     float shine=2;
     material2* mtLight=createMaterial(am,diff,sp,shine);
     pointLight* plight=new pointLight(glm::vec3(1,1,1),mtLight,0);
@@ -351,18 +351,6 @@ void test_normal_mapping_model(){
     sh->use();
     sh->setBool("bUseBlinnPhong", true);
  
-    
-//    sh->use();
-//    glActiveTexture(GL_TEXTURE1);
-//    glBindTexture(GL_TEXTURE_2D,texNormal->getTextureID());
-//    sh->setInt("texture0",0,true);
-//    sh->setInt("texture_normal",1,true);
-//    sh->setVec3("lightPos",glm::value_ptr(lightViewPos),true);
-//    spObj->setCBBeforeDrawCall([sh,plight](int programID){
-//        sh->use();
-//        sh->setVec3("lightPos",glm::value_ptr(plight->getPosition()),true);
-//    });
-  
     //动态调整光照系数
     world::getInstance()->getControl()->regOnKeyPress('r', [cam,plight,am,diff,sp,shine](){
         material2* mt=plight->getMaterial();
@@ -431,26 +419,93 @@ void test_normal_mapping_model(){
         plight->setDirtyUBO(true);
         flylog("shiness %f",mt->getShiness());
     });
+}
 
-//    float r=4.6;
-//    plight->setPositionX(plight->getPositionX()*r);
-//    plight->setPositionY(plight->getPositionY()*r);
-//    timerUtil::getInstance()->exec(0.05, [](camera* cam, pointLight* plight,sprite* spObj){
-//        float v=0.08;
-//        float x0=0;
-//        float z0=0;
-//        float x1=0;
-//        float z1=0;
-//        //灯光移动
-//        x0=plight->getPositionX();
-//        z0=plight->getPositionY();
-//        x1=x0*cos(v)-z0*sin(v);
-//        z1=z0*cos(v)+x0*sin(v);
+//视差贴图
+//法向量左乘TBN矩阵，把法向量从切线空间变换到世界坐标空间，光源和相机坐标不需要变换，在片元着色器中进行空间变换
+void test_parallax_mapping_1(){
+    camera* cam=world::getInstance()->getCamera();
+    
+    material2* mtLight=createMaterial(1, 1, 1, 1);
+    pointLight* plight=new pointLight(glm::vec3(0.8,0.8,0.8),mtLight,0);
+    if(!plight->init()){
+        flylog("point light init failed!");
+        return;
+    }
+    plight->setPosition(glm::vec3(0.1,0.1,0.2));
+    plight->setScale(0.03);
+    world::getInstance()->addPointLight(plight);
+    glm::vec3 lightViewPos=plight->getPosition();
+    glm::vec3 camPos=glm::vec3(0,0,3);
+    cam->setPosition(camPos);
+    
+    //sprite
+    sprite* spObj=new sprite("./res/bricks2.jpg");
+    initPosArr(spObj);
+    spObj->setPosition(glm::vec3(0,0,-2.5));
+    texture2* texNormal=new texture2("./res/bricks2_normal.jpg");
+    texNormal->init();
+    texNormal->glInit(GL_TEXTURE0+1);
+    
+    texture2* texHeight=new texture2("./res/bricks2_height.jpg");
+    texHeight->init();
+    texHeight->glInit(GL_TEXTURE0+2);
+    
+    shader* sh=new shader("./res/shader/3d_1tex_board_normal.vs","./res/shader/3d_1tex_board_normal.fs");
+    spObj->setShader(sh);
+    sh->use();
+    glActiveTexture(GL_TEXTURE1);
+    glBindTexture(GL_TEXTURE_2D,texNormal->getTextureID());
+    sh->setInt("texture_normal",1,true);
+    glActiveTexture(GL_TEXTURE2);
+    glBindTexture(GL_TEXTURE_2D,texHeight->getTextureID());
+    sh->setInt("texture_height",2,true);
+    sh->setBool("bParallax", true,true);
+//
+    sh->setVec3("lightPos",glm::value_ptr(lightViewPos),true);
+    world::getInstance()->addChild(spObj);
+    world::getInstance()->getControl()->bindNode(spObj);
+    spObj->setCBBeforeDrawCall([sh,plight](int programID){
+        sh->use();
+        sh->setVec3("lightPos",glm::value_ptr(plight->getPosition()),true);
+    });
+    
+    world::getInstance()->getControl()->regOnKeyPress('g', [cam](){
+        glm::vec3 pos=cam->getPosition();
+        float yaw=cam->getYaw();
+        float pitch=cam->getPitch();
+        flylog("cam at %f %f %f,yaw %f pitch %f",pos.x,pos.y,pos.z,yaw,pitch);
+    });
+    
+//    bool p=true;
+    world::getInstance()->getControl()->regOnKeyPress('g', [cam,plight,spObj](){
+        shader* sh=spObj->getShader();
+        sh->use();
+        bool p=sh->getBool("bParallax");
+        sh->setBool("bParallax", !p);
+        flylog("set bParallax to %d",!p);
+        bool p2=sh->getBool("bParallax");
+    });
+    
+    float r=3.6;
+    plight->setPositionX(plight->getPositionX()*r);
+    plight->setPositionY(plight->getPositionY()*r);
+    timerUtil::getInstance()->exec(0.1, [](camera* cam, pointLight* plight,sprite* spObj){
+        float v=0.08;
+        float x0=0;
+        float z0=0;
+        float x1=0;
+        float z1=0;
+        //灯光移动
+        x0=plight->getPositionX();
+        z0=plight->getPositionY();
+        x1=x0*cos(v)-z0*sin(v);
+        z1=z0*cos(v)+x0*sin(v);
 //        plight->setPositionX(x1);
 //        plight->setPositionY(z1);
-////        plight->setPositionX(x0+0.001);
-//
-//        //cube移动
-////        spObj->moveBy(glm::vec3(0.1,0,0));
-//    }, cam,plight,spObj);
+        //        plight->setPositionX(x0+0.001);
+        
+        //cube移动
+        //        spObj->moveBy(glm::vec3(0.1,0,0));
+    }, cam,plight,spObj);
 }

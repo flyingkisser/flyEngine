@@ -41,14 +41,14 @@ void main(){
     // vec3 T = normalize(normalMatrix * aTangent);
     // vec3 N = normalize(normalMatrix * aNormal); 
     // // T=normalize(T-dot(T,N)*N);  //保持TBN的正交性(三者相互垂直)
-    // vec3 B=cross(T,N);  //只显示出一半的模型
+    // vec3 B=cross(T,N);  //
 
 
     //可以正常显示
     vec3 B = normalize(normalMatrix * aBitangent);
     vec3 N = normalize(normalMatrix * aNormal); 
     // T=normalize(T-dot(T,N)*N);  //保持TBN的正交性(三者相互垂直)
-    vec3 T=cross(B,N);  //只显示出一半的模型
+    vec3 T=cross(B,N);  //
 
     TBN=mat3(T,B,N);
 }

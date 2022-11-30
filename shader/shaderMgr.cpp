@@ -109,6 +109,10 @@ shader* shaderMgr::get2dQuadShader(){
     return shaderMgr::getShader("./res/shader/2d_quad.vs", "./res/shader/2d_quad.fs");
 }
 
+shader* shaderMgr::get3dQuadShader(){
+    return shaderMgr::getShader("./res/shader/3d_quad.vs", "./res/shader/3d_quad.fs");
+}
+
 
 unsigned int shaderMgr::createShaderFromFile(const char* szVertFileName,const char* szFragFileName){
     GLuint vertShader,fragShader,idProgram=0;

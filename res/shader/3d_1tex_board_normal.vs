@@ -16,6 +16,7 @@ out VS_OUT {
     vec3 fragPos;
     vec2 texCoord;
     mat3 TBN;
+    mat3 TBNReverse;
     vec3 cam_pos;
 } vs_out;
 
@@ -37,4 +38,5 @@ void main(){
     vec3 B = normalize(mat3Model * aBitangent);
     vec3 N = normalize(mat3Model * aNormal);
     vs_out.TBN=mat3(T,B,N);
+    vs_out.TBNReverse=transpose(vs_out.TBN);
 }

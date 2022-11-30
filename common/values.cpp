@@ -318,10 +318,10 @@ float g_verticeArrWithTexCoord_2d[] = {
 
 float g_verticeArrWithTexCoord_quad[] = {
     // positions        // texture Coords
-    -1.0f,  1.0f,  0.0f, 1.0f,
-    -1.0f, -1.0f,  0.0f, 0.0f,
-    1.0f, -1.0f,   1.0f, 0.0f,
-    1.0f,  1.0f,   1.0f, 1.0f
+    -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+    -1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+    1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+    1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
 };
 
 float g_verticeArrWithTexCoord_quad2[] = {

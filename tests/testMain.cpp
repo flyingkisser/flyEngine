@@ -23,6 +23,7 @@
 #include "test_gamma.h"
 #include "test_shadow_mapping.h"
 #include "test_normal_parallax_mapping.h"
+#include "test_hdr_bloom.h"
 
 void testMainBegin(){
     //code cube test
@@ -130,5 +131,9 @@ void testMainBegin(){
 //    test_normal_mapping_1();
 //    test_normal_mapping_2();
 //    test_normal_mapping_3();
-     test_normal_mapping_model();
+//     test_normal_mapping_model();
+//    test_parallax_mapping_1();
+//    test_HDR_1();
+//    test_HDR_2();
+    test_bloom_1();
 }

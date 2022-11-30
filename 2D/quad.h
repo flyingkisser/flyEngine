@@ -21,7 +21,8 @@ private:
     
 public:
     quad(const char* strImageFileName);
-    quad(unsigned int texID);
+    quad(unsigned int texID,float width,float height);
+    bool init();
     void glInit();
     void draw();
 };

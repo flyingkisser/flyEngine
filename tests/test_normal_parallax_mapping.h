@@ -15,4 +15,5 @@ void test_normal_mapping_1();
 void test_normal_mapping_2();
 void test_normal_mapping_3();
 void test_normal_mapping_model();
+void test_parallax_mapping_1();
 #endif /* test_normal_parallax_mapping_h */
