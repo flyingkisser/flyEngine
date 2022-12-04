@@ -35,6 +35,7 @@ struct PointLight{
     float constant;     //距离衰减常量
     float linear;       //距离衰减一次常量系数
     float quadratic;    //距离衰减二次常量系数
+    float radius;
 };
 
 

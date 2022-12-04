@@ -22,6 +22,12 @@ pointLight::pointLight(glm::vec3 color,material2* mt,float constant,float linear
     _ubo=g_ubo_id_arr[ubo_binding_light_point];
     if(!init())
         flylog("pointLight init failed!!");
+    if(constant>0 && linear>0 && quadratic>0){
+        float lightMax=std::fmaxf(std::fmaxf(color.r,color.g),color.b);
+        m_fRadius=(-linear+std::sqrtf(linear*linear-4*quadratic*(constant-(256.0/5.0)*lightMax)))/(2*quadratic);
+        m_fRadius*=1000;
+    }
+  
     // _ubo=uboMgr::createUBO(ubo_binding_light_point, ubo_size_light_point_arr,"light_point");
 //    _ubo=g_ubo_id_light_point0;
 }
@@ -35,10 +41,10 @@ void pointLight::update(int light_index){
 }
 
 void pointLight::glUpdate(int light_index){
-    int sizeArr[]={4,12,12,12,12,12,4,4,4};
-    int offsetArr[]={0,16,32,48,64,80,92,96,100};
+    int sizeArr[]={4,12,12,12,12,12,4,4,4,4};
+    int offsetArr[]={0,16,32,48,64,80,92,96,100,104};
     int enabled=1;
-    int num=9;
+    int num=sizeof(offsetArr)/sizeof(offsetArr[0]);
     material2* mt=getMaterial();
     glm::vec3 pos=getPosition();
     void* bufArr[]={
@@ -50,14 +56,13 @@ void pointLight::glUpdate(int light_index){
         (void*)glm::value_ptr(mt->getSpecular()),
         &m_fConstant,
         &m_fLinear,
-        &m_fQuadratic
+        &m_fQuadratic,
+        &m_fRadius
     };
-    for(int i=0;i<num;i++){
-        // offsetArr[i]=offsetArr[i]*(light_index+1)+ubo_size_light_point*light_index;
+    for(int i=0;i<num;i++)
         offsetArr[i]=offsetArr[i]+ubo_size_light_point*light_index;
-    }
-    uboMgr::writeData(_ubo, num, sizeArr,offsetArr,bufArr);
-    flylog("pointLight ubo updated pos %f %f %f!",pos.x,pos.y,pos.z);
+    uboMgr::writeData(_ubo,num,sizeArr,offsetArr,bufArr);
+    flylog("pointLight[%d] ubo_data updated pos %f %f %f!radius %f",light_index,pos.x,pos.y,pos.z,m_fRadius);
 }
 
 

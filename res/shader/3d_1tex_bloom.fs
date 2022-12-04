@@ -1,9 +1,8 @@
 #version 330 core
+precision highp float;
 layout(location=0) out vec4 FragColor;
 layout(location=1) out vec4 BrightColor;
 
-
-precision highp float;
 #define POINT_LIGHTS_NUM 4
 struct PointLight{
     bool enabled;
@@ -15,6 +14,7 @@ struct PointLight{
     float constant;
     float linear;
     float quadratic;
+    float radius;
 };
 
 layout (std140) uniform light_point{

@@ -275,3 +275,53 @@ fboHDRBloomGaussStruct fbo::createFBOHDRBloomGauss(){
     glBindFramebuffer(GL_FRAMEBUFFER,0);
     return st;
 }
+
+//deferred shading fbo
+fboDeferredShadingStruct fbo::createFBODeferredShading(){
+    fboDeferredShadingStruct st;
+    unsigned int texIDArr[3]={0};
+    //create fbo for hdr with brightness
+    //一个fbo，两个纹理，分别用于写入颜色和亮度值
+    glGenFramebuffers(1,&st.fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);
+    glGenTextures(3,texIDArr);
+    
+    glBindTexture(GL_TEXTURE_2D,texIDArr[0]);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F,g_winWidth,g_winHigh,0,GL_RGBA,GL_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,texIDArr[0],0);
+
+    glBindTexture(GL_TEXTURE_2D,texIDArr[1]);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F,g_winWidth,g_winHigh,0,GL_RGBA,GL_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT1,GL_TEXTURE_2D,texIDArr[1],0);
+
+    glBindTexture(GL_TEXTURE_2D,texIDArr[2]);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,g_winWidth,g_winHigh,0,GL_RGBA,GL_UNSIGNED_BYTE,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT2,GL_TEXTURE_2D,texIDArr[2],0);
+
+    glGenRenderbuffers(1,&st.rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,st.rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH24_STENCIL8,g_winWidth,g_winHigh);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_STENCIL_ATTACHMENT,GL_RENDERBUFFER,st.rbo);
+    int status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboDeferredShadingStruct st={0};
+        flylog("createFBODeferredShading: glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+
+    unsigned int drawAttachArr[3]={GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1,GL_COLOR_ATTACHMENT2};
+    glDrawBuffers(3,drawAttachArr);
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    
+    st.texPos=texIDArr[0];
+    st.texNormal=texIDArr[1];
+    st.texAlbedoSpec=texIDArr[2];
+
+    return st;
+}

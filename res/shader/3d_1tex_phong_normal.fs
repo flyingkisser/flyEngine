@@ -39,6 +39,7 @@ struct PointLight{
     float constant;
     float linear;
     float quadratic;
+    float radius;
 };
 //聚光灯
 struct SpotLight{

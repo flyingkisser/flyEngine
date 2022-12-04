@@ -18,6 +18,14 @@ struct fboStruct{
     unsigned int rbo;   //render buffer id
     unsigned int texID; //texture id bind as an attachment with fbo
 };
+struct fboDeferredShadingStruct{
+    unsigned int fbo;   //frame buffer id
+    unsigned int rbo;   //render buffer id
+    unsigned int texPos;    //position buffer
+    unsigned int texNormal; //normal buffer
+    unsigned int texAlbedoSpec; //diffuse and specular buffer
+};
+
 struct fboHDRBloomGaussStruct{
     unsigned int fboHDR;   //frame buffer id for hdr
     unsigned int fboBloomArr[2];   //frame buffer arr for bloom
@@ -25,6 +33,7 @@ struct fboHDRBloomGaussStruct{
     unsigned int texHDRArr[2]; //texture id arr1 for hdr color and brightness
     unsigned int texGaussianArr[2]; //texture id arr2 for bloom pingpong blur
 };
+
 
 class fbo{
 public:
@@ -34,6 +43,7 @@ public:
     static fboStruct createFBOForDepthWithCubemap();
     static fboStruct createFBOHDR();
     static fboHDRBloomGaussStruct createFBOHDRBloomGauss();
+    static fboDeferredShadingStruct createFBODeferredShading();
 };
 
 NS_FLYENGINE_END

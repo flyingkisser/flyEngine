@@ -22,9 +22,10 @@ public:
     void update(int light_index);
     
 private:
-    float m_fConstant;
-    float m_fLinear;
-    float m_fQuadratic;
+    float m_fConstant=0;
+    float m_fLinear=0;
+    float m_fQuadratic=0;
+    float m_fRadius=0;
     
     int _ubo=0;
 };

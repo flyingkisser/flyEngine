@@ -198,6 +198,10 @@ void test_HDR_2(){
     });
 }
 
+//bloom测试
+//第一个fbo渲染出两张纹理，普通颜色和高光
+//第二组fbo对应两张纹理，对高光纹理进行平行和垂直两个方向的高斯模糊
+//最后把刚才最后一次输出的纹理，贴图到全屏quad上
 void test_bloom_1(){
     camera* cam=world::getInstance()->getCamera();
     cubeTex* cubeObj1=new cubeTex("./res/wood.png");
@@ -263,7 +267,7 @@ void test_bloom_1(){
     world::getInstance()->addPointLight(light3);
     world::getInstance()->addPointLight(light4);
     
-    cam->setPosition(glm::vec3(0,0,10));
+    cam->setPosition(glm::vec3(0,0,40));
     
     quad* quad2D=new quad(st.texHDRArr[0],g_winWidth,g_winHigh);
     quad2D->flipY(true);
@@ -280,7 +284,7 @@ void test_bloom_1(){
 #endif
 //
 //    //渲染到两张纹理
-    shader* shCubeBloom=new shader("./res/shader/3d_1tex_phong.vs","./res/shader/3d_bloom.fs");
+    shader* shCubeBloom=new shader("./res/shader/3d_1tex_phong.vs","./res/shader/3d_1tex_bloom.fs");
     shader* shLightBloom=new shader("./res/shader/3d_color.vs","./res/shader/3d_color_bloom.fs");
     shader* shGuassian=new shader("./res/shader/3d_quad.vs","./res/shader/2d_gaussian.fs");
     shader* shBind=new shader("./res/shader/3d_quad.vs","./res/shader/2d_hdr_bloomblur.fs");
@@ -291,7 +295,7 @@ void test_bloom_1(){
     shBind->setInt("bloomBlur", 1);
     shBind->setFloat("exposure", 0.1);
     world::getInstance()->setCBBeforeDrawCall([st,cam,shCubeBloom,shLightBloom,shQuad,shGuassian,shBind,quad2D,cubeObj1,cubeObj2,cubeObj3,cubeObj4,view,light1,light2,light3,light4](){
-        //第一步：场景渲染到st.fboHDR的二张纹理中
+        //第一步：场景渲染到st.fboHDR的两张纹理中(一张输出正常颜色，一张只写入高亮度的部分)
         cubeObj1->setShader(shCubeBloom);
         cubeObj2->setShader(shCubeBloom);
         cubeObj3->setShader(shCubeBloom);
@@ -315,6 +319,12 @@ void test_bloom_1(){
 //        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 //        glClear(GL_COLOR_BUFFER_BIT);
 
+        //进行10次左右和上下方向的高斯模糊
+        //每次单独写进一个framebuffer和它对应的纹理
+        //第0次，绑定亮度纹理，输出到1号framebuffer对应的1号纹理
+        //第一次，绑定1号纹理，但输出到0号framebuffer对应的0号纹理
+        //第二次，绑定0号纹理，但输出到1号framebffer对应的1号纹理
+        //这样就实现了对两个纹理的混合使用
         bool bHorizontal=true;
         bool bFirst=true;
         quad2D->setShader(shGuassian);

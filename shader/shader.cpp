@@ -53,6 +53,8 @@ shader::shader(const char* szVertFileName,const char* szFragFileName,const char*
         flylog("shader::compile failed!");
         return;
     }
+    flylog("programID %d %s %s",_idProgram,stringUtil::getStrAfterFromLast(std::string(_szVertFileName), "/").c_str(),
+           stringUtil::getStrAfterFromLast(std::string(_szFragFileName), "/").c_str());
     
     //setup inital values
     uboMgr::linkUBOAndBindPoint(_idProgram,"mat3d", ubo_binding_mat_3d);
