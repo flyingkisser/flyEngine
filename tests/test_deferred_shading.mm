@@ -312,6 +312,7 @@ void test_deferred_shading_2(){
     });
 }
 
+//光体积运算
 void test_deferred_shading_volumn(){
     camera* cam=world::getInstance()->getCamera();
     model* modelObj1=new model("./res/model/backpack/backpack.obj");
@@ -341,6 +342,8 @@ void test_deferred_shading_volumn(){
     
     fboDeferredShadingStruct st=fbo::createFBODeferredShading();
   
+    //当点光源的三个距离参数都不为0时，会计算光球的半径
+    //shader中只会点亮处于此半径内的顶点
     material2* mt=createMaterial(1, 1, 1, 0);
     pointLight* light1=new pointLight(glm::vec3(0.7,0.7,0.7),mt);
     pointLight* light2=new pointLight(glm::vec3(1,0,0),mt);
@@ -393,6 +396,8 @@ void test_deferred_shading_volumn(){
     shQuadDeferredShading->setInt("texPosition",0);
     shQuadDeferredShading->setInt("texNormal",1);
     shQuadDeferredShading->setInt("texAlbedoSpec",2);
+//    shQuadDeferredShading->setBool("bEnableLightVolumn", true);
+    
 //    glslUtil::printAllUniformAndBlock(shQuadDeferredShading->getProgramID());
     
     modelObj1->setShader(shDeferredShading);

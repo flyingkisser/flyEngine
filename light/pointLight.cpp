@@ -25,7 +25,7 @@ pointLight::pointLight(glm::vec3 color,material2* mt,float constant,float linear
     if(constant>0 && linear>0 && quadratic>0){
         float lightMax=std::fmaxf(std::fmaxf(color.r,color.g),color.b);
         m_fRadius=(-linear+std::sqrtf(linear*linear-4*quadratic*(constant-(256.0/5.0)*lightMax)))/(2*quadratic);
-        m_fRadius*=1000;
+//        m_fRadius*=10;
     }
   
     // _ubo=uboMgr::createUBO(ubo_binding_light_point, ubo_size_light_point_arr,"light_point");

@@ -27,7 +27,7 @@ out vec4 FragColor;
 uniform sampler2D texPosition;
 uniform sampler2D texNormal;
 uniform sampler2D texAlbedoSpec;
-uniform float exposure;
+uniform bool bEnableLightVolumn;
 
 vec3 g_normal_vector;
 vec3 g_view_vector;
@@ -61,15 +61,20 @@ void main()
     g_view_vector=normalize(view_pos-posFrag);
     vec3 obj_color=texture(texAlbedoSpec,texCoord).rgb;
     float specular=texture(texAlbedoSpec,texCoord).a;
+    vec3 volumne_color=vec3(0,0,0);
     for(int i=0;i<POINT_LIGHTS_NUM;i++){
         PointLight p=light_point_arr[i];
         //如果启用了点光源的volumn参数
-        if(p.radius>0.0f && length(p.pos-posFrag)>=p.radius){
-            float v=p.radius/length(p.pos-posFrag);
-            FragColor=vec4(v,v,v,1.0);
-            return;
-            // continue;
-        }
+        // if(bEnableLightVolumn){
+            float len=length(p.pos-posFrag);
+            // if(p.radius>0.0f && len>=p.radius){
+                float v=p.radius/len;
+                v=len/20;
+                FragColor=vec4(v,v,v,1.0);
+                return;
+                // continue;
+            // }
+        // }
         checkPoint(p.pos,p.color,p.ambient,p.diffuse,specular);
     }
     FragColor=vec4((g_ambient+g_diffuse+g_specular)*obj_color,1.0);
