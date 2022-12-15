@@ -34,6 +34,18 @@ struct fboHDRBloomGaussStruct{
     unsigned int texGaussianArr[2]; //texture id arr2 for bloom pingpong blur
 };
 
+struct fboSSAOStruct{
+    unsigned int fboGBuffer;   //frame buffer id
+    unsigned int rbo;   //render buffer id
+    unsigned int texPos;    //position buffer
+    unsigned int texNormal; //normal buffer
+    unsigned int texAlbedoSpec; //diffuse and specular buffer
+    unsigned int fboSSAO;   //frame buffer id
+    unsigned int texSSAOColor; //diffuse and specular buffer
+    unsigned int fboSSAOBlur;
+    unsigned int texSSAOColorBlur;
+    unsigned int texNoise;
+};
 
 class fbo{
 public:
@@ -44,6 +56,7 @@ public:
     static fboStruct createFBOHDR();
     static fboHDRBloomGaussStruct createFBOHDRBloomGauss();
     static fboDeferredShadingStruct createFBODeferredShading();
+    static fboSSAOStruct createFBOSSAO();
 };
 
 NS_FLYENGINE_END

@@ -6,6 +6,7 @@
 //  Copyright © 2022 joe. All rights reserved.
 //
 
+#include <random>
 #include "fbo.h"
 #include "defines.h"
 
@@ -325,3 +326,102 @@ fboDeferredShadingStruct fbo::createFBODeferredShading(){
 
     return st;
 }
+
+fboSSAOStruct fbo::createFBOSSAO(){
+    fboSSAOStruct st;
+    int status;
+    unsigned int texIDArr[3]={0};
+    //第一个pass
+    glGenFramebuffers(1,&st.fboGBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER,st.fboGBuffer);
+    glGenTextures(3,texIDArr);
+    
+    glBindTexture(GL_TEXTURE_2D,texIDArr[0]);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F,g_winWidth,g_winHigh,0,GL_RGBA,GL_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,texIDArr[0],0);
+    
+    glBindTexture(GL_TEXTURE_2D,texIDArr[1]);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F,g_winWidth,g_winHigh,0,GL_RGBA,GL_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT1,GL_TEXTURE_2D,texIDArr[1],0);
+    
+    glBindTexture(GL_TEXTURE_2D,texIDArr[2]);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,g_winWidth,g_winHigh,0,GL_RGBA,GL_UNSIGNED_BYTE,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT2,GL_TEXTURE_2D,texIDArr[2],0);
+    
+    glGenRenderbuffers(1,&st.rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,st.rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH24_STENCIL8,g_winWidth,g_winHigh);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_STENCIL_ATTACHMENT,GL_RENDERBUFFER,st.rbo);
+    status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboSSAOStruct st={0};
+        flylog("createFBOSSAO:pass1 glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+    st.texPos=texIDArr[0];
+    st.texNormal=texIDArr[1];
+    st.texAlbedoSpec=texIDArr[2];
+    unsigned int drawAttachArr[3]={GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1,GL_COLOR_ATTACHMENT2};
+    glDrawBuffers(3,drawAttachArr);
+   
+    //创建second pass
+    glGenFramebuffers(1,&st.fboSSAO);
+    glBindFramebuffer(GL_FRAMEBUFFER,st.fboSSAO);
+    glGenTextures(1,&st.texSSAOColor);
+    glBindTexture(GL_TEXTURE_2D,st.texSSAOColor);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RED,g_winWidth,g_winHigh,0,GL_RED,GL_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,st.texSSAOColor,0);
+    status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboSSAOStruct st={0};
+        flylog("createFBOSSAO:pass2 glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+    
+    //第三个pass
+    glGenFramebuffers(1,&st.fboSSAOBlur);
+    glBindFramebuffer(GL_FRAMEBUFFER,st.fboSSAOBlur);
+    glGenTextures(1,&st.texSSAOColorBlur);
+    glBindTexture(GL_TEXTURE_2D,st.texSSAOColorBlur);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RED,g_winWidth,g_winHigh,0,GL_RED,GL_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,st.texSSAOColorBlur,0);
+    status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboSSAOStruct st={0};
+        flylog("createFBOSSAO:pass3 glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+
+    //noise纹理
+    std::uniform_real_distribution<float> randomFloats(0.0,1.0);
+    std::default_random_engine gen;
+    std::vector<glm::vec3> ssaoNoise;
+    for(int i=0;i<16;i++){
+        glm::vec3 noise=glm::vec3(randomFloats(gen)*2.0-1.0,randomFloats(gen)*2.0-1.0,0.0);
+        ssaoNoise.push_back(noise);
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    glGenTextures(1,&st.texNoise);
+    glBindTexture(GL_TEXTURE_2D,st.texNoise);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F,4,4,0,GL_RGB,GL_FLOAT,&ssaoNoise[0]);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+    return st;
+}
+
+

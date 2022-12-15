@@ -25,6 +25,8 @@
 #include "test_normal_parallax_mapping.h"
 #include "test_hdr_bloom.h"
 #include "test_deferred_shading.h"
+#include "test_ssao.h"
+#include "test_pbr.h"
 
 void testMainBegin(){
     //code cube test
@@ -139,5 +141,8 @@ void testMainBegin(){
 //    test_bloom_1();
 //    test_deferred_shading();
 //    test_deferred_shading_2();
-    test_deferred_shading_volumn();
+//    test_deferred_shading_volumn();
+//    test_ssao_0();
+//    test_ssao();
+    test_PBR_1();
 }

@@ -123,3 +123,11 @@ void mathUtil::extendPosRange(float* arr,int rows,int columns,float v){
         }
     }
 }
+
+
+//y1起点，y2终点，weight是[0,1]区间内的实数
+//在y1和y2之间取一个值 ，取多少，由权重控制
+//当权重为0.5时，正好取到中间
+float mathUtil::lerp(float y1,float y2,float weight){
+    return y1+weight*(y2-y1);
+}

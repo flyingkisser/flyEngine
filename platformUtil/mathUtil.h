@@ -26,6 +26,7 @@ public:
     static float sqrt(float v);
     static float pow(float v,float s);
     static void extendPosRange(float* arr,int rows,int columns,float v);
+    static float lerp(float y1,float y2,float weight);
     static void test();
 };
 

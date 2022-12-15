@@ -312,7 +312,7 @@ void test_deferred_shading_2(){
     });
 }
 
-//光体积运算
+//体积光运算
 void test_deferred_shading_volumn(){
     camera* cam=world::getInstance()->getCamera();
     model* modelObj1=new model("./res/model/backpack/backpack.obj");
@@ -350,10 +350,10 @@ void test_deferred_shading_volumn(){
     pointLight* light3=new pointLight(glm::vec3(0,0,0.5),mt);
     pointLight* light4=new pointLight(glm::vec3(0,0.5,0),mt);
     
-    light1->setPosition(glm::vec3(0,0.5,-1.5));
-    light2->setPosition(glm::vec3(-4,0.5,-3));
-    light3->setPosition(glm::vec3(3,0.5,1));
-    light4->setPosition(glm::vec3(-0.8,2.4,2));
+    light1->setPosition(glm::vec3(0,0.5,-2.5));
+    light2->setPosition(glm::vec3(-4,0.5,-4));
+    light3->setPosition(glm::vec3(3,0.5,2));
+    light4->setPosition(glm::vec3(-0.8,2.4,4));
   
     float lightScale=0.5;
     light1->setScale(lightScale);
@@ -373,7 +373,7 @@ void test_deferred_shading_volumn(){
     world::getInstance()->getControl()->bindNode(light3);
     world::getInstance()->getControl()->bindNode(light4);
 
-    cam->setPosition(glm::vec3(0,0,40));
+    cam->setPosition(glm::vec3(0,0,20));
     
     quad* quad2D=new quad(st.texPos,g_winWidth,g_winHigh);
     quad2D->flipY(true);

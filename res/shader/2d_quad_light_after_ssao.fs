@@ -27,14 +27,17 @@ out vec4 FragColor;
 uniform sampler2D texPosition;
 uniform sampler2D texNormal;
 uniform sampler2D texAlbedoSpec;
-uniform bool bEnableLightVolumn;
+uniform sampler2D texOcclusion;
+uniform bool bEnableOcclusion;
+uniform bool bZeroOcclusion;
 
 vec3 g_normal_vector;
 vec3 g_view_vector;
 vec3 g_ambient=vec3(0,0,0);
 vec3 g_diffuse=vec3(0,0,0);
 vec3 g_specular=vec3(0,0,0);
-vec3 g_debug_color=vec3(0,0,0);
+float g_occlusion=0.0;
+
 vec3 posFrag;
 
 float calcAttenuation(vec3 posFrag,vec3 posLight,float constant,float linear,float quadratic){
@@ -61,27 +64,18 @@ void main()
     g_view_vector=normalize(view_pos-posFrag);
     vec3 obj_color=texture(texAlbedoSpec,texCoord).rgb;
     float specular=texture(texAlbedoSpec,texCoord).a;
-    vec3 volumne_color=vec3(0,0,0);
+    g_occlusion=texture(texOcclusion,texCoord).r;
+   
+    if(!bEnableOcclusion)
+        g_occlusion=1.0;
+    if(bZeroOcclusion)
+        g_occlusion=0.0;
     for(int i=0;i<POINT_LIGHTS_NUM;i++){
         PointLight p=light_point_arr[i];
-        //如果启用了点光源的volumn参数
-        // if(bEnableLightVolumn){
-            float len=length(p.pos-posFrag);
-            if(p.radius>0.0f && len>=p.radius){
-                // float v=len/p.radius;
-                // v=len/20;
-                // FragColor=vec4(v,v,v,1.0);
-                // return;
-                continue;
-            }
-        // }
         checkPoint(p.pos,p.color,p.ambient,p.diffuse,specular);
     }
-    FragColor=vec4((g_ambient+g_diffuse+g_specular)*obj_color,1.0);
-    // PointLight p=light_point_arr[0];
-    // vec3 light_vector=normalize(p.pos-posFrag);
-    // vec3 diffuse=p.color*p.diffuse*max(dot(light_vector,g_normal_vector),0.0f);
-    // FragColor=vec4((diffuse)*obj_color,1.0);
-	return;
+    FragColor=vec4((g_ambient*g_occlusion+g_diffuse+g_specular)*obj_color,1.0);
+	// FragColor=vec4(vec3(g_occlusion),1.0);
+    return;
 }  
 
