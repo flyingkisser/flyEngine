@@ -29,8 +29,8 @@ bool cubeColor::init(){
     if(_shaderObj==NULL)
        return false;
     _gl_program=_shaderObj->getProgramID();
-    int descArr[]={3};
-    initVAO(g_verticeArr, sizeof(g_verticeArr), descArr, 1);
+    int descArr[]={3,3};
+    initVAO(g_verticeArrWithNormal, sizeof(g_verticeArrWithNormal), descArr, 2);
     return true;
 }
 
@@ -39,6 +39,7 @@ void cubeColor::draw(){
     if(m_cb_before_draw_call!=nullptr)
         m_cb_before_draw_call(_shaderObj->getProgramID());
     node::updateModel();
+    node::glUpdateLight();
     _shaderObj->setVec3("color", glm::value_ptr(m_vec3Color));
 
     glEnable(GL_DEPTH_TEST);

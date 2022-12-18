@@ -45,6 +45,7 @@
 		D86CE57528F2ABB0006797C4 /* test_gamma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57328F2ABB0006797C4 /* test_gamma.cpp */; };
 		D86CE57828F2E891006797C4 /* test_shadow_mapping.mm in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57728F2E891006797C4 /* test_shadow_mapping.mm */; };
 		D86CE57B28F3B71D006797C4 /* quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57A28F3B71D006797C4 /* quad.cpp */; };
+		D87236D8294C8EB2008E0822 /* semiSphere.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87236D7294C8EB2008E0822 /* semiSphere.cpp */; };
 		D87D8E2A28C8710000E30C83 /* test_framebuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = D87D8E2928C870FF00E30C83 /* test_framebuffer.mm */; };
 		D87D8E3028CEF69E00E30C83 /* test_gs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87D8E2F28CEF69E00E30C83 /* test_gs.cpp */; };
 		D87EBFD426A5780B004ED7DE /* timerUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D87EBFD326A5780B004ED7DE /* timerUtil.cpp */; };
@@ -1632,6 +1633,8 @@
 		D86CE57728F2E891006797C4 /* test_shadow_mapping.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = test_shadow_mapping.mm; sourceTree = "<group>"; };
 		D86CE57928F3B71D006797C4 /* quad.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = quad.h; sourceTree = "<group>"; };
 		D86CE57A28F3B71D006797C4 /* quad.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = quad.cpp; sourceTree = "<group>"; };
+		D87236D6294C8EB2008E0822 /* semiSphere.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = semiSphere.h; sourceTree = "<group>"; };
+		D87236D7294C8EB2008E0822 /* semiSphere.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = semiSphere.cpp; sourceTree = "<group>"; };
 		D87D8E2928C870FF00E30C83 /* test_framebuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = test_framebuffer.mm; sourceTree = "<group>"; };
 		D87D8E2E28CEF69D00E30C83 /* test_gs.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_gs.h; sourceTree = "<group>"; };
 		D87D8E2F28CEF69E00E30C83 /* test_gs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_gs.cpp; sourceTree = "<group>"; };
@@ -4142,6 +4145,8 @@
 				D8EC783D288ACA1600415650 /* skybox.cpp */,
 				D8B01CE928DB3F25004EF910 /* billboard.cpp */,
 				D8B01CEA28DB3F25004EF910 /* billboard.h */,
+				D87236D6294C8EB2008E0822 /* semiSphere.h */,
+				D87236D7294C8EB2008E0822 /* semiSphere.cpp */,
 			);
 			path = 3D;
 			sourceTree = "<group>";
@@ -4573,6 +4578,7 @@
 				8E86C9C326638480004B3BB7 /* testPhong.cpp in Sources */,
 				D8B01CEB28DB3F25004EF910 /* billboard.cpp in Sources */,
 				D8F4E6772939DA250051037D /* test_deferred_shading.mm in Sources */,
+				D87236D8294C8EB2008E0822 /* semiSphere.cpp in Sources */,
 				D825DB8624AAEE5100C494E7 /* values.cpp in Sources */,
 				D87EBFFD26B16B70004ED7DE /* repeat.cpp in Sources */,
 				D87EC00026B16B96004ED7DE /* forever.cpp in Sources */,

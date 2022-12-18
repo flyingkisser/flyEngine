@@ -176,10 +176,6 @@ int glError=0;
 // meshes
 unsigned int planeVAO;
 
-
-
-
-
 // renderCube() renders a 1x1 3D cube in NDC.
 // -------------------------------------------------
 unsigned int cubeVAO = 0;
@@ -314,6 +310,101 @@ void renderScene(shader* sh)
     renderCube();
 }
 
+unsigned int sphereVAO = 0;
+unsigned int indexCount;
+void renderSphere()
+{
+    if (sphereVAO == 0)
+    {
+        glGenVertexArrays(1, &sphereVAO);
+
+        unsigned int vbo, ebo;
+        glGenBuffers(1, &vbo);
+        glGenBuffers(1, &ebo);
+
+        std::vector<glm::vec3> positions;
+        std::vector<glm::vec2> uv;
+        std::vector<glm::vec3> normals;
+        std::vector<unsigned int> indices;
+
+        const unsigned int X_SEGMENTS = 64;
+        const unsigned int Y_SEGMENTS = 64;
+        const float PI = 3.14159265359f;
+        for (unsigned int x = 0; x <= X_SEGMENTS; ++x)
+        {
+            for (unsigned int y = 0; y <= Y_SEGMENTS; ++y)
+            {
+                float xSegment = (float)x / (float)X_SEGMENTS;
+                float ySegment = (float)y / (float)Y_SEGMENTS;
+                float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+                float yPos = std::cos(ySegment * PI);
+                float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+
+                positions.push_back(glm::vec3(xPos, yPos, zPos));
+                uv.push_back(glm::vec2(xSegment, ySegment));
+                normals.push_back(glm::vec3(xPos, yPos, zPos));
+            }
+        }
+
+        bool oddRow = false;
+        for (unsigned int y = 0; y < Y_SEGMENTS; ++y)
+        {
+            if (!oddRow) // even rows: y == 0, y == 2; and so on
+            {
+                for (unsigned int x = 0; x <= X_SEGMENTS; ++x)
+                {
+                    indices.push_back(y       * (X_SEGMENTS + 1) + x);
+                    indices.push_back((y + 1) * (X_SEGMENTS + 1) + x);
+                }
+            }
+            else
+            {
+                for (int x = X_SEGMENTS; x >= 0; --x)
+                {
+                    indices.push_back((y + 1) * (X_SEGMENTS + 1) + x);
+                    indices.push_back(y       * (X_SEGMENTS + 1) + x);
+                }
+            }
+            oddRow = !oddRow;
+        }
+        indexCount = static_cast<unsigned int>(indices.size());
+
+        std::vector<float> data;
+        for (unsigned int i = 0; i < positions.size(); ++i)
+        {
+            data.push_back(positions[i].x);
+            data.push_back(positions[i].y);
+            data.push_back(positions[i].z);
+            if (normals.size() > 0)
+            {
+                data.push_back(normals[i].x);
+                data.push_back(normals[i].y);
+                data.push_back(normals[i].z);
+            }
+            if (uv.size() > 0)
+            {
+                data.push_back(uv[i].x);
+                data.push_back(uv[i].y);
+            }
+        }
+        glBindVertexArray(sphereVAO);
+        glBindBuffer(GL_ARRAY_BUFFER, vbo);
+        glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(float), &data[0], GL_STATIC_DRAW);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
+        unsigned int stride = (3 + 2 + 3) * sizeof(float);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)0);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, stride, (void*)(3 * sizeof(float)));
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, stride, (void*)(6 * sizeof(float)));
+    }
+
+    glBindVertexArray(sphereVAO);
+    glDrawElements(GL_TRIANGLE_STRIP, indexCount, GL_UNSIGNED_INT, 0);
+}
+
 int main2()
 {
     char szHomeDir[1024]={0};
@@ -359,157 +450,110 @@ int main2()
     }
 
   
-    shader* mappingShader=new shader("./res/shader/3.1.3.shadow_mapping.vs", "./res/shader/3.1.3.shadow_mapping.fs");
-    shader* onlyDepthBufferShader=new shader("./res/shader/3.1.3.shadow_mapping_depth.vs", "./res/shader/3.1.3.shadow_mapping_depth.fs");
-    shader* drawDepthValueShader=new shader("./res/shader/3.1.3.debug_quad.vs", "./res/shader/3.1.3.debug_quad_depth.fs");
-
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-       // ------------------------------------------------------------------
-    float planeVertices[] = {
-       // positions            // normals         // texcoords
-        25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
-       -25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
-       -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
-
-        25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
-       -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
-        25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f
-    };
-    // plane VAO
-    unsigned int planeVBO;
-    glGenVertexArrays(1, &planeVAO);
-    glGenBuffers(1, &planeVBO);
-    glBindVertexArray(planeVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glBindVertexArray(0);
-
-    // load textures
-    // -------------
-
-
-    unsigned int woodTexture = textureMgr::getInstance()->getTextureID("res/wood.png");
-
-    // configure depth map FBO
-    // -----------------------
-    const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
-    unsigned int depthMapFBO;
-    glGenFramebuffers(1, &depthMapFBO);
-    // create depth texture
-    unsigned int depthMap;
-    glGenTextures(1, &depthMap);
-    glBindTexture(GL_TEXTURE_2D, depthMap);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-    float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
-    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-    // attach depth texture as FBO's depth buffer
-    glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-    glDrawBuffer(GL_NONE);
-    glReadBuffer(GL_NONE);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-    // shader configuration
-    // --------------------
-    mappingShader->use();
-    mappingShader->setInt("diffuseTexture", 0);
-    mappingShader->setInt("shadowMap", 1);
-    drawDepthValueShader->use();
-    drawDepthValueShader->setInt("depthMap", 0);
-
-    glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
+    // build and compile shaders
+      // -------------------------
+    
+    shader* shPBR=new shader("./res/shader/1.1.pbr.vs", "./res/shader/1.1.pbr.fs");
    
-    while (!glfwWindowShouldClose(window))
-    {
-        // per-frame time logic
-        // --------------------
-        float currentFrame = static_cast<float>(glfwGetTime());
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+ 
 
-        // input
-        // -----
-        processInput(window);
+      // lights
+      // ------
+      glm::vec3 lightPositions[] = {
+          glm::vec3(-10.0f,  10.0f, 10.0f),
+          glm::vec3( 10.0f,  10.0f, 10.0f),
+          glm::vec3(-10.0f, -10.0f, 10.0f),
+          glm::vec3( 10.0f, -10.0f, 10.0f),
+      };
+      glm::vec3 lightColors[] = {
+          glm::vec3(300.0f, 300.0f, 300.0f),
+          glm::vec3(300.0f, 300.0f, 300.0f),
+          glm::vec3(300.0f, 300.0f, 300.0f),
+          glm::vec3(300.0f, 300.0f, 300.0f)
+      };
+      int nrRows    = 7;
+      int nrColumns = 7;
+      float spacing = 2.5;
 
-        // change light position over time
-        //lightPos.x = sin(glfwGetTime()) * 3.0f;
-        //lightPos.z = cos(glfwGetTime()) * 2.0f;
-        //lightPos.y = 5.0 + cos(glfwGetTime()) * 1.0f;
+      // initialize static shader uniforms before rendering
+      // --------------------------------------------------
+      glm::mat4 projection = glm::perspective(glm::radians(cameras.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+    shPBR->use();
+    shPBR->setVec3("albedo", (float*)glm::value_ptr(glm::vec3(0.5f, 0.0f, 0.0f)));
+    shPBR->setFloat("ao", 1.0f);
+    shPBR->setMat4("projection", (float*)glm::value_ptr(projection));
 
-        // render
-        // ------
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+      // render loop
+      // -----------
+      while (!glfwWindowShouldClose(window))
+      {
+          // per-frame time logic
+          // --------------------
+          float currentFrame = static_cast<float>(glfwGetTime());
+          deltaTime = currentFrame - lastFrame;
+          lastFrame = currentFrame;
 
-        // 1. render depth of scene to texture (from light's perspective)
-        // --------------------------------------------------------------
-        glm::mat4 lightProjection, lightView;
-        glm::mat4 lightSpaceMatrix;
-        float near_plane = 1.0f, far_plane = 7.5f;
-        //lightProjection = glm::perspective(glm::radians(45.0f), (GLfloat)SHADOW_WIDTH / (GLfloat)SHADOW_HEIGHT, near_plane, far_plane); // note that if you use a perspective projection matrix you'll have to change the light position as the current light position isn't enough to reflect the whole scene
-        lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
-        lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
-        lightSpaceMatrix = lightProjection * lightView;
-        // render scene from light's point of view
-        onlyDepthBufferShader->use();
-        onlyDepthBufferShader->setMat4("lightSpaceMatrix", glm::value_ptr(lightSpaceMatrix));
+          // input
+          // -----
+          processInput(window);
 
-        glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-        glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-        glClear(GL_DEPTH_BUFFER_BIT);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, woodTexture);
-        renderScene(onlyDepthBufferShader); //把深度信息绘制进深度纹理里
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+          // render
+          // ------
+          glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // reset viewport
-        glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+          shPBR->use();
+          glm::mat4 view = cameras.GetViewMatrix();
+          shPBR->setMat4("view", (float*)glm::value_ptr(view));
+          shPBR->setVec3("camPos", (float*)glm::value_ptr(cameras.Position));
 
-        // 2. render scene as normal using the generated depth/shadow map
-        // --------------------------------------------------------------
-        glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        mappingShader->use();
-        glm::mat4 projection = glm::perspective(glm::radians(cameras.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        glm::mat4 view = cameras.GetViewMatrix();
-        mappingShader->setMat4("projection", glm::value_ptr(projection));
-        mappingShader->setMat4("view", glm::value_ptr(view));
-        // set light uniforms
-        mappingShader->setVec3("viewPos", glm::value_ptr(cameras.Position));
-        mappingShader->setVec3("lightPos", glm::value_ptr(lightPos));
-        mappingShader->setMat4("lightSpaceMatrix", glm::value_ptr(lightSpaceMatrix));
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, woodTexture);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, depthMap);
-        renderScene(mappingShader);
+          // render rows*column number of spheres with varying metallic/roughness values scaled by rows and columns respectively
+          glm::mat4 model = glm::mat4(1.0f);
+          for (int row = 0; row < nrRows; ++row)
+          {
+              shPBR->setFloat("metallic", (float)row / (float)nrRows);
+              for (int col = 0; col < nrColumns; ++col)
+              {
+                  // we clamp the roughness to 0.05 - 1.0 as perfectly smooth surfaces (roughness of 0.0) tend to look a bit off
+                  // on direct lighting.
+                  shPBR->setFloat("roughness", glm::clamp((float)col / (float)nrColumns, 0.05f, 1.0f));
+                  
+                  model = glm::mat4(1.0f);
+                  model = glm::translate(model, glm::vec3(
+                      (col - (nrColumns / 2)) * spacing,
+                      (row - (nrRows / 2)) * spacing,
+                      0.0f
+                  ));
+                  shPBR->setMat4("model", (float*)glm::value_ptr(model));
+                  renderSphere();
+              }
+          }
 
-        // render Depth map to quad for visual debugging
-        // ---------------------------------------------
-//        drawDepthValueShader->use();
-//        drawDepthValueShader->setFloat("near_plane", near_plane);
-//        drawDepthValueShader->setFloat("far_plane", far_plane);
-//        glActiveTexture(GL_TEXTURE0);
-//        glBindTexture(GL_TEXTURE_2D, depthMap);
-        //renderQuad();
+          // render light source (simply re-render sphere at light positions)
+          // this looks a bit off as we use the same shader, but it'll make their positions obvious and
+          // keeps the codeprint small.
+          for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
+          {
+              glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
+              newPos = lightPositions[i];
+              std::string s1="lightPositions[" + std::to_string(i) + "]";
+              std::string s2="lightColors[" + std::to_string(i) + "]";
+              shPBR->setVec3(s1.c_str(), (float*)glm::value_ptr(newPos));
+              shPBR->setVec3(s2.c_str(), (float*)glm::value_ptr(lightColors[i]));
 
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
+              model = glm::mat4(1.0f);
+              model = glm::translate(model, newPos);
+              model = glm::scale(model, glm::vec3(0.5f));
+              shPBR->setMat4("model", (float*)glm::value_ptr(model));
+              renderSphere();
+          }
+
+          // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+          // -------------------------------------------------------------------------------
+          glfwSwapBuffers(window);
+          glfwPollEvents();
+      }
+    
     glfwTerminate();
     return 0;
 }

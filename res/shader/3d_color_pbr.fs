@@ -38,15 +38,13 @@ layout (std140) uniform light_point{
 in vec3 normalVector;
 in vec3 posFrag;
 in vec3 uni_cam_pos;
-in mat3 TBN;
 
 out vec4 FragColor;
 
-uniform sampler2D albedo;
-uniform sampler2D normal;
-uniform sampler2D metallic;
-uniform sampler2D roughness;
-uniform sampler2D ao;
+uniform vec3 albedo;
+uniform float metallic;
+uniform float roughness;
+uniform float ao;
 
 vec3 g_normal_vector;
 vec3 g_view_vector;

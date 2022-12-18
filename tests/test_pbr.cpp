@@ -14,6 +14,7 @@
 #include "timeUtil.h"
 #include "directionLight.h"
 #include "cubeTex.h"
+#include "semiSphere.h"
 #include "material2.h"
 #include "shader.h"
 #include "shaderMgr.h"
@@ -40,52 +41,113 @@ static void init_light_direction(){
 }
 
 
-void test_PBR_1(){
+void test_PBR_cubeColor(){
     init_light_direction();
+    shader* shPBR=new shader("res/shader/3d_color.vs","res/shader/3d_color_pbr.fs");
+    
+    shPBR->use();
+    shPBR->setVec3("albedo", (float*)glm::value_ptr(glm::vec3(0.5,0.0,0.0)));
+    shPBR->setFloat("metallic", 0.0);
+    shPBR->setFloat("roughness", 0.0);
+    shPBR->setFloat("ao", 1.0);
     
     //普通cube
-    node* cubeObj=new cubeTex("res/wood.png");
-    if(!cubeObj->init()){
-        flylog("node init failed!");
-        return;
+    for(int i=0;i<7;i++){
+        shPBR->setFloat("metallic", (float)i / (float)7.0);
+        for(int j=0;j<7;j++){
+            semiSphere* cubeObj=new semiSphere(glm::vec3(300));
+            if(!cubeObj->init()){
+                flylog("node init failed!");
+                return;
+            }
+            cubeObj->setPosition(glm::vec3(j*0.3-0.8,i*0.3-0.8,-2));
+            cubeObj->setScale(glm::vec3(0.1,0.15,0.2));
+            cubeObj->setShader(shPBR);
+            world::getInstance()->addChild(cubeObj);
+            world::getInstance()->getControl()->bindNode(cubeObj);
+            shPBR->setFloat("roughness", glm::clamp((float)j / (float)7.0, 0.05f, 1.0f));
+                        
+        }
     }
-    cubeObj->setPosition(glm::vec3(0,0,-8));
-    cubeObj->setRotation(glm::vec3(30,60,0));
-    cubeObj->setMaterial(createMaterial(1,1,1,2));
-    world::getInstance()->addChild(cubeObj);
+  
     
     //通过按住鼠标右键，控制模型旋转
     control* controlObj=world::getInstance()->getControl();
     
-    
     //光源1
     material2* mtLight=createMaterial(0.3, 0.8, 0.8, 2);
-    pointLight* lightObj1=new pointLight(glm::vec3(0.8,0.8,0.8),mtLight,0);
-    if(!lightObj1->init()){
-        flylog("point light init failed!");
-        return;
-    }
-    lightObj1->setPosition(glm::vec3(0,0,-4));
-    lightObj1->setScale(glm::vec3(0.2,0.2,0.2));
+    pointLight* lightObj1=new pointLight(glm::vec3(300),mtLight,0);
+    pointLight* lightObj2=new pointLight(glm::vec3(300),mtLight,0);
+    pointLight* lightObj3=new pointLight(glm::vec3(300),mtLight,0);
+    pointLight* lightObj4=new pointLight(glm::vec3(300),mtLight,0);
+    lightObj1->init();
+    lightObj2->init();
+    lightObj3->init();
+    lightObj4->init();
+    
+    lightObj1->setPosition(glm::vec3(-0.5,0.5,-1));
+    lightObj2->setPosition(glm::vec3(0.5,0.5,-1));
+    lightObj3->setPosition(glm::vec3(-1,-1,-1));
+    lightObj4->setPosition(glm::vec3(1,-1,-1));
+    
+    lightObj1->setScale(glm::vec3(0.2));
+    lightObj2->setScale(glm::vec3(0.2));
+    lightObj3->setScale(glm::vec3(0.2));
+    lightObj4->setScale(glm::vec3(0.2));
+ 
     world::getInstance()->addPointLight(lightObj1);
-    
+    world::getInstance()->addPointLight(lightObj2);
+    world::getInstance()->addPointLight(lightObj3);
+    world::getInstance()->addPointLight(lightObj4);
+   
     timerUtil* timerMgrObj=new timerUtil("light_test_timer");
-    timerMgrObj->exec(0.1,[](node* lightObj1){
-        float radius=timeUtil::getTimeFloatSinceRun();
-        lightObj1->setPositionX(1.5*cos(radius));
-        lightObj1->setPositionY(1.5*sin(radius));
-    },lightObj1);
-    
-    controlObj->bindNode(cubeObj);
+//    timerMgrObj->exec(0.1,[](node* lightObj1){
+//        float radius=timeUtil::getTimeFloatSinceRun();
+//        lightObj1->setPositionX(1.5*cos(radius));
+//        lightObj1->setPositionY(1.5*sin(radius));
+//    },lightObj1);
     controlObj->bindNode(lightObj1);
-    
+    controlObj->bindNode(lightObj2);
+    controlObj->bindNode(lightObj3);
+    controlObj->bindNode(lightObj4);
+ 
     camera* cam=world::getInstance()->getCamera();
-
-    shader* shPBR=new shader("res/shader/3d_1tex_phong.vs","res/shader/3d_1tex_pbr.fs");
-    cubeObj->setShader(shPBR);
     
-    world::getInstance()->getControl()->regOnKeyPress('g', [cam](){
-        glm::vec3 pos=cam->getPosition();
-        flylog("cam at %f %f %f",pos.x,pos.y,pos.z);
+    world::getInstance()->getControl()->regOnKeyPress('g', [cam,shPBR](){
+        shPBR->use();
+        float metallic=shPBR->getFloat("metallic");
+        metallic+=0.1;
+        if(metallic>=1)
+            metallic=1.0;
+        shPBR->setFloat("metallic", metallic);
+        flylog("set metallic %f",metallic);
     });
+    world::getInstance()->getControl()->regOnKeyPress('h', [cam,shPBR](){
+        shPBR->use();
+        float metallic=shPBR->getFloat("metallic");
+        metallic-=0.1;
+        if(metallic<=0)
+            metallic=0.0;
+        shPBR->setFloat("metallic", metallic);
+        flylog("set metallic %f",metallic);
+    });
+    world::getInstance()->getControl()->regOnKeyPress('j', [cam,shPBR](){
+        shPBR->use();
+        float roughness=shPBR->getFloat("roughness");
+        roughness+=0.1;
+        if(roughness>=1)
+            roughness=1.0;
+        shPBR->setFloat("roughness", roughness);
+        flylog("set roughness %f",roughness);
+    });
+    world::getInstance()->getControl()->regOnKeyPress('k', [cam,shPBR](){
+        shPBR->use();
+        float roughness=shPBR->getFloat("roughness");
+        roughness-=0.1;
+        if(roughness<=0)
+            roughness=0.0;
+        shPBR->setFloat("roughness", roughness);
+        flylog("set roughness %f",roughness);
+    });
+    
 }

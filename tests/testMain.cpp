@@ -144,5 +144,5 @@ void testMainBegin(){
 //    test_deferred_shading_volumn();
 //    test_ssao_0();
 //    test_ssao();
-    test_PBR_1();
+    test_PBR_cubeColor();
 }

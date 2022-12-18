@@ -1,13 +1,15 @@
 //
-//  cubeColor.h
+//  semiSphere.h
 //  flyEngine
 //
-//  Created by joe on 11/08/2021.
-//  Copyright © 2021 joe. All rights reserved.
+//  Created by joe on 16/12/2022.
+//  Copyright © 2022 joe. All rights reserved.
 //
 
-#ifndef cubeColor_h
-#define cubeColor_h
+#ifndef semiSphere_h
+#define semiSphere_h
+
+#include <stdio.h>
 
 #include <stdio.h>
 #include <string>
@@ -20,15 +22,17 @@ using namespace std;
 
 NS_FLYENGINE_BEGIN
 
-class cubeColor: public node
+class semiSphere: public node
 {
 private:
     glm::vec3 m_vec3Color;
     bool _dirtyColor=false;
+    unsigned int _gl_ebo=0;
+    unsigned int _index_size=0;
     
 public:
-    cubeColor(glm::vec3 color);
-    ~cubeColor(){};
+    semiSphere(glm::vec3 color);
+    ~semiSphere(){};
     
     glm::vec3 getColor(){return m_vec3Color;};
     
@@ -42,10 +46,9 @@ public:
     
     bool isDirtyColor(){return _dirtyColor;};
     void setDirtyColor(bool v){_dirtyColor=v;};
-    bool initBySemiSphere();
     void draw();
 };
 
 NS_FLYENGINE_END
 
-#endif /* cubeColor_h */
+#endif /* semiSphere_h */
