@@ -17,7 +17,8 @@ static void getPNGTextureInfo(int color_type,  struct_texture *texinfo)
     switch (color_type)
     {
         case PNG_COLOR_TYPE_GRAY:
-            texinfo->format = GL_LUMINANCE;
+//            texinfo->format = GL_LUMINANCE;
+            texinfo->format = GL_RED;
             texinfo->internalFormat = 1;
             break;
             

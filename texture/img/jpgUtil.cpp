@@ -8,7 +8,9 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdexcept>
 #include "jpeglib.h"
+#include "jerror.h"
 #include "defines.h"
 #include "jpgUtil.h"
 using namespace flyEngine;
@@ -30,6 +32,15 @@ static void getJPGTextureInfo(int num_components,  struct_texture *texinfo){
     }
 }
 
+void on_jpg_error(jpeg_common_struct* st){
+    fprintf(stderr, "on_jpg_error,do nothing,return!\n");
+//    my_error_ptr myerr=(my_error_ptr)st->err;
+    (*st->err->output_message)(st);
+    throw std::runtime_error("on_jpg_error");
+//    longjmp(myerr->setjmp_buffer,1);
+//    jpeg_destroy_decompress(st);
+}
+
 bool jpgUtil::isJpg(const char *filename)
 {
     struct jpeg_decompress_struct cinfo;
@@ -45,11 +56,22 @@ bool jpgUtil::isJpg(const char *filename)
     //初始化JPEG对象
     jpeg_create_decompress(&cinfo);
     jpeg_stdio_src(&cinfo, fp);
+    jerr.error_exit=on_jpg_error;
+//    if(setjmp(jerr.setjmp_buffer)){
+//        jpeg_destroy_decompress(&cinfo);
+//        fclose(fp);
+//        return false;
+//    }
     //读取图像信息
-    jpeg_read_header(&cinfo, TRUE);
-    if(cinfo.image_width==0 || cinfo.image_height==0)
-      return false;
-    return true;
+    try{
+        jpeg_read_header(&cinfo, TRUE);
+        if(cinfo.image_width==0 || cinfo.image_height==0)
+          return false;
+        return true;
+    }catch(std::runtime_error error){
+        //fprintf(stderr, "jpgUtil::isJpg error:%s\n", error.what());
+        return false;
+    }
 }
 
 bool jpgUtil::loadFile(const char *filename,struct_texture* texinfo,bool bFlipY)

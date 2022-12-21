@@ -53,6 +53,7 @@ public:
     static fboStruct createFBOMSAA();
     static fboStruct createFBOForDepth();
     static fboStruct createFBOForDepthWithCubemap();
+    static fboStruct createFBOForIBLWithCubemap();
     static fboStruct createFBOHDR();
     static fboHDRBloomGaussStruct createFBOHDRBloomGauss();
     static fboDeferredShadingStruct createFBODeferredShading();
