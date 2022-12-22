@@ -145,5 +145,7 @@ void testMainBegin(){
 //    test_ssao_0();
 //    test_ssao();
 //    test_PBR_cubeColor();
-    test_PBR_cubeTex();
+//    test_PBR_cubeTex_2();
+    
+    test_PBR_cubeTex_ibl_1();
 }

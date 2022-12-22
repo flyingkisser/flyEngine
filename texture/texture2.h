@@ -19,7 +19,7 @@ using namespace std;
 NS_FLYENGINE_BEGIN
 
 class texture2:glRef{
-private:
+protected:
     int _width;
     int _height;
     int _type;

@@ -179,6 +179,45 @@ fboStruct fbo::createFBOForDepthWithCubemap(){
     return st;
 }
 
+//球形深度纹理
+fboStruct fbo::createFBOForIBLWithCubemap(){
+    unsigned int fbo=0;
+    unsigned int texID=0;
+    unsigned int rbo=0;
+    //1.create fbo
+    glGenFramebuffers(1,&fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER,fbo);
+    //2.1 create texture
+    glGenTextures(1,&texID);
+    glBindTexture(GL_TEXTURE_CUBE_MAP,texID);
+
+    for(int i=0;i<6;i++)
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i,0,GL_RGB16F,512,512,0,GL_RGB,GL_FLOAT,NULL);
+    
+    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+    //3.1 create rbo(depth and stencil)
+    glGenRenderbuffers(1,&rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH24_STENCIL8,512,512);
+    //3.2 bind rbo to fbo
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_STENCIL_ATTACHMENT,GL_RENDERBUFFER,rbo);
+    int status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboStruct st={0,0,0};
+        flylog("createFBOForIBLWithCubemap: glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    
+    fboStruct st={fbo,rbo,texID};
+    return st;
+}
+
 //HDR纹理，纹理格式是GL_RGB16F
 fboStruct fbo::createFBOHDR(){
     unsigned int fbo=0;

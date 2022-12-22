@@ -88,6 +88,7 @@
 		D8B01CF128DDE8A3004EF910 /* test_cubeTexIns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B01CF028DDE8A3004EF910 /* test_cubeTexIns.cpp */; };
 		D8B01CF728E0A3D1004EF910 /* nodeIns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B01CF628E0A3D1004EF910 /* nodeIns.cpp */; };
 		D8B01CFA28E17E4A004EF910 /* modelIns.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B01CF928E17E4A004EF910 /* modelIns.cpp */; };
+		D8B2711C2952CE2F00841859 /* textureHdr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B2711A2952CE2F00841859 /* textureHdr.cpp */; };
 		D8B374D72844A8F400C3DF0C /* test_model.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8B374D62844A8F400C3DF0C /* test_model.cpp */; };
 		D8BB1B98255A6A0E00AF9FD5 /* mouseEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B97255A6A0E00AF9FD5 /* mouseEvent.cpp */; };
 		D8BB1B9B255A6D1500AF9FD5 /* mouseEventMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8BB1B9A255A6D1500AF9FD5 /* mouseEventMgr.cpp */; };
@@ -1734,6 +1735,8 @@
 		D8B01CF628E0A3D1004EF910 /* nodeIns.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = nodeIns.cpp; sourceTree = "<group>"; };
 		D8B01CF828E17E4A004EF910 /* modelIns.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = modelIns.h; sourceTree = "<group>"; };
 		D8B01CF928E17E4A004EF910 /* modelIns.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = modelIns.cpp; sourceTree = "<group>"; };
+		D8B2711A2952CE2F00841859 /* textureHdr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = textureHdr.cpp; sourceTree = "<group>"; };
+		D8B2711B2952CE2F00841859 /* textureHdr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = textureHdr.h; sourceTree = "<group>"; };
 		D8B374D52844A8F400C3DF0C /* test_model.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_model.h; sourceTree = "<group>"; };
 		D8B374D62844A8F400C3DF0C /* test_model.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_model.cpp; sourceTree = "<group>"; };
 		D8B374DA2844AE8000C3DF0C /* source_attribution.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = source_attribution.txt; sourceTree = "<group>"; };
@@ -4091,6 +4094,8 @@
 				D8A6E8B728C4DE0600C3DE56 /* texture.cpp */,
 				D8A6E8B928C4DE6200C3DE56 /* texture2.h */,
 				D8A6E8BA28C4DE6200C3DE56 /* texture2.cpp */,
+				D8B2711A2952CE2F00841859 /* textureHdr.cpp */,
+				D8B2711B2952CE2F00841859 /* textureHdr.h */,
 			);
 			path = texture;
 			sourceTree = "<group>";
@@ -4656,6 +4661,7 @@
 				D87EBFE726A7CA3F004ED7DE /* mathUtil.cpp in Sources */,
 				D882CCD828EB184700B11310 /* test_msaa.mm in Sources */,
 				D84FB80926ABF59B003FDDE1 /* moveTo.cpp in Sources */,
+				D8B2711C2952CE2F00841859 /* textureHdr.cpp in Sources */,
 				D825DB71249CB3EB00C494E7 /* randUtil.cpp in Sources */,
 				D8A2AD8A272AC46400B5FC18 /* stb_image.cpp in Sources */,
 				D81EF3871EB01E950003604F /* error.cpp in Sources */,
