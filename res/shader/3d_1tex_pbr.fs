@@ -38,15 +38,20 @@ layout (std140) uniform light_point{
 in vec3 normalVector;
 in vec3 posFrag;
 in vec3 uni_cam_pos;
-in mat3 TBN;
+in vec2 texCoord;
 
 out vec4 FragColor;
 
-uniform sampler2D albedo;
-uniform sampler2D normal;
-uniform sampler2D metallic;
-uniform sampler2D roughness;
-uniform sampler2D ao;
+uniform sampler2D tex_albedo;
+uniform sampler2D tex_normal;
+uniform sampler2D tex_metallic;
+uniform sampler2D tex_roughness;
+uniform sampler2D tex_ao;
+
+vec3 albedo;
+float metallic;
+float roughness;
+float ao;
 
 vec3 g_normal_vector;
 vec3 g_view_vector;
@@ -81,6 +86,18 @@ void checkDir(vec3 direction,vec3 color,float light_ambient,float light_diffuse,
     g_specular+=specular;
 }
 
+vec3 getNormalFromMap(){
+    vec3 tangentNormal=texture(tex_normal,texCoord).xyz*2.0-1.0;
+    vec3 Q1  = dFdx(posFrag);
+    vec3 Q2  = dFdy(posFrag);
+    vec2 st1 = dFdx(texCoord);
+    vec2 st2 = dFdy(texCoord);
+    vec3 N   = normalize(normalVector);
+    vec3 T  = normalize(Q1*st2.t - Q2*st1.t);
+    vec3 B  = -normalize(cross(N, T));
+    mat3 TBN = mat3(T, B, N);
+    return normalize(TBN * tangentNormal);
+}
 vec3 fresnelSchlick(float cosTheta, vec3 F0){
     return F0 + (1.0 - F0) * pow(clamp(1.0 - cosTheta, 0.0, 1.0), 5.0);
 }
@@ -146,12 +163,19 @@ void checkPoint(vec3 pos,vec3 color,vec3 light_ambient,vec3 light_diffuse,vec3 l
     // g_debug_color+=(kD*albedo/3.1415926+specular)*radiance*NdotL;
 }
 
+
+
 void main(){
     // FragColor=vec4(albedo,1.0);
     // return;
-    g_normal_vector=normalize(normalVector);
+    // g_normal_vector=normalize(normalVector);
+    
+    albedo=pow(texture(tex_albedo,texCoord).rgb,vec3(2.2));
+    metallic=texture(tex_metallic,texCoord).r;
+    roughness=texture(tex_roughness,texCoord).r;
+    ao=texture(tex_ao,texCoord).r;
+    g_normal_vector=getNormalFromMap();
     g_view_vector=normalize(uni_cam_pos-posFrag);
-
    // for(int i=0;i<DIR_LIGHT_NUM;i++){
    //      DirectionLight p=light_dir_arr[i];
    //      checkDir(p.direction,p.color,p.ambient,p.diffuse,p.specular,p.shiness);

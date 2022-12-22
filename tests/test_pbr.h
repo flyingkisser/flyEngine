@@ -12,4 +12,5 @@
 #include <stdio.h>
 
 void test_PBR_cubeColor();
+void test_PBR_cubeTex();
 #endif /* test_pbr_h */
