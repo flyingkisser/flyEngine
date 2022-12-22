@@ -29,7 +29,7 @@ public:
     bool init();
     float* getBuf(){return _dataBuf;};
     void glInit(int texturePos=0);
-}
+};
 
 NS_FLYENGINE_END
 #endif /* textureHdr_h */

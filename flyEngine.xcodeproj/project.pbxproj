@@ -41,7 +41,7 @@
 		D85F22FD27FEBC22007B0C19 /* libassimp.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D85F22FC27FEBC22007B0C19 /* libassimp.5.dylib */; };
 		D8670BBE2931B60600DD7791 /* test_hdr_bloom.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8670BBD2931B60600DD7791 /* test_hdr_bloom.mm */; };
 		D8670BC129434F1000DD7791 /* test_ssao.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8670BC029434F1000DD7791 /* test_ssao.mm */; };
-		D8670BC42949EDEB00DD7791 /* test_pbr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8670BC32949EDEB00DD7791 /* test_pbr.cpp */; };
+		D8670BC42949EDEB00DD7791 /* test_pbr.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8670BC32949EDEB00DD7791 /* test_pbr.mm */; };
 		D86CE57528F2ABB0006797C4 /* test_gamma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57328F2ABB0006797C4 /* test_gamma.cpp */; };
 		D86CE57828F2E891006797C4 /* test_shadow_mapping.mm in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57728F2E891006797C4 /* test_shadow_mapping.mm */; };
 		D86CE57B28F3B71D006797C4 /* quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57A28F3B71D006797C4 /* quad.cpp */; };
@@ -1625,7 +1625,7 @@
 		D8670BBF29434F1000DD7791 /* test_ssao.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_ssao.h; sourceTree = "<group>"; };
 		D8670BC029434F1000DD7791 /* test_ssao.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = test_ssao.mm; sourceTree = "<group>"; };
 		D8670BC22949EDEB00DD7791 /* test_pbr.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_pbr.h; sourceTree = "<group>"; };
-		D8670BC32949EDEB00DD7791 /* test_pbr.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_pbr.cpp; sourceTree = "<group>"; };
+		D8670BC32949EDEB00DD7791 /* test_pbr.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = test_pbr.mm; sourceTree = "<group>"; };
 		D8691EE626B3FA2100D40717 /* 3d_color.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_color.vs; sourceTree = "<group>"; };
 		D8691EE726B3FA2100D40717 /* 3d_color.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_color.fs; sourceTree = "<group>"; };
 		D86CE57328F2ABB0006797C4 /* test_gamma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_gamma.cpp; sourceTree = "<group>"; };
@@ -4079,7 +4079,7 @@
 				D8670BBF29434F1000DD7791 /* test_ssao.h */,
 				D8670BC029434F1000DD7791 /* test_ssao.mm */,
 				D8670BC22949EDEB00DD7791 /* test_pbr.h */,
-				D8670BC32949EDEB00DD7791 /* test_pbr.cpp */,
+				D8670BC32949EDEB00DD7791 /* test_pbr.mm */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -4665,7 +4665,7 @@
 				D825DB71249CB3EB00C494E7 /* randUtil.cpp in Sources */,
 				D8A2AD8A272AC46400B5FC18 /* stb_image.cpp in Sources */,
 				D81EF3871EB01E950003604F /* error.cpp in Sources */,
-				D8670BC42949EDEB00DD7791 /* test_pbr.cpp in Sources */,
+				D8670BC42949EDEB00DD7791 /* test_pbr.mm in Sources */,
 				D8EC7843288AF69A00415650 /* test_skybox.cpp in Sources */,
 				D8880DC82896352A000BCFEE /* uboMgr.cpp in Sources */,
 				8ECA453A26916C3E00FDFC7A /* camera.cpp in Sources */,

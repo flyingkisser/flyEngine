@@ -13,5 +13,5 @@
 
 void test_PBR_cubeColor();
 void test_PBR_cubeTex();
-void test_PBR_cubeTex_2();
+void test_PBR_ibl_1();
 #endif /* test_pbr_h */

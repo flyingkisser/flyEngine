@@ -32,10 +32,8 @@ bool textureHdr::init(){
     return true;
 }
 
-
 //texturePos from GL_TEXTURE0,GL_TEXTURE1
 void textureHdr::glInit(int texturePos){
-    glRef::glInit();
     glGenTextures(1,&_textureID);
     if(texturePos){
         glActiveTexture(texturePos);
@@ -48,8 +46,8 @@ void textureHdr::glInit(int texturePos){
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    flylog("glTexImage2D from buf %llu begin %d*%d %d",_dataBuf,_width,_height,_width*_height);
+    flylog("textureHdr from buf %llu begin %d*%d %d",_dataBuf,_width,_height,_width*_height);
     glTexImage2D(GL_TEXTURE_2D,0,GL_RGB16F,_width,_height,0,GL_RGB,GL_FLOAT,_dataBuf);
     checkGLError();
-    flylog("glTexImage2D from buf %llu end",_dataBuf);
+    flylog("textureHdr from buf %llu end",_dataBuf);
 }
