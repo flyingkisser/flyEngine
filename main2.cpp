@@ -9,21 +9,27 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include "dirUtil.h"
 // FreeType
 #include <ft2build.h>
 #include FT_FREETYPE_H
 // GL includes
-#include "shader.h"
+
 #include <iostream>
 #include <vector>
-#include "defines.h"
 #include "stb_image/stb_image.h"
 
-#include "cubeTex.h"
-#include "world.h"
+#include "defines.h"
 #include "error.h"
+
+#include "dirUtil.h"
+#include "shader.h"
+#include "cubeTex.h"
+#include "skybox.h"
 #include "textureMgr.h"
+#include "textureHdr.h"
+#include "texture2.h"
+#include "fbo.h"
+#include "world.h"
 
 USE_NS_FLYENGINE
 using namespace std;
@@ -448,41 +454,130 @@ int main2()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-
-  
-    // build and compile shaders
-      // -------------------------
     
-    shader* shPBR=new shader("./res/shader/1.1.pbr.vs", "./res/shader/1.1.pbr.fs");
-   
+    glm::mat4 proj = glm::perspective(glm::radians(cameras.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+    glm::mat4 projForCap = glm::perspective(glm::radians(90.0f), 1.0f, 0.1f, 10.0f);
+    glm::mat4 viewArr[] =
+    {
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f,  0.0f,  0.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  1.0f,  0.0f), glm::vec3(0.0f,  0.0f,  1.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -1.0f,  0.0f), glm::vec3(0.0f,  0.0f, -1.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f,  1.0f), glm::vec3(0.0f, -1.0f,  0.0f)),
+        glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
+    };
+    
+    textureHdr* texHDR=new textureHdr("res/pbr_ibl/newport_loft.hdr");
+    texHDR->init();
+    texHDR->glInit();
  
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL); // set depth function to less than AND equal for skybox depth trick.
+  
+    shader* shRenderSixFace=new shader("res/shader/cubemap.vs", "res/shader/equirectangular2cubemap.fs");
+    shader* shIrradiance=new shader("res/shader/cubemap.vs", "res/shader/irradiance.fs");
 
-      // lights
-      // ------
-      glm::vec3 lightPositions[] = {
-          glm::vec3(-10.0f,  10.0f, 10.0f),
-          glm::vec3( 10.0f,  10.0f, 10.0f),
-          glm::vec3(-10.0f, -10.0f, 10.0f),
-          glm::vec3( 10.0f, -10.0f, 10.0f),
-      };
-      glm::vec3 lightColors[] = {
-          glm::vec3(300.0f, 300.0f, 300.0f),
-          glm::vec3(300.0f, 300.0f, 300.0f),
-          glm::vec3(300.0f, 300.0f, 300.0f),
-          glm::vec3(300.0f, 300.0f, 300.0f)
-      };
-      int nrRows    = 7;
-      int nrColumns = 7;
-      float spacing = 2.5;
+    shRenderSixFace->use();
+    shRenderSixFace->setInt("texHDR", 0);
+    shRenderSixFace->setMat4("proj", projForCap);
 
-      // initialize static shader uniforms before rendering
-      // --------------------------------------------------
-      glm::mat4 projection = glm::perspective(glm::radians(cameras.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-    shPBR->use();
-    shPBR->setVec3("albedo", (float*)glm::value_ptr(glm::vec3(0.5f, 0.0f, 0.0f)));
-    shPBR->setFloat("ao", 1.0f);
-    shPBR->setMat4("projection", (float*)glm::value_ptr(projection));
+    shIrradiance->use();
+    shIrradiance->setInt("texEnvMap", 0);
+    shIrradiance->setMat4("proj", projForCap);
+    
+    shader* pbrShader=new shader("res/shader/2.1.2.pbr.vs", "res/shader/2.1.2.pbr.fs");
+    shader* backgroundShader=new shader("res/shader/2.1.2.background.vs", "res/shader/2.1.2.background.fs");
 
+    backgroundShader->use();
+    backgroundShader->setMat4("projection", proj);
+
+    pbrShader->use();
+    pbrShader->setInt("irradianceMap", 0);
+    pbrShader->setVec3("albedo", 0.5f, 0.0f, 0.0f);
+    pbrShader->setFloat("ao", 1.0f);
+    pbrShader->setMat4("projection", proj);
+    
+    backgroundShader->use();
+    backgroundShader->setInt("environmentMap", 0);
+
+      
+    fboStruct st=fbo::createFBOForIBLWithCubemap();
+    cubeTex* cubeRenderSixFace=new cubeTex(texHDR->getTextureID());
+    cubeRenderSixFace->init();
+    cubeRenderSixFace->setShader(shRenderSixFace);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, texHDR->getTextureID());
+    glViewport(0, 0, 512, 512); // don't forget to configure the viewport to the capture dimensions.
+    glBindFramebuffer(GL_FRAMEBUFFER, st.fbo);
+    for (unsigned int i = 0; i < 6; ++i){
+        shRenderSixFace->setMat4("view", viewArr[i]);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, st.texID, 0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        cubeRenderSixFace->draw();
+    }
+ 
+    
+      unsigned int irradianceMap;
+      glGenTextures(1, &irradianceMap);
+      glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
+      for (unsigned int i = 0; i < 6; ++i)
+      {
+          glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 32, 32, 0, GL_RGB, GL_FLOAT, nullptr);
+      }
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+      glBindFramebuffer(GL_FRAMEBUFFER, st.fbo);
+      glBindRenderbuffer(GL_RENDERBUFFER, st.rbo);
+      glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 32, 32);
+
+     
+
+    skybox* cubeIrradiance=new skybox(st.texID,shIrradiance);
+    glBindFramebuffer(GL_FRAMEBUFFER, st.fbo);
+    glViewport(0, 0, 32, 32); // don't forget to configure the viewport to the capture dimensions.
+    for (unsigned int i = 0; i < 6; ++i){
+        shIrradiance->setMat4("view", viewArr[i]);
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irradianceMap, 0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        cubeIrradiance->drawSimple();
+    }
+   
+//    irradianceShader->use();
+//    irradianceShader->setInt("environmentMap", 0);
+//    irradianceShader->setMat4("projection", projForCap);
+//    glActiveTexture(GL_TEXTURE0);
+//    glBindTexture(GL_TEXTURE_CUBE_MAP, st.texID);
+//      glViewport(0, 0, 32, 32); // don't forget to configure the viewport to the capture dimensions.
+//      glBindFramebuffer(GL_FRAMEBUFFER, st.fbo);
+//      for (unsigned int i = 0; i < 6; ++i)
+//      {
+//          irradianceShader->setMat4("view", viewArr[i]);
+//          glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irradianceMap, 0);
+//          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+//          renderCube();
+//      }
+    
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glm::vec3 lightPositions[] = {
+        glm::vec3(-10.0f,  10.0f, 10.0f),
+        glm::vec3( 10.0f,  10.0f, 10.0f),
+        glm::vec3(-10.0f, -10.0f, 10.0f),
+        glm::vec3( 10.0f, -10.0f, 10.0f),
+    };
+    glm::vec3 lightColors[] = {
+        glm::vec3(300.0f, 300.0f, 300.0f),
+        glm::vec3(300.0f, 300.0f, 300.0f),
+        glm::vec3(300.0f, 300.0f, 300.0f),
+        glm::vec3(300.0f, 300.0f, 300.0f)
+    };
+    int nrRows = 7;
+    int nrColumns = 7;
+    float spacing = 2.5;
+    
       // render loop
       // -----------
       while (!glfwWindowShouldClose(window))
@@ -498,56 +593,67 @@ int main2()
           processInput(window);
 
           // render
-          // ------
-          glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-          glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // ------
+        glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-          shPBR->use();
-          glm::mat4 view = cameras.GetViewMatrix();
-          shPBR->setMat4("view", (float*)glm::value_ptr(view));
-          shPBR->setVec3("camPos", (float*)glm::value_ptr(cameras.Position));
+          pbrShader->use();
+        glm::mat4 view = cameras.GetViewMatrix();
+        pbrShader->setMat4("view", view);
+        pbrShader->setVec3("camPos", cameras.Position);
 
-          // render rows*column number of spheres with varying metallic/roughness values scaled by rows and columns respectively
-          glm::mat4 model = glm::mat4(1.0f);
-          for (int row = 0; row < nrRows; ++row)
-          {
-              shPBR->setFloat("metallic", (float)row / (float)nrRows);
-              for (int col = 0; col < nrColumns; ++col)
-              {
-                  // we clamp the roughness to 0.05 - 1.0 as perfectly smooth surfaces (roughness of 0.0) tend to look a bit off
-                  // on direct lighting.
-                  shPBR->setFloat("roughness", glm::clamp((float)col / (float)nrColumns, 0.05f, 1.0f));
-                  
-                  model = glm::mat4(1.0f);
-                  model = glm::translate(model, glm::vec3(
-                      (col - (nrColumns / 2)) * spacing,
-                      (row - (nrRows / 2)) * spacing,
-                      0.0f
-                  ));
-                  shPBR->setMat4("model", (float*)glm::value_ptr(model));
-                  renderSphere();
-              }
-          }
+        // bind pre-computed IBL data
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap);
 
-          // render light source (simply re-render sphere at light positions)
-          // this looks a bit off as we use the same shader, but it'll make their positions obvious and
-          // keeps the codeprint small.
-          for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
-          {
-              glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
-              newPos = lightPositions[i];
-              std::string s1="lightPositions[" + std::to_string(i) + "]";
-              std::string s2="lightColors[" + std::to_string(i) + "]";
-              shPBR->setVec3(s1.c_str(), (float*)glm::value_ptr(newPos));
-              shPBR->setVec3(s2.c_str(), (float*)glm::value_ptr(lightColors[i]));
+        // render rows*column number of spheres with varying metallic/roughness values scaled by rows and columns respectively
+        glm::mat4 model = glm::mat4(1.0f);
+        for (int row = 0; row < nrRows; ++row)
+        {
+            pbrShader->setFloat("metallic", (float)row / (float)nrRows);
+            for (int col = 0; col < nrColumns; ++col)
+            {
+                // we clamp the roughness to 0.025 - 1.0 as perfectly smooth surfaces (roughness of 0.0) tend to look a bit off
+                // on direct lighting.
+                pbrShader->setFloat("roughness", glm::clamp((float)col / (float)nrColumns, 0.05f, 1.0f));
 
-              model = glm::mat4(1.0f);
-              model = glm::translate(model, newPos);
-              model = glm::scale(model, glm::vec3(0.5f));
-              shPBR->setMat4("model", (float*)glm::value_ptr(model));
-              renderSphere();
-          }
+                model = glm::mat4(1.0f);
+                model = glm::translate(model, glm::vec3(
+                    (float)(col - (nrColumns / 2)) * spacing,
+                    (float)(row - (nrRows / 2)) * spacing,
+                    -2.0f
+                ));
+                pbrShader->setMat4("model", model);
+                renderSphere();
+            }
+        }
 
+
+        // render light source (simply re-render sphere at light positions)
+        // this looks a bit off as we use the same shader, but it'll make their positions obvious and
+        // keeps the codeprint small.
+        for (unsigned int i = 0; i < sizeof(lightPositions) / sizeof(lightPositions[0]); ++i)
+        {
+            glm::vec3 newPos = lightPositions[i] + glm::vec3(sin(glfwGetTime() * 5.0) * 5.0, 0.0, 0.0);
+            newPos = lightPositions[i];
+            pbrShader->setVec3("lightPositions[" + std::to_string(i) + "]", newPos);
+            pbrShader->setVec3("lightColors[" + std::to_string(i) + "]", lightColors[i]);
+
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, newPos);
+            model = glm::scale(model, glm::vec3(0.5f));
+            pbrShader->setMat4("model", model);
+            renderSphere();
+        }
+
+        // render skybox (render as last to prevent overdraw)
+        backgroundShader->use();
+          backgroundShader->setMat4("view", view);
+          backgroundShader->setInt("environmentMap", 0);
+        glActiveTexture(GL_TEXTURE0);
+//        glBindTexture(GL_TEXTURE_CUBE_MAP, st.texID);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, irradianceMap); // display irradiance map
+        renderCube();
           // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
           // -------------------------------------------------------------------------------
           glfwSwapBuffers(window);
@@ -594,14 +700,14 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
     lastX = xpos;
     lastY = ypos;
 
-//    camera.ProcessMouseMovement(xoffset, yoffset);
+//    cameras.ProcessMouseMovement(xoffset, yoffset);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
 // ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
-//    camera.ProcessMouseScroll(static_cast<float>(yoffset));
+//    cameras.ProcessMouseScroll(static_cast<float>(yoffset));
 }
 
 // utility function for loading a 2D texture from file

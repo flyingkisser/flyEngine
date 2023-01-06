@@ -11,7 +11,14 @@
 
 #include <stdio.h>
 
+
+
 int checkGLError (const char* str=NULL);
+int checkGLErrorWithFileLine (const char* filename,int line);
+
+
+#define checkGLErrorWithFileLines() checkGLErrorWithFileLine(__FILE__, __LINE__)
+
 
 #endif /* error_h */
 

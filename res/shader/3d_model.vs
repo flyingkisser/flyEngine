@@ -6,18 +6,17 @@ layout (location=2) in vec2 aTexCoord;
 
 out vec2 texCoord;
 out vec3 normalVector;
-out vec3 normalVectorInView;
+// out vec3 normalVectorInView;
 out vec3 posFrag;
-out vec3 posFragInView;
+// out vec3 posFragInView;
 out vec3 uni_cam_pos;
 
-out VS_OUT{
-    vec2 texCoord;
-    vec3 normalVector;
-    vec3 posFrag;
-    vec3 uni_cam_pos;
-    vec3 posFragInView;
-} vsOut;
+// out VS_OUT{
+//     vec2 texCoord;
+//     vec3 normalVector;
+//     vec3 posFrag;
+//     vec3 uni_cam_pos;
+// } vsOut;
 
 layout (std140) uniform mat3d{
     mat4 proj;
@@ -30,16 +29,15 @@ uniform mat4 matModel;
 void main(){
     texCoord=aTexCoord;
     normalVector = mat3(transpose(inverse(matModel))) * aNormal;
-    normalVectorInView = mat3(transpose(inverse(mat3(view*matModel)))) * aNormal;
+    // normalVectorInView = mat3(transpose(inverse(mat3(view*matModel)))) * aNormal;
     posFrag=vec3(matModel * vec4(aPos,1));
-    posFragInView=vec3(proj*view*matModel * vec4(aPos,1));
+    // posFragInView=vec3(proj*view*matModel * vec4(aPos,1));
     uni_cam_pos=cam_pos;
 
-    vsOut.texCoord=texCoord;
-    vsOut.normalVector=normalVector;
-    vsOut.posFrag=posFrag;
-    vsOut.posFragInView=posFragInView;
-    vsOut.uni_cam_pos=uni_cam_pos;
+    // vsOut.texCoord=texCoord;
+    // vsOut.normalVector=normalVector;
+    // vsOut.posFrag=posFrag;
+    // vsOut.uni_cam_pos=uni_cam_pos;
 
     gl_Position = proj * view * matModel * vec4(aPos, 1);
 }

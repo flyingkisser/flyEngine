@@ -97,6 +97,39 @@ void test_one_model(){
     },modelObj,pLight);
 }
 
+void test_one_model_fbx(){
+    init_light_direction();
+    
+    pointLight* pLight=new pointLight(glm::vec3(1,1,1),createMaterial(1.0, 1.0, 1.0, 2));
+    if(!pLight->init()){
+         flylog("pLight init failed!");
+         return;
+    }
+    pLight->setPosition(glm::vec3(-0.7,0.6,0));
+    world::getInstance()->addPointLight(pLight);
+
+    model* modelObj=new model("res/model/Cerberus/Cerberus_LP.FBX");
+    modelObj->setPosition(glm::vec3(0,0,-0.5));
+    if(!modelObj->init()){
+       flylog("modelObj init failed!");
+       return;
+    }
+    world::getInstance()->addChild(modelObj);
+    
+    //通过按住鼠标右键，控制模型旋转
+    control* controlObj=world::getInstance()->getControl();
+    controlObj->bindNode(modelObj);
+
+    timerUtil* timerMgrObj=new timerUtil("model_test_timer");
+    
+//    timerMgrObj->exec(0.1,[](node* _node,node* lightObj){
+//        _node->rotateBy(glm::vec3(0,0.5f,0));
+//        float radius=timeUtil::getTimeFloatSinceRun();
+//        lightObj->setPositionX(2*cos(radius));
+//        lightObj->setPositionZ(8*sin(radius));
+//    },modelObj,pLight);
+}
+
 void test_one_model_onePointLight_BlinnPhong(){
     init_light_direction();
     

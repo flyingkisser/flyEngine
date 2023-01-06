@@ -54,7 +54,8 @@ public:
     bool init();
 
     void draw();
-    
+    void drawSimple();
+  
     void setCBBeforeDraw(std::function<void()> cb){_cb_before_draw=cb;};
 };
 

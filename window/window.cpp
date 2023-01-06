@@ -52,6 +52,8 @@ void window::init(){
     #ifdef __APPLE__
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     #endif
+    //opengl4.3以上才能启用
+    glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
     //设置msaa一个像素点进行4次采样
 //    glfwWindowHint(GLFW_SAMPLES, 4);
 

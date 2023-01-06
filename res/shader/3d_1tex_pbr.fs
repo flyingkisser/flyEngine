@@ -166,8 +166,6 @@ void checkPoint(vec3 pos,vec3 color,vec3 light_ambient,vec3 light_diffuse,vec3 l
 }
 
 void main(){
-    // FragColor=vec4(albedo,1.0);
-    // return;
     g_normal_vector=getNormalFromMap();
     g_view_vector=normalize(uni_cam_pos-posFrag);
     albedo=pow(texture(tex_albedo,texCoord).rgb,vec3(2.2));
@@ -191,7 +189,6 @@ void main(){
     vec3 color=ambient+g_Lo;
     color=color/(color+vec3(1.0));  //HDR->LDR;
     color=pow(color,vec3(1.0/2.2)); //gamma correct
-    // color=g_debug_color;
     FragColor=vec4(color,1.0);
     // FragColor=vec4(texture(tex_metallic,texCoord).r);
 }

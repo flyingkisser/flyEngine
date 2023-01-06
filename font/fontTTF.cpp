@@ -52,7 +52,7 @@ bool fontTTF::init(){
 }
 
 void fontTTF::glInit(){
-    glPixelStorei(GL_UNPACK_ALIGNMENT,1);
+    glPixelStorei(GL_UNPACK_ALIGNMENT,1);//对齐粒度是1，因为下面只用了一个字节来表示一个颜色，纹理的宽度最终不会按4对齐
     for(int i=0;i<128;i++){
         GLuint texID=0;
         texFontStruct st={0};
@@ -63,11 +63,6 @@ void fontTTF::glInit(){
         }
         glGenTextures(1,&texID);
         glBindTexture(GL_TEXTURE_2D, texID);
-//        glTexImage2D(GL_TEXTURE_2D,0,GL_RED,
-//                     _ftFace->glyph->bitmap.width,
-//                     _ftFace->glyph->bitmap.rows,
-//                     0,GL_RED,GL_UNSIGNED_BYTE,_ftFace->glyph->bitmap.buffer
-//                     );
         glTexImage2D(GL_TEXTURE_2D,0,GL_RED,
                      _ftFace->glyph->bitmap.width,
                      _ftFace->glyph->bitmap.rows,

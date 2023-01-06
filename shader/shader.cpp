@@ -341,6 +341,15 @@ void shader::setVec3(const char *name, float* v,bool debug){
     }
     glUniform3fv(pos,1,v);
 }
+void shader::setVec3(const char *name, glm::vec3 vector3,bool debug){
+    return setVec3(name,glm::value_ptr(vector3),debug);
+}
+void shader::setVec3(const char *name, float v1,float v2,float v3,bool debug){
+    return setVec3(name,(float*)glm::value_ptr(glm::vec3(v1,v2,v3)),debug);
+}
+void shader::setVec3(std::string name, glm::vec3 vector3,bool debug){
+    return setVec3(name.c_str(),glm::value_ptr(vector3),debug);
+}
 
 void shader::setMat4(const char *name, float* v,bool debug){
     int pos=glGetUniformLocation(_idProgram, name);
@@ -350,6 +359,12 @@ void shader::setMat4(const char *name, float* v,bool debug){
        return;
     }
     glUniformMatrix4fv(pos,1,GL_FALSE,v);
+}
+void shader::setMat4(const char *name, glm::mat4 v,bool debug){
+    return setMat4(name,glm::value_ptr(v),debug);
+}
+void shader::setMat4(std::string name, glm::mat4 v,bool debug){
+    return setMat4(name.c_str(),glm::value_ptr(v),debug);
 }
 
 void shader::setMat4Multi(const char *name, float* v,int count,bool debug){

@@ -19,7 +19,6 @@
 #include "testMain.h"
 USE_NS_FLYENGINE
 
-
 int main(int argc, char **argv) {
     char szHomeDir[1024]={0};
     dirUtil::getHomeDir(szHomeDir,sizeof(szHomeDir));

@@ -53,17 +53,12 @@ bool jpgUtil::isJpg(const char *filename)
     }
     //绑定标准错误处理结构
     cinfo.err = jpeg_std_error(&jerr);
-    //初始化JPEG对象
-    jpeg_create_decompress(&cinfo);
-    jpeg_stdio_src(&cinfo, fp);
     jerr.error_exit=on_jpg_error;
-//    if(setjmp(jerr.setjmp_buffer)){
-//        jpeg_destroy_decompress(&cinfo);
-//        fclose(fp);
-//        return false;
-//    }
     //读取图像信息
     try{
+        //初始化JPEG对象
+        jpeg_create_decompress(&cinfo);
+        jpeg_stdio_src(&cinfo, fp);
         jpeg_read_header(&cinfo, TRUE);
         if(cinfo.image_width==0 || cinfo.image_height==0)
           return false;

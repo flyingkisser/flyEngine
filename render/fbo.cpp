@@ -190,10 +190,8 @@ fboStruct fbo::createFBOForIBLWithCubemap(){
     //2.1 create texture
     glGenTextures(1,&texID);
     glBindTexture(GL_TEXTURE_CUBE_MAP,texID);
-
     for(int i=0;i<6;i++)
         glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i,0,GL_RGB16F,512,512,0,GL_RGB,GL_FLOAT,NULL);
-    
     glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -203,9 +201,9 @@ fboStruct fbo::createFBOForIBLWithCubemap(){
     //3.1 create rbo(depth and stencil)
     glGenRenderbuffers(1,&rbo);
     glBindRenderbuffer(GL_RENDERBUFFER,rbo);
-    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH24_STENCIL8,512,512);
+    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH_COMPONENT24,512,512);
     //3.2 bind rbo to fbo
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_STENCIL_ATTACHMENT,GL_RENDERBUFFER,rbo);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_RENDERBUFFER,rbo);
     int status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if(status!=GL_FRAMEBUFFER_COMPLETE){
         fboStruct st={0,0,0};
@@ -213,7 +211,6 @@ fboStruct fbo::createFBOForIBLWithCubemap(){
         return st;
     }
     glBindFramebuffer(GL_FRAMEBUFFER,0);
-    
     fboStruct st={fbo,rbo,texID};
     return st;
 }
@@ -229,7 +226,7 @@ fboStruct fbo::createFBOHDR(){
     //2.1 create texture
     glGenTextures(1,&texID);
     glBindTexture(GL_TEXTURE_2D,texID);
-    glTexImage2D(GL_TEXTURE_2D,0,GL_RGB16F,g_winWidth,g_winHigh,0,GL_RGB,GL_FLOAT,NULL);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGB16F,512,512,0,GL_RGB,GL_FLOAT,NULL);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     //2.2 bind texture to fbo
@@ -237,7 +234,7 @@ fboStruct fbo::createFBOHDR(){
     //3.1 create rbo(depth and stencil)
     glGenRenderbuffers(1,&rbo);
     glBindRenderbuffer(GL_RENDERBUFFER,rbo);
-    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH24_STENCIL8,g_winWidth,g_winHigh);
+    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH24_STENCIL8,512,512);
     //3.2 bind rbo to fbo
     glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_STENCIL_ATTACHMENT,GL_RENDERBUFFER,rbo);
     int status=glCheckFramebufferStatus(GL_FRAMEBUFFER);

@@ -74,10 +74,8 @@ void uiText::setFontSize(int s){
 void uiText::draw(){
     int strLen=(int)strlen(_strText);
     glm::vec3 nodePos=getPosition();
-    
     if(strLen<=0)
         return;
-    
     _shaderObj->use();
     
     

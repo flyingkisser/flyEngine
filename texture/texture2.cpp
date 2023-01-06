@@ -60,7 +60,7 @@ bool texture2::init(){
         _dataBuf=st.buf;
         return true;
     }else{
-        int width, height, nrComponents;
+        int width=0, height=0, nrComponents=0;
         // tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
         if(_bFlipY)
             stbi_set_flip_vertically_on_load(true);

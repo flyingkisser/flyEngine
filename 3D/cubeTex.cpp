@@ -116,7 +116,7 @@ void cubeTex::setPipelineValue(){
 
 void cubeTex::drawCall(){
     glEnable(GL_DEPTH_TEST);
-    // glActiveTexture(GL_TEXTURE0);
+    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D,_gl_texture0);
     glBindVertexArray(_gl_vao);
     glDrawArrays(GL_TRIANGLES,0,36);

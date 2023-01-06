@@ -75,3 +75,10 @@ int checkGLError(const char *pos)
 #endif
     return error;
 }
+
+int checkGLErrorWithFileLine(const char* filename,int line){
+    char szBuf[512]={0};
+    sprintf(szBuf,"%s line %d",filename,line);
+    return checkGLError(szBuf);
+//    return checkGLError();
+}

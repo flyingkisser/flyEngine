@@ -41,6 +41,7 @@ public:
 
     mesh(std::vector<Vertex> vecVertices,std::vector<unsigned int> vecIndices,std::vector<Texture> vecTextures);
     void draw(shader* s);
+    void drawSimple(shader* s);
     void drawInstanced(shader* s,int count);
     int getVerticeCount(){return m_vecVertices.size();};
     void setCBBeforeDraw(std::function<void()> cb){_cb_before_draw=cb;};

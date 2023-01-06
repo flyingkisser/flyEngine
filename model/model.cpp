@@ -244,3 +244,10 @@ void model::draw(){
 //    }
     _meshObj->draw(_shaderObj);
 }
+
+void model::drawSimple(){
+    _shaderObj->use();
+    node::updateModel();
+    node::glUpdateLight();
+    _meshObj->drawSimple(_shaderObj);
+}

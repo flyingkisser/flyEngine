@@ -71,6 +71,7 @@ void testMainBegin(){
 //    test_oneSpotLight_multiCube_specularMap_cameraControl();
 //    test_vector();
 //    test_one_model();
+//    test_one_model_fbx();
 //    test_one_model_onePointLight_BlinnPhong();
 //    test_onePointLight_oneCube_BlinnPhong_2();
     
@@ -82,7 +83,7 @@ void testMainBegin(){
 //    test_stencil_4();
     
 //    test_blend_1();
-//    test_blend_2();
+    test_blend_2();
 //        test_text1(); //not working on ios
     
 //    test_facecull();
@@ -147,5 +148,10 @@ void testMainBegin(){
 //    test_PBR_cubeColor();
 //    test_PBR_cubeTex();
     
-    test_PBR_ibl_1();
+//    test_PBR_ibl_1();
+//    test_PBR_ibl_irradiance();
+//    test_PBR_ibl_irradiance2();
+//    test_PBR_ibl_diffuse_specular();
+//    test_PBR_ibl_diffuse_specular_ball2();
+//    test_PBR_ibl_diffuse_model_fbx_gun();
 }

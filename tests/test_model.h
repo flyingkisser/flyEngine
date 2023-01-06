@@ -12,5 +12,6 @@
 #include <stdio.h>
 void test_one_model();
 void test_one_model_onePointLight_BlinnPhong();
+void test_one_model_fbx();
 
 #endif /* test_model_h */

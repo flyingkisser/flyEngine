@@ -15,7 +15,7 @@
 #include <vector>
 
 NS_FLYENGINE_BEGIN
-
+class shader;
 class skybox : public node{
 private:
     unsigned int _texID;
@@ -27,10 +27,13 @@ public:
     //exp:sky_1.png
     skybox(const char* imgFileName1,const char* imgFileName2,const char* imgFileName3,
            const char* imgFileName4,const char* imgFileName5,const char* imgFileName6);
+    skybox(unsigned int texID,shader* sh);
+    skybox(unsigned int texID);
     ~skybox();
     void glInit();
     bool init();
     void draw();
+    void drawSimple();
     unsigned int getTexID(){return _texID;};
 };
 

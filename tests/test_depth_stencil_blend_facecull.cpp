@@ -408,7 +408,12 @@ void test_stencil_4(){
     });
 }
 
+//使用了a值小于0.1时片元进行discard的处理
+//无法显示出玻璃类物体的透视效果（如果a值小于0.1的时候)
+//只有a值小于0.1时抛弃片元和深度测试启用后前面的片元显示后面的不绘制
+//因为没有启用GL_BLEND,透视效果无法实现
 void test_blend_1(){
+    int descArr[]={3,2};
     float transparentVertices_flip[] = {
            // positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
            0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
@@ -429,15 +434,23 @@ void test_blend_1(){
            1.0f, -0.5f,  0.0f,  1.0f,  0.0f,
            1.0f,  0.5f,  0.0f,  1.0f,  1.0f
        };
+    
+    cubeTex* cubePlain=new cubeTex("res/marble.jpg");
+    if(!cubePlain->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane),descArr,2)){
+        flylog("init cubeTex failed!");
+        return;
+    }
+    cubePlain->setPosition(glm::vec3(0,0,0.5));
+    world::getInstance()->addChild(cubePlain);
+  
 
-    cubeTex* cubeObj=new cubeTex("res/grass.png");
-    int descArr[]={3,2};
-    if(!cubeObj->initByVerticeArr(transparentVertices,sizeof(transparentVertices),descArr,2)){
+    cubeTex* cubeGrass=new cubeTex("res/grass.png");
+    if(!cubeGrass->initByVerticeArr(transparentVertices,sizeof(transparentVertices),descArr,2)){
         flylog("init cubeObj failed!");
         return;
     }
     shader* shaderObj=new shader("res/shader/3d_1tex.vs","res/shader/3d_blend_1.fs");
-    cubeObj->setShader(shaderObj);
+    cubeGrass->setShader(shaderObj);
 //    cubeObj->setPosition(glm::vec3(-1.5f,  0.0f, -0.48f));
 //    world::getInstance()->addChild(cubeObj);
     std::vector<glm::vec3> posVector={
@@ -448,22 +461,21 @@ void test_blend_1(){
         glm::vec3(0.5f,  0.0f, -0.6f)
     };
     for(auto it:posVector){
-        cubeTex* cube=cubeObj->clone();
+        cubeTex* cube=cubeGrass->clone();
         cube->setPosition(it);
         world::getInstance()->addChild(cube);
         world::getInstance()->getControl()->bindNode(cube);
     }
     
-    cubeTex* plainObj=new cubeTex("res/marble.jpg");
-    if(!plainObj->initByVerticeArr(g_verticeArrWithTexCoord_plane,sizeof(g_verticeArrWithTexCoord_plane),descArr,2)){
-        flylog("init cubeTex failed!");
-        return;
-    }
-    plainObj->setPosition(glm::vec3(0,0,0.5));
-    world::getInstance()->addChild(plainObj);
+//    world::getInstance()->setCBBeforeDrawCall([](){
+//        glEnable(GL_DEPTH_TEST);
+//        glEnable(GL_BLEND);
+//        glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+//    });
 }
 
-
+//启用GL_BLEND,Blend函数设置为GL_SRC_ALPHA，GL_ONE_MINUS_SRC_ALPHA
+//但物体的绘制有先后顺序的要求，可显示出玻璃类物体的透视效果
 void test_blend_2(){
     cubeTex* cubeObj=new cubeTex("res/metal.png");
     if(!cubeObj->init()){
@@ -540,7 +552,7 @@ void test_blend_2(){
     //同时启用深度测试和GL_BLEND以后，后绘制的物体会找先绘制的颜色
     //如果先添加了近平面的物体，再添加远平面的东西
     //近平面添加以后，因为这时背影没有东西，所以只显示前面物体的颜色
-    //绘制后面的物品时，因为深度测试的原因，部分处于遮挡的片元会被抛弃掉
+    //绘制后面的物体时，因为深度测试的原因，部分处于遮挡的片元会被抛弃掉
     //所以整体的效果就是放在前面有透明的物体如玻璃，显示不出来后面的物体
     //所以需要按先后顺序进行绘制（即DrawCall)
     //先绘制后面的，再绘制前面的带透明效果的

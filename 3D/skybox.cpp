@@ -54,6 +54,25 @@ skybox::skybox(const char* imgFileName1,const char* imgFileName2,const char* img
     init();
 }
 
+skybox::skybox(unsigned int texID,shader* sh){
+    _texID=texID;
+    setShader(sh);
+    
+//    int desc[]={3,2,3};
+//    initVAO(g_verticeArrWithTexCoordAndNormal,sizeof(g_verticeArrWithTexCoordAndNormal),desc,3);
+    
+    int descArr[]={3};
+    initVAO(g_verticeArr_skybox, sizeof(g_verticeArr_skybox),descArr,1);
+}
+
+skybox::skybox(unsigned int texID){
+    int descArr[]={3};
+    _texID=texID;
+    setShader(shaderMgr::getShader("res/shader/skybox.vs", "res/shader/skybox.fs"));
+    initVAO(g_verticeArr_skybox, sizeof(g_verticeArr_skybox),descArr,1);
+//    world::getInstance()->getCamera()->setPositionZ(0);
+}
+
 skybox::~skybox(){}
 
 void skybox::glInit(){
@@ -72,13 +91,12 @@ void skybox::glInit(){
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-
 }
 
 bool skybox::init(){
     setShader(shaderMgr::getShader("res/shader/skybox.vs", "res/shader/skybox.fs"));
     glInit();
-    world::getInstance()->getCamera()->setPositionZ(0);
+//    world::getInstance()->getCamera()->setPositionZ(0);
     return true;
 }
 
@@ -95,6 +113,15 @@ void skybox::draw(){
     glBindTexture(GL_TEXTURE_CUBE_MAP,_texID);
     glDrawArrays(GL_TRIANGLES,0,36);
     glDepthFunc(GL_LESS);   //恢复默认
-
     state::log(36);
 }
+
+void skybox::drawSimple(){
+    glBindVertexArray(_gl_vao);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP,_texID);
+    glDrawArrays(GL_TRIANGLES,0,36);
+    state::log(36);
+}
+
+

@@ -90,6 +90,18 @@ void mesh::draw(shader* s){
     state::log((int)m_vecIndices.size());
 }
 
+void mesh::drawSimple(shader* s){
+    s->use();
+    if(_cb_before_draw)
+        _cb_before_draw();
+    glEnable(GL_DEPTH_TEST);
+    glBindVertexArray(m_int_vao);
+    glDrawElements(GL_TRIANGLES,(int)m_vecIndices.size(),GL_UNSIGNED_INT,0);
+    glBindVertexArray(0);
+    state::log((int)m_vecIndices.size());
+}
+
+
 void mesh::drawInstanced(shader* s,int count){
     unsigned int diffuseIndex=0;
     unsigned int specularIndex=0;
