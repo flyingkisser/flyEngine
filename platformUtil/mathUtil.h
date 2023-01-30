@@ -10,6 +10,11 @@
 #define mathUtil_h
 
 #include <stdio.h>
+#include "assimp/quaternion.h"
+#include "assimp/vector3.h"
+#include "assimp/matrix4x4.h"
+#include "glm/glm.hpp"
+#include "glm/gtc/quaternion.hpp"
 
 class mathUtil{
 public:
@@ -28,6 +33,11 @@ public:
     static void extendPosRange(float* arr,int rows,int columns,float v);
     static float lerp(float y1,float y2,float weight);
     static void test();
+    
+    static glm::mat4 convertMatrixToGLMFormat(const aiMatrix4x4& from);
+    static glm::vec3 getGLMVec(const aiVector3D& vec);
+    static glm::quat getGLMQuat(const aiQuaternion& pOrientation);
+
 };
 
 #endif /* mathUtil_h */
