@@ -1,4 +1,4 @@
-#version 330 core
+#version 410 core
 //指定默认的精度限定符
 //highp     float(-2^62, 2^62),int(-2^16, 2^16) 32位, 适用于顶点变换
 //mediump   float(-2^14, 2^14),int(-2^10, 2^10) 16位, 适用于uv坐标，比highp快2倍

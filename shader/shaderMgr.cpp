@@ -112,6 +112,9 @@ shader* shaderMgr::get2dQuadShader(){
 shader* shaderMgr::get3dQuadShader(){
     return shaderMgr::getShader("./res/shader/3d_quad.vs", "./res/shader/3d_quad.fs");
 }
+shader* shaderMgr::get3dQuadColorShader(){
+    return shaderMgr::getShader("./res/shader/3d_quad.vs", "./res/shader/3d_quad_color.fs");
+}
 
 
 unsigned int shaderMgr::createShaderFromFile(const char* szVertFileName,const char* szFragFileName){

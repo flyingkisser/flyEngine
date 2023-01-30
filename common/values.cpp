@@ -324,13 +324,17 @@ float g_verticeArrWithTexCoord_quad[] = {
     1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
 };
 
-float g_verticeArrWithTexCoord_quad2[] = {
+float g_verticeArrWithTexCoord_quadColor[] = {
     // positions        // texture Coords
-    -1.0f,  1.0f,  0.0f, 1.0f,
-    -1.0f, -1.0f,  0.0f, 0.0f,
-    1.0f, -1.0f,   1.0f, 0.0f,
-    1.0f,  1.0f,   1.0f, 1.0f
+    -1.0f, -1.0f, 0.0f,    0.0f, 0.0f,
+    1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+    1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+    
+    1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+    -1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+    -1.0f, -1.0f, 0.0f, 0.0f, 0.0f
 };
+
 
 float g_verticeArr_skybox_1[] = {
         // positions

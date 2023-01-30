@@ -143,6 +143,8 @@ extern float g_verticeArrWithTexCoord_plane[30];
 extern float g_verticeArrWithTexCoordAndNormal_plane[54];
 extern float g_verticeArrWithTexCoord_2d[24];
 extern float g_verticeArrWithTexCoord_quad[20];
+extern float g_verticeArrWithTexCoord_quadColor[30];
+
 extern float g_verticeArr_skybox[108];
 
 

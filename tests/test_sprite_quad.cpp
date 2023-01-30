@@ -1,12 +1,12 @@
 //
-//  test_sprite.cpp
+//  test_sprite_quad.cpp
 //  flyEngine
 //
 //  Created by joe on 19/07/2022.
 //  Copyright © 2022 joe. All rights reserved.
 //
 
-#include "test_sprite.h"
+#include "test_sprite_quad.h"
 #include "sprite.h"
 //#include "quad.h"
 #include "world.h"
@@ -15,6 +15,7 @@
 #include "rotateBy.h"
 #include "moveBy.h"
 #include "forever.h"
+#include "quadColor.h"
 
 USE_NS_FLYENGINE
 void test_sprite_1(){
@@ -59,3 +60,10 @@ void test_sprite_2(){
 //        sp->setContentSize(flyEngine::size{s.width+20.0f,s.height+10.0f});
 //    }, sp);
 //}
+
+void test_quad_color(){
+    quadColor* sp=new quadColor(glm::vec3(1,0,0),100,100);
+    world::getInstance()->addChild(sp);
+    flyEngine::size s=sp->getContentSize();
+    sp->setPosition(glm::vec3((g_winWidth-s.width)/2,(g_winHigh-s.height)/2,0));
+}

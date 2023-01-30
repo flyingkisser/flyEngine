@@ -14,7 +14,7 @@
 #include "test_depth_stencil_blend_facecull.h"
 #include "test_text.h"
 #include "test_framebuffer.h"
-#include "test_sprite.h"
+#include "test_sprite_quad.h"
 #include "test_skybox.h"
 #include "test_ubo.h"
 #include "test_gs.h"
@@ -83,7 +83,7 @@ void testMainBegin(){
 //    test_stencil_4();
     
 //    test_blend_1();
-    test_blend_2();
+//    test_blend_2();
 //        test_text1(); //not working on ios
     
 //    test_facecull();
@@ -154,4 +154,6 @@ void testMainBegin(){
 //    test_PBR_ibl_diffuse_specular();
 //    test_PBR_ibl_diffuse_specular_ball2();
 //    test_PBR_ibl_diffuse_model_fbx_gun();
+    
+    test_quad_color();
 }
