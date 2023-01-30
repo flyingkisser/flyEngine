@@ -1632,6 +1632,10 @@
 		D8670BC6296B12D700DD7791 /* test_oit.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = test_oit.mm; sourceTree = "<group>"; };
 		D8670BC8296B141C00DD7791 /* quadColor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = quadColor.h; sourceTree = "<group>"; };
 		D8670BC9296B141C00DD7791 /* quadColor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = quadColor.cpp; sourceTree = "<group>"; };
+		D8670BCD29880DA500DD7791 /* bone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = bone.cpp; sourceTree = "<group>"; };
+		D8670BCE29880DA500DD7791 /* animation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = animation.h; sourceTree = "<group>"; };
+		D8670BCF29880DA500DD7791 /* bone.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bone.h; sourceTree = "<group>"; };
+		D8670BD029880DA500DD7791 /* animation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = animation.cpp; sourceTree = "<group>"; };
 		D8691EE626B3FA2100D40717 /* 3d_color.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_color.vs; sourceTree = "<group>"; };
 		D8691EE726B3FA2100D40717 /* 3d_color.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_color.fs; sourceTree = "<group>"; };
 		D86CE57328F2ABB0006797C4 /* test_gamma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_gamma.cpp; sourceTree = "<group>"; };
@@ -3913,6 +3917,7 @@
 				D825DBB824ACA31A00C494E7 /* render */,
 				D89028332880044A00152FFF /* state */,
 				D852349C28A9549400E69D25 /* shader */,
+				D8670BCC29880DA500DD7791 /* skeletonAni */,
 				D8902825287D564B00152FFF /* text */,
 				D825DBA924AC82DF00C494E7 /* texture */,
 				D87EBFE826AA6B76004ED7DE /* window */,
@@ -4215,6 +4220,17 @@
 			);
 			path = camera;
 			sourceTree = "<group>";
+		};
+		D8670BCC29880DA500DD7791 /* skeletonAni */ = {
+			isa = PBXGroup;
+			children = (
+				D8670BCF29880DA500DD7791 /* bone.h */,
+				D8670BCD29880DA500DD7791 /* bone.cpp */,
+				D8670BCE29880DA500DD7791 /* animation.h */,
+				D8670BD029880DA500DD7791 /* animation.cpp */,
+			);
+			path = skeletonAni;
+			sourceTree = SOURCE_ROOT;
 		};
 		D87EBFD826A6EFFC004ED7DE /* action */ = {
 			isa = PBXGroup;
