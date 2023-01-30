@@ -22,6 +22,11 @@
 
 NS_FLYENGINE_BEGIN
 
+struct BoneInfo{
+    int id;
+    glm::mat4 offset;
+};
+
 class shader;
 class mesh;
 
@@ -34,6 +39,13 @@ private:
     int m_totalMesh=0;
     std::map<int,std::vector<Texture>> m_mapTexture;
     std::function<void()> _cb_before_draw=NULL;
+    std::vector<Vertex> _vertices;
+    std::vector<unsigned int> _indices;
+    std::vector<Texture> _textures;
+    mesh* _meshObj;
+    
+    std::map<std::string,BoneInfo> m_boneInfoMap;
+    int m_boneCounter=0;
     
     bool loadModel(std::string path);
     void processNode(aiNode* node,const aiScene *scene);
@@ -41,22 +53,21 @@ private:
     void processNode2(aiNode* node,const aiScene *scene);
     int processMesh2(aiMesh* ai_mesh,const aiScene *scene);
     std::vector<Texture> loadMaterialTextures(aiMaterial *mat, aiTextureType aiTexType);
+    void setVertexBoneDataToDefault(Vertex& stVertex);
+    void setVertexBoneData(Vertex& stVertex,int boneID,float weight);
+    void extractBoneWeightForVertices(std::vector<Vertex>& vertices,aiMesh* mesh,const aiScene* scene);
 
-
-    std::vector<Vertex> _vertices;
-    std::vector<unsigned int> _indices;
-    std::vector<Texture> _textures;
-    mesh* _meshObj;
+   
     
 public:
     model(char* szPath);
-
     bool init();
-
     void draw();
     void drawSimple();
-  
     void setCBBeforeDraw(std::function<void()> cb){_cb_before_draw=cb;};
+    
+    auto& getBoneInfoMap(){return m_boneInfoMap;};
+    auto getBoneCount(){return m_boneCounter;};
 };
 
 NS_FLYENGINE_END

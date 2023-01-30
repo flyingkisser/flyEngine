@@ -14,13 +14,15 @@
 #include "shader.h"
 
 NS_FLYENGINE_BEGIN
-
+#define MAX_BONE_INFLUENCE 4
 struct Vertex{
     glm::vec3 pos_vetex;
     glm::vec3 normal;
     glm::vec2 pos_texcoord;
     glm::vec3 tangent;
     glm::vec3 bitangent;
+    int boneIDArr[MAX_BONE_INFLUENCE];
+    float weightArr[MAX_BONE_INFLUENCE];
 };
 
 enum TextureType{

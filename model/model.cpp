@@ -19,6 +19,7 @@
 #include "camera.h"
 #include "world.h"
 #include "directionLight.h"
+#include "mathUtil.h"
 #ifdef BUILD_IOS
 #include "ios_dirUtil.h"
 #endif
@@ -215,6 +216,52 @@ std::vector<Texture> model::loadMaterialTextures(aiMaterial *aiMT, aiTextureType
     return textures;
 }
 
+void model::setVertexBoneDataToDefault(Vertex &stVertex){
+    for(int i=0;i<MAX_BONE_INFLUENCE;i++){
+        stVertex.boneIDArr[i]=-1;
+        stVertex.weightArr[i]=0;
+    }
+}
+
+void model::setVertexBoneData(Vertex &stVertex, int boneID, float weight){
+    for(int i=0;i<MAX_BONE_INFLUENCE;i++){
+        if(stVertex.boneIDArr[i]>=0)
+            continue;
+        stVertex.boneIDArr[i]=boneID;
+        stVertex.weightArr[i]=weight;
+    }
+}
+
+void model::extractBoneWeightForVertices(std::vector<Vertex>& vertices,aiMesh* mesh,const aiScene* scene){
+    for(int i=0;i<mesh->mNumBones;i++){
+        int boneID=-1;
+        std::string boneName=mesh->mBones[i]->mName.C_Str();
+        if(m_boneInfoMap.find(boneName)==m_boneInfoMap.end()){
+            BoneInfo newBoneInfo;
+            newBoneInfo.id=m_boneCounter++;
+            newBoneInfo.offset=mathUtil::convertMatrixToGLMFormat(mesh->mBones[i]->mOffsetMatrix);
+            m_boneInfoMap[boneName]=newBoneInfo;
+            boneID=newBoneInfo.id;
+        }
+        else
+            boneID=m_boneInfoMap[boneName].id;
+        if(boneID==-1){
+            flylog("extractBoneWeightForVertices:find boneID -1!return!");
+            return;
+        }
+        auto weights=mesh->mBones[i]->mWeights;
+        int numWeight=mesh->mBones[i]->mNumWeights;
+        for(int j=0;j<numWeight;j++){
+            int vertexID=weights[j].mVertexId;
+            int weight=weights[j].mWeight;
+            if(vertexID>=vertices.size()){
+                flylog("extractBoneWeightForVertices:find vertexID %d >= vetices.size()",vertexID,vertices.size());
+                continue;
+            }
+            setVertexBoneData(vertices[vertexID], boneID, weight);
+        }
+    }
+}
 
 bool model::init(){
 //    setPosition(glm::vec3(0,0,-5));
