@@ -38,18 +38,20 @@ private:
     std::vector<bone> _bones;
     AssimpNodeData _rootNode;
     std::map<std::string,BoneInfo> _boneInfoMap;
-
+    model* _model;
+    
 public:
-    animation(std::string& aniPath,model* modelObj);
+    animation(char* aniPath);
     bone* findBone(std::string& name);
     inline float getTicksPersecond(){return _ticksPerSecond;};
     inline float getDuration(){return _duration;};
     inline AssimpNodeData& getRootNode(){return _rootNode;};
     inline std::map<std::string,BoneInfo>& getBoneInfoMap(){return _boneInfoMap;};
+    model* getModel(){return _model;};
    
 private:
-    void _readMissingBones(aiAnimation* aniObj,model& modelObj);
-    void _readHeirarchyData(AssimpNodeData& dest,aiNode* src);
+    void _readMissingBones(aiAnimation* aniObj,model* modelObj);
+    void _readHeirarchyData(AssimpNodeData* dest,aiNode* src);
 };
 
 NS_FLYENGINE_END

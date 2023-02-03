@@ -38,7 +38,6 @@ public:
 
     bool init();
 
-    
     cubeTex* clone();
     
     bool initByVerticeArr(float* arr,int arrSize,int descArr[],int descArrSize);

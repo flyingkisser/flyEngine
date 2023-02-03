@@ -33,6 +33,7 @@ public:
     
     static shader* get3d1texPongWithSpecularTexShader();
     static shader* getModelShader();
+    static shader* getModelAniShader();
     static shader* getModelInstancedShader();
     static shader* getModelInstancedByVBOShader();
     

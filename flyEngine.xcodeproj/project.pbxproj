@@ -44,6 +44,10 @@
 		D8670BC42949EDEB00DD7791 /* test_pbr.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8670BC32949EDEB00DD7791 /* test_pbr.mm */; };
 		D8670BC7296B12D700DD7791 /* test_oit.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8670BC6296B12D700DD7791 /* test_oit.mm */; };
 		D8670BCA296B141C00DD7791 /* quadColor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8670BC9296B141C00DD7791 /* quadColor.cpp */; };
+		D8670BD3298811E300DD7791 /* animator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8670BD2298811E300DD7791 /* animator.cpp */; };
+		D8670BD4298936FD00DD7791 /* bone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8670BCD29880DA500DD7791 /* bone.cpp */; };
+		D8670BD5298936FD00DD7791 /* animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8670BD029880DA500DD7791 /* animation.cpp */; };
+		D8670BD8298937AD00DD7791 /* test_animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8670BD7298937AD00DD7791 /* test_animation.cpp */; };
 		D86CE57528F2ABB0006797C4 /* test_gamma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57328F2ABB0006797C4 /* test_gamma.cpp */; };
 		D86CE57828F2E891006797C4 /* test_shadow_mapping.mm in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57728F2E891006797C4 /* test_shadow_mapping.mm */; };
 		D86CE57B28F3B71D006797C4 /* quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57A28F3B71D006797C4 /* quad.cpp */; };
@@ -1636,6 +1640,15 @@
 		D8670BCE29880DA500DD7791 /* animation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = animation.h; sourceTree = "<group>"; };
 		D8670BCF29880DA500DD7791 /* bone.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = bone.h; sourceTree = "<group>"; };
 		D8670BD029880DA500DD7791 /* animation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = animation.cpp; sourceTree = "<group>"; };
+		D8670BD1298811E300DD7791 /* animator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = animator.h; sourceTree = "<group>"; };
+		D8670BD2298811E300DD7791 /* animator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = animator.cpp; sourceTree = "<group>"; };
+		D8670BD6298937AD00DD7791 /* test_animation.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_animation.h; sourceTree = "<group>"; };
+		D8670BD7298937AD00DD7791 /* test_animation.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_animation.cpp; sourceTree = "<group>"; };
+		D8670BDB298A91DC00DD7791 /* Vampire_emission.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Vampire_emission.png; sourceTree = "<group>"; };
+		D8670BDC298A91DC00DD7791 /* Vampire_diffuse.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Vampire_diffuse.png; sourceTree = "<group>"; };
+		D8670BDD298A91DC00DD7791 /* Vampire_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Vampire_normal.png; sourceTree = "<group>"; };
+		D8670BDE298A91DC00DD7791 /* Vampire_specular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Vampire_specular.png; sourceTree = "<group>"; };
+		D8670BDF298A91DC00DD7791 /* dancing_vampire.dae */ = {isa = PBXFileReference; lastKnownFileType = text.xml.dae; path = dancing_vampire.dae; sourceTree = "<group>"; };
 		D8691EE626B3FA2100D40717 /* 3d_color.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_color.vs; sourceTree = "<group>"; };
 		D8691EE726B3FA2100D40717 /* 3d_color.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_color.fs; sourceTree = "<group>"; };
 		D86CE57328F2ABB0006797C4 /* test_gamma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_gamma.cpp; sourceTree = "<group>"; };
@@ -4095,6 +4108,8 @@
 				D8670BC32949EDEB00DD7791 /* test_pbr.mm */,
 				D8670BC5296B12D700DD7791 /* test_oit.h */,
 				D8670BC6296B12D700DD7791 /* test_oit.mm */,
+				D8670BD6298937AD00DD7791 /* test_animation.h */,
+				D8670BD7298937AD00DD7791 /* test_animation.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -4228,9 +4243,31 @@
 				D8670BCD29880DA500DD7791 /* bone.cpp */,
 				D8670BCE29880DA500DD7791 /* animation.h */,
 				D8670BD029880DA500DD7791 /* animation.cpp */,
+				D8670BD1298811E300DD7791 /* animator.h */,
+				D8670BD2298811E300DD7791 /* animator.cpp */,
 			);
 			path = skeletonAni;
 			sourceTree = SOURCE_ROOT;
+		};
+		D8670BD9298A91DC00DD7791 /* vampire */ = {
+			isa = PBXGroup;
+			children = (
+				D8670BDA298A91DC00DD7791 /* textures */,
+				D8670BDF298A91DC00DD7791 /* dancing_vampire.dae */,
+			);
+			path = vampire;
+			sourceTree = "<group>";
+		};
+		D8670BDA298A91DC00DD7791 /* textures */ = {
+			isa = PBXGroup;
+			children = (
+				D8670BDB298A91DC00DD7791 /* Vampire_emission.png */,
+				D8670BDC298A91DC00DD7791 /* Vampire_diffuse.png */,
+				D8670BDD298A91DC00DD7791 /* Vampire_normal.png */,
+				D8670BDE298A91DC00DD7791 /* Vampire_specular.png */,
+			);
+			path = textures;
+			sourceTree = "<group>";
 		};
 		D87EBFD826A6EFFC004ED7DE /* action */ = {
 			isa = PBXGroup;
@@ -4311,6 +4348,7 @@
 		D8B374D82844AE8000C3DF0C /* model */ = {
 			isa = PBXGroup;
 			children = (
+				D8670BD9298A91DC00DD7791 /* vampire */,
 				D8B374D92844AE8000C3DF0C /* backpack */,
 			);
 			path = model;
@@ -4601,6 +4639,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8670BD4298936FD00DD7791 /* bone.cpp in Sources */,
+				D8670BD5298936FD00DD7791 /* animation.cpp in Sources */,
 				D86CE57828F2E891006797C4 /* test_shadow_mapping.mm in Sources */,
 				D8A6E8C328C4F37700C3DE56 /* shader.cpp in Sources */,
 				D8A6E8C528C4F37700C3DE56 /* shaderMgr.cpp in Sources */,
@@ -4673,6 +4713,7 @@
 				D8EC7823287C741300415650 /* test_text.cpp in Sources */,
 				D810AEAD26835232009B774B /* glad.c in Sources */,
 				D87EBFF726AEB1D0004ED7DE /* scaleBy.cpp in Sources */,
+				D8670BD8298937AD00DD7791 /* test_animation.cpp in Sources */,
 				D8B01CEE28DB4EC9004EF910 /* cubeTexIns.cpp in Sources */,
 				D8A6E8B828C4DE0600C3DE56 /* texture.cpp in Sources */,
 				D87EBFF426AAAEFE004ED7DE /* spawn.cpp in Sources */,
@@ -4703,6 +4744,7 @@
 				D8F62FF528C4D1F700EF8756 /* material2.cpp in Sources */,
 				D8A8498C28694A0E000E231C /* test_c_plusplus.cpp in Sources */,
 				D8EC783A2886C24F00415650 /* test_sprite_quad.cpp in Sources */,
+				D8670BD3298811E300DD7791 /* animator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

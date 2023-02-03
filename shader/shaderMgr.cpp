@@ -101,6 +101,9 @@ shader* shaderMgr::getModelInstancedShader(){
 shader* shaderMgr::getModelInstancedByVBOShader(){
     return shaderMgr::getShaderUniqueue("./res/shader/3d_model_ins_vbo.vs","./res/shader/3d_1tex_phong.fs");
 }
+shader* shaderMgr::getModelAniShader(){
+    return shaderMgr::getShaderUniqueue("./res/shader/3d_model_ani.vs","./res/shader/3d_1tex_phong.fs");
+}
 
 shader* shaderMgr::get2d1texShader(){
     return shaderMgr::getShader("./res/shader/2d_1tex.vs", "./res/shader/2d_1tex.fs");

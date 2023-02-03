@@ -27,6 +27,7 @@
 #include "test_deferred_shading.h"
 #include "test_ssao.h"
 #include "test_pbr.h"
+#include "test_animation.h"
 
 void testMainBegin(){
     //code cube test
@@ -155,5 +156,6 @@ void testMainBegin(){
 //    test_PBR_ibl_diffuse_specular_ball2();
 //    test_PBR_ibl_diffuse_model_fbx_gun();
     
-    test_quad_color();
+//    test_quad_color();
+    test_ani1();
 }
