@@ -41,9 +41,20 @@
 USE_NS_FLYENGINE
 
 void test_ani1(){
-//    modle* modelObj=new model("res/model/vmpire/dancing_vampire.dae");
+//    model* modelObj=new model("res/model/vampire/dancing_vampire.dae");
+//    modelObj->init();
+//    modelObj->setPosition(glm::vec3(0,0,-40));
+//    modelObj->setScale(0.05);
+//    world::getInstance()->addChild(modelObj);
+    
     animation* aniData=new animation("res/model/vampire/dancing_vampire.dae");
+    model* modelObj=aniData->getModel();
+    modelObj->setPosition(glm::vec3(0,0,-40));
+    modelObj->setScale(0.05);
+    
     animator* aniObj=new animator(aniData);
     world::getInstance()->addChild(aniObj);
+    
+   
     
 }

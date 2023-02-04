@@ -32,6 +32,7 @@ animation::animation(char* path){
     _duration=ani->mDuration;
     _ticksPerSecond=ani->mTicksPerSecond;
     _model=new model(path);
+    _model->init();
     _readHeirarchyData(&_rootNode, scene->mRootNode);
     _readMissingBones(ani,_model);
 }
@@ -54,6 +55,7 @@ void animation::_readMissingBones(aiAnimation* aniObj,model* modelObj){
         if(boneInfoMap.find(boneName)==boneInfoMap.end()){
             boneInfoMap[boneName].id=boneCount;
             boneCount++;
+            flylog("animation:find missing bone %s",boneName.c_str());
         }
         _bones.push_back(bone(channel->mNodeName.data,boneInfoMap[channel->mNodeName.data].id,channel));
     }
@@ -73,4 +75,5 @@ void animation::_readHeirarchyData(AssimpNodeData* dest,aiNode* src){
         _readHeirarchyData(&newData, src->mChildren[i]);
         dest->childrens.push_back(newData);
     }
+//    flylog("animation:%s have %d children",dest->name.c_str(),dest->childrenCount);
 }

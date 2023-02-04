@@ -21,11 +21,14 @@ USE_NS_FLYENGINE
 
 int main(int argc, char **argv) {
     char szHomeDir[1024]={0};
+    char szWorkDir[1024]={0};
     dirUtil::getHomeDir(szHomeDir,sizeof(szHomeDir));
+    dirUtil::getCurrentWorkDir(szWorkDir,sizeof(szWorkDir));
     strcat(szHomeDir,"/Documents/flyEngine/");
     dirUtil::setCurrentWorkDir(szHomeDir);
     printf("main:set current work dir %s\n",szHomeDir);
-    
+    printf("main:engine dir %s\n",szWorkDir);
+
     timeUtil::init();
     window::init();
     glslUtil::init();

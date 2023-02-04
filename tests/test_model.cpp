@@ -78,6 +78,11 @@ void test_one_model(){
 
     model* modelObj=new model("res/model/backpack/backpack.obj");
     modelObj->setPosition(glm::vec3(0,0,-0.5));
+    
+//    model* modelObj=new model("res/model/vampire/dancing_vampire.dae");
+//    modelObj->setPosition(glm::vec3(0,0,-40));
+//    modelObj->setScale(0.05);
+    
     if(!modelObj->init()){
        flylog("modelObj init failed!");
        return;

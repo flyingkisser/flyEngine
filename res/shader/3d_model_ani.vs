@@ -28,9 +28,9 @@ void main(){
     vec3 normal=aNormal;
     for(int i=0;i<4;i++){
         int boneID=boneIDs[i];
-        if(boneIDs[boneID]==-1)
+        if(boneID==-1)
             continue;
-        if(boneIDs[boneID]>=100){
+        if(boneID>=100){
             pos=vec4(aPos,1.0);
             break;
         }

@@ -70,9 +70,10 @@ void animator::draw(){
     _delteTime=_currentTime-_lastTime;
     _lastTime=_currentTime;
     _shaderObj->use();
+    updateAnimation(_delteTime);
     auto transforms=getFinalBoneMatries();
     for(int i=0;i<transforms.size();i++){
-        _shaderObj->setMat4("finalBoneMatrices["+std::to_string(i)+"]", transforms[i]);
+        _shaderObj->setMat4("finalBoneMatrices["+std::to_string(i)+"]", transforms[i],true);
     }
     _currentAnimation->getModel()->draw();
 }
