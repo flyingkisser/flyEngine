@@ -124,6 +124,8 @@ bool shader::bindGeometry(const char* szGeometryFileName){
        char* szLog=(char*)malloc(lenLog);
        glGetProgramInfoLog(_idProgram,lenLog,&num,szLog);
        fprintf(stderr,"shader::shader: program link error: %s",szLog);
+       fprintf(stderr, _szVert);
+       fprintf(stderr, _szFrag);
        free(szLog);
        return false;
     }
@@ -261,6 +263,8 @@ void shader::compile(){
        char* szLog=(char*)malloc(lenLog);
        glGetProgramInfoLog(idProgram,lenLog,&num,szLog);
        fprintf(stderr,"shader::shader: program link error: %s",szLog);
+       fprintf(stderr, _szVertFileName);
+       fprintf(stderr, _szFragFileName);
        free(szLog);
     }
 
@@ -350,6 +354,25 @@ void shader::setVec3(const char *name, float v1,float v2,float v3,bool debug){
 void shader::setVec3(std::string name, glm::vec3 vector3,bool debug){
     return setVec3(name.c_str(),glm::value_ptr(vector3),debug);
 }
+void shader::setVec4(const char *name, float* v,bool debug){
+    int pos=glGetUniformLocation(_idProgram, name);
+    if(pos==-1){
+        if(debug)
+            flylog("shader::setVec3 cannot find %s",name);
+        return;
+    }
+    glUniform4fv(pos,1,v);
+}
+void shader::setVec4(const char *name, glm::vec4 vector4,bool debug){
+    return setVec4(name,glm::value_ptr(vector4),debug);
+}
+void shader::setVec4(const char *name, float v1,float v2,float v3,float v4,bool debug){
+    return setVec4(name,(float*)glm::value_ptr(glm::vec4(v1,v2,v3,v4)),debug);
+}
+void shader::setVec4(std::string name, glm::vec4 vector4,bool debug){
+    return setVec4(name.c_str(),glm::value_ptr(vector4),debug);
+}
+
 
 void shader::setMat4(const char *name, float* v,bool debug){
     int pos=glGetUniformLocation(_idProgram, name);

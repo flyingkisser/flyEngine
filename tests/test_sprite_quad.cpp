@@ -16,6 +16,8 @@
 #include "moveBy.h"
 #include "forever.h"
 #include "quadColor.h"
+#include "camera.h"
+#include "control.h"
 
 USE_NS_FLYENGINE
 void test_sprite_1(){
@@ -62,8 +64,24 @@ void test_sprite_2(){
 //}
 
 void test_quad_color(){
-    quadColor* sp=new quadColor(glm::vec3(1,0,0),100,100);
-    world::getInstance()->addChild(sp);
-    flyEngine::size s=sp->getContentSize();
-    sp->setPosition(glm::vec3((g_winWidth-s.width)/2,(g_winHigh-s.height)/2,0));
+    quadColor* sp1=new quadColor(glm::vec4(1,0,0,1),10,20);
+    quadColor* sp2=new quadColor(glm::vec4(0,1,0,1),10,20);
+    quadColor* sp3=new quadColor(glm::vec4(0,0,1,1),10,20);
+    
+    sp1->setPosition(glm::vec3(0,0,-9));
+    sp1->setRotation(glm::vec3(0,30,0));
+    
+    sp2->setPosition(glm::vec3(0,0,-10));
+    sp2->setRotation(glm::vec3(0,30,0));
+    
+    sp3->setPosition(glm::vec3(0,0,-11));
+    sp3->setRotation(glm::vec3(0,30,0));
+
+    world::getInstance()->addChild(sp1);
+    world::getInstance()->addChild(sp2);
+    world::getInstance()->addChild(sp3);
+
+    world::getInstance()->getCamera()->getControl()->bindNode(sp1);
+    world::getInstance()->getCamera()->getControl()->bindNode(sp2);
+    world::getInstance()->getCamera()->getControl()->bindNode(sp3);
 }

@@ -27,6 +27,7 @@
 #include "test_deferred_shading.h"
 #include "test_ssao.h"
 #include "test_pbr.h"
+#include "test_oit.h"
 #include "test_animation.h"
 
 void testMainBegin(){
@@ -157,5 +158,6 @@ void testMainBegin(){
 //    test_PBR_ibl_diffuse_model_fbx_gun();
     
 //    test_quad_color();
-    test_ani1();
+    test_oit_quad_color();
+//    test_ani1();
 }

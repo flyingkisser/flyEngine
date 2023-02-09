@@ -47,6 +47,16 @@ struct fboSSAOStruct{
     unsigned int texNoise;
 };
 
+struct fboOitStruct{
+    unsigned int fboOpaque;   //frame buffer id
+    unsigned int fboTransparent;   //frame buffer
+    unsigned int rbo;   //render buffer id
+    unsigned int texOpaque;
+    unsigned int texDepth;
+    unsigned int texAccum;
+    unsigned int texReveal;
+};
+
 class fbo{
 public:
     static fboStruct createFBO();
@@ -58,6 +68,7 @@ public:
     static fboHDRBloomGaussStruct createFBOHDRBloomGauss();
     static fboDeferredShadingStruct createFBODeferredShading();
     static fboSSAOStruct createFBOSSAO();
+    static fboOitStruct createFBOOit();
 };
 
 NS_FLYENGINE_END

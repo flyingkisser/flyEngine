@@ -18,11 +18,11 @@ NS_FLYENGINE_BEGIN
 class quadColor : public sprite{
 private:
     void _reInitVertices();
-    glm::vec3 _color;
+    glm::vec4 _color;
     size _size=size{0,0};
     
 public:
-    quadColor(glm::vec3 color,float width,float height);
+    quadColor(glm::vec4 color,float width,float height);
 //    size getContentSize(){return _size;};
 //     void setContentSize(size s);
     bool init();

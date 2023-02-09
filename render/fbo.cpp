@@ -461,3 +461,63 @@ fboSSAOStruct fbo::createFBOSSAO(){
 }
 
 
+fboOitStruct fbo::createFBOOit(){
+    fboOitStruct st;
+    unsigned int texIDArr[3]={0};
+    //create fbo for hdr with brightness
+    //一个fbo，两个纹理，分别用于写入颜色和亮度值
+    glGenFramebuffers(1,&st.fboOpaque);
+    glGenFramebuffers(1,&st.fboTransparent);
+   
+    glGenTextures(1,&st.texOpaque);
+    glBindTexture(GL_TEXTURE_2D,st.texOpaque);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F,g_winWidth,g_winHigh,0,GL_RGBA,GL_HALF_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D,0);
+    
+    glGenTextures(1,&st.texDepth);
+    glBindTexture(GL_TEXTURE_2D,st.texDepth);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,g_winWidth,g_winHigh,0,GL_DEPTH_COMPONENT,GL_FLOAT,NULL);
+    glBindTexture(GL_TEXTURE_2D,0);
+    
+    glBindFramebuffer(GL_FRAMEBUFFER,st.fboOpaque);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,st.texOpaque,0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,st.texDepth,0);
+    int status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboOitStruct st={0};
+        flylog("createFBOOit: 1 glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    
+    glGenTextures(1,&st.texAccum);
+    glBindTexture(GL_TEXTURE_2D,st.texAccum);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F,g_winWidth,g_winHigh,0,GL_RGBA,GL_HALF_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D,0);
+    
+    glGenTextures(1,&st.texReveal);
+    glBindTexture(GL_TEXTURE_2D,st.texReveal);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_R8,g_winWidth,g_winHigh,0,GL_RED,GL_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glBindTexture(GL_TEXTURE_2D,0);
+    
+    glBindFramebuffer(GL_FRAMEBUFFER,st.fboTransparent);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,st.texAccum,0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT1,GL_TEXTURE_2D,st.texReveal,0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,st.texDepth,0);
+    unsigned int drawAttachArr[2]={GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1};
+    glDrawBuffers(2,drawAttachArr);
+    status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboOitStruct st={0};
+        flylog("createFBOOit: 1 glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    return st;
+}

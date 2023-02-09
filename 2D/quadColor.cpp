@@ -18,7 +18,7 @@ USE_NS_FLYENGINE
 
 
 
-quadColor::quadColor(glm::vec3 color,float width,float height):sprite(1){
+quadColor::quadColor(glm::vec4 color,float width,float height):sprite(1){
     _color=color;
     _size.width=width;
     _size.height=height;
@@ -43,7 +43,7 @@ void quadColor::glInit(){
     int descArr[]={3,2};
     initVAO(g_verticeArrWithTexCoord_quadColor, sizeof(g_verticeArrWithTexCoord_quadColor),descArr,2);
     _shaderObj->use();
-    _shaderObj->setVec3("color", _color);
+    _shaderObj->setVec4("color", _color,true);
 }
 
 
@@ -53,13 +53,7 @@ void quadColor::_reInitVertices(){
 }
 
 void quadColor::draw(){
-//    _shaderObj->use();
-//    if(m_cb_before_draw_call!=nullptr)
-//        m_cb_before_draw_call(_shaderObj->getProgramID());
-//    //    cam->update2D();
-//    updateModel();
-//    glBindVertexArray(_gl_vao);
-//    glDrawArrays(GL_TRIANGLES,0,6);
-//    state::log(6);
+    _shaderObj->use();
+    _shaderObj->setVec4("color", _color,true);
     drawByType(GL_TRIANGLES, 6);
 }

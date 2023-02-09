@@ -12,4 +12,5 @@
 #include <stdio.h>
 
 #endif /* test_oit_h */
-void test_oit();
+void test_oit_quad_color();
+void test_oit2();
