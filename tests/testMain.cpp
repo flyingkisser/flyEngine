@@ -158,6 +158,6 @@ void testMainBegin(){
 //    test_PBR_ibl_diffuse_model_fbx_gun();
     
 //    test_quad_color();
-    test_oit_quad_color();
-//    test_ani1();
+//    test_oit_quad_color();
+    test_ani1();
 }

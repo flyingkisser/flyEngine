@@ -26,7 +26,7 @@ class animator:public node
 private:
     float _currentTime;
     float _delteTime;
-    float _lastTime;
+    unsigned long _lastTime;
     animation* _currentAnimation;
     std::vector<glm::mat4> _finalBoneMatrices;
     

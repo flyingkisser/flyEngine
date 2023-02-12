@@ -56,13 +56,13 @@ public:
     int getPositionIndex(float animationTime);
     int getRotationIndex(float animationTime);
     int getScaleIndex(float animationTime);
+    void dbg_interpolatePosition(float animationTime);
     
 private:
     float _getScaleFactor(float lastTimeStamp, float nextTimeStamp, float animationTime);
     glm::mat4 _interpolatePosition(float animationTime);
     glm::mat4 _interpolateRotation(float animationTime);
     glm::mat4 _interpolateScaling(float animationTime);
-
 };
 
 NS_FLYENGINE_END

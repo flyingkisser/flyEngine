@@ -38,6 +38,7 @@ void main(){
         pos+=localPos*weights[i];
         normal=mat3(finalBoneMatrices[boneID])*aNormal;
     }
+    // pos=finalBoneMatrices[boneIDs[0]]*vec4(aPos,1.0);
 
     texCoord=aTexCoord;
     normalVector = mat3(transpose(inverse(matModel))) * normal;

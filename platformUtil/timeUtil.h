@@ -22,6 +22,7 @@ public:
     static unsigned long getTimeMS();//毫秒
     static float getTimeFloatSinceRun();
     static unsigned int getTime();
+    static float getTimeFloat();
     static struct tm* getDate();
     static struct tm* getDateBySec(long long secTime);
     static int getTimeZoneDiff();

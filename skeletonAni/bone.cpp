@@ -22,18 +22,21 @@ bone::bone(std::string name,int id,aiNodeAnim* channel):_name(name),_id(id),_loc
         data.position=mathUtil::getGLMVec(channel->mPositionKeys[i].mValue);
         data.timeStamp=channel->mPositionKeys[i].mTime;
         _positions.push_back(data);
+//        flylog("pos: %s %f %f %f time %f",name.c_str(),data.position.x,data.position.y,data.position.z,data.timeStamp);
     }
     for(int i=0;i<_numRotations;i++){
         KeyRotation data;
         data.orientation=mathUtil::getGLMQuat(channel->mRotationKeys[i].mValue);
         data.timeStamp=channel->mPositionKeys[i].mTime;
         _rotations.push_back(data);
+//        flylog("rotation: %s %f %f %f time %f",name.c_str(),data.orientation.x,data.orientation.y,data.orientation.z,data.timeStamp);
     }
     for(int i=0;i<_numScales;i++){
         KeyScale data;
         data.scale=mathUtil::getGLMVec(channel->mScalingKeys[i].mValue);
         data.timeStamp=channel->mPositionKeys[i].mTime;
         _scales.push_back(data);
+//        flylog("scale: %s %f %f %f time %f",name.c_str(),data.scale.x,data.scale.y,data.scale.z,data.timeStamp);
     }
 }
 
@@ -69,6 +72,19 @@ float bone::_getScaleFactor(float lastTimeStamp, float nextTimeStamp, float anim
     float midWayLength=animationTime-lastTimeStamp;
     float frameDiff=nextTimeStamp-lastTimeStamp;
     return midWayLength/frameDiff;
+}
+
+void bone::dbg_interpolatePosition(float animationTime){
+    if(_numPositions==1)
+        return;
+     
+    int index0=getPositionIndex(animationTime);
+    if(index0==-1){
+        flylog("bone:_interpolatePosition aniTime %f is beyond this animation,do nothing!",animationTime);
+    }
+    float scale=_getScaleFactor(_positions[index0].timeStamp,_positions[index0+1].timeStamp,animationTime);
+    glm::vec3 v=glm::mix(_positions[index0].position,_positions[index0+1].position,scale);
+    flylog("index %d aniTime %f %f %f %f ",index0,animationTime,v.x,v.y,v.z);
 }
 
 glm::mat4 bone::_interpolatePosition(float animationTime){

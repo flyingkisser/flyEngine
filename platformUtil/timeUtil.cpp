@@ -79,6 +79,10 @@ unsigned int timeUtil::getTime(){
     return getTimeMS()/1000;
 }
 
+float timeUtil::getTimeFloat(){
+    return (float)getTimeMS()/1000.0;
+}
+
 static long long s_time_us_first_run=0.0f;
 float timeUtil::getTimeFloatSinceRun(){
     if(s_time_us_first_run==0.0f){

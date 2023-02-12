@@ -10,6 +10,7 @@
 #include "bone.h"
 #include "timeUtil.h"
 #include "shaderMgr.h"
+#include "logUtil.h"
 
 USE_NS_FLYENGINE
 
@@ -32,6 +33,7 @@ void animator::updateAnimation(float dt){
         return;
     _currentTime+=_currentAnimation->getTicksPersecond()*dt;
     _currentTime=fmod(_currentTime,_currentAnimation->getDuration());
+    flylog("_currentTime %f",_currentTime);
     calculateBoneTransform(&_currentAnimation->getRootNode(),glm::mat4(1.0));
 }
 
@@ -47,6 +49,10 @@ void animator::calculateBoneTransform(AssimpNodeData* nodeData,glm::mat4 parentT
     if(boneObj){
         boneObj->update(_currentTime);
         nodeTransformation=boneObj->getLocalTransform();
+        
+//        if(nodeName=="Hips"){
+//            boneObj->dbg_interpolatePosition(_currentTime);
+//        }
     }
     glm::mat4 globalTransformation=parentTransform*nodeTransformation;
     auto boneInfoMap=_currentAnimation->getBoneInfoMap();
@@ -54,6 +60,12 @@ void animator::calculateBoneTransform(AssimpNodeData* nodeData,glm::mat4 parentT
         int index=boneInfoMap[nodeName].id;
         glm::mat4 offset=boneInfoMap[nodeName].offset;
         _finalBoneMatrices[index]=globalTransformation*offset;
+        
+        if(nodeName=="Hips"){
+            glm::mat4 tempMat=globalTransformation*offset;
+            flylog("index %d %s %f %f %f %f",index,nodeName.c_str(),tempMat[0][0],tempMat[1][1],tempMat[2][2],tempMat[3][3]);
+        }
+     
     }
     for(int i=0;i<nodeData->childrenCount;i++)
         calculateBoneTransform(&nodeData->childrens[i], globalTransformation);
@@ -64,16 +76,19 @@ bool animator::init(){
 }
 
 void animator::draw(){
-    _currentTime=timeUtil::getTime();
+    unsigned long time=timeUtil::getTimeMS();
     if(_lastTime==0)
-        _lastTime=_currentTime;
-    _delteTime=_currentTime-_lastTime;
-    _lastTime=_currentTime;
+        _lastTime=time;
+    unsigned long dt=time-_lastTime;
+    _lastTime=time;
     _shaderObj->use();
-    updateAnimation(_delteTime);
+//    flylog("dt %d",dt);
+    updateAnimation((float)dt);
     auto transforms=getFinalBoneMatries();
     for(int i=0;i<transforms.size();i++){
         _shaderObj->setMat4("finalBoneMatrices["+std::to_string(i)+"]", transforms[i],true);
     }
     _currentAnimation->getModel()->draw();
+//    glm::mat4 tempMat=transforms[1];
+//    flylog("%f %f %f %f",tempMat[0][0],tempMat[1][1],tempMat[2][2],tempMat[3][3]);
 }
