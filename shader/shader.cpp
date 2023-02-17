@@ -292,7 +292,9 @@ void shader::setBool(const char *name, bool v,bool debug){
     }
     glUniform1i(pos, (int)v);
 }
-
+void shader::setBool(std::string name, bool v,bool debug){
+    setBool(name.c_str(),v,debug);
+}
 bool shader::getBool(const char* name,bool debug){
     unsigned int value[16]={0};
     int pos=glGetUniformLocation(_idProgram, name);
@@ -315,7 +317,6 @@ float shader::getFloat(const char* name,bool debug){
     glGetUniformfv(_idProgram,pos,value);
     return value[0];
 }
-
 void shader::setInt(const char *name, int v,bool debug){
     int pos=glGetUniformLocation(_idProgram, name);
     if(pos==-1){
@@ -325,7 +326,9 @@ void shader::setInt(const char *name, int v,bool debug){
     }
     glUniform1i(pos,v);
 }
-
+void shader::setInt(std::string name, int v,bool debug){
+    setInt(name.c_str(),v,debug);
+}
 void shader::setFloat(const char *name, float v,bool debug){
     int pos=glGetUniformLocation(_idProgram, name);
     if(pos==-1){
@@ -334,6 +337,9 @@ void shader::setFloat(const char *name, float v,bool debug){
        return;
     }
     glUniform1f(pos,v);
+}
+void shader::setFloat(std::string name, float v,bool debug){
+    setFloat(name.c_str(),v,debug);
 }
 
 void shader::setVec3(const char *name, float* v,bool debug){

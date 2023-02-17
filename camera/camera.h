@@ -43,6 +43,8 @@ public:
  
     void setYaw(float v);
     void setPitch(float v);
+    void setNearPlane(float v);
+    void setFarPlane(float v);
     
     void setFocusPos(glm::vec3 p){_focusPos=glm::normalize(p);_bFocus=true;_dirtyPos=true;};
     void disableFocus(){_bFocus=false;};
@@ -98,6 +100,8 @@ private:
     float _fov=0;
     float _fovOrigin=0;
     float _screenRatio=0.0;
+    float _nearPlane=0.1f;
+    float _farPlane=100.0f;
     
     int _ubo_mat_3d=0;
     int _ubo_mat_2d=0;

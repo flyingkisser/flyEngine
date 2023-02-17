@@ -146,7 +146,7 @@ bool camera::init(){
     _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
     _matCameraOrigin=_matCamera;
     
-    _matProjPerspective=glm::perspective(glm::radians(double(_fov)), (double)_screenRatio, 0.1, 100.0);
+    _matProjPerspective=glm::perspective(glm::radians(double(_fov)), (double)_screenRatio, (double)_nearPlane, (double)_farPlane);
     _matProjPerspectiveOrigin=_matProjPerspective;
     
     _matProjOrtho=glm::ortho(0.0f,(float)g_winWidth,0.0f,(float)g_winHigh);
@@ -156,6 +156,16 @@ bool camera::init(){
     return true;
 }
 
+void camera::setFarPlane(float v){
+    _farPlane=v;
+    _matProjPerspective=glm::perspective(glm::radians(double(_fov)), (double)_screenRatio, (double)_nearPlane, (double)_farPlane);
+    _matProjPerspectiveOrigin=_matProjPerspective;
+}
+void camera::setNearPlane(float v){
+    _nearPlane=v;
+    _matProjPerspective=glm::perspective(glm::radians(double(_fov)), (double)_screenRatio, (double)_nearPlane, (double)_farPlane);
+    _matProjPerspectiveOrigin=_matProjPerspective;
+}
 
 
 glm::mat4 camera::getLookAtMatrix(){

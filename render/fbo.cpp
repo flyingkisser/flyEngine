@@ -463,7 +463,6 @@ fboSSAOStruct fbo::createFBOSSAO(){
 
 fboOitStruct fbo::createFBOOit(){
     fboOitStruct st;
-    unsigned int texIDArr[3]={0};
     //create fbo for hdr with brightness
     //一个fbo，两个纹理，分别用于写入颜色和亮度值
     glGenFramebuffers(1,&st.fboOpaque);
@@ -516,6 +515,33 @@ fboOitStruct fbo::createFBOOit(){
     if(status!=GL_FRAMEBUFFER_COMPLETE){
         fboOitStruct st={0};
         flylog("createFBOOit: 1 glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    return st;
+}
+
+
+fboCsmStruct fbo::createFBOCsm(int depthLevel){
+    fboCsmStruct st;
+    glGenFramebuffers(1,&st.fboLight);
+    glGenTextures(1,&st.texDepthArr);
+    glBindTexture(GL_TEXTURE_2D_ARRAY,st.texDepthArr);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY,0,GL_DEPTH_COMPONENT32F,g_winWidth,g_winHigh,depthLevel,0,GL_DEPTH_COMPONENT,GL_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
+    float borderColor[]={1.0,1.0,1.0,1.0};
+    glTexParameterfv(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_BORDER_COLOR,borderColor);
+    glBindFramebuffer(GL_FRAMEBUFFER,st.fboLight);
+    glFramebufferTexture(GL_FRAMEBUFFER,GL_DEPTH_COMPONENT,st.texDepthArr,0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+    int status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboCsmStruct st={0};
+        flylog("createFBOCSM:glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
         return st;
     }
     glBindFramebuffer(GL_FRAMEBUFFER,0);

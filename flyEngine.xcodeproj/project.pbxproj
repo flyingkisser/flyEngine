@@ -48,6 +48,7 @@
 		D8670BD4298936FD00DD7791 /* bone.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8670BCD29880DA500DD7791 /* bone.cpp */; };
 		D8670BD5298936FD00DD7791 /* animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8670BD029880DA500DD7791 /* animation.cpp */; };
 		D8670BD8298937AD00DD7791 /* test_animation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8670BD7298937AD00DD7791 /* test_animation.cpp */; };
+		D8670BE22999212000DD7791 /* test_csm.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8670BE12999212000DD7791 /* test_csm.mm */; };
 		D86CE57528F2ABB0006797C4 /* test_gamma.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57328F2ABB0006797C4 /* test_gamma.cpp */; };
 		D86CE57828F2E891006797C4 /* test_shadow_mapping.mm in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57728F2E891006797C4 /* test_shadow_mapping.mm */; };
 		D86CE57B28F3B71D006797C4 /* quad.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D86CE57A28F3B71D006797C4 /* quad.cpp */; };
@@ -1649,6 +1650,8 @@
 		D8670BDD298A91DC00DD7791 /* Vampire_normal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Vampire_normal.png; sourceTree = "<group>"; };
 		D8670BDE298A91DC00DD7791 /* Vampire_specular.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Vampire_specular.png; sourceTree = "<group>"; };
 		D8670BDF298A91DC00DD7791 /* dancing_vampire.dae */ = {isa = PBXFileReference; lastKnownFileType = text.xml.dae; path = dancing_vampire.dae; sourceTree = "<group>"; };
+		D8670BE02999212000DD7791 /* test_csm.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_csm.h; sourceTree = "<group>"; };
+		D8670BE12999212000DD7791 /* test_csm.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = test_csm.mm; sourceTree = "<group>"; };
 		D8691EE626B3FA2100D40717 /* 3d_color.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_color.vs; sourceTree = "<group>"; };
 		D8691EE726B3FA2100D40717 /* 3d_color.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = 3d_color.fs; sourceTree = "<group>"; };
 		D86CE57328F2ABB0006797C4 /* test_gamma.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_gamma.cpp; sourceTree = "<group>"; };
@@ -4110,6 +4113,8 @@
 				D8670BC6296B12D700DD7791 /* test_oit.mm */,
 				D8670BD6298937AD00DD7791 /* test_animation.h */,
 				D8670BD7298937AD00DD7791 /* test_animation.cpp */,
+				D8670BE02999212000DD7791 /* test_csm.h */,
+				D8670BE12999212000DD7791 /* test_csm.mm */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -4739,6 +4744,7 @@
 				D8880DC82896352A000BCFEE /* uboMgr.cpp in Sources */,
 				8ECA453A26916C3E00FDFC7A /* camera.cpp in Sources */,
 				D825DBC424AED54B00C494E7 /* bmpUtil.cpp in Sources */,
+				D8670BE22999212000DD7791 /* test_csm.mm in Sources */,
 				D85F1BD625022327005390DC /* VAOMgr.cpp in Sources */,
 				D86CE57B28F3B71D006797C4 /* quad.cpp in Sources */,
 				D8F62FF528C4D1F700EF8756 /* material2.cpp in Sources */,

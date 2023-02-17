@@ -57,6 +57,12 @@ struct fboOitStruct{
     unsigned int texReveal;
 };
 
+struct fboCsmStruct{
+    unsigned int fboLight;   //frame buffer id
+    unsigned int texDepthArr;
+};
+
+
 class fbo{
 public:
     static fboStruct createFBO();
@@ -69,6 +75,7 @@ public:
     static fboDeferredShadingStruct createFBODeferredShading();
     static fboSSAOStruct createFBOSSAO();
     static fboOitStruct createFBOOit();
+    static fboCsmStruct createFBOCsm(int depthLevel);
 };
 
 NS_FLYENGINE_END

@@ -32,8 +32,11 @@ class shader : public glRef{
         bool isSuccess();
         void use();
         void setBool(const char* name,bool v,bool debug=false);
+        void setBool(std::string name,bool v,bool debug=false);
         void setInt(const char* name,int v,bool debug=false);
+        void setInt(std::string name,int v,bool debug=false);
         void setFloat(const char* name,float v,bool debug=false);
+        void setFloat(std::string name,float v,bool debug=false);
         void setMat4(const char* name,float* v,bool debug=false);
         void setMat4(const char* name,glm::mat4 v,bool debug=false);
         void setMat4(std::string name,glm::mat4 v,bool debug=false);
