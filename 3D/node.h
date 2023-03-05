@@ -126,7 +126,7 @@ public:
     shader* getShader(){return _shaderObj;};
     void setShader(shader* shaderObj);
     glm::mat4 getModelMatrix(){return _matModel;};
-    
+    glm::mat4 calcModelMatrix();
     void setPosRange(float v);
     
     void setCBBeforeDrawCall(std::function<void(int programID)> f){m_cb_before_draw_call=f;};

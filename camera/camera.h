@@ -31,9 +31,15 @@ public:
     float getPositionZ(){return _cameraPos.z;};
     glm::vec3 getPosition(){return _cameraPos;};
     glm::vec3 getFront(){return _cameraFront;};
+    glm::vec3 getUp(){return _cameraUp;};
+    glm::vec3 getRight(){return _cameraRight;};
+  
     float getYaw(){return _yaw;};
     float getPitch(){return _pitch;};
     float getFov(){return _fov;};
+    float getScreenRatio(){return _screenRatio;};
+    float getFarPlane(){return _farPlane;};
+    float getNearPlane(){return _nearPlane;};
 
     void setProgrameID(int program){_program=program;};
     void setPosition(glm::vec3 v);
@@ -90,6 +96,7 @@ private:
     glm::vec3 _cameraPosOrigin;
     glm::vec3 _cameraFront;
     glm::vec3 _cameraUp;
+    glm::vec3 _cameraRight;
     glm::vec3 _focusPos;
     bool _bFocus;
     

@@ -43,7 +43,7 @@ private:
 public:
     animation(char* aniPath);
     bone* findBone(std::string& name);
-    inline float getTicksPersecond(){return _ticksPerSecond;};
+    inline float getTicksPerSecond(){return _ticksPerSecond;};
     inline float getDuration(){return _duration;};
     inline AssimpNodeData& getRootNode(){return _rootNode;};
     inline std::map<std::string,BoneInfo>& getBoneInfoMap(){return _boneInfoMap;};

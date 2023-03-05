@@ -31,9 +31,9 @@ void animator::updateAnimation(float dt){
     _delteTime=dt;
     if(_currentAnimation==nullptr)
         return;
-    _currentTime+=_currentAnimation->getTicksPersecond()*dt;
+    _currentTime+=_currentAnimation->getTicksPerSecond()*dt;
     _currentTime=fmod(_currentTime,_currentAnimation->getDuration());
-    flylog("_currentTime %f",_currentTime);
+//    flylog("_currentTime %f",_currentTime);
     calculateBoneTransform(&_currentAnimation->getRootNode(),glm::mat4(1.0));
 }
 
@@ -61,10 +61,10 @@ void animator::calculateBoneTransform(AssimpNodeData* nodeData,glm::mat4 parentT
         glm::mat4 offset=boneInfoMap[nodeName].offset;
         _finalBoneMatrices[index]=globalTransformation*offset;
         
-        if(nodeName=="Hips"){
-            glm::mat4 tempMat=globalTransformation*offset;
-            flylog("index %d %s %f %f %f %f",index,nodeName.c_str(),tempMat[0][0],tempMat[1][1],tempMat[2][2],tempMat[3][3]);
-        }
+//        if(nodeName=="Hips"){
+//            glm::mat4 tempMat=globalTransformation*offset;
+//            flylog("index %d %s %f %f %f %f",index,nodeName.c_str(),tempMat[0][0],tempMat[1][1],tempMat[2][2],tempMat[3][3]);
+//        }
      
     }
     for(int i=0;i<nodeData->childrenCount;i++)
@@ -83,12 +83,13 @@ void animator::draw(){
     _lastTime=time;
     _shaderObj->use();
 //    flylog("dt %d",dt);
-    updateAnimation((float)dt);
+    updateAnimation((float)dt/1000.0);
     auto transforms=getFinalBoneMatries();
     for(int i=0;i<transforms.size();i++){
         _shaderObj->setMat4("finalBoneMatrices["+std::to_string(i)+"]", transforms[i],true);
     }
     _currentAnimation->getModel()->draw();
+//    _currentAnimation->getModel()->debugPrint();
 //    glm::mat4 tempMat=transforms[1];
 //    flylog("%f %f %f %f",tempMat[0][0],tempMat[1][1],tempMat[2][2],tempMat[3][3]);
 }

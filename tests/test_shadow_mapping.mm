@@ -394,7 +394,7 @@ void test_shadow_mapping_use_pass(){
 }
 
 //先渲染出深度图，然后灯光不移动
-void test_shadow_mapping_static_shadow(){
+void test_shadow_mapping_shadow_static(){
     camera* cam=world::getInstance()->getCamera();
     cubeTex* cubeObj=new cubeTex("./res/wood.png");
     cubeObj->init();

@@ -22,7 +22,6 @@ struct size{
 };
 
 
-
 /*
 class vec3{
 public:

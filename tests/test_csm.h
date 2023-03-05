@@ -12,5 +12,6 @@
 #include <stdio.h>
 
 void test_csm_1();
+void test_csm_old();
 
 #endif /* test_csm_h */

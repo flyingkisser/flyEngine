@@ -68,6 +68,7 @@ public:
     
     auto& getBoneInfoMap(){return m_boneInfoMap;};
     auto getBoneCount(){return m_boneCounter;};
+    void debugPrint();
 };
 
 NS_FLYENGINE_END

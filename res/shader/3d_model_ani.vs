@@ -34,12 +34,13 @@ void main(){
             pos=vec4(aPos,1.0);
             break;
         }
-        vec4 localPos=finalBoneMatrices[boneID]*vec4(aPos,1.0);
-        pos+=localPos*weights[i];
-        normal=mat3(finalBoneMatrices[boneID])*aNormal;
+        if(weights[i]<=0.0)
+            break;
+        vec4 localPos=finalBoneMatrices[boneID]*weights[i]*vec4(aPos,1.0);
+        pos+=localPos;
+        // pos+=localPos*weights[i];
+        // normal=mat3(finalBoneMatrices[boneID])*aNormal;
     }
-    // pos=finalBoneMatrices[boneIDs[0]]*vec4(aPos,1.0);
-
     texCoord=aTexCoord;
     normalVector = mat3(transpose(inverse(matModel))) * normal;
     posFrag=vec3(matModel * pos);

@@ -30,6 +30,7 @@
 #include "test_oit.h"
 #include "test_animation.h"
 #include "test_csm.h"
+#include "test_frustum_culling.h"
 
 void testMainBegin(){
     //code cube test
@@ -161,5 +162,8 @@ void testMainBegin(){
 //    test_quad_color();
 //    test_oit_quad_color();
 //    test_ani1();
-    test_csm_1();
+//    test_csm_old();
+//    test_csm_1();
+    
+    test_frustum_culling_sphere();
 }

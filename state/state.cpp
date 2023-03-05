@@ -43,7 +43,7 @@ void state::displayFrameRate(){
         s_textRate=new uiText("res/font/arial.ttf",20,"");
         s_textRate->setPosition(glm::vec3(3,4,0));
         s_textRate->setLogInStatebool(false);
-        world::getInstance()->addChild(s_textRate);
+//        world::getInstance()->addChild(s_textRate);
     }
     long long time=timeUtil::getTimeMS();
     if(s_lasttime==0){
@@ -56,6 +56,7 @@ void state::displayFrameRate(){
     float rate=1000.0/(float)diff;
     s_strRate="frame:"+std::to_string(rate);
     s_textRate->setText(s_strRate.c_str());
+    s_textRate->draw();
 }
 
 void state::displayDrawCall(){
@@ -63,10 +64,11 @@ void state::displayDrawCall(){
         s_textDrawCall=new uiText("res/font/arial.ttf",20,"");
         s_textDrawCall->setPosition(glm::vec3(3,24,0));
         s_textDrawCall->setLogInStatebool(false);
-        world::getInstance()->addChild(s_textDrawCall);
+//        world::getInstance()->addChild(s_textDrawCall);
     }
     s_strDrawCall="draw_call:"+std::to_string(s_draw_call);
     s_textDrawCall->setText(s_strDrawCall.c_str());
+    s_textDrawCall->draw();
 }
 
 void state::displayVertices(){
@@ -74,10 +76,11 @@ void state::displayVertices(){
         s_textVertices=new uiText("res/font/arial.ttf",20,"");
         s_textVertices->setPosition(glm::vec3(3,44,0));
         s_textVertices->setLogInStatebool(false);
-        world::getInstance()->addChild(s_textVertices);
+//        world::getInstance()->addChild(s_textVertices);
     }
     s_strVertices="vertices:"+std::to_string(s_vertices);
     s_textVertices->setText(s_strVertices.c_str());
+    s_textVertices->draw();
 }
 
 void state::reset(){

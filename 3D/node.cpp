@@ -166,6 +166,22 @@ void node::updateModel(){
     _shaderObj->setMat4(uniform_name_mat_model, glm::value_ptr(_matModel));
 }
 
+glm::mat4 node::calcModelMatrix(){
+    //移动
+    _matModel=glm::translate(glm::mat4(1.0f),_pos);
+    //旋转
+    if(_rotate.x)//沿x轴
+      _matModel=glm::rotate(_matModel,glm::radians(_rotate.x),glm::vec3(1,0,0));
+    if(_rotate.y)//沿y轴
+      _matModel=glm::rotate(_matModel,glm::radians(_rotate.y),glm::vec3(0,1,0));
+    if(_rotate.z)//沿z轴
+      _matModel=glm::rotate(_matModel,glm::radians(_rotate.z),glm::vec3(0,0,1));
+    //缩放
+    _matModel=glm::scale(_matModel,_scale);
+    return _matModel;
+}
+
+
 void node::glUpdateLight(){
     int i=0;
     

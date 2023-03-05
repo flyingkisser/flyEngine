@@ -124,12 +124,17 @@ mesh model::processMesh(aiMesh* ai_mesh,const aiScene *scene){
 }
 
 void model::processNode2(aiNode* node,const aiScene *scene){
+    int c=0;
     for(int i=0;i<node->mNumMeshes;i++){
-        int c=processMesh2(scene->mMeshes[node->mMeshes[i]], scene);
+        c=processMesh2(scene->mMeshes[node->mMeshes[i]], scene);
         flylog("mesh index %d processed![vertices %d]",node->mMeshes[i],c);
     }
     for(int i=0;i<node->mNumChildren;i++)
         processNode2(node->mChildren[i], scene);
+    if(c<=0){
+        flylog("processNode2:this node does not contain any mesh,return!");
+        return;
+    }
     _meshObj=new mesh(_vertices,_indices,_textures);
     if(_cb_before_draw!=NULL)
         _meshObj->setCBBeforeDraw(_cb_before_draw);
@@ -139,6 +144,7 @@ int model::processMesh2(aiMesh* ai_mesh,const aiScene *scene){
     //处理顶点坐标，法向量，纹理坐标，构造Vertex结构体
     for(int i=0;i<ai_mesh->mNumVertices;i++){
         Vertex vertex;
+        
         vertex.pos_vetex.x=ai_mesh->mVertices[i].x;
         vertex.pos_vetex.y=ai_mesh->mVertices[i].y;
         vertex.pos_vetex.z=ai_mesh->mVertices[i].z;
@@ -162,7 +168,9 @@ int model::processMesh2(aiMesh* ai_mesh,const aiScene *scene){
             vertex.pos_texcoord.x=0;
             vertex.pos_texcoord.y=0;
         }
+        setVertexBoneDataToDefault(vertex);
         _vertices.push_back(vertex);
+        
         m_totalVertics++;
     }
     //处理顶点坐标的索引
@@ -266,6 +274,12 @@ void model::setVertexBoneDataToDefault(Vertex &stVertex){
     }
 }
 
+void model::debugPrint(){
+    for(auto v : _vertices){
+        flylog("%d %d %d %d %f %f %f %f",v.boneIDArr[0],v.boneIDArr[1],v.boneIDArr[2],v.boneIDArr[3],
+               v.weightArr[0],v.weightArr[1],v.weightArr[2],v.weightArr[3]);
+    }
+}
 
 
 

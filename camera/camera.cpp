@@ -141,8 +141,9 @@ bool camera::init(){
     _cameraFront.y=sin(glm::radians(_pitch));
     _cameraFront.z=sin(glm::radians(_yaw))*cos(glm::radians(_pitch));
     _cameraFront=glm::normalize(_cameraFront);
-    _cameraUp=glm::vec3(0,1,0);
-    
+    _cameraRight=glm::normalize(glm::cross(_cameraFront,glm::vec3(0,1,0)));
+    _cameraUp=glm::normalize(glm::cross(_cameraRight,_cameraFront));
+ 
     _matCamera=glm::lookAt(_cameraPos, _cameraPos+_cameraFront, _cameraUp);
     _matCameraOrigin=_matCamera;
     

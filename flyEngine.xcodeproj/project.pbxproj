@@ -124,6 +124,7 @@
 		D8F4E674291A4F0D0051037D /* test_normal_parallax_mapping.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F4E673291A4F0D0051037D /* test_normal_parallax_mapping.cpp */; };
 		D8F4E6772939DA250051037D /* test_deferred_shading.mm in Sources */ = {isa = PBXBuildFile; fileRef = D8F4E6762939DA250051037D /* test_deferred_shading.mm */; };
 		D8F62FF528C4D1F700EF8756 /* material2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8F62FF428C4D1F700EF8756 /* material2.cpp */; };
+		D8FAE94029B1996100DFFD4C /* test_frustum_culling.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8FAE93F29B1996100DFFD4C /* test_frustum_culling.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -1956,6 +1957,14 @@
 		D8F4E6762939DA250051037D /* test_deferred_shading.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = test_deferred_shading.mm; sourceTree = "<group>"; };
 		D8F62FF328C4D1F700EF8756 /* material2.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = material2.h; sourceTree = "<group>"; };
 		D8F62FF428C4D1F700EF8756 /* material2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = material2.cpp; sourceTree = "<group>"; };
+		D8FAE93729ACE35800DFFD4C /* plane.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = plane.h; sourceTree = "<group>"; };
+		D8FAE93929B18AA400DFFD4C /* frustum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = frustum.h; sourceTree = "<group>"; };
+		D8FAE93B29B18B0F00DFFD4C /* volume.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = volume.h; sourceTree = "<group>"; };
+		D8FAE93D29B18DA300DFFD4C /* sphere.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = sphere.h; sourceTree = "<group>"; };
+		D8FAE93E29B1996100DFFD4C /* test_frustum_culling.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_frustum_culling.h; sourceTree = "<group>"; };
+		D8FAE93F29B1996100DFFD4C /* test_frustum_culling.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_frustum_culling.cpp; sourceTree = "<group>"; };
+		D8FAE94129B1EA8800DFFD4C /* aabb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aabb.h; sourceTree = "<group>"; };
+		D8FAE94229B42BF300DFFD4C /* collision.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = collision.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3916,6 +3925,7 @@
 		D81EF3531EAFA0070003604F = {
 			isa = PBXGroup;
 			children = (
+				D8FAE93829B18A6C00DFFD4C /* collision */,
 				D825DB77249CD2D900C494E7 /* res */,
 				D8BED728253EB965006974D3 /* learnC++ */,
 				D825DB8024AAEDD600C494E7 /* 2D */,
@@ -4115,6 +4125,8 @@
 				D8670BD7298937AD00DD7791 /* test_animation.cpp */,
 				D8670BE02999212000DD7791 /* test_csm.h */,
 				D8670BE12999212000DD7791 /* test_csm.mm */,
+				D8FAE93E29B1996100DFFD4C /* test_frustum_culling.h */,
+				D8FAE93F29B1996100DFFD4C /* test_frustum_culling.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -4586,6 +4598,19 @@
 			path = skybox;
 			sourceTree = "<group>";
 		};
+		D8FAE93829B18A6C00DFFD4C /* collision */ = {
+			isa = PBXGroup;
+			children = (
+				D8FAE93729ACE35800DFFD4C /* plane.h */,
+				D8FAE93929B18AA400DFFD4C /* frustum.h */,
+				D8FAE93B29B18B0F00DFFD4C /* volume.h */,
+				D8FAE93D29B18DA300DFFD4C /* sphere.h */,
+				D8FAE94129B1EA8800DFFD4C /* aabb.h */,
+				D8FAE94229B42BF300DFFD4C /* collision.h */,
+			);
+			path = collision;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -4735,6 +4760,7 @@
 				D87EBFE726A7CA3F004ED7DE /* mathUtil.cpp in Sources */,
 				D882CCD828EB184700B11310 /* test_msaa.mm in Sources */,
 				D84FB80926ABF59B003FDDE1 /* moveTo.cpp in Sources */,
+				D8FAE94029B1996100DFFD4C /* test_frustum_culling.cpp in Sources */,
 				D8B2711C2952CE2F00841859 /* textureHdr.cpp in Sources */,
 				D825DB71249CB3EB00C494E7 /* randUtil.cpp in Sources */,
 				D8A2AD8A272AC46400B5FC18 /* stb_image.cpp in Sources */,
