@@ -15,6 +15,8 @@
 
 #include "defines.h"
 #include "glRef.h"
+#include "frustum.h"
+
 
 using namespace std;
 
@@ -26,6 +28,7 @@ class texture;
 class shader;
 class material;
 class material2;
+
 class node: public glRef
 {
 protected:
@@ -57,6 +60,10 @@ protected:
     int _desc_arr_size=0;
     std::function <void(int programID)> m_cb_before_draw_call=nullptr;
     
+    frustum* _stFrustum=NULL;
+    bool _bCollisionSphere=false;
+    
+    
 public:
     node();
     ~node(){};
@@ -83,6 +90,7 @@ public:
     glm::vec3& getPosition(){return _pos;};
     glm::vec3& getScale(){return _scale;};
     glm::vec3& getRotation(){return _rotate;};
+    glm::vec3 getSize();
     
     void setRotation(glm::vec3 v);
     void setScale(glm::vec3 v);
@@ -122,6 +130,12 @@ public:
     void setMaterial(material2* mt);
     material2* getMaterial(){return m_material;};
     // material2* getMaterial2(){return m_material2;};
+    
+    void setFrustum(frustum* st){_stFrustum=st;};
+    void setCollisionSphere(bool v){_bCollisionSphere=v;};
+    bool isCollsionSphereEnabled(){return _bCollisionSphere;};
+    bool isOnFrustumBySphere();
+    
     
     shader* getShader(){return _shaderObj;};
     void setShader(shader* shaderObj);

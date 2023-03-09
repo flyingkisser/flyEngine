@@ -18,6 +18,7 @@
 #include "quadColor.h"
 #include "camera.h"
 #include "control.h"
+#include "shader.h"
 
 USE_NS_FLYENGINE
 void test_sprite_1(){
@@ -84,4 +85,27 @@ void test_quad_color(){
     world::getInstance()->getCamera()->getControl()->bindNode(sp1);
     world::getInstance()->getCamera()->getControl()->bindNode(sp2);
     world::getInstance()->getCamera()->getControl()->bindNode(sp3);
+}
+
+void test_quad_color2(){
+//    camera* cam=world::getInstance()->getCamera();
+//    quadColor* sp1=new quadColor(glm::vec4(1,0,0,1),10,20);
+//    glm::vec3 front=cam->getFront();
+//    glm::mat4 model=glm::vec4(0,0,1,1)*glm::inverse(front);
+//
+//    sp1->setPosition(glm::vec3(0,0,-9));
+//    sp1->setRotation(glm::vec3(0,30,0));
+//
+//    world::getInstance()->setCBBeforeDrawCall([sp1,model](){
+//        shader* sh=sp1->getShader();
+//        sh->use();
+//        sh->setMat4("model",model);
+//        sp1->draw();
+//    });
+//
+////    world::getInstance()->addChild(sp1);
+//
+//
+//    world::getInstance()->getCamera()->getControl()->bindNode(sp1);
+  
 }

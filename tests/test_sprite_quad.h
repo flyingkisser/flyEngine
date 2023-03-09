@@ -15,4 +15,5 @@ void test_sprite_1();
 void test_sprite_2();
 //void test_quad_1();
 void test_quad_color();
+void test_quad_color2();
 #endif /* test_sprite_quad_h */

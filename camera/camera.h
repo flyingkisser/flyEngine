@@ -20,6 +20,7 @@ NS_FLYENGINE_BEGIN
 
 class control;
 class shader;
+struct frustum;
 
 class camera{
     
@@ -75,6 +76,9 @@ public:
     
     void initUBO();
     void updateUBOForShadow(glm::vec3 lightPos);
+    void initFrustum();
+    void updateFrustum();
+    frustum* getFrustum(){return _stFrustum;};
     
 private:
     void _updateCamera();
@@ -113,6 +117,7 @@ private:
     int _ubo_mat_3d=0;
     int _ubo_mat_2d=0;
     int _ubo_mat_3d_shadow=0;
+    frustum* _stFrustum=NULL;
 };
 
 NS_FLYENGINE_END

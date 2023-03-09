@@ -13,6 +13,7 @@
 #include "shaderMgr.h"
 #include "window.h"
 #include "uboMgr.h"
+#include "frustum.h"
 
 using namespace flyEngine;
 
@@ -34,6 +35,8 @@ void camera::_updateCamera(){
         (void*)glm::value_ptr(_cameraPos)
     };
     uboMgr::writeData(_ubo_mat_3d,2,sizeArr,offsetArr,bufArr);
+    
+    updateFrustum();
 }
 
 void camera::_updateProjection(){
@@ -85,6 +88,8 @@ void camera::_updateFront(){
     _cameraFront.x=posFront.x;
     _cameraFront.y=posFront.y;
     _cameraFront.z=posFront.z;
+    _cameraRight=glm::normalize(glm::cross(_cameraFront,glm::vec3(0,1,0)));
+    _cameraUp=glm::normalize(glm::cross(_cameraRight,_cameraFront));
     _dirtyPos=true;
 }
 
@@ -137,10 +142,11 @@ bool camera::init(){
     
     _cameraPos=glm::vec3(0,0,3);
     _cameraPosOrigin=_cameraPos;
-    _cameraFront.x=cos(glm::radians(_yaw))*cos(glm::radians(_pitch));
-    _cameraFront.y=sin(glm::radians(_pitch));
-    _cameraFront.z=sin(glm::radians(_yaw))*cos(glm::radians(_pitch));
-    _cameraFront=glm::normalize(_cameraFront);
+    glm::vec3 direction;
+    direction.x=cos(glm::radians(_yaw))*cos(glm::radians(_pitch));
+    direction.y=sin(glm::radians(_pitch));
+    direction.z=sin(glm::radians(_yaw))*cos(glm::radians(_pitch));
+    _cameraFront=glm::normalize(direction);
     _cameraRight=glm::normalize(glm::cross(_cameraFront,glm::vec3(0,1,0)));
     _cameraUp=glm::normalize(glm::cross(_cameraRight,_cameraFront));
  
@@ -154,6 +160,7 @@ bool camera::init(){
     
     _dirtyPos=false;
     initUBO();
+    initFrustum();
     return true;
 }
 
@@ -166,6 +173,32 @@ void camera::setNearPlane(float v){
     _nearPlane=v;
     _matProjPerspective=glm::perspective(glm::radians(double(_fov)), (double)_screenRatio, (double)_nearPlane, (double)_farPlane);
     _matProjPerspectiveOrigin=_matProjPerspective;
+}
+
+void camera::initFrustum(){
+    frustum* stFrustum=new frustum;
+    const float halfVSide = _farPlane * tanf(_fov * .5f);
+    const float halfHSide = halfVSide * _screenRatio;
+    const glm::vec3 frontMultFar = _farPlane * _cameraFront;
+    stFrustum->near = { _cameraPos + _nearPlane * _cameraFront, _cameraFront,"near" };
+    stFrustum->far = { _cameraPos + frontMultFar, -_cameraFront,"far"};
+    stFrustum->right = { _cameraPos,glm::cross(_cameraUp,frontMultFar + _cameraRight * halfHSide),"right" };
+    stFrustum->left = { _cameraPos, glm::cross(frontMultFar - _cameraRight * halfHSide,_cameraUp),"left" };
+    stFrustum->top = { _cameraPos,glm::cross(_cameraRight, frontMultFar - _cameraUp * halfVSide),"top" };
+    stFrustum->bottom = { _cameraPos,glm::cross(frontMultFar + _cameraUp * halfVSide, _cameraRight),"bottom" };
+    _stFrustum=stFrustum;
+}
+
+void camera::updateFrustum(){
+    const float halfVSide = _farPlane * tanf(_fov * .5f);
+    const float halfHSide = halfVSide * _screenRatio;
+    const glm::vec3 frontMultFar = _farPlane * _cameraFront;
+    _stFrustum->near = { _cameraPos + _nearPlane * _cameraFront, _cameraFront,"near" };
+    _stFrustum->far = { _cameraPos + frontMultFar, -_cameraFront,"far"};
+    _stFrustum->right = { _cameraPos,glm::cross(_cameraUp,frontMultFar + _cameraRight * halfHSide),"right" };
+    _stFrustum->left = { _cameraPos, glm::cross(frontMultFar - _cameraRight * halfHSide,_cameraUp),"left" };
+    _stFrustum->top = { _cameraPos,glm::cross(_cameraRight, frontMultFar - _cameraUp * halfVSide),"top" };
+    _stFrustum->bottom = { _cameraPos,glm::cross(frontMultFar + _cameraUp * halfVSide, _cameraRight),"bottom" };
 }
 
 

@@ -28,9 +28,7 @@
 #include "quad.h"
 #include "quadColor.h"
 #include "shaderMgr.h"
-
 #include "frustum.h"
-#include "collision.h"
 
 
 #ifdef BUILD_IOS
@@ -43,17 +41,24 @@ static material2* createMaterial(float ambient,float diffuse,float specular,floa
     return new material2(glm::vec3(ambient,ambient,ambient),glm::vec3(diffuse,diffuse,diffuse),glm::vec3(specular,specular,specular),shineness);
 }
 
+
+
+
 void test_frustum_culling_sphere(){
     camera* cam=world::getInstance()->getCamera();
     glm::vec3 camPos=glm::vec3(-1.8,1.8,9.5);
     cam->setPosition(camPos);
     cam->setYaw(-83.03);
     cam->setPitch(-9);
+//    cam->setYaw(-106);
+//    cam->setPitch(-2.6);
+    
     float far=cam->getFarPlane();
     float near=cam->getNearPlane();
-    float fov=cam->getFov();
-    frustum stFrus=createFrustumFromCamera(cam,cam->getScreenRatio(),fov,far,near);
+//    float fov=cam->getFov();
+//    frustum* stFrus=createFrustumFromCamera(cam,cam->getScreenRatio(),fov,far,near);
     
+    frustum* stFrus=cam->getFrustum();
     
     cubeTex* floorObj=new cubeTex("./res/floor.png");
    
@@ -75,9 +80,12 @@ void test_frustum_culling_sphere(){
             float z=-1.0f+(j+1)*2/(float)countY;
             cubeObj->setPosition(glm::vec3(x,0.5,z));
             cubeObj->setScale(0.1);
+            cubeObj->setFrustum(stFrus);
+            cubeObj->setCollisionSphere(true);
             world::getInstance()->addChild(cubeObj);
             world::getInstance()->getControl()->bindNode(cubeObj);
             flylog("add %d rock %f %f %f",c++,x,y,z);
+            objArr.push_back(cubeObj);
         }
     }
     
@@ -136,6 +144,14 @@ void test_frustum_culling_sphere(){
 //        glViewport(0,0,g_winWidth,g_winHigh);
     });
 
+    world::getInstance()->getControl()->regOnKeyPress('p', [cam,objArr](){
+//        glm::vec3 pos=cam->getPosition();
+//        float yaw=cam->getYaw();
+//        float pitch=cam->getPitch();
+//        flylog("cam at %f %f %f,yaw %f pitch %f",pos.x,pos.y,pos.z,yaw,pitch);
+        objArr[0]->print();
+    });
+    
  
     world::getInstance()->getControl()->regOnKeyPress('g', [cam](){
         glm::vec3 pos=cam->getPosition();

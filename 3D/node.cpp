@@ -25,9 +25,7 @@
 
 USE_NS_FLYENGINE
 
-void node::print(){
-    flylog("node:pos %f %f %f",_pos.x,_pos.y,_pos.z);
-}
+
 
 node::node(){
 }
@@ -113,6 +111,44 @@ void node::setShader(shader* shaderObj){
     _shaderObj=shaderObj;
     _shaderObj->use();
     _gl_program=shaderObj->getProgramID();
+}
+
+glm::vec3 node::getSize(){
+    glm::vec3 s;
+    for(int i=0;i<3;i++){
+        s[i]=std::abs(_vertice_arr[0+i])+std::abs(_vertice_arr[8+i]);
+    }
+    return s;
+}
+bool node::isOnFrustumBySphere(){
+    glm::vec3 scale=getScale();
+    float maxScale=std::max(std::max(scale.x,scale.y),scale.z);
+    glm::vec3 size=getSize();
+    float r=size.x*maxScale*0.5f;
+    glm::vec3 center=getPosition();
+    return _stFrustum->left.getSignedDistanceToPlane(center)>-r &&
+    _stFrustum->right.getSignedDistanceToPlane(center)>-r &&
+    _stFrustum->far.getSignedDistanceToPlane(center)>-r &&
+    _stFrustum->near.getSignedDistanceToPlane(center)>-r &&
+    _stFrustum->top.getSignedDistanceToPlane(center)>-r &&
+    _stFrustum->bottom.getSignedDistanceToPlane(center)>-r;
+//    return true;
+};
+
+void node::print(){
+    glm::vec3 scale=getScale();
+    float maxScale=std::max(std::max(scale.x,scale.y),scale.z);
+    glm::vec3 size=getSize();
+    float r=size.x*maxScale*0.5f;
+    glm::vec3 center=getPosition();
+    float left=_stFrustum->left.getSignedDistanceToPlane(center);
+    float right=_stFrustum->right.getSignedDistanceToPlane(center);
+    float far=_stFrustum->far.getSignedDistanceToPlane(center);
+    float near=_stFrustum->near.getSignedDistanceToPlane(center);
+    float top=_stFrustum->top.getSignedDistanceToPlane(center);
+    float bottom=_stFrustum->bottom.getSignedDistanceToPlane(center);
+    bool result=left>-r && right>-r && far>-r && near>-r && top>-r && bottom>-r;
+    flylog("node:pos %f %f %f left %f right %f far %f near %f top %f bottom %f -r %f result %d ",_pos.x,_pos.y,_pos.z,left,right,far,near,top,bottom,-r,result);
 }
 
 void node::initVAO(float* arr,int arrSize,int descArr[],int descArrSize){
@@ -205,3 +241,4 @@ void node::glUpdateLight(){
        lightObj->update(i++);
     }
 }
+

@@ -10,7 +10,7 @@
 #define collision_h
 
 #include "plane.h"
-#include "frustum.h"
+//#include "frustum.h"
 #include "volume.h"
 #include "sphere.h"
 #include "aabb.h"
