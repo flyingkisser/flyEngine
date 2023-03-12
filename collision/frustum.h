@@ -16,16 +16,16 @@
 
 NS_FLYENGINE_BEGIN
 
-struct frustum{
-    plane top;
-    plane bottom;
-    plane right;
-    plane left;
-    plane far;
-    plane near;
-};
-
-frustum* createFrustumFromCamera(camera* cam, float aspect, float fovY,float zNear, float zFar);
+//struct frustum{
+//    plane top;
+//    plane bottom;
+//    plane right;
+//    plane left;
+//    plane far;
+//    plane near;
+//};
+//
+//frustum* createFrustumFromCamera(camera* cam, float aspect, float fovY,float zNear, float zFar);
 
 
 

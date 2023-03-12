@@ -86,3 +86,23 @@ void flylogErrno(const char* fmt,...){
     
     fprintf(stdout, "errno %d : %s\n", errno,strerror(errno));
 }
+
+void flylogVec3Float(glm::vec3 v){
+    flylog("%f %f %f",v[0],v[1],v[2]);
+}
+void flylogVec3Int(glm::vec3 v){
+    flylog("%d %d %d",v[0],v[1],v[2]);
+}
+
+void flylogMat4(glm::mat4 v){
+    for(int i=0;i<4;i++){
+        flylog("%d: %f %f %f %f",i,v[i][0],v[i][1],v[i][2],v[i][3]);
+    }
+}
+
+void flylogMat4(const char* szPrefix,glm::mat4 v){
+    flylog(szPrefix);
+    for(int i=0;i<4;i++){
+        flylog("%d: %f %f %f %f",i,v[i][0],v[i][1],v[i][2],v[i][3]);
+    }
+}

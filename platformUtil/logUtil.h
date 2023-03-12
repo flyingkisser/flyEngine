@@ -21,5 +21,9 @@ public:
 void flylogErrno(const char* fmt,...);
 void flylog(const char* szFmt,...);
 void flylogNoTime(const char* fmt,...);
+void flylogVec3Float(glm::vec3 v);
+void flylogVec3Int(glm::vec3 v);
+void flylogMat4(glm::mat4 v);
+void flylogMat4(const char* szPrefix,glm::mat4 v);
 
 #endif /* logUtil_h */

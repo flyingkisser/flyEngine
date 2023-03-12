@@ -16,18 +16,18 @@
 NS_FLYENGINE_BEGIN
 
 
-struct volume{
-    virtual bool isOnFrustum(frustum& camFrustum,node* node) const=0;
-    virtual bool isOnOrForwardPlane(plane& p) const=0;
-    bool isOnFrustum(frustum& camFrustum) const{
-        return isOnOrForwardPlane(camFrustum.left) &&
-        isOnOrForwardPlane(camFrustum.right) &&
-        isOnOrForwardPlane(camFrustum.top) &&
-        isOnOrForwardPlane(camFrustum.bottom) &&
-        isOnOrForwardPlane(camFrustum.near) &&
-        isOnOrForwardPlane(camFrustum.far);
-    }
-};
+//struct volume{
+//    virtual bool isOnFrustum(frustum& camFrustum,node* node) const=0;
+//    virtual bool isOnOrForwardPlane(plane& p) const=0;
+//    bool isOnFrustum(frustum& camFrustum) const{
+//        return isOnOrForwardPlane(camFrustum.left) &&
+//        isOnOrForwardPlane(camFrustum.right) &&
+//        isOnOrForwardPlane(camFrustum.top) &&
+//        isOnOrForwardPlane(camFrustum.bottom) &&
+//        isOnOrForwardPlane(camFrustum.near) &&
+//        isOnOrForwardPlane(camFrustum.far);
+//    }
+//};
 
 NS_FLYENGINE_END
 

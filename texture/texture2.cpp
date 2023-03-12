@@ -48,6 +48,7 @@ bool texture2::init(){
         _height=st.height;
         _format=st.format;
         _dataBuf=st.buf;
+        _channels=4;
         return true;
     }else if(jpgUtil::isJpg(szPath)){
         if(!jpgUtil::loadFile(szPath, &st,_bFlipY)){
@@ -58,6 +59,7 @@ bool texture2::init(){
         _height=st.height;
         _format=st.format;
         _dataBuf=st.buf;
+        _channels=3;
         return true;
     }else{
         int width=0, height=0, nrComponents=0;
@@ -74,6 +76,7 @@ bool texture2::init(){
         else if (nrComponents == 4)
            _format = GL_RGBA;
         _dataBuf=data;
+        _channels=nrComponents;
         return true;
     }
 }

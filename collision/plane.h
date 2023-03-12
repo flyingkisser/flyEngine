@@ -33,24 +33,6 @@ struct plane{
     }
 };
 
-//struct plane{
-//    glm::vec3 normal={0.0f,1.0f,0.0f};
-//    float distance=0.0f;
-//
-//    plane()=default;
-//    plane(glm::vec3 pos,glm::vec3 norm,char* name){
-//        normal=glm::normalize(norm);
-//        distance=glm::dot(normal,pos);
-//        flylog("plane %s %f %f %f dis %f",name,normal.x,normal.y,normal.z,distance);
-//    }
-//
-//    float getSignedDistanceToPlane(glm::vec3 pos){
-//        float len=glm::dot(normal,pos);
-//        float v=len-distance;
-//        return v;
-//    }
-//};
-
 
 NS_FLYENGINE_END
 

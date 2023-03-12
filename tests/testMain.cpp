@@ -31,6 +31,7 @@
 #include "test_animation.h"
 #include "test_csm.h"
 #include "test_frustum_culling.h"
+#include "test_height_map.h"
 
 void testMainBegin(){
     //code cube test
@@ -166,5 +167,9 @@ void testMainBegin(){
 //    test_csm_old();
 //    test_csm_1();
     
-    test_frustum_culling_sphere();
+//    test_frustum_culling_sphere();
+//    test_frustum_culling_aabb();
+    
+    test_height_map_by_cpu();
+    
 }

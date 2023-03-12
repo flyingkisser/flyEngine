@@ -15,8 +15,6 @@
 
 #include "defines.h"
 #include "glRef.h"
-#include "frustum.h"
-
 
 using namespace std;
 
@@ -51,7 +49,8 @@ protected:
     unsigned int _gl_program=0;
     unsigned int _gl_vao=0;
     unsigned int _gl_vbo=0;
-   
+    unsigned int _gl_ebo=0;
+  
  
     bool _bVisible=true;
     float* _vertice_arr=nullptr;
@@ -60,8 +59,9 @@ protected:
     int _desc_arr_size=0;
     std::function <void(int programID)> m_cb_before_draw_call=nullptr;
     
-    frustum* _stFrustum=NULL;
-    bool _bCollisionSphere=false;
+  
+    bool _bCutOffSphere=false;
+    bool _bCutOffAABB=false;
     
     
 public:
@@ -131,11 +131,13 @@ public:
     material2* getMaterial(){return m_material;};
     // material2* getMaterial2(){return m_material2;};
     
-    void setFrustum(frustum* st){_stFrustum=st;};
-    void setCollisionSphere(bool v){_bCollisionSphere=v;};
-    bool isCollsionSphereEnabled(){return _bCollisionSphere;};
-    bool isOnFrustumBySphere();
-    
+    void setCutOffBySphere(bool v){_bCutOffSphere=v;};
+    void setCutOffByAABB(bool v){_bCutOffAABB=v;};
+    bool isCufOffSphereEnabled(){return _bCutOffSphere;};
+    bool isCufOffAABBEnabled(){return _bCutOffAABB;};
+    bool isInFrustumBySphere();
+    bool isInFrustumByAABB();
+
     
     shader* getShader(){return _shaderObj;};
     void setShader(shader* shaderObj);

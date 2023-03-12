@@ -119,6 +119,14 @@ shader* shaderMgr::get3dQuadColorShader(){
     return shaderMgr::getShader("./res/shader/3d_quad.vs", "./res/shader/3d_quad_color.fs");
 }
 
+shader* shaderMgr::getHeightCpuShader(){
+    return shaderMgr::getShader("./res/shader/height_cpu.vs", "./res/shader/height_cpu.fs");
+}
+
+shader* shaderMgr::getHeightGpuShader(){
+    return shaderMgr::getShader("./res/shader/height_gpu.vs", "./res/shader/height_gpu.fs");
+}
+
 
 unsigned int shaderMgr::createShaderFromFile(const char* szVertFileName,const char* szFragFileName){
     GLuint vertShader,fragShader,idProgram=0;

@@ -86,7 +86,9 @@ void world::_drawAllChild(shader* sh){
         node* nodeObj=c;
         if(!nodeObj->visible())
             continue;
-        if(nodeObj->isCollsionSphereEnabled() && !nodeObj->isOnFrustumBySphere())
+        if(nodeObj->isCufOffSphereEnabled() && !nodeObj->isInFrustumBySphere())
+            continue;
+        if(nodeObj->isCufOffAABBEnabled() && !nodeObj->isInFrustumByAABB())
             continue;
         if(sh!=NULL)
             nodeObj->setShader(sh);

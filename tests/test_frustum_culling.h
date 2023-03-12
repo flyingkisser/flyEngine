@@ -12,5 +12,6 @@
 #include <stdio.h>
 
 void test_frustum_culling_sphere();
+void test_frustum_culling_aabb();
 
 #endif /* test_frustum_culling_h */

@@ -20,7 +20,6 @@ NS_FLYENGINE_BEGIN
 
 class control;
 class shader;
-struct frustum;
 
 class camera{
     
@@ -52,8 +51,10 @@ public:
     void setPitch(float v);
     void setNearPlane(float v);
     void setFarPlane(float v);
-    
-    void setFocusPos(glm::vec3 p){_focusPos=glm::normalize(p);_bFocus=true;_dirtyPos=true;};
+    void setScreenRatio(float v);
+    void setFov(float v);
+  
+    void setFocusPos(glm::vec3 p){_focusPos=glm::normalize(p);_bFocus=true;_dirty=true;};
     void disableFocus(){_bFocus=false;};
 
     void moveBy(glm::vec3 v);
@@ -78,7 +79,9 @@ public:
     void updateUBOForShadow(glm::vec3 lightPos);
     void initFrustum();
     void updateFrustum();
-    frustum* getFrustum(){return _stFrustum;};
+    bool isInFrustumBySphere(glm::vec3 p,float r);
+    bool isInFrustumByAABB(glm::vec3 p,glm::vec3 rx,glm::vec3 ry,glm::vec3 rz);
+    void printPlaneDistance(glm::vec3 p,float r);
     
 private:
     void _updateCamera();
@@ -104,12 +107,12 @@ private:
     glm::vec3 _focusPos;
     bool _bFocus;
     
-    bool _dirtyPos;
+    bool _dirty;
     int _program=0;
-    float _yaw=0;
-    float _pitch=0;
-    float _fov=0;
-    float _fovOrigin=0;
+    float _yaw=0.0;
+    float _pitch=0.0;
+    float _fov=0.0;
+    float _fovOrigin=0.0;
     float _screenRatio=0.0;
     float _nearPlane=0.1f;
     float _farPlane=100.0f;
@@ -117,7 +120,7 @@ private:
     int _ubo_mat_3d=0;
     int _ubo_mat_2d=0;
     int _ubo_mat_3d_shadow=0;
-    frustum* _stFrustum=NULL;
+    float _frustum[6][4]={0};
 };
 
 NS_FLYENGINE_END

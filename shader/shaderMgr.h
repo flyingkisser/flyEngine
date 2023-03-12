@@ -41,6 +41,9 @@ public:
     static shader* get2dQuadShader();
     static shader* get3dQuadShader();
     static shader* get3dQuadColorShader();
+    
+    static shader* getHeightCpuShader();
+    static shader* getHeightGpuShader();
 
     static shader* getShader(const char* szVertFileName,const char* szFragFileName);
     static shader* getShader(int programID);

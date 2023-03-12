@@ -25,6 +25,7 @@ protected:
     int _type;
     int _format;
     int _internalFormat;
+    int _channels;
     int _colorType;
     int _texturePos;
     unsigned int _textureID;
@@ -38,6 +39,7 @@ public:
     bool init();
     flyEngine::size getSize();
     
+    int getChannels(){return _channels;};
     int getWidth(){return _width;};
     int getHeight(){return _height;};
     unsigned char* getBuf(){return _dataBuf;};

@@ -120,19 +120,24 @@ glm::vec3 node::getSize(){
     }
     return s;
 }
-bool node::isOnFrustumBySphere(){
+bool node::isInFrustumBySphere(){
     glm::vec3 scale=getScale();
     float maxScale=std::max(std::max(scale.x,scale.y),scale.z);
     glm::vec3 size=getSize();
     float r=size.x*maxScale*0.5f;
     glm::vec3 center=getPosition();
-    return _stFrustum->left.getSignedDistanceToPlane(center)>-r &&
-    _stFrustum->right.getSignedDistanceToPlane(center)>-r &&
-    _stFrustum->far.getSignedDistanceToPlane(center)>-r &&
-    _stFrustum->near.getSignedDistanceToPlane(center)>-r &&
-    _stFrustum->top.getSignedDistanceToPlane(center)>-r &&
-    _stFrustum->bottom.getSignedDistanceToPlane(center)>-r;
-//    return true;
+    return  world::getInstance()->getCamera()->isInFrustumBySphere(center,r);;
+};
+bool node::isInFrustumByAABB(){
+    glm::vec3 scale=getScale();
+    float maxScale=std::max(std::max(scale.x,scale.y),scale.z);
+    glm::vec3 size=getSize();
+    float r=size.x*maxScale*0.5f;
+    glm::vec3 center=getPosition();
+    glm::vec3 rx=_matModel*glm::vec4(size.x*0.5f,0,0,0);
+    glm::vec3 ry=_matModel*glm::vec4(0,size.y*0.5f,0,0);
+    glm::vec3 rz=_matModel*glm::vec4(0,0,size.z*0.5f,0);
+    return  world::getInstance()->getCamera()->isInFrustumByAABB(center,rx,ry,rz);;
 };
 
 void node::print(){
@@ -141,14 +146,16 @@ void node::print(){
     glm::vec3 size=getSize();
     float r=size.x*maxScale*0.5f;
     glm::vec3 center=getPosition();
-    float left=_stFrustum->left.getSignedDistanceToPlane(center);
-    float right=_stFrustum->right.getSignedDistanceToPlane(center);
-    float far=_stFrustum->far.getSignedDistanceToPlane(center);
-    float near=_stFrustum->near.getSignedDistanceToPlane(center);
-    float top=_stFrustum->top.getSignedDistanceToPlane(center);
-    float bottom=_stFrustum->bottom.getSignedDistanceToPlane(center);
-    bool result=left>-r && right>-r && far>-r && near>-r && top>-r && bottom>-r;
-    flylog("node:pos %f %f %f left %f right %f far %f near %f top %f bottom %f -r %f result %d ",_pos.x,_pos.y,_pos.z,left,right,far,near,top,bottom,-r,result);
+    world::getInstance()->getCamera()->printPlaneDistance(center,r);
+    
+//    float left=_stFrustum->left.getSignedDistanceToPlane(center);
+//    float right=_stFrustum->right.getSignedDistanceToPlane(center);
+//    float far=_stFrustum->far.getSignedDistanceToPlane(center);
+//    float near=_stFrustum->near.getSignedDistanceToPlane(center);
+//    float top=_stFrustum->top.getSignedDistanceToPlane(center);
+//    float bottom=_stFrustum->bottom.getSignedDistanceToPlane(center);
+//    bool result=left>-r && right>-r && far>-r && near>-r && top>-r && bottom>-r;
+//    flylog("node:pos %f %f %f left %f right %f far %f near %f top %f bottom %f -r %f result %d ",_pos.x,_pos.y,_pos.z,left,right,far,near,top,bottom,-r,result);
 }
 
 void node::initVAO(float* arr,int arrSize,int descArr[],int descArrSize){

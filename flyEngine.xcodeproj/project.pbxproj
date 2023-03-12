@@ -84,6 +84,9 @@
 		D890282B287D5A9E00152FFF /* fontMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8902829287D5A9E00152FFF /* fontMgr.cpp */; };
 		D89028392880059800152FFF /* state.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89028382880059800152FFF /* state.cpp */; };
 		D89600F924D40EE100DF6FD3 /* gpuUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D89600F824D40EE100DF6FD3 /* gpuUtil.cpp */; };
+		D8A105D629BB25DF00B6C9FF /* test_height_map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A105D529BB25DF00B6C9FF /* test_height_map.cpp */; };
+		D8A105D929BB266100B6C9FF /* heightMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A105D829BB266100B6C9FF /* heightMap.cpp */; };
+		D8A105DD29BD76FD00B6C9FF /* heightMapPatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A105DC29BD76FD00B6C9FF /* heightMapPatch.cpp */; };
 		D8A2AD8A272AC46400B5FC18 /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A2AD89272AC46400B5FC18 /* stb_image.cpp */; };
 		D8A5B1AE285F0D0D00B76852 /* main2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5B1AD285F0D0D00B76852 /* main2.cpp */; };
 		D8A6E8B828C4DE0600C3DE56 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A6E8B728C4DE0600C3DE56 /* texture.cpp */; };
@@ -1743,6 +1746,12 @@
 		D89028382880059800152FFF /* state.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = state.cpp; sourceTree = "<group>"; };
 		D89600F724D40EE100DF6FD3 /* gpuUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = gpuUtil.h; sourceTree = "<group>"; };
 		D89600F824D40EE100DF6FD3 /* gpuUtil.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = gpuUtil.cpp; sourceTree = "<group>"; };
+		D8A105D429BB25DF00B6C9FF /* test_height_map.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_height_map.h; sourceTree = "<group>"; };
+		D8A105D529BB25DF00B6C9FF /* test_height_map.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_height_map.cpp; sourceTree = "<group>"; };
+		D8A105D729BB266100B6C9FF /* heightMap.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = heightMap.h; sourceTree = "<group>"; };
+		D8A105D829BB266100B6C9FF /* heightMap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = heightMap.cpp; sourceTree = "<group>"; };
+		D8A105DB29BD76FD00B6C9FF /* heightMapPatch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = heightMapPatch.h; sourceTree = "<group>"; };
+		D8A105DC29BD76FD00B6C9FF /* heightMapPatch.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = heightMapPatch.cpp; sourceTree = "<group>"; };
 		D8A2AD88272AC46400B5FC18 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		D8A2AD89272AC46400B5FC18 /* stb_image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stb_image.cpp; sourceTree = "<group>"; };
 		D8A5B1AD285F0D0D00B76852 /* main2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main2.cpp; sourceTree = "<group>"; };
@@ -3927,6 +3936,7 @@
 		D81EF3531EAFA0070003604F = {
 			isa = PBXGroup;
 			children = (
+				D8A105DA29BD76CE00B6C9FF /* height */,
 				D8FAE93829B18A6C00DFFD4C /* collision */,
 				D825DB77249CD2D900C494E7 /* res */,
 				D8BED728253EB965006974D3 /* learnC++ */,
@@ -4005,8 +4015,8 @@
 				D8847650289920A5004EF587 /* glslUtil.h */,
 				D89600F824D40EE100DF6FD3 /* gpuUtil.cpp */,
 				D89600F724D40EE100DF6FD3 /* gpuUtil.h */,
-				D810AEB5268B3BE3009B774B /* logUtil.cpp */,
 				D810AEB4268B3BE3009B774B /* logUtil.h */,
+				D810AEB5268B3BE3009B774B /* logUtil.cpp */,
 				D87EBFE626A7CA3F004ED7DE /* mathUtil.cpp */,
 				D87EBFE526A7CA3F004ED7DE /* mathUtil.h */,
 				D825DBAE24AC89DB00C494E7 /* platformUtil.h */,
@@ -4129,6 +4139,8 @@
 				D8670BE12999212000DD7791 /* test_csm.mm */,
 				D8FAE93E29B1996100DFFD4C /* test_frustum_culling.h */,
 				D8FAE93F29B1996100DFFD4C /* test_frustum_culling.cpp */,
+				D8A105D429BB25DF00B6C9FF /* test_height_map.h */,
+				D8A105D529BB25DF00B6C9FF /* test_height_map.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -4353,6 +4365,17 @@
 				D89028382880059800152FFF /* state.cpp */,
 			);
 			path = state;
+			sourceTree = "<group>";
+		};
+		D8A105DA29BD76CE00B6C9FF /* height */ = {
+			isa = PBXGroup;
+			children = (
+				D8A105D729BB266100B6C9FF /* heightMap.h */,
+				D8A105D829BB266100B6C9FF /* heightMap.cpp */,
+				D8A105DB29BD76FD00B6C9FF /* heightMapPatch.h */,
+				D8A105DC29BD76FD00B6C9FF /* heightMapPatch.cpp */,
+			);
+			path = height;
 			sourceTree = "<group>";
 		};
 		D8A2AD87272AC46400B5FC18 /* stb_image */ = {
@@ -4689,6 +4712,7 @@
 				D87EC00026B16B96004ED7DE /* forever.cpp in Sources */,
 				D825DBA824AC7F7300C494E7 /* testMain.cpp in Sources */,
 				D89028392880059800152FFF /* state.cpp in Sources */,
+				D8A105D629BB25DF00B6C9FF /* test_height_map.cpp in Sources */,
 				D87EBFD726A59A46004ED7DE /* timeUtil.cpp in Sources */,
 				D87D8E2A28C8710000E30C83 /* test_framebuffer.mm in Sources */,
 				D87EC00326B2CF33004ED7DE /* test_action.cpp in Sources */,
@@ -4767,6 +4791,7 @@
 				D8FAE94029B1996100DFFD4C /* test_frustum_culling.cpp in Sources */,
 				D8B2711C2952CE2F00841859 /* textureHdr.cpp in Sources */,
 				D825DB71249CB3EB00C494E7 /* randUtil.cpp in Sources */,
+				D8A105D929BB266100B6C9FF /* heightMap.cpp in Sources */,
 				D8A2AD8A272AC46400B5FC18 /* stb_image.cpp in Sources */,
 				D81EF3871EB01E950003604F /* error.cpp in Sources */,
 				D8670BC42949EDEB00DD7791 /* test_pbr.mm in Sources */,
@@ -4776,6 +4801,7 @@
 				D825DBC424AED54B00C494E7 /* bmpUtil.cpp in Sources */,
 				D8670BE22999212000DD7791 /* test_csm.mm in Sources */,
 				D85F1BD625022327005390DC /* VAOMgr.cpp in Sources */,
+				D8A105DD29BD76FD00B6C9FF /* heightMapPatch.cpp in Sources */,
 				D86CE57B28F3B71D006797C4 /* quad.cpp in Sources */,
 				D8F62FF528C4D1F700EF8756 /* material2.cpp in Sources */,
 				D8A8498C28694A0E000E231C /* test_c_plusplus.cpp in Sources */,

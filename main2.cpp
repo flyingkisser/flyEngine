@@ -32,6 +32,9 @@
 #include "texture2.h"
 #include "fbo.h"
 #include "world.h"
+#include "logUtil.h"
+#include "heightMap.h"
+#include "camera.h"
 
 USE_NS_FLYENGINE
 using namespace std;
@@ -173,7 +176,9 @@ const unsigned int SCR_WIDTH = 2560;
 const unsigned int SCR_HEIGHT = 1440;
 
 // camera
-Camera cameras(glm::vec3(-1.0f, 0.0f, 40.0f));
+Camera cameras(glm::vec3(67.0f, 627.5f, 169.9f),
+              glm::vec3(0.0f, 1.0f, 0.0f),
+              -128.1f, -42.4f);
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
@@ -682,92 +687,27 @@ int main2()
 
     // build and compile shaders
     // -------------------------
-    shader* shaderMap=new shader("res/shader/10.shadow_mapping.vs", "res/shader/10.shadow_mapping.fs");
-    shader* simpleDepthShader=new shader("res/shader/10.shadow_mapping_depth.vs", "res/shader/10.shadow_mapping_depth.fs", "res/shader/10.shadow_mapping_depth.gs");
-    shader* debugDepthQuad=new shader("res/shader/10.debug_quad.vs", "res/shader/10.debug_quad_depth.fs");
-    shader* debugCascadeShader=new shader("res/shader/10.debug_cascade.vs", "res/shader/10.debug_cascade.fs");
-
-    // set up vertex data (and buffer(s)) and configure vertex attributes
-    // ------------------------------------------------------------------
-    float planeVertices[] = {
-        // positions            // normals         // texcoords
-         25.0f, -2.0f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
-        -25.0f, -2.0f,  25.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
-        -25.0f, -2.0f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
-         25.0f, -2.0f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
-        -25.0f, -2.0f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
-         25.0f, -2.0f, -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f
-    };
-    // plane VAO
-    unsigned int planeVBO;
-    glGenVertexArrays(1, &planeVAO);
-    glGenBuffers(1, &planeVBO);
-    glBindVertexArray(planeVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-    glBindVertexArray(0);
-
-    // load textures
-    // -------------
-    texture2* tex2=new texture2("res/wood.png");
-    unsigned int woodTexture = tex2->getTextureID();
-
-    // configure light FBO
-    // -----------------------
-    glGenFramebuffers(1, &lightFBO);
-
-    glGenTextures(1, &lightDepthMaps);
-    glBindTexture(GL_TEXTURE_2D_ARRAY, lightDepthMaps);
-    glTexImage3D(
-        GL_TEXTURE_2D_ARRAY, 0, GL_DEPTH_COMPONENT32F, depthMapResolution, depthMapResolution, int(shadowCascadeLevels.size()) + 1,
-        0, GL_DEPTH_COMPONENT, GL_FLOAT, nullptr);
-
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
-    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
-
-    constexpr float bordercolor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    glTexParameterfv(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BORDER_COLOR, bordercolor);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, lightFBO);
-    glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, lightDepthMaps, 0);
-    glDrawBuffer(GL_NONE);
-    glReadBuffer(GL_NONE);
-
-    int status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-    if (status != GL_FRAMEBUFFER_COMPLETE)
-    {
-        std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!";
-        throw 0;
-    }
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-    // configure UBO
-    // --------------------
-    unsigned int matricesUBO;
-    glGenBuffers(1, &matricesUBO);
-    glBindBuffer(GL_UNIFORM_BUFFER, matricesUBO);
-    glBufferData(GL_UNIFORM_BUFFER, sizeof(glm::mat4x4) * 16, nullptr, GL_STATIC_DRAW);
-    glBindBufferBase(GL_UNIFORM_BUFFER, 0, matricesUBO);
-    glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-    // shader configuration
-    // --------------------
-    shaderMap->use();
-    shaderMap->setInt("diffuseTexture", 0);
-    shaderMap->setInt("shadowMap", 1);
-    debugDepthQuad->use();
-    debugDepthQuad->setInt("depthMap", 0);
+    // shader* heightMapShader=new shader("res/shader/8.3.cpuheight.vs", "res/shader/8.3.cpuheight.fs");
 
     
+    heightMap* heightObj=new heightMap("res/iceland_heightmap.png");
+    if(!heightObj->init()){
+        flylog("heightObj init failed!");
+        return -1;
+    }  
+    heightObj->setPosition(glm::vec3(0,0,0));
+    shader* heightMapShader=heightObj->getShader();
+
+   
+    camera* cam=world::getInstance()->getCamera();
+    cam->setPosition(glm::vec3(67.0f, 627.5f, 169.9f));
+    cam->setFarPlane(100000.0);
+    cam->setYaw(-128.1);
+    cam->setPitch(-42.4);
+    cam->setScreenRatio(2560.0/1440.0);
+    //cam->setRa
+    cam->update();
+
       // render loop
       // -----------
       while (!glfwWindowShouldClose(window))
@@ -783,89 +723,33 @@ int main2()
         // -----
         processInput(window);
 
-        // change light position over time
-        //lightPos.x = sin(glfwGetTime()) * 3.0f;
-        //lightPos.z = cos(glfwGetTime()) * 2.0f;
-        //lightPos.y = 5.0 + cos(glfwGetTime()) * 1.0f;
-
-        // render
-        // ------
+        
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  // be sure to activate shader when setting uniforms/drawing objects
+        heightMapShader->use();
 
-        // 0. UBO setup
-        const auto lightMatrices = getLightSpaceMatrices();
-        glBindBuffer(GL_UNIFORM_BUFFER, matricesUBO);
-        for (size_t i = 0; i < lightMatrices.size(); ++i)
-        {
-            glBufferSubData(GL_UNIFORM_BUFFER, i * sizeof(glm::mat4x4), sizeof(glm::mat4x4), &lightMatrices[i]);
-        }
-        glBindBuffer(GL_UNIFORM_BUFFER, 0);
+        // view/projection transformations
+          // glm::mat4 projectionGood = glm::perspective(glm::radians(cameras.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100000.0f);
+          // flylog("good: zoom %f ratio %f near %f far %f",cameras.Zoom,(float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100000.0f);
+          // cam->print();
+         // glm::mat4 viewGood = cameras.GetViewMatrix();
+        glm::mat4 projection =cam->getPerspectiveMatrix();
+         glm::mat4 view=cam->getLookAtMatrix();
+        heightMapShader->setMat4("proj", projection);
+        heightMapShader->setMat4("view", view);
+          
+        // flylogMat4("projGood",projectionGood);
+        // flylogMat4("projBad",projectionBad);
+        // flylogMat4("viewGood",viewGood);
+        // flylogMat4("viewBad",viewBad);
 
-        // 1. render depth of scene to texture (from light's perspective)
-        // --------------------------------------------------------------
-        //lightProjection = glm::perspective(glm::radians(45.0f), (GLfloat)SHADOW_WIDTH / (GLfloat)SHADOW_HEIGHT, near_plane, far_plane); // note that if you use a perspective projection matrix you'll have to change the light position as the current light position isn't enough to reflect the whole scene
-        // render scene from light's point of view
-        simpleDepthShader->use();
-
-        glBindFramebuffer(GL_FRAMEBUFFER, lightFBO);
-        glViewport(0, 0, depthMapResolution, depthMapResolution);
-        glClear(GL_DEPTH_BUFFER_BIT);
-        glCullFace(GL_FRONT);  // peter panning
-        renderScene(simpleDepthShader);
-        glCullFace(GL_BACK);
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-        // reset viewport
-        glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        // 2. render scene as normal using the generated depth/shadow map  
-        // --------------------------------------------------------------
-        glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        shaderMap->use();
-        const glm::mat4 projection = glm::perspective(glm::radians(cameras.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, cameraNearPlane, cameraFarPlane);
-        const glm::mat4 view = cameras.GetViewMatrix();
-        shaderMap->setMat4("projection", projection);
-        shaderMap->setMat4("view", view);
-        // set light uniforms
-        shaderMap->setVec3("viewPos", cameras.Position);
-        shaderMap->setVec3("lightDir", lightDir);
-        shaderMap->setFloat("farPlane", cameraFarPlane);
-        shaderMap->setInt("cascadeCount", shadowCascadeLevels.size());
-        for (size_t i = 0; i < shadowCascadeLevels.size(); ++i)
-        {
-            shaderMap->setFloat("cascadePlaneDistances[" + std::to_string(i) + "]", shadowCascadeLevels[i]);
-        }
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, woodTexture);
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D_ARRAY, lightDepthMaps);
-        renderScene(shaderMap);
-
-        // if (lightMatricesCache.size() != 0)
-        // {
-        //     glEnable(GL_BLEND);
-        //     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        //     debugCascadeShader->use();
-        //     debugCascadeShader->setMat4("projection", projection);
-        //     debugCascadeShader->setMat4("view", view);
-        //     drawCascadeVolumeVisualizers(lightMatricesCache, debugCascadeShader);
-        //     glDisable(GL_BLEND);
-        // }
-
-        // render Depth map to quad for visual debugging
-        // ---------------------------------------------
-        // debugDepthQuad->use();
-        // debugDepthQuad->setInt("layer", debugLayer);
-        // glActiveTexture(GL_TEXTURE0);
-        // glBindTexture(GL_TEXTURE_2D_ARRAY, lightDepthMaps);
-        // if (showQuad)
-        // {
-        //     renderQuad();
-        // }
-
+        // world transformation
+        glm::mat4 model = glm::mat4(1.0f);
+        heightMapShader->setMat4("matModel", model);
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        heightObj->draw();
+    
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);
@@ -874,8 +758,8 @@ int main2()
 
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
-    glDeleteVertexArrays(1, &planeVAO);
-    glDeleteBuffers(1, &planeVBO);
+//    glDeleteVertexArrays(1, &planeVAO);
+//    glDeleteBuffers(1, &planeVBO);
 
     glfwTerminate();
     return 0;
