@@ -215,7 +215,7 @@ fboStruct fbo::createFBOForIBLWithCubemap(){
     return st;
 }
 
-//HDR纹理，纹理格式是GL_RGB16F
+//HDR纹理，纹理格式是GL_RGBA16F
 fboStruct fbo::createFBOHDR(){
     unsigned int fbo=0;
     unsigned int texID=0;
@@ -226,7 +226,9 @@ fboStruct fbo::createFBOHDR(){
     //2.1 create texture
     glGenTextures(1,&texID);
     glBindTexture(GL_TEXTURE_2D,texID);
-    glTexImage2D(GL_TEXTURE_2D,0,GL_RGB16F,512,512,0,GL_RGB,GL_FLOAT,NULL);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGBA16F,g_winWidth,g_winHigh
+                 
+                 ,0,GL_RGBA,GL_FLOAT,NULL);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     //2.2 bind texture to fbo
@@ -234,7 +236,7 @@ fboStruct fbo::createFBOHDR(){
     //3.1 create rbo(depth and stencil)
     glGenRenderbuffers(1,&rbo);
     glBindRenderbuffer(GL_RENDERBUFFER,rbo);
-    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH24_STENCIL8,512,512);
+    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH24_STENCIL8,g_winWidth,g_winHigh);
     //3.2 bind rbo to fbo
     glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_STENCIL_ATTACHMENT,GL_RENDERBUFFER,rbo);
     int status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
@@ -312,6 +314,48 @@ fboHDRBloomGaussStruct fbo::createFBOHDRBloomGauss(){
     glBindFramebuffer(GL_FRAMEBUFFER,0);
     return st;
 }
+
+fboHDRBloomPhysicalStruct fbo::createFBOHDRBloomPhysical(int mipChainLen){
+    fboHDRBloomPhysicalStruct st;
+    //create fbo for hdr with brightness
+    //一个fbo，两个纹理，分别用于写入颜色和亮度值
+    glGenFramebuffers(1,&st.fboHDR);
+    glBindFramebuffer(GL_FRAMEBUFFER,st.fboHDR);
+    
+    glm::vec2 mipFloatSize=glm::vec2((float)g_winWidth,(float)g_winHigh);
+    glm::ivec2 mipIntSize=glm::ivec2((int)g_winWidth,(int)g_winHigh);
+
+    for(int i=0;i<mipChainLen;i++){
+        fboBloomMip mip={0};
+        mipFloatSize*=0.5f;
+        mipIntSize/=2;
+        mip.floatSize=mipFloatSize;
+        mip.intSize=mipIntSize;
+        glGenTextures(1,&mip.tex);
+        glBindTexture(GL_TEXTURE_2D,mip.tex);
+        glTexImage2D(GL_TEXTURE_2D,0,GL_R11F_G11F_B10F,(int)mipFloatSize.x,(int)mipFloatSize.y,0,GL_RGB,GL_FLOAT,NULL);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        st.mips.emplace_back(mip);
+    }
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,st.mips[0].tex,0);
+    
+    unsigned int drawAttachArr[1]={GL_COLOR_ATTACHMENT0};
+    glDrawBuffers(1,drawAttachArr);
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    
+    status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboHDRBloomPhysicalStruct st={0};
+        flylog("createFBOHDRBloomPhysical: glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    return st;
+}
+
 
 //deferred shading fbo
 fboDeferredShadingStruct fbo::createFBODeferredShading(){

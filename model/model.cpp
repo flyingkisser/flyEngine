@@ -57,7 +57,7 @@ void model::processNode(aiNode* node,const aiScene *scene){
         if(_cb_before_draw!=NULL)
             meshObj.setCBBeforeDraw(_cb_before_draw);
         m_vecMeshes.push_back(meshObj);
-        flylog("mesh index %d processed![vertices %d]",node->mMeshes[i],meshObj.getVerticeCount());
+        // flylog("mesh index %d processed![vertices %d]",node->mMeshes[i],meshObj.getVerticeCount());
     }
     for(int i=0;i<node->mNumChildren;i++)
         processNode(node->mChildren[i], scene);
@@ -127,7 +127,7 @@ void model::processNode2(aiNode* node,const aiScene *scene){
     int c=0;
     for(int i=0;i<node->mNumMeshes;i++){
         c=processMesh2(scene->mMeshes[node->mMeshes[i]], scene);
-        flylog("mesh index %d processed![vertices %d]",node->mMeshes[i],c);
+        // flylog("mesh index %d processed![vertices %d]",node->mMeshes[i],c);
     }
     for(int i=0;i<node->mNumChildren;i++)
         processNode2(node->mChildren[i], scene);
@@ -223,7 +223,7 @@ void model::extractBoneWeightForVertices(std::vector<Vertex>& vertices,aiMesh* m
             int vertexID=weights[j].mVertexId;
             auto weight=weights[j].mWeight;
             if(vertexID>=vertices.size()){
-                flylog("extractBoneWeightForVertices:find vertexID %d >= vetices.size()",vertexID,vertices.size());
+                // flylog("extractBoneWeightForVertices:find vertexID %d >= vetices.size()",vertexID,vertices.size());
                 continue;
             }
             setVertexBoneData(vertices[vertexID], boneID, weight);
@@ -231,7 +231,7 @@ void model::extractBoneWeightForVertices(std::vector<Vertex>& vertices,aiMesh* m
         }
 //        flylog("extractBoneWeightForVertices:bone %s set %d num of weight",boneName.c_str(),numWeight);
     }
-    flylog("extractBoneWeightForVertices:mesh %s have bones %d",mesh->mName.C_Str(),mesh->mNumBones);
+    // flylog("extractBoneWeightForVertices:mesh %s have bones %d",mesh->mName.C_Str(),mesh->mNumBones);
 }
 void model::setVertexBoneData(Vertex &stVertex, int boneID, float weight){
     for(int i=0;i<MAX_BONE_INFLUENCE;i++){

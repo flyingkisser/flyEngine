@@ -145,6 +145,7 @@ void testMainBegin(){
 //    test_HDR_1();
 //    test_HDR_2();
 //    test_bloom_1();
+     test_bloom_2();
 //    test_deferred_shading();
 //    test_deferred_shading_2();
 //    test_deferred_shading_volumn();
@@ -170,6 +171,6 @@ void testMainBegin(){
 //    test_frustum_culling_sphere();
 //    test_frustum_culling_aabb();
     
-    test_height_map_by_cpu();
-    
+//    test_height_map_by_cpu();
+//    test_height_map_by_gpu();
 }

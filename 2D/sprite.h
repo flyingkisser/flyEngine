@@ -29,7 +29,6 @@ protected:
     bool _bReverseColor=false;
     bool _bGray=false;
  
-private:
     void _reInitVertices();
     
 public:

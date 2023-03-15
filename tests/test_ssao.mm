@@ -180,7 +180,7 @@ void test_ssao(){
     cam->setYaw(-92.64);
     cam->setPitch(-0.1);
     
-    quad* quad2D=new quad(st.texPos,g_winWidth,g_winHigh);
+    quad* quad2D=new quad(st.texPos);
     quad2D->flipY(true);
     
     std::uniform_real_distribution<float> randomFloats(0.0,1.0);

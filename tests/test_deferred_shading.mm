@@ -110,7 +110,7 @@ void test_deferred_shading(){
     
     cam->setPosition(glm::vec3(0,0,30));
     
-    quad* quad2D=new quad(st.texPos,g_winWidth,g_winHigh);
+    quad* quad2D=new quad(st.texPos);
     quad2D->flipY(true);
 
     world::getInstance()->setCBBeforeAnyGLCall([st](){
@@ -242,7 +242,7 @@ void test_deferred_shading_2(){
     
     cam->setPosition(glm::vec3(0,0,40));
     
-    quad* quad2D=new quad(st.texPos,g_winWidth,g_winHigh);
+    quad* quad2D=new quad(st.texPos);
     quad2D->flipY(true);
 
     world::getInstance()->setCBBeforeAnyGLCall([st](){
@@ -375,7 +375,7 @@ void test_deferred_shading_volumn(){
 
     cam->setPosition(glm::vec3(0,0,20));
     
-    quad* quad2D=new quad(st.texPos,g_winWidth,g_winHigh);
+    quad* quad2D=new quad(st.texPos);
     quad2D->flipY(true);
 
     world::getInstance()->setCBBeforeAnyGLCall([st](){

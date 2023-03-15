@@ -34,6 +34,7 @@
 #include "world.h"
 #include "logUtil.h"
 #include "heightMap.h"
+#include "heightMapPatch.h"
 #include "camera.h"
 
 USE_NS_FLYENGINE
@@ -681,75 +682,160 @@ int main2()
         return -1;
     }
    
-   // configure global opengl state
+    GLint maxTessLevel;
+    glGetIntegerv(GL_MAX_TESS_GEN_LEVEL, &maxTessLevel);
+    std::cout << "Max available tess level: " << maxTessLevel << std::endl;
+
+    // configure global opengl state
     // -----------------------------
     glEnable(GL_DEPTH_TEST);
 
-    // build and compile shaders
-    // -------------------------
-    // shader* heightMapShader=new shader("res/shader/8.3.cpuheight.vs", "res/shader/8.3.cpuheight.fs");
-
-    
-    heightMap* heightObj=new heightMap("res/iceland_heightmap.png");
-    if(!heightObj->init()){
-        flylog("heightObj init failed!");
-        return -1;
-    }  
-    heightObj->setPosition(glm::vec3(0,0,0));
-    shader* heightMapShader=heightObj->getShader();
+    // build and compile our shader program
+    // ------------------------------------
+    // shader* tessHeightMapShader=new shader("res/shader/8.3.gpuheight.vs","res/shader/8.3.gpuheight.fs", nullptr,            // if wishing to render as is
+    //                            "res/shader/8.3.gpuheight.tcs", "res/shader/8.3.gpuheight.tes");
+  
+    // shader* tessHeightMapShader=new shader("res/shader/height_gpu.vs","res/shader/height_gpu.fs", nullptr,            // if wishing to render as is
+    //                            "res/shader/height_gpu.tcs", "res/shader/height_gpu.tes");
 
    
+    // unsigned int texture;
+    // glGenTextures(1, &texture);
+    // glActiveTexture(GL_TEXTURE0);
+    // glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
+    // // set the texture wrapping parameters
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    // // set texture filtering parameters
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // // load image, create texture and generate mipmaps
+    // int width, height, nrChannels;
+    // // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
+    // unsigned char *data = stbi_load("res/heightmap/iceland_heightmap.png", &width, &height, &nrChannels, 0);
+    // if (data)
+    // {
+    //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    //     glGenerateMipmap(GL_TEXTURE_2D);
+
+    //     tessHeightMapShader->setInt("heightMap", 0);
+    //     std::cout << "Loaded heightmap of size " << height << " x " << width << std::endl;
+    // }
+    // else
+    // {
+    //     std::cout << "Failed to load texture" << std::endl;
+    // }
+    // stbi_image_free(data);
+
+    // texture2* _texObj=new texture2("res/heightmap/iceland_heightmap.png",true);
+    // if(!_texObj->init()){
+    //     flylog("heightMapPatch::init texture2 failed,return!");
+    //     return false;
+    // }
+    // _texObj->glInitWithParam(0,GL_REPEAT,GL_REPEAT,GL_LINEAR_MIPMAP_LINEAR,GL_LINEAR,GL_UNSIGNED_BYTE,true);
+    // int width=_texObj->getWidth();
+    // int height=_texObj->getHeight();
+   
+    // std::vector<float> vertices;
+    // unsigned rez = 20;
+    // for(unsigned i = 0; i <= rez-1; i++)
+    // {
+    //     for(unsigned j = 0; j <= rez-1; j++)
+    //     {
+    //         vertices.push_back(-width/2.0f + width*i/(float)rez); // v.x
+    //         vertices.push_back(0.0f); // v.y
+    //         vertices.push_back(-height/2.0f + height*j/(float)rez); // v.z
+    //         vertices.push_back(i / (float)rez); // u
+    //         vertices.push_back(j / (float)rez); // v
+
+    //         vertices.push_back(-width/2.0f + width*(i+1)/(float)rez); // v.x
+    //         vertices.push_back(0.0f); // v.y
+    //         vertices.push_back(-height/2.0f + height*j/(float)rez); // v.z
+    //         vertices.push_back((i+1) / (float)rez); // u
+    //         vertices.push_back(j / (float)rez); // v
+
+    //         vertices.push_back(-width/2.0f + width*i/(float)rez); // v.x
+    //         vertices.push_back(0.0f); // v.y
+    //         vertices.push_back(-height/2.0f + height*(j+1)/(float)rez); // v.z
+    //         vertices.push_back(i / (float)rez); // u
+    //         vertices.push_back((j+1) / (float)rez); // v
+
+    //         vertices.push_back(-width/2.0f + width*(i+1)/(float)rez); // v.x
+    //         vertices.push_back(0.0f); // v.y
+    //         vertices.push_back(-height/2.0f + height*(j+1)/(float)rez); // v.z
+    //         vertices.push_back((i+1) / (float)rez); // u
+    //         vertices.push_back((j+1) / (float)rez); // v
+    //     }
+    // }
+  
+    // // first, configure the cube's VAO (and terrainVBO)
+    // unsigned int terrainVAO, terrainVBO;
+    // glGenVertexArrays(1, &terrainVAO);
+    // glBindVertexArray(terrainVAO);
+
+    // glGenBuffers(1, &terrainVBO);
+    // glBindBuffer(GL_ARRAY_BUFFER, terrainVBO);
+    // glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+
+    // // position attribute
+    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    // glEnableVertexAttribArray(0);
+    // // texCoord attribute
+    // glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
+    // glEnableVertexAttribArray(1);
+
+    // glPatchParameteri(GL_PATCH_VERTICES, 4);
+
     camera* cam=world::getInstance()->getCamera();
     cam->setPosition(glm::vec3(67.0f, 627.5f, 169.9f));
     cam->setFarPlane(100000.0);
     cam->setYaw(-128.1);
     cam->setPitch(-42.4);
-    cam->setScreenRatio(2560.0/1440.0);
-    //cam->setRa
     cam->update();
 
-      // render loop
-      // -----------
-      while (!glfwWindowShouldClose(window))
-      {
-            // per-frame time logic
-         // per-frame time logic
+    heightMapPatch* heightObj=new heightMapPatch("res/heightmap/iceland_heightmap.png");
+    if(!heightObj->init()){
+        flylog("heightObj init failed!");
+        return 0;
+    }
+    // shader* tessHeightMapShader=heightObj->getShader();
+    // render loop
+    // -----------
+    while (!glfwWindowShouldClose(window))
+    {
+        // per-frame time logic
         // --------------------
-        float currentFrame = glfwGetTime();
-        deltaTime = currentFrame - lastFrame;
-        lastFrame = currentFrame;
+        // float currentFrame = glfwGetTime();
+        // deltaTime = currentFrame - lastFrame;
+        // lastFrame = currentFrame;
 
         // input
         // -----
         processInput(window);
 
-        
+        // render
+        // ------
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  // be sure to activate shader when setting uniforms/drawing objects
-        heightMapShader->use();
+
+        // be sure to activate shader when setting uniforms/drawing objects
+        // tessHeightMapShader->use();
 
         // view/projection transformations
-          // glm::mat4 projectionGood = glm::perspective(glm::radians(cameras.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100000.0f);
-          // flylog("good: zoom %f ratio %f near %f far %f",cameras.Zoom,(float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100000.0f);
-          // cam->print();
-         // glm::mat4 viewGood = cameras.GetViewMatrix();
-        glm::mat4 projection =cam->getPerspectiveMatrix();
-         glm::mat4 view=cam->getLookAtMatrix();
-        heightMapShader->setMat4("proj", projection);
-        heightMapShader->setMat4("view", view);
-          
-        // flylogMat4("projGood",projectionGood);
-        // flylogMat4("projBad",projectionBad);
-        // flylogMat4("viewGood",viewGood);
-        // flylogMat4("viewBad",viewBad);
+        // glm::mat4 projection = glm::perspective(glm::radians(cameras.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100000.0f);
+        // glm::mat4 view = cameras.GetViewMatrix();
+        // glm::mat4 proj=cam->getPerspectiveMatrix();
+        // glm::mat4 view=cam->getLookAtMatrix();
+        // glm::mat4 model = glm::mat4(1.0f);
+        // tessHeightMapShader->setMat4("proj", proj);
+        // tessHeightMapShader->setMat4("view", view);
+        // tessHeightMapShader->setMat4("matModel", model);
 
-        // world transformation
-        glm::mat4 model = glm::mat4(1.0f);
-        heightMapShader->setMat4("matModel", model);
-        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
         heightObj->draw();
-    
+        // render the terrain
+        // glBindVertexArray(terrainVAO);
+        // glDrawArrays(GL_PATCHES, 0, 4*rez*rez);
+
         // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
         // -------------------------------------------------------------------------------
         glfwSwapBuffers(window);

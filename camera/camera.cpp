@@ -132,7 +132,7 @@ void camera::print(){
 bool camera::init(){
     _yaw=-90.0;//points to -z
     _pitch=0.0;
-    _fov=45.0;  //field of view,in short:fov, you can see more with high fov, ex 45.0;
+    _fov=30.0;  //field of view,in short:fov, you can see more with high fov, ex 45.0;
     _fovOrigin=_fov;
     _screenRatio=800.0f/600.0f;
     

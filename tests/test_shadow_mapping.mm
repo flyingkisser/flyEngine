@@ -181,8 +181,8 @@ void test_shadow_mapping_normal(){
     floorObj->setPosition(glm::vec3(0,-1,0));
 
     fboStruct stDepth=fbo::createFBOForDepth();
-    sprite* sp=new sprite(stDepth.texID);
-    sp->flipY(true);
+//    sprite* sp=new sprite(stDepth.texID);
+//    sp->flipY(true);
 
     material2* mtLight=createMaterial(0.3, 0.8, 0.8, 2);
     pointLight* plight=new pointLight(glm::vec3(0.8,0.8,0.8),mtLight,0);
@@ -241,7 +241,7 @@ void test_shadow_mapping_normal(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     });
     
-    world::getInstance()->setCBBeforeDrawCall([stDepth,shDepth,shNormal,cam,sp,cubeObj,cubeObj2,floorObj,plight,plight2,view](){
+    world::getInstance()->setCBBeforeDrawCall([stDepth,shDepth,shNormal,cam,cubeObj,cubeObj2,floorObj,plight,plight2,view](){
         //first pass
         cubeObj->setShader(shDepth);
         cubeObj->draw();
@@ -320,8 +320,8 @@ void test_shadow_mapping_use_pass(){
     floorObj->setPosition(glm::vec3(0,-1,0));
 
     fboStruct stDepth=fbo::createFBOForDepth();
-    sprite* sp=new sprite(stDepth.texID);
-    sp->flipY(true);
+//    sprite* sp=new sprite(stDepth.texID);
+//    sp->flipY(true);
 
     material2* mtLight=createMaterial(0.3, 0.8, 0.8, 2);
     pointLight* plight=new pointLight(glm::vec3(0.8,0.8,0.8),mtLight,0);
@@ -417,8 +417,8 @@ void test_shadow_mapping_shadow_static(){
     floorObj->setPosition(glm::vec3(0,-1,0));
 
     fboStruct stDepth=fbo::createFBOForDepth();
-    sprite* sp=new sprite(stDepth.texID);
-    sp->flipY(true);
+//    sprite* sp=new sprite(stDepth.texID);
+//    sp->flipY(true);
 
     material2* mtLight=createMaterial(0.3, 0.8, 0.8, 2);
     pointLight* plight=new pointLight(glm::vec3(0.8,0.8,0.8),mtLight,0);
@@ -535,8 +535,8 @@ void test_shadow_mapping_light_move(){
     floorObj->setPosition(glm::vec3(0,-1,0));
 
     fboStruct stDepth=fbo::createFBOForDepth();
-    sprite* sp=new sprite(stDepth.texID);
-    sp->flipY(true);
+//    sprite* sp=new sprite(stDepth.texID);
+//    sp->flipY(true);
 
     material2* mtLight=createMaterial(0.3, 0.8, 0.8, 2);
     pointLight* plight=new pointLight(glm::vec3(0.8,0.8,0.8),mtLight,0);

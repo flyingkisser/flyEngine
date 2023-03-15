@@ -9,6 +9,17 @@ uniform bool bFlipX;
 uniform bool bFlipY;
 uniform bool bReverseColor;
 uniform bool bGray;
+uniform bool bToneMapping;
+uniform float exposure;
+
+vec3 toneMapping(vec3 color){
+    if(exposure==0.0f)
+        return color/(color+vec3(1.0f));
+    else{
+        return vec3(1.0) - exp(-color * exposure);
+    }
+}
+
 void main(){
     float x=texCoord.x;
     float y=texCoord.y;
@@ -23,7 +34,8 @@ void main(){
     else if(bGray){
         float r=0.2126 * color.r + 0.7152 * color.g + 0.0722 * color.b;
         FragColor=vec4(r,r,r,1.0);
-    }
+    }else if(bToneMapping)
+        FragColor=vec4(toneMapping(vec3(color)),1.0f);
     else
         FragColor=color;
 }

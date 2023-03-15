@@ -81,8 +81,6 @@ bool texture2::init(){
     }
 }
 
-
-
 flyEngine::size texture2::getSize(){
   return flyEngine::size{(float)_width,(float)_height};
 };
@@ -139,4 +137,30 @@ void texture2::glInit(int texturePos){
     checkGLError();
     flylog("glTexImage2D from buf %llu end",_dataBuf);
 //  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, structTex.width, structTex.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, structTex.buf);
+}
+
+//texturePos from GL_TEXTURE0,GL_TEXTURE1
+void texture2::glInitWithParam(int texturePos,unsigned int wrapS,unsigned int wrapT,unsigned int minfilter,unsigned int magFilter,
+                      unsigned int dateType,bool bGenMipmap){
+    glRef::glInit();
+    glGenTextures(1,&_textureID);
+    if(texturePos){
+        glActiveTexture(texturePos);
+        _texturePos=texturePos-GL_TEXTURE0;
+    }
+    glBindTexture(GL_TEXTURE_2D,_textureID);
+  
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minfilter);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, magFilter);
+    
+    flylog("glTexImage2D from buf %llu begin %d*%d %d",_dataBuf,_width,_height,_width*_height);
+    glTexImage2D(GL_TEXTURE_2D,0,_format,_width,_height,0,_format,dateType,_dataBuf);
+    checkGLError();
+    flylog("glTexImage2D from buf %llu end",_dataBuf);
+    
+    if(bGenMipmap)
+        glGenerateMipmap(GL_TEXTURE_2D);
 }

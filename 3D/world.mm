@@ -120,7 +120,7 @@ void world::_draw(){
     if(_cb_before_any_gl_call!=nullptr)
         _cb_before_any_gl_call();
     _camera->update();
-    
+
     if(_vector_pass.size()==0){
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -149,10 +149,11 @@ void world::_draw(){
             _drawAllChild(sh);
         }
     }
-    
+
     if(_cb_after_any_gl_call!=nullptr)
         _cb_after_any_gl_call();
 }
+
 
 void world::_renderOnce(){
     state::reset();
@@ -172,6 +173,8 @@ void world::_main_loop(){
 //    worldObj->setCamera(cameraObj);
 //    cameraObj->enableControl();
     while(!glfwWindowShouldClose(g_window)){
+//        if(glfwGetKey(g_window,GLFW_KEY_ESCAPE)==GLFW_PRESS)
+//            glfwSetWindowShouldClose(g_window,true);
         threadUtil::sleepMS(CONST_FRAME_RATE*1000);   //1000 means 1ms
         _renderOnce();
         glfwSwapBuffers(g_window);

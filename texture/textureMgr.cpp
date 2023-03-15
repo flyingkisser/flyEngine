@@ -55,7 +55,7 @@ texture2* textureMgr::getTexture(const char *szFileName,bool bFlipY){
     texture2* texObj=new texture2(szFileName,bFlipY);
     if(!texObj->init())
         return NULL;
-    texObj->glInit();
+    texObj->glInit(0);
     _mapTextureCache[szFileName]=texObj;
     return texObj;
 }

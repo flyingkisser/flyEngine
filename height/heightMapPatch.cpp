@@ -32,24 +32,25 @@ void heightMapPatch::resetPos(){
 }
 
 bool heightMapPatch::init(){
-    _texObj=textureMgr::getInstance()->getTexture(_texPath,true);
-    if(_texObj==NULL)
+    _texObj=new texture2(_texPath,true);
+    if(!_texObj->init()){
+        flylog("heightMapPatch::init texture2 failed,return!");
         return false;
-    if(_shaderObj==NULL)
-        _shaderObj=shaderMgr::getHeightCpuShader();
+    }
+    _texObj->glInitWithParam(0,GL_REPEAT,GL_REPEAT,GL_LINEAR_MIPMAP_LINEAR,GL_LINEAR,GL_UNSIGNED_BYTE,true);
+  
+    _shaderObj=shaderMgr::getHeightGpuShader();
     if(_shaderObj==NULL){
-        flylog("heightMap::init shaderObj is null,return!");
+        flylog("heightMapPatch::init shaderObj is null,return!");
         return false;
     }
     _gl_program=_shaderObj->getProgramID();
+    
+    _shaderObj->use();
+   
 
-    float yScale=64.0/256.0;
-    float yShift=16.0;
     int height=_texObj->getHeight();
     int width=_texObj->getWidth();
-    int channels=_texObj->getChannels();
-    unsigned char* buf=_texObj->getBuf();
-    
    
     _rez=20;
     for(int i=0;i<=_rez-1;i++){
@@ -79,40 +80,28 @@ bool heightMapPatch::init(){
             _vertices.push_back((j+1)/(float)_rez); // v
         }
     }
-    
-    for(int i=0;i<height-1;i++){
-        for(int j=0;j<width;j++){
-            for(int k=0;k<2;k++){
-                _indices.push_back(j+width*(i+k));
-            }
-        }
-    }
-    
-    num_strips=height-1;
-    num_verts_per_strip=width*2;
 
-    glPatchParameteri(GL_PATCH_VERTICES, 4);
-    
     glGenVertexArrays(1,&_gl_vao);
     glBindVertexArray(_gl_vao);
     glGenBuffers(1,&_gl_vbo);
     glBindBuffer(GL_ARRAY_BUFFER,_gl_vbo);
     glBufferData(GL_ARRAY_BUFFER,_vertices.size()*sizeof(float),&_vertices[0],GL_STATIC_DRAW);
-    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,3*sizeof(float),(void*)0);
+    
+    glVertexAttribPointer(0,3,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1,2,GL_FLOAT,GL_FALSE,5*sizeof(float),(void*)(3*sizeof(float)));
+    glEnableVertexAttribArray(1);
 
-    glGenBuffers(1,&_gl_ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,_gl_ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER,_indices.size()*sizeof(int),&_indices[0],GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER,0);
-    glBindVertexArray(0);
+    glPatchParameteri(GL_PATCH_VERTICES, 4);
     return true;
 }
 
-
 void heightMapPatch::setPipelineValue(){
     _shaderObj->use();
-    
+    camera* cam=world::getInstance()->getCamera();
+    _shaderObj->setInt("heightMap", 0,true);
+    _shaderObj->setMat4("proj", cam->getPerspectiveMatrix());
+    _shaderObj->setMat4("view", cam->getLookAtMatrix());
     if(m_cb_before_draw_call!=nullptr)
         m_cb_before_draw_call(_shaderObj->getProgramID());
     
@@ -125,13 +114,11 @@ void heightMapPatch::drawCall(){
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     glEnable(GL_DEPTH_TEST);
     glBindVertexArray(_gl_vao);
-    for(int i=0;i<num_strips;i++){
-        glDrawArrays(GL_PATCHES,0,4*_rez*_rez);
-    }
+    glDrawArrays(GL_PATCHES,0,4*_rez*_rez);
 }
 
 void heightMapPatch::draw(){
     setPipelineValue();
     drawCall();
-    state::log(num_strips*num_verts_per_strip);
+    state::log(4*_rez*_rez);
 }

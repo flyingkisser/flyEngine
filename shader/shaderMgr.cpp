@@ -124,7 +124,8 @@ shader* shaderMgr::getHeightCpuShader(){
 }
 
 shader* shaderMgr::getHeightGpuShader(){
-    return shaderMgr::getShader("./res/shader/height_gpu.vs", "./res/shader/height_gpu.fs");
+    return new shader("./res/shader/height_gpu.vs", "./res/shader/height_gpu.fs",NULL,
+                                 "./res/shader/height_gpu.tcs","./res/shader/height_gpu.tes");
 }
 
 

@@ -22,12 +22,17 @@ class shader : public glRef{
         char* _szVert=NULL;
         char* _szFrag=NULL;
         char* _szGeo=NULL;
+        char* _szTessControl=NULL;
+        char* _szTessEval=NULL;
         char* _szVertFileName=NULL;
         char* _szFragFileName=NULL;
         char* _szGeometryFileName=NULL;
+        char* _szTessControlFileName=NULL;
+        char* _szTessEvalFileName=NULL;
         
     public:
-        shader(const char* szVertFileName,const char* szFragFileName,const char* szGeometry=NULL);
+        shader(const char* szVertFileName,const char* szFragFileName,const char* szGeometry=NULL,
+               const char* szTessControl=NULL,const char* szTessEval=NULL);
         ~shader();
         bool isSuccess();
         void use();

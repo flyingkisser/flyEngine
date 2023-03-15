@@ -14,7 +14,7 @@
 #include "timeUtil.h"
 #include "directionLight.h"
 #include "cubeTex.h"
-#include "quad.h"
+#include "quadSize.h"
 #include "semiSphere.h"
 #include "material2.h"
 #include "texture2.h"
@@ -944,7 +944,7 @@ void test_PBR_ibl_diffuse_specular(){
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texBRDFLut, 0);
     glViewport(0, 0, 512, 512);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    quad* quadBRDF=new quad(1,1,1);
+    quadSize* quadBRDF=new quadSize(1,1,1);
     quadBRDF->setShader(shBRDF);
     quadBRDF->draw();
   
@@ -1195,7 +1195,7 @@ void test_PBR_ibl_diffuse_specular_ball2(){
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texBRDFLut, 0);
     glViewport(0, 0, 512, 512);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    quad* quadBRDF=new quad(1,1,1);
+    quadSize* quadBRDF=new quadSize(1,1,1);
     quadBRDF->setShader(shBRDF);
     quadBRDF->draw();
   
@@ -1448,7 +1448,7 @@ void test_PBR_ibl_diffuse_model_fbx_gun(){
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texBRDFLut, 0);
     glViewport(0, 0, 512, 512);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    quad* quadBRDF=new quad(1,1,1);
+    quadSize* quadBRDF=new quadSize(1,1,1);
     quadBRDF->setShader(shBRDF);
     quadBRDF->draw();
   

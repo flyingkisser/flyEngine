@@ -30,7 +30,7 @@ private:
     std::vector<int> _indices;
     unsigned int num_strips;
     unsigned int num_verts_per_strip;
-    int _rez;
+    unsigned int _rez;
     bool _bLineMode=false;
 
 public:

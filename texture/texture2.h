@@ -46,6 +46,9 @@ public:
     unsigned int getTextureID(){return _textureID;};
     unsigned int getTexturePos(){return _texturePos;};
     void glInit(int texturePos=0);
+    void glInitWithParam(int texturePos=0,unsigned int wrapS=GL_REPEAT,unsigned int wrapT=GL_REPEAT,
+                unsigned int minfilter=GL_LINEAR,unsigned int magFilter=GL_LINEAR,
+                unsigned int dateType=GL_UNSIGNED_INT,bool bGenMipmap=false);
 };
 
 NS_FLYENGINE_END

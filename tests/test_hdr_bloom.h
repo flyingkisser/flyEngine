@@ -13,4 +13,5 @@
 void test_HDR_1();
 void test_HDR_2();
 void test_bloom_1();
+void test_bloom_2();
 #endif /* test_hdr_bloom_h */

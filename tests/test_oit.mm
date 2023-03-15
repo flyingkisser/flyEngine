@@ -64,8 +64,8 @@ void test_oit_quad_color(){
 
     fboOitStruct st=fbo::createFBOOit();
     
-    quad* quadComposition=new quad(st.texAccum,g_screenWidth,g_screenHigh);
-    quad* quadScreen=new quad(st.texOpaque,g_screenWidth,g_screenHigh);
+    quad* quadComposition=new quad(st.texAccum);
+    quad* quadScreen=new quad(st.texOpaque);
     
     //当点光源的三个距离参数都不为0时，会计算光球的半径
     //shader中只会点亮处于此半径内的顶点
@@ -270,7 +270,7 @@ void test_oit2(){
     
     cam->setPosition(glm::vec3(0,0,20));
     
-    quad* quad2D=new quad(st.texPos,g_winWidth,g_winHigh);
+    quad* quad2D=new quad(st.texPos);
     quad2D->flipY(true);
     
     world::getInstance()->setCBBeforeAnyGLCall([st](){

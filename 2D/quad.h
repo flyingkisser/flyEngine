@@ -21,10 +21,12 @@ private:
     
 public:
     quad(const char* strImageFileName);
-    quad(unsigned int texID,float width,float height);
+    quad(unsigned int texID);
+    quad(unsigned int texID,int width,int height);
     bool init();
     void glInit();
     void draw();
+    void setContentSize(flyEngine::size s);
 };
 
 NS_FLYENGINE_END

@@ -18,16 +18,21 @@
 
 using namespace flyEngine;
 
-shader::shader(const char* szVertFileName,const char* szFragFileName,const char* szGeometryFileName){
+shader::shader(const char* szVertFileName,const char* szFragFileName,const char* szGeometryFileName,
+               const char* szTessControlFileName,const char* szTessEvalFileName){
     _idProgram=0;
 #ifdef BUILD_MAC
     _szVertFileName=(char*)szVertFileName;
     _szFragFileName=(char*)szFragFileName;
     _szGeometryFileName=(char*)szGeometryFileName;
+    _szTessControlFileName=(char*)szTessControlFileName;
+    _szTessEvalFileName=(char*)szTessEvalFileName;
 #elif BUILD_IOS
     std::string strVertFullPath;
     std::string strFragFullPath;
     std::string strGeoFullPath;
+    std::string strTessControlFullPath;
+    std::string strTessEvalFullPath;
     if(szVertFileName[0]!='/'){
         strVertFullPath=ios_dirUtil::getFileFullPathName(szVertFileName);
         _szVertFileName=(char*)strVertFullPath.c_str();
@@ -37,10 +42,20 @@ shader::shader(const char* szVertFileName,const char* szFragFileName,const char*
             strGeoFullPath=ios_dirUtil::getFileFullPathName(szGeometryFileName);
             _szGeometryFileName=(char*)strGeoFullPath.c_str();
         }
+        if(szTessControlFileName!=NULL){
+            strTessControlFullPath=ios_dirUtil::getFileFullPathName(szTessControlFileName);
+            _szTessControlFileName=(char*)strTessControlFullPath.c_str();
+        }
+        if(szTessEvalFileName!=NULL){
+            strTessEvalFullPath=ios_dirUtil::getFileFullPathName(szTessEvalFileName);
+            _szTessEvalFileName=(char*)strTessEvalFullPath.c_str();
+        }
     }else{
         _szVertFileName=(char*)szVertFileName;
         _szFragFileName=(char*)szFragFileName;
         _szGeometryFileName=(char*)szGeometryFileName;
+        _szGeometryFileName=(char*)szTessControlFileName;
+        _szTessEvalFileName=(char*)szTessEvalFileName;
     }
 #endif
     
@@ -147,13 +162,21 @@ bool shader::readFile(){
         free(szVert);
         return false;
     }
+    _szVert=szVert;
+    _szFrag=szFrag;
     if(_szGeometryFileName!=NULL){
         char* szGeo=(char*)fileUtil::readFile(_szGeometryFileName);
         _szGeo=szGeo;
     }
-    _szVert=szVert;
-    _szFrag=szFrag;
-    
+    if(_szTessControlFileName!=NULL){
+        char* sz=(char*)fileUtil::readFile(_szTessControlFileName);
+        _szTessControl=sz;
+    }
+    if(_szTessEvalFileName!=NULL){
+        char* sz=(char*)fileUtil::readFile(_szTessEvalFileName);
+        _szTessEval=sz;
+    }
+   
 #ifdef BUILD_IOS
     const char* buf=stringUtil::replace(szVert,"version 330","version 300");
     if(buf!=NULL){
@@ -185,12 +208,24 @@ shader::~shader(){
         free(_szFrag);
         _szFrag=NULL;
     }
+    if(_szGeo!=NULL){
+        free(_szGeo);
+        _szGeo=NULL;
+    }
+    if(_szTessControl!=NULL){
+        free(_szTessControl);
+        _szTessControl=NULL;
+    }
+    if(_szTessEval!=NULL){
+        free(_szTessEval);
+        _szTessEval=NULL;
+    }
 }
 
 void shader::compile(){
     glRef::glInit();
-    GLuint vertShader=0,fragShader=0,geoShader=0,idProgram=0;
-    GLint vertStatus,fragStatus,gsStatus,programStatus;
+    GLuint vertShader=0,fragShader=0,geoShader=0,tessControlShader=0,tessEvalShader=0,idProgram=0;
+    GLint vertStatus,fragStatus,gsStatus,tess1Status,tess2Status,programStatus;
     vertShader=glCreateShader(GL_VERTEX_SHADER);
     fragShader=glCreateShader(GL_FRAGMENT_SHADER);
     
@@ -252,6 +287,50 @@ void shader::compile(){
         glAttachShader(idProgram, geoShader);
     }
 #endif
+    flylog("gl_ver %d",GL_VER);
+    
+#if GL_VER >= 330
+    if(_szTessControl){
+        tessControlShader=glCreateShader(GL_TESS_CONTROL_SHADER);
+        glShaderSource(tessControlShader, 1, &_szTessControl, NULL);
+        glCompileShader(tessControlShader);
+        glGetShaderiv(tessControlShader, GL_COMPILE_STATUS, &tess1Status);
+        if(tess1Status!=GL_TRUE){
+            int lenLog;
+            GLsizei num;
+            glGetShaderiv(tessControlShader, GL_INFO_LOG_LENGTH, &lenLog);
+            char* szLog=(char*)malloc(lenLog);
+            glGetShaderInfoLog(tessControlShader,lenLog,&num,szLog);
+            fprintf(stderr,"%s\nshader::shader: tessControlShader error: %s",_szTessControlFileName,szLog);
+            fprintf(stderr,_szGeo);
+            free(szLog);
+            glDeleteShader(vertShader);
+            glDeleteShader(fragShader);
+            return;
+        }
+        glAttachShader(idProgram, tessControlShader);
+    }
+    if(_szTessEval){
+        tessEvalShader=glCreateShader(GL_TESS_EVALUATION_SHADER);
+        glShaderSource(tessEvalShader, 1, &_szTessEval, NULL);
+        glCompileShader(tessEvalShader);
+        glGetShaderiv(tessEvalShader, GL_COMPILE_STATUS, &tess2Status);
+        if(tess2Status!=GL_TRUE){
+            int lenLog;
+            GLsizei num;
+            glGetShaderiv(tessEvalShader, GL_INFO_LOG_LENGTH, &lenLog);
+            char* szLog=(char*)malloc(lenLog);
+            glGetShaderInfoLog(tessEvalShader,lenLog,&num,szLog);
+            fprintf(stderr,"%s\nshader::shader: tessEvalShader error: %s",_szTessEvalFileName,szLog);
+            fprintf(stderr,_szGeo);
+            free(szLog);
+            glDeleteShader(vertShader);
+            glDeleteShader(fragShader);
+            return;
+        }
+        glAttachShader(idProgram, tessEvalShader);
+    }
+#endif
 
     glLinkProgram(idProgram);
 
@@ -272,6 +351,10 @@ void shader::compile(){
     glDeleteShader(fragShader);
     if(geoShader)
         glDeleteShader(geoShader);
+    if(tessControlShader)
+        glDeleteShader(tessControlShader);
+    if(tessEvalShader)
+        glDeleteShader(tessEvalShader);
     _idProgram=idProgram;
 }
 

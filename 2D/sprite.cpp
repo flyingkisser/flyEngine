@@ -70,7 +70,7 @@ void sprite::glInit(){
         {w,h,1,0}
     };
     int descArr[]={2,2};
-    initVAO((float*)vertices, sizeof(vertices),descArr,2);
+    initVAO((float*)vertices,sizeof(vertices),descArr,2);
 }
 
 void sprite::setContentSize(size s){
