@@ -71,4 +71,5 @@ void uboMgr::initAllUbo(){
     g_ubo_id_arr[ubo_binding_light_dir]=uboMgr::createUBO(ubo_binding_light_dir, ubo_size_light_dir_arr,"light_dir");
     g_ubo_id_arr[ubo_binding_light_point]=uboMgr::createUBO(ubo_binding_light_point, ubo_size_light_point_arr,"light_point");
     g_ubo_id_arr[ubo_binding_light_spot]=uboMgr::createUBO(ubo_binding_light_spot, ubo_size_light_spot_arr,"light_spot");
+    g_ubo_id_arr[ubo_binding_light_area]=uboMgr::createUBO(ubo_binding_light_area, ubo_size_light_area_arr,"light_area");
 }

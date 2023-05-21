@@ -119,7 +119,6 @@ float DistributionGGX(vec3 N, vec3 H, float roughness){
     float num   = a2;
     float denom = (NdotH2 * (a2 - 1.0) + 1.0);
     denom = 3.1415926 * denom * denom;
-    
     return num / denom;
 }
 
@@ -129,7 +128,6 @@ float GeometrySchlickGGX(float NdotV, float roughness){
 
     float num   = NdotV;
     float denom = NdotV * (1.0 - k) + k;
-    
     return num / denom;
 }
 float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness){
@@ -137,7 +135,6 @@ float GeometrySmith(vec3 N, vec3 V, vec3 L, float roughness){
     float NdotL = max(dot(N, L), 0.0);
     float ggx2  = GeometrySchlickGGX(NdotV, roughness);
     float ggx1  = GeometrySchlickGGX(NdotL, roughness);
-    
     return ggx1 * ggx2;
 }
 
@@ -159,8 +156,7 @@ void checkPoint(vec3 pos,vec3 color,vec3 light_ambient,vec3 light_diffuse,vec3 l
     float G=GeometrySmith(g_normal_vector,g_view_vector,light_vector,roughness);
 
     vec3 numerator=NDF*G*F;
-    float denominator=4*max(dot(g_normal_vector,g_view_vector),0.0)*
-    max(dot(g_normal_vector,light_vector),0.0)+0.0001;
+    float denominator=4*max(dot(g_normal_vector,g_view_vector),0.0)*max(dot(g_normal_vector,light_vector),0.0)+0.0001;
     vec3 specular=numerator/denominator;
 
     vec3 kS=F;  //反射光的能量
@@ -172,6 +168,7 @@ void checkPoint(vec3 pos,vec3 color,vec3 light_ambient,vec3 light_diffuse,vec3 l
     // g_debug_color+=(kD*albedo/3.1415926+specular)*radiance*NdotL;
 }
 
+const float MAX_REFLECTION_LOD=4.0;
 vec3 checkAmbient(){
     // ambient lighting (we now use IBL as the ambient term)
     vec3 F0 = vec3(0.04); 
@@ -182,16 +179,13 @@ vec3 checkAmbient(){
     vec3 irradiance=texture(tex_irradiance,g_normal_vector).rgb;
     vec3 diffuse      = irradiance * albedo;
 
-    const float MAX_REFLECTION_LOD = 4.0;
-
-    vec3 prefilteredColor = textureLod(tex_prefilter,g_reflect_vector,
-    roughness*MAX_REFLECTION_LOD).rgb;  
+    vec3 prefilteredColor = textureLod(tex_prefilter,g_reflect_vector,roughness*MAX_REFLECTION_LOD).rgb;  
     vec2 brdf=texture(tex_brdf,vec2(max(dot(g_normal_vector,g_view_vector),0),roughness)).rg;  
     // vec3 F=fresnelSchlickRoughness(max(dot(g_normal_vector,g_view_vector),0),F0,roughness);
     vec3 F=kS;
     vec3 specular=prefilteredColor*(F*brdf.x+brdf.y);
     vec3 ambient =(kD*diffuse+specular)*ao;
-    return vec3(ambient);
+    return ambient;
 }
 
 void main(){

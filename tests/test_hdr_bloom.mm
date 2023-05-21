@@ -389,8 +389,13 @@ void test_bloom_1(){
 
 
 //physical based bloom
-void test_bloom_2(){
+void test_bloom_physical(){
     camera* cam=world::getInstance()->getCamera();
+    int bloomChainLength=5;
+    glm::vec2 viewportFloatSize=glm::vec2((float)g_winWidth,(float)g_winHigh);
+    glm::ivec2 viewportIntSize=glm::ivec2((int)g_winWidth,(int)g_winHigh);
+    cam->setPosition(glm::vec3(0,0,40));
+    
     cubeTex* cubeObj1=new cubeTex("./res/wood.png");
     cubeTex* cubeObj2=new cubeTex("./res/wood.png");
     cubeTex* cubeObj3=new cubeTex("./res/wood.png");
@@ -419,8 +424,6 @@ void test_bloom_2(){
     world::getInstance()->getControl()->bindNode(cubeObj3);
     world::getInstance()->getControl()->bindNode(cubeObj4);
     
-    fboHDRBloomPhysicalStruct st=fbo::createFBOHDRBloomPhysical(5);
-    
     material2* mt=createMaterial(1, 1, 1, 0);
     pointLight* light1=new pointLight(glm::vec3(50,50,50),mt);
     pointLight* light2=new pointLight(glm::vec3(20,0,0),mt);
@@ -444,56 +447,59 @@ void test_bloom_2(){
     world::getInstance()->addPointLight(light2);
     world::getInstance()->addPointLight(light3);
     world::getInstance()->addPointLight(light4);
-    
-    cam->setPosition(glm::vec3(0,0,40));
-    
-    quad* quad2D=new quad(st.texHDRArr[0],15,15);
-    quad2D->flipY(true);
-    
-    world::getInstance()->setCBBeforeAnyGLCall([st](){
-        glBindFramebuffer(GL_FRAMEBUFFER,st.fboHDR);
-    });
+
+
+    fboHDRBloomPhysicalStruct st=fbo::createFBOHDRBloomPhysical(bloomChainLength);
+   
+    sprite* sp=new sprite(st.texHDRArr[0]);
     
 #ifdef BUILD_IOS
     GLKView* view=[ViewController getView];
 #else
     int view=0;
 #endif
-    //
-    //    //渲染到两张纹理
+    
+        //渲染到两张纹理
     shader* shCubeBloom=new shader("./res/shader/3d_1tex_phong.vs","./res/shader/3d_1tex_bloom.fs");
     shader* shLightBloom=new shader("./res/shader/3d_color.vs","./res/shader/3d_color_bloom.fs");
-    shader* shBloomDown=new shader("./res/shader/2d_bloom.vs","./res/shader/2d_bloom_down_sample.fs");
-    shader* shBloomUp=new shader("./res/shader/2d_bloom.vs","./res/shader/2d_bloom_up_sample.fs");
-    shader* shBind=new shader("./res/shader/3d_quad.vs","./res/shader/2d_hdr_bloomblur.fs");
-    shader* shQuad=quad2D->getShader();
+//    shader* shBloomDown=new shader("./res/shader/2d_bloom.vs","./res/shader/2d_bloom_down_sample.fs");
+//    shader* shBloomUp=new shader("./res/shader/2d_bloom.vs","./res/shader/2d_bloom_up_sample.fs");
+    shader* shBloomDown=new shader("./res/shader/2d_1tex.vs","./res/shader/2d_bloom_down_sample.fs");
+    shader* shBloomUp=new shader("./res/shader/2d_1tex.vs","./res/shader/2d_bloom_up_sample.fs");
+//    shader* shBind=new shader("./res/shader/2d_quad.vs","./res/shader/2d_hdr_bloomblur.fs");
+    shader* shBind=new shader("./res/shader/2d_1tex.vs","./res/shader/2d_hdr_bloomblur.fs");
     shader* shLight=light1->getShader();
     shBind->use();
     shBind->setInt("scene", 0);
     shBind->setInt("bloomBlur", 1);
-    shBind->setFloat("exposure", 0.1);
-    
+    shBind->setFloat("exposure", 0.01);     //越大曝光度越高
+    shBind->setFloat("bloomFactor", 0.3);   //越大越光晕越强
+
     shBloomDown->use();
     shBloomDown->setInt("srcTexture", 0);
-    
+    shBloomDown->setVec2("srcResolution",viewportFloatSize);
+    shBloomDown->setInt("mipLevel",0);//enable KarisAverage on first downsample
+
     shBloomUp->use();
     shBloomUp->setInt("srcTexture", 0);
+    shBloomUp->setFloat("filterRadius", 0.005);
+
+    world::getInstance()->setCBBeforeAnyGLCall([st](){
+        glBindFramebuffer(GL_FRAMEBUFFER,st.fboHDR);
+    });
     
-    glm::vec2 viewportFloatSize=glm::vec2((float)g_winWidth,(float)g_winHigh);
-    glm::ivec2 viewportIntSize=glm::ivec2((int)g_winWidth,(int)g_winHigh);
-    
-    world::getInstance()->setCBBeforeDrawCall([st,cam,shCubeBloom,shLightBloom,shQuad,shBloomDown,shBloomUp,shBind,quad2D,cubeObj1,cubeObj2,cubeObj3,cubeObj4,view,light1,light2,light3,light4](){
-       
+    world::getInstance()->setCBBeforeDrawCall([st,cam,shCubeBloom,shLightBloom,shBloomDown,shBloomUp,shBind,bloomChainLength,viewportFloatSize,viewportIntSize,sp,cubeObj1,cubeObj2,cubeObj3,cubeObj4,view,light1,light2,light3,light4](){
+        //第一步：生成正常颜色纹理和bloom纹理
         cubeObj1->setShader(shCubeBloom);
         cubeObj2->setShader(shCubeBloom);
         cubeObj3->setShader(shCubeBloom);
         cubeObj4->setShader(shCubeBloom);
-        
+
         light1->setShader(shLightBloom);
         light2->setShader(shLightBloom);
         light3->setShader(shLightBloom);
         light4->setShader(shLightBloom);
-        
+
         cubeObj1->draw();
         cubeObj2->draw();
         cubeObj3->draw();
@@ -502,84 +508,59 @@ void test_bloom_2(){
         light2->draw();
         light3->draw();
         light4->draw();
-        
-        //第二步
-        
+       
+        //第二步：把bloom纹理向下取样再向上取样
+        //2.1 down sample
+        glBindFramebuffer(GL_FRAMEBUFFER,st.fboChain);
         shBloomDown->use();
         shBloomDown->setVec2("srcResolution",viewportFloatSize);
-        cubeObj1->setShader(shBloomDown);
-        cubeObj2->setShader(shBloomDown);
-        cubeObj3->setShader(shBloomDown);
-        cubeObj4->setShader(shBloomDown);
-        cubeObj1->draw();
-        cubeObj2->draw();
-        cubeObj3->draw();
-        cubeObj4->draw();
-        
-        //        glDisable(GL_DEPTH_TEST);
-        //        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-        //        glClear(GL_COLOR_BUFFER_BIT);
-        
-        //进行10次左右和上下方向的高斯模糊
-        //每次单独写进一个framebuffer和它对应的纹理
-        //第0次，绑定亮度纹理，输出到1号framebuffer对应的1号纹理
-        //第一次，绑定1号纹理，但输出到0号framebuffer对应的0号纹理
-        //第二次，绑定0号纹理，但输出到1号framebffer对应的1号纹理
-        //这样就实现了对两个纹理的混合使用
-        bool bHorizontal=true;
-        bool bFirst=true;
-        quad2D->setShader(shGuassian);
-        shGuassian->use();
-        for(int i=0;i<10;i++){
-            glBindFramebuffer(GL_FRAMEBUFFER,st.fboBloomArr[bHorizontal]);
-            shGuassian->setBool("horizontal", bHorizontal,true);
-            unsigned int texID=bFirst?st.texHDRArr[1]:st.texGaussianArr[!bHorizontal];
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D,texID);
-            quad2D->setTexID(texID);
-            quad2D->draw();
-            bHorizontal=!bHorizontal;
-            if(bFirst)
-                bFirst=false;
+        shBloomDown->setInt("mipLevel",0);//enable KarisAverage on first downsample
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, st.texHDRArr[1]);
+        sp->setShader(shBloomDown);
+        sp->setTexID(st.texHDRArr[1]);
+        for(int i=0;i<bloomChainLength;i++){
+            fboBloomMip mip=st.mips[i];
+            glViewport(0,0,mip.intSize.x,mip.intSize.y);
+            glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,mip.tex,0);
+            sp->draw();
+            shBloomDown->use();
+            shBloomDown->setVec2("srcResolution",mip.floatSize);
+            shBloomDown->setInt("mipLevel", 1); //disable KarisAverage
+            sp->setTexID(mip.tex);
         }
-        
+        //2.2 up sample
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_ONE,GL_ONE);
+        glBlendEquation(GL_FUNC_ADD);
+        sp->setShader(shBloomUp);
+        for(int i=bloomChainLength-1;i>0;i--){
+            fboBloomMip mip=st.mips[i];
+            fboBloomMip mipBefore=st.mips[i-1];
+            sp->setTexID(mip.tex);
+            glViewport(0,0,mipBefore.intSize.x,mipBefore.intSize.y);
+            glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,mipBefore.tex,0);
+            sp->draw();
+        }
+        glDisable(GL_BLEND);
+
+        //第三步
+        //正常颜色纹理与bloom纹理混合后输出
 #ifdef BUILD_MAC
         glBindFramebuffer(GL_FRAMEBUFFER, 0);   //绑定默认的framebuffer
 #elif BUILD_IOS
         [view bindDrawable];    //绑定GLKView创建的framebuffer
 #endif
-        //        glDisable(GL_DEPTH_TEST);
-        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glViewport(0,0,g_winWidth,g_winHigh);
+        glDisable(GL_DEPTH_TEST);
+        glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        quad2D->setShader(shBind);
-        quad2D->setTexID(st.texHDRArr[0]);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, st.texHDRArr[0]);
+        
+
+        sp->setShader(shBind);
+        sp->setTexID(st.texHDRArr[0]);
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, st.texGaussianArr[!bHorizontal]);
-        //         glBindTexture(GL_TEXTURE_2D, st.texGaussianArr[1]);
-        quad2D->draw();
+        glBindTexture(GL_TEXTURE_2D,st.mips[0].tex);
+        sp->draw();
     });
-    
-    //    struct fboHDRBloomGaussStruct{
-    //        unsigned int fboHDR;   //frame buffer id for hdr
-    //        unsigned int fboBloomArr[2];   //frame buffer arr for bloom
-    //        unsigned int rbo;   //render buffer id
-    //        unsigned int texHDRArr[2]; //texture id arr1 for hdr color and brightness
-    //        unsigned int texGaussianArr[2]; //texture id arr2 for bloom pingpong blur
-    //    };
-    
-    //    world::getInstance()->getControl()->regOnKeyPress('g',[sp](){
-    //        shader* sh=sp->getShader();
-    //        sh->use();
-    //        float v=sh->getFloat("exposure");
-    //        sh->setFloat("exposure",v+0.1);
-    //    });
-    //    world::getInstance()->getControl()->regOnKeyPress('h',[sp](){
-    //        shader* sh=sp->getShader();
-    //        sh->use();
-    //        float v=sh->getFloat("exposure");
-    //        if(v-0.1>=0)
-    //            sh->setFloat("exposure",v-0.1);
-    //    });
 }

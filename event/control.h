@@ -32,7 +32,7 @@ class node;
 class control
 {
 private:
-    float _move_d=0.1;
+    float _move_d=1;
     float _mouseLeftLastX=0;
     float _mouseLeftLastY=0;
     

@@ -36,6 +36,7 @@
 		D8309C4626970FD000A855A6 /* glRef.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8309C4526970FD000A855A6 /* glRef.cpp */; };
 		D83EF33126C299550007E460 /* light.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83EF33026C299550007E460 /* light.cpp */; };
 		D83EF33426C29AC00007E460 /* test_pointLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D83EF33326C29AC00007E460 /* test_pointLight.cpp */; };
+		D84C04082A0E4C4400792BB4 /* test_water.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84C04072A0E4C4400792BB4 /* test_water.cpp */; };
 		D84FB80926ABF59B003FDDE1 /* moveTo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D84FB80726ABF59B003FDDE1 /* moveTo.cpp */; };
 		D85F1BD625022327005390DC /* VAOMgr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D85F1BD525022327005390DC /* VAOMgr.cpp */; };
 		D85F22FD27FEBC22007B0C19 /* libassimp.5.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D85F22FC27FEBC22007B0C19 /* libassimp.5.dylib */; };
@@ -88,6 +89,9 @@
 		D8A105D629BB25DF00B6C9FF /* test_height_map.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A105D529BB25DF00B6C9FF /* test_height_map.cpp */; };
 		D8A105D929BB266100B6C9FF /* heightMap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A105D829BB266100B6C9FF /* heightMap.cpp */; };
 		D8A105DD29BD76FD00B6C9FF /* heightMapPatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A105DC29BD76FD00B6C9FF /* heightMapPatch.cpp */; };
+		D8A105E229CAA2A100B6C9FF /* test_areaLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A105E129CAA2A100B6C9FF /* test_areaLight.cpp */; };
+		D8A105E529CAAD5200B6C9FF /* areaLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A105E429CAAD5200B6C9FF /* areaLight.cpp */; };
+		D8A105E829CAAFA500B6C9FF /* textureBuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A105E729CAAFA500B6C9FF /* textureBuffer.cpp */; };
 		D8A2AD8A272AC46400B5FC18 /* stb_image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A2AD89272AC46400B5FC18 /* stb_image.cpp */; };
 		D8A5B1AE285F0D0D00B76852 /* main2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A5B1AD285F0D0D00B76852 /* main2.cpp */; };
 		D8A6E8B828C4DE0600C3DE56 /* texture.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D8A6E8B728C4DE0600C3DE56 /* texture.cpp */; };
@@ -1619,6 +1623,8 @@
 		D83EF33026C299550007E460 /* light.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = light.cpp; sourceTree = "<group>"; };
 		D83EF33226C29AC00007E460 /* test_pointLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_pointLight.h; sourceTree = "<group>"; };
 		D83EF33326C29AC00007E460 /* test_pointLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_pointLight.cpp; sourceTree = "<group>"; };
+		D84C04062A0E4C4400792BB4 /* test_water.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_water.h; sourceTree = "<group>"; };
+		D84C04072A0E4C4400792BB4 /* test_water.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_water.cpp; sourceTree = "<group>"; };
 		D84FB80726ABF59B003FDDE1 /* moveTo.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = moveTo.cpp; sourceTree = "<group>"; };
 		D84FB80826ABF59B003FDDE1 /* moveTo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = moveTo.h; sourceTree = "<group>"; };
 		D852349D28A9549400E69D25 /* shader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shader.h; sourceTree = "<group>"; };
@@ -1755,6 +1761,14 @@
 		D8A105D829BB266100B6C9FF /* heightMap.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = heightMap.cpp; sourceTree = "<group>"; };
 		D8A105DB29BD76FD00B6C9FF /* heightMapPatch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = heightMapPatch.h; sourceTree = "<group>"; };
 		D8A105DC29BD76FD00B6C9FF /* heightMapPatch.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = heightMapPatch.cpp; sourceTree = "<group>"; };
+		D8A105DE29CA027E00B6C9FF /* ltc_matrix.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ltc_matrix.h; sourceTree = "<group>"; };
+		D8A105DF29CAA00B00B6C9FF /* colors.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = colors.h; sourceTree = "<group>"; };
+		D8A105E029CAA2A100B6C9FF /* test_areaLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = test_areaLight.h; sourceTree = "<group>"; };
+		D8A105E129CAA2A100B6C9FF /* test_areaLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = test_areaLight.cpp; sourceTree = "<group>"; };
+		D8A105E329CAAD5200B6C9FF /* areaLight.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = areaLight.h; sourceTree = "<group>"; };
+		D8A105E429CAAD5200B6C9FF /* areaLight.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = areaLight.cpp; sourceTree = "<group>"; };
+		D8A105E629CAAFA500B6C9FF /* textureBuffer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = textureBuffer.h; sourceTree = "<group>"; };
+		D8A105E729CAAFA500B6C9FF /* textureBuffer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = textureBuffer.cpp; sourceTree = "<group>"; };
 		D8A2AD88272AC46400B5FC18 /* stb_image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		D8A2AD89272AC46400B5FC18 /* stb_image.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stb_image.cpp; sourceTree = "<group>"; };
 		D8A5B1AD285F0D0D00B76852 /* main2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main2.cpp; sourceTree = "<group>"; };
@@ -4082,6 +4096,7 @@
 				D8309C4526970FD000A855A6 /* glRef.cpp */,
 				D85234BC28A9DA8C00E69D25 /* values.h */,
 				D825DB8424AAEE5100C494E7 /* values.cpp */,
+				D8A105DF29CAA00B00B6C9FF /* colors.h */,
 			);
 			path = common;
 			sourceTree = "<group>";
@@ -4100,6 +4115,8 @@
 				D83EF33326C29AC00007E460 /* test_pointLight.cpp */,
 				D8F37D7D26EF683600E5225B /* test_spotLight.h */,
 				D8F37D7E26EF683600E5225B /* test_spotLight.cpp */,
+				D8A105E029CAA2A100B6C9FF /* test_areaLight.h */,
+				D8A105E129CAA2A100B6C9FF /* test_areaLight.cpp */,
 				D8B374D52844A8F400C3DF0C /* test_model.h */,
 				D8B374D62844A8F400C3DF0C /* test_model.cpp */,
 				D8A8498A28694A0E000E231C /* test_c_plusplus.h */,
@@ -4146,6 +4163,8 @@
 				D8FAE93F29B1996100DFFD4C /* test_frustum_culling.cpp */,
 				D8A105D429BB25DF00B6C9FF /* test_height_map.h */,
 				D8A105D529BB25DF00B6C9FF /* test_height_map.cpp */,
+				D84C04062A0E4C4400792BB4 /* test_water.h */,
+				D84C04072A0E4C4400792BB4 /* test_water.cpp */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -4162,6 +4181,8 @@
 				D8A6E8BA28C4DE6200C3DE56 /* texture2.cpp */,
 				D8B2711A2952CE2F00841859 /* textureHdr.cpp */,
 				D8B2711B2952CE2F00841859 /* textureHdr.h */,
+				D8A105E629CAAFA500B6C9FF /* textureBuffer.h */,
+				D8A105E729CAAFA500B6C9FF /* textureBuffer.cpp */,
 			);
 			path = texture;
 			sourceTree = "<group>";
@@ -4233,6 +4254,9 @@
 				D8F37D7526E607D000E5225B /* pointLight.cpp */,
 				D8F37D7A26E6331200E5225B /* spotLight.h */,
 				D8F37D7B26E6331200E5225B /* spotLight.cpp */,
+				D8A105DE29CA027E00B6C9FF /* ltc_matrix.h */,
+				D8A105E329CAAD5200B6C9FF /* areaLight.h */,
+				D8A105E429CAAD5200B6C9FF /* areaLight.cpp */,
 			);
 			path = light;
 			sourceTree = "<group>";
@@ -4763,6 +4787,7 @@
 				D8F37D7F26EF683600E5225B /* test_spotLight.cpp in Sources */,
 				D86CE57528F2ABB0006797C4 /* test_gamma.cpp in Sources */,
 				D87EBFD426A5780B004ED7DE /* timerUtil.cpp in Sources */,
+				D8A105E229CAA2A100B6C9FF /* test_areaLight.cpp in Sources */,
 				D81EF3601EAFA0070003604F /* main.cpp in Sources */,
 				D89600F924D40EE100DF6FD3 /* gpuUtil.cpp in Sources */,
 				D8EC783428815CF400415650 /* fbo.cpp in Sources */,
@@ -4791,10 +4816,13 @@
 				D8B01CF128DDE8A3004EF910 /* test_cubeTexIns.cpp in Sources */,
 				D87EBFF126AAAEF2004ED7DE /* sequence.cpp in Sources */,
 				D87EBFE726A7CA3F004ED7DE /* mathUtil.cpp in Sources */,
+				D8A105E529CAAD5200B6C9FF /* areaLight.cpp in Sources */,
 				D882CCD828EB184700B11310 /* test_msaa.mm in Sources */,
+				D84C04082A0E4C4400792BB4 /* test_water.cpp in Sources */,
 				D84FB80926ABF59B003FDDE1 /* moveTo.cpp in Sources */,
 				D8FAE94029B1996100DFFD4C /* test_frustum_culling.cpp in Sources */,
 				D8B2711C2952CE2F00841859 /* textureHdr.cpp in Sources */,
+				D8A105E829CAAFA500B6C9FF /* textureBuffer.cpp in Sources */,
 				D825DB71249CB3EB00C494E7 /* randUtil.cpp in Sources */,
 				D8A105D929BB266100B6C9FF /* heightMap.cpp in Sources */,
 				D8A2AD8A272AC46400B5FC18 /* stb_image.cpp in Sources */,

@@ -78,6 +78,7 @@ shader::shader(const char* szVertFileName,const char* szFragFileName,const char*
     uboMgr::linkUBOAndBindPoint(_idProgram,"light_dir", ubo_binding_light_dir);
     uboMgr::linkUBOAndBindPoint(_idProgram,"light_point", ubo_binding_light_point);
     uboMgr::linkUBOAndBindPoint(_idProgram,"light_spot", ubo_binding_light_spot);
+    uboMgr::linkUBOAndBindPoint(_idProgram,"light_area", ubo_binding_light_area);
     use();
     setInt("texture_shadow", texture_shadow);
     setInt("texture_depth_cube", texture_depth_cube);
@@ -265,7 +266,7 @@ void shader::compile(){
     glAttachShader(idProgram, vertShader);
     glAttachShader(idProgram, fragShader);
 
-#if GL_VER >= 320
+
     if(_szGeo){
         geoShader=glCreateShader(GL_GEOMETRY_SHADER);
         glShaderSource(geoShader, 1, &_szGeo, NULL);
@@ -286,10 +287,10 @@ void shader::compile(){
         }
         glAttachShader(idProgram, geoShader);
     }
-#endif
+
     flylog("gl_ver %d",GL_VER);
     
-#if GL_VER >= 330
+
     if(_szTessControl){
         tessControlShader=glCreateShader(GL_TESS_CONTROL_SHADER);
         glShaderSource(tessControlShader, 1, &_szTessControl, NULL);
@@ -302,7 +303,7 @@ void shader::compile(){
             char* szLog=(char*)malloc(lenLog);
             glGetShaderInfoLog(tessControlShader,lenLog,&num,szLog);
             fprintf(stderr,"%s\nshader::shader: tessControlShader error: %s",_szTessControlFileName,szLog);
-            fprintf(stderr,_szGeo);
+            fprintf(stderr,_szTessControl);
             free(szLog);
             glDeleteShader(vertShader);
             glDeleteShader(fragShader);
@@ -322,7 +323,7 @@ void shader::compile(){
             char* szLog=(char*)malloc(lenLog);
             glGetShaderInfoLog(tessEvalShader,lenLog,&num,szLog);
             fprintf(stderr,"%s\nshader::shader: tessEvalShader error: %s",_szTessEvalFileName,szLog);
-            fprintf(stderr,_szGeo);
+            fprintf(stderr,_szTessEval);
             free(szLog);
             glDeleteShader(vertShader);
             glDeleteShader(fragShader);
@@ -330,7 +331,7 @@ void shader::compile(){
         }
         glAttachShader(idProgram, tessEvalShader);
     }
-#endif
+
 
     glLinkProgram(idProgram);
 
@@ -425,6 +426,26 @@ void shader::setFloat(std::string name, float v,bool debug){
     setFloat(name.c_str(),v,debug);
 }
 
+void shader::setVec2(const char *name, float* v,bool debug){
+    int pos=glGetUniformLocation(_idProgram, name);
+    if(pos==-1){
+        if(debug)
+            flylog("shader::setVec2 cannot find %s",name);
+       return;
+    }
+    glUniform2fv(pos,1,v);
+}
+void shader::setVec2(const char *name, glm::vec2 vector2,bool debug){
+    return setVec2(name,glm::value_ptr(vector2),debug);
+}
+void shader::setVec2(const char *name, float v1,float v2,bool debug){
+    return setVec2(name,(float*)glm::value_ptr(glm::vec2(v1,v2)),debug);
+}
+void shader::setVec2(std::string name, glm::vec2 vector2,bool debug){
+    return setVec2(name.c_str(),glm::value_ptr(vector2),debug);
+}
+
+
 void shader::setVec3(const char *name, float* v,bool debug){
     int pos=glGetUniformLocation(_idProgram, name);
     if(pos==-1){
@@ -443,6 +464,7 @@ void shader::setVec3(const char *name, float v1,float v2,float v3,bool debug){
 void shader::setVec3(std::string name, glm::vec3 vector3,bool debug){
     return setVec3(name.c_str(),glm::value_ptr(vector3),debug);
 }
+
 void shader::setVec4(const char *name, float* v,bool debug){
     int pos=glGetUniformLocation(_idProgram, name);
     if(pos==-1){

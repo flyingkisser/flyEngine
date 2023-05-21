@@ -62,7 +62,7 @@ void main(){
 
     for(int i=0;i<POINT_LIGHTS_NUM;i++){
         PointLight p=light_point_arr[i];
-        checkPoint(p.pos,p.color,p.ambient,p.diffuse,p.specular,p.constant,p.linear,p.quadratic);
+        checkPoint(p.pos,p.color,p.ambient,p.diffuse,p.specular);
     }
   
     //如果物体的材质启用了，要计算物体本身的材质对于光照的影响1

@@ -120,6 +120,7 @@ void sprite::setGray(bool s){
     _bGray=s;
     _b_dirty_shader=true;
 }
+
 void sprite::drawByType(int type,int verticeNum){
     _shaderObj->use();
     if(m_cb_before_draw_call!=nullptr)
@@ -136,7 +137,7 @@ void sprite::drawByType(int type,int verticeNum){
         _shaderObj->setBool("bGray", _bGray);
         _b_dirty_shader=false;
     }
-    
+
 //    cam->update2D();
     updateModel();
     glBindVertexArray(_gl_vao);
@@ -145,6 +146,7 @@ void sprite::drawByType(int type,int verticeNum){
     glDrawArrays(type,0,verticeNum);
     state::log(verticeNum);
 }
+
 
 void sprite::draw(){
     drawByType(GL_TRIANGLES,6);

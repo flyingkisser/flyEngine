@@ -34,6 +34,7 @@ protected:
     bool _bFlipY=false;
     
 public:
+    texture2(){};
     texture2(const char* szPath,bool _bFlipY=false);
     ~texture2();
     bool init();

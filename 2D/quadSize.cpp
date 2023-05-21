@@ -53,9 +53,24 @@ bool quadSize::init(){
     return true;
 }
 
+//void quadSize::glInit(){
+//    int descArr[]={3,2};
+//    initVAO(g_verticeArrWithTexCoord_quad, sizeof(g_verticeArrWithTexCoord_quad),descArr,2);
+//}
+
 void quadSize::glInit(){
+    glm::vec3 s=getScale();
+    float x=_size.width;
+    float y=_size.height;
+    float verticeArrWithTexCoord[] = {
+        // positions        // texture Coords
+        -x,  y, 0.0f, 0.0f, 1.0f,
+        -x, -y, 0.0f, 0.0f, 0.0f,
+        x,  y, 0.0f, 1.0f, 1.0f,
+        x, -y, 0.0f, 1.0f, 0.0f,
+    };
     int descArr[]={3,2};
-    initVAO(g_verticeArrWithTexCoord_quad, sizeof(g_verticeArrWithTexCoord_quad),descArr,2);
+    initVAO(verticeArrWithTexCoord, sizeof(verticeArrWithTexCoord),descArr,2);
 }
 
 void quadSize::_reInitVertices(){

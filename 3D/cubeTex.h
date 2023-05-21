@@ -43,8 +43,10 @@ public:
     bool initByVerticeArr(float* arr,int arrSize,int descArr[],int descArrSize);
     void resetPos();
     void draw();
+    void drawWithoutBindTex();
     void setPipelineValue();
     void drawCall();
+    
     
 };
 

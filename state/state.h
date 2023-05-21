@@ -23,15 +23,17 @@ static int s_vertices=0;
 static bool s_bShowFrameRate=true;
 static bool s_bShowDrawCall=true;
 static bool s_bShowVertices=true;
-
+static bool s_bShowTime=true;
 
 static uiText* s_textRate=NULL;
 static uiText* s_textDrawCall=NULL;
 static uiText* s_textVertices=NULL;
+static uiText* s_textTime=NULL;
 
 static std::string s_strRate;
 static std::string s_strDrawCall;
 static std::string s_strVertices;
+static std::string s_strTime;
 
 class state{
     
@@ -49,6 +51,10 @@ public:
     static void setShowVertices(bool s);
     static bool isShowVertices();
     static void displayVertices();
+    
+    static void setShowTime(bool s);
+    static bool isShowTime();
+    static void displayTime();
     
     static void reset();
     

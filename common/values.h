@@ -102,6 +102,15 @@
 #define uniform_name_light_spot_cutoff_outer "light_spot_arr[%d].cutoff_outer"
 #define uniform_name_light_spot_direction "light_spot_arr[%d].direction"
 
+//area light
+#define uniform_name_light_area_enabled  "light_area_arr[%d].enabled"
+#define uniform_name_light_area_pos      "light_area_arr[%d].pos"
+#define uniform_name_light_area_color    "light_area_arr[%d].color"
+#define uniform_name_light_area_points  "light_area_arr[%d].points"
+#define uniform_name_light_area_intensity  "light_area_arr[%d].intensity"
+#define uniform_name_light_area_twoSided "light_area_arr[%d].twoSided"
+#define uniform_name_light_area_roughness "light_area_arr[%d].roughness"
+
 //ubo binding point index
 //on ios binding point max is 23,otherwise will not work!!
 
@@ -111,6 +120,7 @@
 #define ubo_binding_light_dir 10
 #define ubo_binding_light_point 11
 #define ubo_binding_light_spot 12
+#define ubo_binding_light_area 13
 
 #define ubo_size_mat_3d 140
 #define ubo_size_mat_3d_shadow 140
@@ -122,6 +132,8 @@
 #define ubo_size_light_point_arr 448
 #define ubo_size_light_spot 128
 #define ubo_size_light_spot_arr 512
+#define ubo_size_light_area 48
+#define ubo_size_light_area_arr 192
 
 //texture id
 #define texture0 0
@@ -141,6 +153,8 @@ extern float g_verticeArrWithTexCoordAndNormalReverse[288];
 
 extern float g_verticeArrWithTexCoord_plane[30];
 extern float g_verticeArrWithTexCoordAndNormal_plane[54];
+extern float g_verticeArrWithTexCoordAndNormal_plane3[54];
+extern float g_verticeArrWithTexCoordAndNormal_plane_areaLight[54];
 extern float g_verticeArrWithTexCoord_2d[24];
 extern float g_verticeArrWithTexCoord_quad[20];
 extern float g_verticeArrWithTexCoord_quadColor[30];

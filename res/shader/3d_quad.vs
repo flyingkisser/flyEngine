@@ -12,6 +12,8 @@ layout (std140) uniform mat3d{
     vec3 cam_pos;
 };
 
+// uniform mat4 proj;
+// uniform mat4 view;
 uniform mat4 matModel;
 
 void main(){

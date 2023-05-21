@@ -249,6 +249,36 @@ void test_PBR_cubeTex(){
     controlObj->bindNode(lightObj2);
     controlObj->bindNode(lightObj3);
     controlObj->bindNode(lightObj4);
+    
+    pointLight* plight0=lightObj1;
+    float move=0.2;
+    world::getInstance()->getControl()->regOnKeyPress('1', [plight0,move](){
+        glm::vec3 pos=plight0->getPosition();
+        plight0->setPositionX(pos.x+move);
+    });
+    world::getInstance()->getControl()->regOnKeyPress('2', [plight0,move](){
+        glm::vec3 pos=plight0->getPosition();
+        plight0->setPositionX(pos.x-move);
+    });
+    
+    world::getInstance()->getControl()->regOnKeyPress('3', [plight0,move](){
+        glm::vec3 pos=plight0->getPosition();
+        plight0->setPositionY(pos.y+move);
+    });
+    world::getInstance()->getControl()->regOnKeyPress('4', [plight0,move](){
+        glm::vec3 pos=plight0->getPosition();
+        plight0->setPositionY(pos.y-move);
+    });
+    
+    world::getInstance()->getControl()->regOnKeyPress('5', [plight0,move](){
+        glm::vec3 pos=plight0->getPosition();
+        plight0->setPositionZ(pos.z+move);
+    });
+    world::getInstance()->getControl()->regOnKeyPress('6', [plight0,move](){
+        glm::vec3 pos=plight0->getPosition();
+        plight0->setPositionZ(pos.z-move);
+    });
+    
 }
 
 //IBL: image based lighting
@@ -1072,8 +1102,8 @@ void test_PBR_ibl_diffuse_specular_ball2(){
 
     shader* shPBR=new shader("res/shader/3d_1tex_pbr.vs","res/shader/3d_1tex_pbr_irradiance_prefilter.fs");
     shader* shBackground=new shader("res/shader/pbr_ibl_background.vs", "res/shader/pbr_ibl_background.fs");
-    shader* shRenderSixFace=new shader("res/shader/cubemap.vs", "res/shader/equirectangular2cubemap.fs");
-    shader* shIrradiance=new shader("res/shader/cubemap.vs", "res/shader/irradiance.fs");
+    shader* shRenderSixFace=new shader("res/shader/cubemap.vs", "res/shader/pbr_equirectangular2cubemap.fs");
+    shader* shIrradiance=new shader("res/shader/cubemap.vs", "res/shader/pbr_irradiance.fs");
     shader* shPrefilter=new shader("res/shader/cubemap.vs", "res/shader/pbr_prefilter.fs");
     shader* shBRDF=new shader("res/shader/2d_quad.vs", "res/shader/pbr_brdf.fs");
 
@@ -1088,7 +1118,7 @@ void test_PBR_ibl_diffuse_specular_ball2(){
     shPrefilter->use();
     shPrefilter->setInt("texEnvMap", 0);
     shPrefilter->setMat4("proj", proj);
-//
+
     shPBR->use();
     shPBR->setInt("tex_albedo", 0);
     shPBR->setInt("tex_normal", 1);
@@ -1097,6 +1127,7 @@ void test_PBR_ibl_diffuse_specular_ball2(){
     shPBR->setInt("tex_ao", 4);
     shPBR->setInt("tex_irradiance", 5);
     shPBR->setInt("tex_prefilter", 6);
+    shPBR->setInt("tex_brdf", 7);
  
     shBackground->use();
     shBackground->setInt("texCubeMap", 0);
@@ -1110,91 +1141,83 @@ void test_PBR_ibl_diffuse_specular_ball2(){
     cubeRenderSixFace->setShader(shRenderSixFace);
     glViewport(0, 0, 512, 512); // don't forget to configure the viewport to the capture dimensions.
     glBindFramebuffer(GL_FRAMEBUFFER, st.fbo);
-    for (unsigned int i = 0; i < 6; ++i){
-        shRenderSixFace->setMat4("view", viewArr[i]);
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, st.texID, 0);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    for(unsigned int i=0;i<6;++i){
+        shRenderSixFace->setMat4("view",viewArr[i]);
+        glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_CUBE_MAP_POSITIVE_X+i,st.texID,0);
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
         cubeRenderSixFace->draw();
     }
     
-    //环境光采样到irradianceMap
-     unsigned int irradianceMap;
-     glGenTextures(1,&irradianceMap);
-     glBindTexture(GL_TEXTURE_CUBE_MAP,irradianceMap);
-     for (unsigned int i = 0; i < 6; ++i){
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 32, 32, 0, GL_RGB, GL_FLOAT, nullptr);
-     }
-     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-     glBindFramebuffer(GL_FRAMEBUFFER, st.fbo);
-     glBindRenderbuffer(GL_RENDERBUFFER, st.rbo);
-     glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 32, 32);
-
-     skybox* cubeIrradiance=new skybox(st.texID,shIrradiance);
-     glViewport(0, 0, 32, 32);
-     for (unsigned int i = 0; i < 6; ++i){
-         shIrradiance->setMat4("view", viewArr[i]);
-         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, irradianceMap, 0);
-         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-         cubeIrradiance->drawSimple();
-     }
+    //环境光采样到另一个cubemap: irradianceMap
+    unsigned int irradianceMap;
+    glGenTextures(1,&irradianceMap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP,irradianceMap);
+    for(unsigned int i=0;i<6;++i)
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i,0,GL_RGB16F,32,32,0,GL_RGB,GL_FLOAT,nullptr);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_R,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,st.rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH_COMPONENT24,32,32);
+    skybox* skyIrradiance=new skybox(st.texID,shIrradiance);
+    glViewport(0,0,32,32);
+    for(unsigned int i=0;i<6;++i){
+        shIrradiance->setMat4("view",viewArr[i]);
+        glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_CUBE_MAP_POSITIVE_X+i,irradianceMap,0);
+        glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+        skyIrradiance->drawSimple();
+    }
     
     //环境光采样到prefilterMap
-    //从上面的cubemap中采样，经过蒙特卡罗积分
+    //从上面的cubemap中采样，经过蒙特卡罗积分，输出到cubemap: prefilterMap
     unsigned int prefilterMap=0;
-    glGenTextures(1, &prefilterMap);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap);
-    for (unsigned int i = 0; i < 6; ++i){
-       glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F, 128, 128, 0, GL_RGB, GL_FLOAT, nullptr);
-    }
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glGenTextures(1,&prefilterMap);
+    glBindTexture(GL_TEXTURE_CUBE_MAP,prefilterMap);
+    for(unsigned int i=0;i<6;++i)
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i,0,GL_RGB16F,128,128,0,GL_RGB,GL_FLOAT,nullptr);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_R,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
     glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
-
-    glBindFramebuffer(GL_FRAMEBUFFER, st.fbo);
-    
-    //计算这个积分结果 ∫ΩLi(p,ωi)dωi
-    skybox* cubePrefilter=new skybox(st.texID,shPrefilter);
+    skybox* skyPrefilter=new skybox(st.texID,shPrefilter);//计算这个积分结果 ∫ΩLi(p,ωi)dωi
     int maxMipLevel=5;
+    glBindFramebuffer(GL_FRAMEBUFFER, st.fbo);
     for(int i=0;i<maxMipLevel;i++){
         int width=(int)128*std::pow(0.5,i);
         int height=(int)128*std::pow(0.5,i);
-        glBindRenderbuffer(GL_RENDERBUFFER, st.rbo);
-        glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
-        glViewport(0, 0, width, height); // don't forget to configure the viewport to the capture dimensions.
-        float roughness = (float)i / (float)(maxMipLevel - 1);
-        shPrefilter->setFloat("roughness", roughness);
-        //roughness越大，则从mipmap level越低的贴图采样
-        for(int j = 0; j < 6; j++){
-            shPrefilter->setMat4("view", viewArr[j]);
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X + j, prefilterMap, i);
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-            cubePrefilter->drawSimple();
+        glBindRenderbuffer(GL_RENDERBUFFER,st.rbo);
+        glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH_COMPONENT24,width,height);
+        glViewport(0,0,width,height); //don't forget to configure the viewport to the capture dimensions.
+        float roughness=(float)i/(float)(maxMipLevel-1);
+        shPrefilter->setFloat("roughness",roughness); //roughness越大，则从mipmap level越低的贴图采样
+        for(int j=0;j<6;j++){
+            shPrefilter->setMat4("view",viewArr[j]);
+            glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_CUBE_MAP_POSITIVE_X+j,prefilterMap,i);
+            glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+            skyPrefilter->drawSimple();
         }
     }
     
-    //BRDF计算，镜面反射结果进入texBRDFLut纹理中
+    //BRDF计算，结果进入texBRDFLut纹理中
     unsigned int texBRDFLut;
-    glGenTextures(1, &texBRDFLut);
-    glBindTexture(GL_TEXTURE_2D, texBRDFLut);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, 512, 512, 0, GL_RG, GL_FLOAT, 0);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glBindFramebuffer(GL_FRAMEBUFFER, st.fbo);
-    glBindRenderbuffer(GL_RENDERBUFFER, st.rbo);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texBRDFLut, 0);
-    glViewport(0, 0, 512, 512);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glGenTextures(1,&texBRDFLut);
+    glBindTexture(GL_TEXTURE_2D,texBRDFLut);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RG16F,512,512,0,GL_RG,GL_FLOAT,0);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,st.rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH_COMPONENT24,512,512);
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,texBRDFLut,0);
+    glViewport(0,0,512,512);
+    glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
     quadSize* quadBRDF=new quadSize(1,1,1);
     quadBRDF->setShader(shBRDF);
     quadBRDF->draw();
@@ -1202,14 +1225,11 @@ void test_PBR_ibl_diffuse_specular_ball2(){
     //display brdf texture
 //    quad* quadObj=new quad(texBRDFLut,g_winHigh,g_winHigh);
 //    world::getInstance()->addChild(quadObj);
-  
-    
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
     skybox* skyBackground=new skybox(st.texID,shBackground);
     world::getInstance()->addChild(skyBackground);
-    
-    glViewport(0, 0, g_winWidth, g_winHigh);
+    glViewport(0,0,g_winWidth,g_winHigh);
 
     //很多个球使用pbr贴图渲染
     texture2* tex0=new texture2("./res/pbr_ball2/Crusted_snow2_albedo.png");
@@ -1217,20 +1237,18 @@ void test_PBR_ibl_diffuse_specular_ball2(){
     texture2* tex2=new texture2("./res/pbr_ball2/Crusted_snow2_metallic.png");
     texture2* tex3=new texture2("./res/pbr_ball2/Crusted_snow2_roughness.png");
     texture2* tex4=new texture2("./res/pbr_ball2/Crusted_snow2_ao.png");
-
     tex0->init();
     tex1->init();
     tex2->init();
     tex3->init();
     tex4->init();
-
     tex0->glInit(GL_TEXTURE0);
     tex1->glInit(GL_TEXTURE1);
     tex2->glInit(GL_TEXTURE2);
     tex3->glInit(GL_TEXTURE3);
     tex4->glInit(GL_TEXTURE4);
 
-    world::getInstance()->setCBBeforeDrawCall([tex0,tex1,tex2,tex3,tex4,irradianceMap,prefilterMap](){
+    world::getInstance()->setCBBeforeDrawCall([tex0,tex1,tex2,tex3,tex4,irradianceMap,prefilterMap,texBRDFLut](){
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D,tex0->getTextureID());
         glActiveTexture(GL_TEXTURE1);
@@ -1245,6 +1263,8 @@ void test_PBR_ibl_diffuse_specular_ball2(){
         glBindTexture(GL_TEXTURE_CUBE_MAP,irradianceMap);
         glActiveTexture(GL_TEXTURE6);
         glBindTexture(GL_TEXTURE_CUBE_MAP,prefilterMap);
+        glActiveTexture(GL_TEXTURE7);
+        glBindTexture(GL_TEXTURE_CUBE_MAP,texBRDFLut);
     });
     for(int i=0;i<7;i++){
         for(int j=0;j<7;j++){
@@ -1260,7 +1280,6 @@ void test_PBR_ibl_diffuse_specular_ball2(){
             world::getInstance()->getControl()->bindNode(cubeObj);
         }
     }
-
 
     //通过按住鼠标右键，控制模型旋转
     control* controlObj=world::getInstance()->getControl();

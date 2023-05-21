@@ -209,9 +209,7 @@ void control::bindNode(flyEngine::node* nodeObj){
                 node->rotateBy(glm::vec3(rotateY,rotateX,0.0f));
             else
                 nodeInstanced->rotateBy(glm::vec3(rotateY,rotateX,0.0f));
-
         }
-            
     });
     _msEventObj->regOnRightClickRelease([&](){
         _mouseRightOriginX=0;

@@ -152,14 +152,25 @@ float g_verticeArrWithTexCoord_plane[] = {
   };
 
 float g_verticeArrWithTexCoordAndNormal_plane[] = {
-       // positions            // texcoords   // normals
-        10.0f, 0.0f,  10.0f,  10.0f, 0.0f,   0.0f, 1.0f, 0.0f,
-       -10.0f, 0.0f,  10.0f,  0.0f,  0.0f,   0.0f, 1.0f, 0.0f,
-       -10.0f, 0.0f, -10.0f,  0.0f,  10.0f,  0.0f, 1.0f, 0.0f,
+    // positions            // texcoords   // normals
+     10.0f, 0.0f,  10.0f,  10.0f, 0.0f,   0.0f, 1.0f, 0.0f,
+    -10.0f, 0.0f,  10.0f,  0.0f,  0.0f,   0.0f, 1.0f, 0.0f,
+    -10.0f, 0.0f, -10.0f,  0.0f,  10.0f,  0.0f, 1.0f, 0.0f,
 
-        10.0f, 0.0f,  10.0f,  10.0f, 0.0f,   0.0f, 1.0f, 0.0f,
-       -10.0f, 0.0f, -10.0f,  0.0f,  10.0f,  0.0f, 1.0f, 0.0f,
-        10.0f, 0.0f, -10.0f,  10.0f, 10.0f,  0.0f, 1.0f, 0.0f
+     10.0f, 0.0f,  10.0f,  10.0f, 0.0f,   0.0f, 1.0f, 0.0f,
+    -10.0f, 0.0f, -10.0f,  0.0f,  10.0f,  0.0f, 1.0f, 0.0f,
+     10.0f, 0.0f, -10.0f,  10.0f, 10.0f,  0.0f, 1.0f, 0.0f
+  };
+
+float g_verticeArrWithTexCoordAndNormal_plane_areaLight[] = {
+       // positions            // texcoords   // normals
+    -8.0f, 2.4f,  -1.0f,  0.0f, 0.0f,   1.0f, 0.0f, 0.0f,
+    -8.0f, 2.4f,   1.0f,  0.0f, 1.0f,   1.0f, 0.0f, 0.0f,
+    -8.0f, 0.4f,   1.0f,  1.0f, 1.0f,   1.0f, 0.0f, 0.0f,
+
+    -8.0f, 2.4f,  -1.0f,  0.0f, 0.0f,   1.0f, 0.0f, 0.0f,
+    -8.0f, 0.4f,   1.0f,  1.0f, 1.0f,   1.0f, 0.0f, 0.0f,
+    -8.0f, 0.4f,  -1.0f,  1.0f, 0.0f,   1.0f, 0.0f, 0.0f,
    };
 
 float g_verticeArrWithTexCoordAndNormal_plane2[] = {
@@ -172,6 +183,17 @@ float g_verticeArrWithTexCoordAndNormal_plane2[] = {
        -10.0f, -0.5f, -10.0f,  0.0f,  10.0f,  0.0f, 1.0f, 0.0f,
         10.0f, -0.5f, -10.0f,  10.0f, 10.0f,  0.0f, 1.0f, 0.0f
    };
+
+float g_verticeArrWithTexCoordAndNormal_plane3[] = {
+    // positions            // texcoords   // normals
+     -10.0f, 0.0f, -10.0f,  0.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+     -10.0f, 0.0f, 10.0f,   0.0f, 1.0f,  0.0f, 1.0f, 0.0f,
+     10.0f,  0.0f, 10.0f,   1.0f, 1.0f,  0.0f, 1.0f, 0.0f,
+
+     -10.0f, 0.0f, -10.0f,  0.0f, 0.0f,  0.0f, 1.0f, 0.0f,
+     10.0f,  0.0f, 10.0f,   1.0f, 1.0f,  0.0f, 1.0f, 0.0f,
+     10.0f,  0.0f, -10.0f,  1.0f, 0.0f,  0.0f, 1.0f, 0.0f
+  };
 
 float g_verticeArrWithTexCoordAndNormal[]={
     -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 0.0f,  0.0f, -1.0f,

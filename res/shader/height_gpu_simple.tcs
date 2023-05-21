@@ -1,0 +1,40 @@
+#version 410 core
+
+//对一次patch中的每一个顶点，这个Shader都会运行一次
+
+//tessellation control shader 决定如何产生细分点
+//tessellation evaluation shader 决定细分点的坐标
+//specifying the number of vertices per patch
+layout(vertices=4) out;
+
+//gl_PatchVerticesIn: 每一个patch的顶点个数
+//gl_PrimitiveID: patch的序号
+//gl_InvocationID：这个patch中，此次操作的顶点序号
+
+
+in vec2 uvs[]; //从vertex shader传递过来的输入
+out vec2 uvsCoord[];    //要传给evaluation shader的输出
+
+void main()
+{
+    //gl_InvocationID代表当前操作的批次，即当前这个patch中，此次操作的顶点的序号
+    //顶点坐标和纹理坐标向下传递
+    gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
+    uvsCoord[gl_InvocationID] = uvs[gl_InvocationID];
+    
+    //设置曲面细分时外面4条边和内部两个方向的切分次数
+    int subNum=8;
+
+    if(gl_InvocationID == 0)
+    {
+        //设置4个边的细分粒度
+        gl_TessLevelOuter[0] = subNum;  //左边框
+        gl_TessLevelOuter[1] = subNum;  //下边框
+        gl_TessLevelOuter[2] = subNum;  //右边框
+        gl_TessLevelOuter[3] = subNum;  //上边框
+
+        //设置横向和纵向两个维度的细分粒度
+        gl_TessLevelInner[0] = subNum;  //上下方向
+        gl_TessLevelInner[1] = subNum;  //左右方向
+    }
+}

@@ -12,7 +12,7 @@
 #include "logUtil.h"
 #include "timerUtil.h"
 #include "timeUtil.h"
-#include "directionLight.h"
+
 #include "cubeTex.h"
 #include "material2.h"
 #include "shader.h"
@@ -20,6 +20,7 @@
 #include "randUtil.h"
 #include "threadUtil.h"
 #include "light.h"
+#include "directionLight.h"
 #include "pointLight.h"
 #include "spotLight.h"
 #include "glslUtil.h"

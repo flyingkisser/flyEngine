@@ -1,0 +1,64 @@
+#version 410 core
+//参数1：要操作的片元类型，可以是quads,triangles,isolines
+//参数2：插空方式，可以是equal,odd,even equal_spacing fractional_odd_spacing fractional_even_spacing
+//参数3：操作顺序，可以是cw,ccw（默认是ccw)
+layout(quads, equal_spacing, ccw) in;
+
+in vec2 uvsCoord[];
+out float height;
+out vec2 texCoord;
+out vec3 normalVector;
+out vec3 posFrag;
+
+uniform mat4 proj;
+uniform mat4 view;
+uniform mat4 matModel;
+
+uniform sampler2D heightMap;
+
+void main()
+{
+    //曲面细分产生的新顶点的纹理坐标
+    float u = gl_TessCoord.x;
+    float v = gl_TessCoord.y;
+
+    //quad四个点的纹理坐标
+    vec2 uv0 = uvsCoord[0];
+    vec2 uv1 = uvsCoord[1];
+    vec2 uv2 = uvsCoord[2];
+    vec2 uv3 = uvsCoord[3];
+
+    vec2 leftUV = (uv1 - uv0) * u + uv0;
+    vec2 rightUV = (uv3 - uv2) * u + uv2;
+    texCoord = (rightUV - leftUV) * v + leftUV;
+    
+    height = texture(heightMap, texCoord).y * 32.0 - 16.0;
+    //height = texture(heightMap, texCoord).y*32;
+
+    //quad四个点的顶点坐标
+    vec4 pos0 = gl_in[0].gl_Position;
+    vec4 pos1 = gl_in[1].gl_Position;
+    vec4 pos2 = gl_in[2].gl_Position;
+    vec4 pos3 = gl_in[3].gl_Position;
+
+    //quad的两个方向的向量
+    vec4 uVec = pos1 - pos0;
+    vec4 vVec = pos2 - pos0;
+    //叉乘并归一化得到法向量
+   // vec4 normal = normalize( vec4(cross(vVec.xyz, uVec.xyz), 0) );
+   vec4 normal = normalize( vec4(cross(uVec.xyz, vVec.xyz), 0) );
+
+   normalVector=vec3(normal.xyz);
+
+    //计算出新顶点的坐标
+    vec4 leftPos = (pos1 - pos0) * u + pos0;
+    vec4 rightPos = (pos3 - pos2) * u + pos2;
+    vec4 pos = (rightPos - leftPos) * v + leftPos;
+    //加上法向量*高度值，即沿着法向量方向，移动到对应高度的位置
+    pos+=normal*height;
+
+    posFrag=vec3(matModel * pos);
+
+    //计算出裁剪空间的坐标
+    gl_Position = proj * view * matModel * pos;
+}

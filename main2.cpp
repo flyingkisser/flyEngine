@@ -58,8 +58,6 @@ const float SPEED       =  2.5f;
 const float SENSITIVITY =  0.1f;
 const float ZOOM        =  45.0f;
 
-glm::mat4 calculate_model_matrix(const glm::vec3& position, const glm::vec3& rotation = glm::vec3(0.0f), const glm::vec3& scale = glm::vec3(1.0f));
-
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class Camera
 {
@@ -169,52 +167,33 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
-unsigned int loadTexture(const char *path);
+unsigned int loadTexture(char *path,bool gammaCorrection=false);
 unsigned int loadCubemap(vector<std::string> faces);
-
+void renderQuad();
+void renderScene(shader *shader);
 //---------------------------------------
 const unsigned int SCR_WIDTH = 2560;
 const unsigned int SCR_HEIGHT = 1440;
 
 // camera
-Camera cameras(glm::vec3(67.0f, 627.5f, 169.9f),
-              glm::vec3(0.0f, 1.0f, 0.0f),
-              -128.1f, -42.4f);
+// Camera cameras(glm::vec3(67.0f, 627.5f, 169.9f),
+//               glm::vec3(0.0f, 1.0f, 0.0f),
+//               -128.1f, -42.4f);
+Camera cameras(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
 bool firstMouse = true;
 float cameraNearPlane = 0.1f;
 float cameraFarPlane = 500.0f;
-
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-std::vector<float> shadowCascadeLevels{ cameraFarPlane / 50.0f, cameraFarPlane / 25.0f, cameraFarPlane / 10.0f, cameraFarPlane / 2.0f };
-int debugLayer = 0;
-
 // meshes
 unsigned int planeVAO;
-
-// lighting info
-// -------------
-const glm::vec3 lightDir = glm::normalize(glm::vec3(20.0f, 50, 20.0f));
-unsigned int lightFBO;
-unsigned int lightDepthMaps;
-constexpr unsigned int depthMapResolution = 4096;
-
-bool showQuad = false;
-
-std::random_device device;
-std::mt19937 generator = std::mt19937(device());
-
-std::vector<glm::mat4> lightMatricesCache;
-
 // meshes
-
 unsigned int sphereVAO = 0;
 unsigned int indexCount;
-
 // renderCube() renders a 1x1 3D cube in NDC.
 // -------------------------------------------------
 unsigned int cubeVAO = 0;
@@ -321,229 +300,31 @@ void renderQuad()
     glBindVertexArray(0);
 }
 
-// renders the 3D scene
-// --------------------
 void renderScene(shader* sh)
 {
-// floor
+    // floor
     glm::mat4 model = glm::mat4(1.0f);
     sh->setMat4("model", model);
     glBindVertexArray(planeVAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
-
-    static std::vector<glm::mat4> modelMatrices;
-    if (modelMatrices.size() == 0)
-    {
-        for (int i = 0; i < 10; ++i)
-        {
-            static std::uniform_real_distribution<float> offsetDistribution = std::uniform_real_distribution<float>(-10, 10);
-            static std::uniform_real_distribution<float> scaleDistribution = std::uniform_real_distribution<float>(1.0, 2.0);
-            static std::uniform_real_distribution<float> rotationDistribution = std::uniform_real_distribution<float>(0, 180);
-
-            auto model = glm::mat4(1.0f);
-            model = glm::translate(model, glm::vec3(offsetDistribution(generator), offsetDistribution(generator) + 10.0f, offsetDistribution(generator)));
-            model = glm::rotate(model, glm::radians(rotationDistribution(generator)), glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
-            model = glm::scale(model, glm::vec3(scaleDistribution(generator)));
-            modelMatrices.push_back(model);
-        }
-    }
-
-    for (const auto& model : modelMatrices)
-    {
-        sh->setMat4("model", model);
-        renderCube();
-    }
+    // cubes
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0));
+    model = glm::scale(model, glm::vec3(0.5f));
+    sh->setMat4("model", model);
+    renderCube();
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(2.0f, 0.0f, 1.0));
+    model = glm::scale(model, glm::vec3(0.5f));
+    sh->setMat4("model", model);
+    renderCube();
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 2.0));
+    model = glm::rotate(model, glm::radians(60.0f), glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
+    model = glm::scale(model, glm::vec3(0.25));
+    sh->setMat4("model", model);
+    renderCube();
 }
-
-std::vector<glm::vec4> getFrustumCornersWorldSpace(const glm::mat4& projview)
-{
-    const auto inv = glm::inverse(projview);
-
-    std::vector<glm::vec4> frustumCorners;
-    for (unsigned int x = 0; x < 2; ++x)
-    {
-        for (unsigned int y = 0; y < 2; ++y)
-        {
-            for (unsigned int z = 0; z < 2; ++z)
-            {
-                const glm::vec4 pt = inv * glm::vec4(2.0f * x - 1.0f, 2.0f * y - 1.0f, 2.0f * z - 1.0f, 1.0f);
-                frustumCorners.push_back(pt / pt.w);
-            }
-        }
-    }
-
-    return frustumCorners;
-}
-
-
-std::vector<glm::vec4> getFrustumCornersWorldSpace(const glm::mat4& proj, const glm::mat4& view)
-{
-    return getFrustumCornersWorldSpace(proj * view);
-}
-
-
-glm::mat4 getLightSpaceMatrix(const float nearPlane, const float farPlane)
-{
-    const auto proj = glm::perspective(
-        glm::radians(cameras.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, nearPlane,
-        farPlane);
-    const auto corners = getFrustumCornersWorldSpace(proj, cameras.GetViewMatrix());
-
-    glm::vec3 center = glm::vec3(0, 0, 0);
-    for (const auto& v : corners)
-    {
-        center += glm::vec3(v);
-    }
-    center /= corners.size();
-
-    const auto lightView = glm::lookAt(center + lightDir, center, glm::vec3(0.0f, 1.0f, 0.0f));
-
-    float minX = std::numeric_limits<float>::max();
-    float maxX = std::numeric_limits<float>::min();
-    float minY = std::numeric_limits<float>::max();
-    float maxY = std::numeric_limits<float>::min();
-    float minZ = std::numeric_limits<float>::max();
-    float maxZ = std::numeric_limits<float>::min();
-    for (const auto& v : corners)
-    {
-        const auto trf = lightView * v;
-        minX = std::min(minX, trf.x);
-        maxX = std::max(maxX, trf.x);
-        minY = std::min(minY, trf.y);
-        maxY = std::max(maxY, trf.y);
-        minZ = std::min(minZ, trf.z);
-        maxZ = std::max(maxZ, trf.z);
-    }
-
-    // Tune this parameter according to the scene
-    constexpr float zMult = 10.0f;
-    if (minZ < 0)
-    {
-        minZ *= zMult;
-    }
-    else
-    {
-        minZ /= zMult;
-    }
-    if (maxZ < 0)
-    {
-        maxZ /= zMult;
-    }
-    else
-    {
-        maxZ *= zMult;
-    }
-
-    const glm::mat4 lightProjection = glm::ortho(minX, maxX, minY, maxY, minZ, maxZ);
-
-    return lightProjection * lightView;
-}
-
-std::vector<glm::mat4> getLightSpaceMatrices()
-{
-    std::vector<glm::mat4> ret;
-    for (size_t i = 0; i < shadowCascadeLevels.size() + 1; ++i)
-    {
-        if (i == 0)
-        {
-            ret.push_back(getLightSpaceMatrix(cameraNearPlane, shadowCascadeLevels[i]));
-        }
-        else if (i < shadowCascadeLevels.size())
-        {
-            ret.push_back(getLightSpaceMatrix(shadowCascadeLevels[i - 1], shadowCascadeLevels[i]));
-        }
-        else
-        {
-            ret.push_back(getLightSpaceMatrix(shadowCascadeLevels[i - 1], cameraFarPlane));
-        }
-    }
-    return ret;
-}
-
-std::vector<GLuint> visualizerVAOs;
-std::vector<GLuint> visualizerVBOs;
-std::vector<GLuint> visualizerEBOs;
-void drawCascadeVolumeVisualizers(const std::vector<glm::mat4>& lightMatrices, shader* sh)
-{
-    visualizerVAOs.resize(8);
-    visualizerEBOs.resize(8);
-    visualizerVBOs.resize(8);
-
-    const GLuint indices[] = {
-        0, 2, 3,
-        0, 3, 1,
-        4, 6, 2,
-        4, 2, 0,
-        5, 7, 6,
-        5, 6, 4,
-        1, 3, 7,
-        1, 7, 5,
-        6, 7, 3,
-        6, 3, 2,
-        1, 5, 4,
-        0, 1, 4
-    };
-
-    const glm::vec4 colors[] = {
-        {1.0, 0.0, 0.0, 0.5f},
-        {0.0, 1.0, 0.0, 0.5f},
-        {0.0, 0.0, 1.0, 0.5f},
-    };
-
-    for (int i = 0; i < lightMatrices.size(); ++i)
-    {
-        const auto corners = getFrustumCornersWorldSpace(lightMatrices[i]);
-        std::vector<glm::vec3> vec3s;
-        for (const auto& v : corners)
-        {
-            vec3s.push_back(glm::vec3(v));
-        }
-
-        glGenVertexArrays(1, &visualizerVAOs[i]);
-        glGenBuffers(1, &visualizerVBOs[i]);
-        glGenBuffers(1, &visualizerEBOs[i]);
-
-        glBindVertexArray(visualizerVAOs[i]);
-
-        glBindBuffer(GL_ARRAY_BUFFER, visualizerVBOs[i]);
-        glBufferData(GL_ARRAY_BUFFER, vec3s.size() * sizeof(glm::vec3), &vec3s[0], GL_STATIC_DRAW);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, visualizerEBOs[i]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, 36 * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
-
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(glm::vec3), (void*)0);
-
-        glBindVertexArray(visualizerVAOs[i]);
-        sh->setVec4("color", colors[i % 3]);
-        glDrawElements(GL_TRIANGLES, GLsizei(36), GL_UNSIGNED_INT, 0);
-
-        glDeleteBuffers(1, &visualizerVBOs[i]);
-        glDeleteBuffers(1, &visualizerEBOs[i]);
-        glDeleteVertexArrays(1, &visualizerVAOs[i]);
-
-        glBindVertexArray(0);
-    }
-
-    visualizerVAOs.clear();
-    visualizerEBOs.clear();
-    visualizerVBOs.clear();
-}
-
-
-glm::mat4 calculate_model_matrix(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale)
-{
-    glm::mat4 trans = glm::mat4(1.0f);
-
-    trans = glm::translate(trans, position);
-    trans = glm::rotate(trans, glm::radians(rotation.x), glm::vec3(1.0, 0.0, 0.0));
-    trans = glm::rotate(trans, glm::radians(rotation.y), glm::vec3(0.0, 1.0, 0.0));
-    trans = glm::rotate(trans, glm::radians(rotation.z), glm::vec3(0.0, 0.0, 1.0));
-    trans = glm::scale(trans, scale);
-
-    return trans;
-}
-
 
 void renderSphere()
 {
@@ -681,166 +462,157 @@ int main2()
         std::cout << "Failed to initialize GLAD" << std::endl;
         return -1;
     }
-   
-    GLint maxTessLevel;
-    glGetIntegerv(GL_MAX_TESS_GEN_LEVEL, &maxTessLevel);
-    std::cout << "Max available tess level: " << maxTessLevel << std::endl;
-
-    // configure global opengl state
-    // -----------------------------
-    glEnable(GL_DEPTH_TEST);
-
-    // build and compile our shader program
-    // ------------------------------------
-    // shader* tessHeightMapShader=new shader("res/shader/8.3.gpuheight.vs","res/shader/8.3.gpuheight.fs", nullptr,            // if wishing to render as is
-    //                            "res/shader/8.3.gpuheight.tcs", "res/shader/8.3.gpuheight.tes");
+    shader* shaderMapping=new shader("res/shader/3.1.3.shadow_mapping.vs", "res/shader/3.1.3.shadow_mapping.fs");
+    shader* simpleDepthShader=new shader("res/shader/3.1.3.shadow_mapping_depth.vs", "res/shader/3.1.3.shadow_mapping_depth.fs");
+    shader* debugDepthQuad=new shader("res/shader/3.1.3.debug_quad.vs", "res/shader/3.1.3.debug_quad.fs");
   
-    // shader* tessHeightMapShader=new shader("res/shader/height_gpu.vs","res/shader/height_gpu.fs", nullptr,            // if wishing to render as is
-    //                            "res/shader/height_gpu.tcs", "res/shader/height_gpu.tes");
+       // set up vertex data (and buffer(s)) and configure vertex attributes
+       // ------------------------------------------------------------------
+       float planeVertices[] = {
+           // positions            // normals         // texcoords
+            25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
+           -25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+           -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
 
-   
-    // unsigned int texture;
-    // glGenTextures(1, &texture);
-    // glActiveTexture(GL_TEXTURE0);
-    // glBindTexture(GL_TEXTURE_2D, texture); // all upcoming GL_TEXTURE_2D operations now have effect on this texture object
-    // // set the texture wrapping parameters
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);   // set texture wrapping to GL_REPEAT (default wrapping method)
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    // // set texture filtering parameters
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    // glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    // // load image, create texture and generate mipmaps
-    // int width, height, nrChannels;
-    // // The FileSystem::getPath(...) is part of the GitHub repository so we can find files on any IDE/platform; replace it with your own image path.
-    // unsigned char *data = stbi_load("res/heightmap/iceland_heightmap.png", &width, &height, &nrChannels, 0);
-    // if (data)
-    // {
-    //     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    //     glGenerateMipmap(GL_TEXTURE_2D);
+            25.0f, -0.5f,  25.0f,  0.0f, 1.0f, 0.0f,  25.0f,  0.0f,
+           -25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,   0.0f, 25.0f,
+            25.0f, -0.5f, -25.0f,  0.0f, 1.0f, 0.0f,  25.0f, 25.0f
+       };
+       // plane VAO
+       unsigned int planeVBO;
+       glGenVertexArrays(1, &planeVAO);
+       glGenBuffers(1, &planeVBO);
+       glBindVertexArray(planeVAO);
+       glBindBuffer(GL_ARRAY_BUFFER, planeVBO);
+       glBufferData(GL_ARRAY_BUFFER, sizeof(planeVertices), planeVertices, GL_STATIC_DRAW);
+       glEnableVertexAttribArray(0);
+       glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+       glEnableVertexAttribArray(1);
+       glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+       glEnableVertexAttribArray(2);
+       glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+       glBindVertexArray(0);
 
-    //     tessHeightMapShader->setInt("heightMap", 0);
-    //     std::cout << "Loaded heightmap of size " << height << " x " << width << std::endl;
-    // }
-    // else
-    // {
-    //     std::cout << "Failed to load texture" << std::endl;
-    // }
-    // stbi_image_free(data);
+       // load textures
+       // -------------
+       unsigned int woodTexture = loadTexture("res/wood.png");
 
-    // texture2* _texObj=new texture2("res/heightmap/iceland_heightmap.png",true);
-    // if(!_texObj->init()){
-    //     flylog("heightMapPatch::init texture2 failed,return!");
-    //     return false;
-    // }
-    // _texObj->glInitWithParam(0,GL_REPEAT,GL_REPEAT,GL_LINEAR_MIPMAP_LINEAR,GL_LINEAR,GL_UNSIGNED_BYTE,true);
-    // int width=_texObj->getWidth();
-    // int height=_texObj->getHeight();
-   
-    // std::vector<float> vertices;
-    // unsigned rez = 20;
-    // for(unsigned i = 0; i <= rez-1; i++)
-    // {
-    //     for(unsigned j = 0; j <= rez-1; j++)
-    //     {
-    //         vertices.push_back(-width/2.0f + width*i/(float)rez); // v.x
-    //         vertices.push_back(0.0f); // v.y
-    //         vertices.push_back(-height/2.0f + height*j/(float)rez); // v.z
-    //         vertices.push_back(i / (float)rez); // u
-    //         vertices.push_back(j / (float)rez); // v
+       // configure depth map FBO
+       // -----------------------
+       const unsigned int SHADOW_WIDTH = 1024, SHADOW_HEIGHT = 1024;
+       unsigned int depthMapFBO;
+       glGenFramebuffers(1, &depthMapFBO);
+       // create depth texture
+       unsigned int depthMap;
+       glGenTextures(1, &depthMap);
+       glBindTexture(GL_TEXTURE_2D, depthMap);
+       glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+       float borderColor[] = { 1.0, 1.0, 1.0, 1.0 };
+       glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
+       // attach depth texture as FBO's depth buffer
+       glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+       glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+       glDrawBuffer(GL_NONE);
+       glReadBuffer(GL_NONE);
+       glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-    //         vertices.push_back(-width/2.0f + width*(i+1)/(float)rez); // v.x
-    //         vertices.push_back(0.0f); // v.y
-    //         vertices.push_back(-height/2.0f + height*j/(float)rez); // v.z
-    //         vertices.push_back((i+1) / (float)rez); // u
-    //         vertices.push_back(j / (float)rez); // v
 
-    //         vertices.push_back(-width/2.0f + width*i/(float)rez); // v.x
-    //         vertices.push_back(0.0f); // v.y
-    //         vertices.push_back(-height/2.0f + height*(j+1)/(float)rez); // v.z
-    //         vertices.push_back(i / (float)rez); // u
-    //         vertices.push_back((j+1) / (float)rez); // v
+       // shader configuration
+       // --------------------
+       shaderMapping->use();
+       shaderMapping->setInt("diffuseTexture", 0);
+       shaderMapping->setInt("shadowMap", 1);
+       debugDepthQuad->use();
+       debugDepthQuad->setInt("depthMap", 0);
 
-    //         vertices.push_back(-width/2.0f + width*(i+1)/(float)rez); // v.x
-    //         vertices.push_back(0.0f); // v.y
-    //         vertices.push_back(-height/2.0f + height*(j+1)/(float)rez); // v.z
-    //         vertices.push_back((i+1) / (float)rez); // u
-    //         vertices.push_back((j+1) / (float)rez); // v
-    //     }
-    // }
-  
-    // // first, configure the cube's VAO (and terrainVBO)
-    // unsigned int terrainVAO, terrainVBO;
-    // glGenVertexArrays(1, &terrainVAO);
-    // glBindVertexArray(terrainVAO);
+       // lighting info
+       // -------------
+       glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
 
-    // glGenBuffers(1, &terrainVBO);
-    // glBindBuffer(GL_ARRAY_BUFFER, terrainVBO);
-    // glBufferData(GL_ARRAY_BUFFER, sizeof(float) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+       // render loop
+       // -----------
+       while (!glfwWindowShouldClose(window))
+       {
+           // per-frame time logic
+           // --------------------
+           float currentFrame = static_cast<float>(glfwGetTime());
+           deltaTime = currentFrame - lastFrame;
+           lastFrame = currentFrame;
 
-    // // position attribute
-    // glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
-    // glEnableVertexAttribArray(0);
-    // // texCoord attribute
-    // glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(sizeof(float) * 3));
-    // glEnableVertexAttribArray(1);
+           // input
+           // -----
+           processInput(window);
 
-    // glPatchParameteri(GL_PATCH_VERTICES, 4);
+           // change light position over time
+           //lightPos.x = sin(glfwGetTime()) * 3.0f;
+           //lightPos.z = cos(glfwGetTime()) * 2.0f;
+           //lightPos.y = 5.0 + cos(glfwGetTime()) * 1.0f;
 
-    camera* cam=world::getInstance()->getCamera();
-    cam->setPosition(glm::vec3(67.0f, 627.5f, 169.9f));
-    cam->setFarPlane(100000.0);
-    cam->setYaw(-128.1);
-    cam->setPitch(-42.4);
-    cam->update();
+           // render
+           // ------
+           glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+           glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    heightMapPatch* heightObj=new heightMapPatch("res/heightmap/iceland_heightmap.png");
-    if(!heightObj->init()){
-        flylog("heightObj init failed!");
-        return 0;
-    }
-    // shader* tessHeightMapShader=heightObj->getShader();
-    // render loop
-    // -----------
-    while (!glfwWindowShouldClose(window))
-    {
-        // per-frame time logic
-        // --------------------
-        // float currentFrame = glfwGetTime();
-        // deltaTime = currentFrame - lastFrame;
-        // lastFrame = currentFrame;
+           // 1. render depth of scene to texture (from light's perspective)
+           // --------------------------------------------------------------
+           glm::mat4 lightProjection, lightView;
+           glm::mat4 lightSpaceMatrix;
+           float near_plane = 1.0f, far_plane = 7.5f;
+           //lightProjection = glm::perspective(glm::radians(45.0f), (GLfloat)SHADOW_WIDTH / (GLfloat)SHADOW_HEIGHT, near_plane, far_plane); // note that if you use a perspective projection matrix you'll have to change the light position as the current light position isn't enough to reflect the whole scene
+           lightProjection = glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, near_plane, far_plane);
+           lightView = glm::lookAt(lightPos, glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+           lightSpaceMatrix = lightProjection * lightView;
+           // render scene from light's point of view
+           simpleDepthShader->use();
+           simpleDepthShader->setMat4("lightSpaceMatrix", lightSpaceMatrix);
 
-        // input
-        // -----
-        processInput(window);
+           glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+           glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+           glClear(GL_DEPTH_BUFFER_BIT);
+           glActiveTexture(GL_TEXTURE0);
+           glBindTexture(GL_TEXTURE_2D, woodTexture);
+           renderScene(simpleDepthShader);
+           glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-        // render
-        // ------
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+           // reset viewport
+           glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
+           glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // be sure to activate shader when setting uniforms/drawing objects
-        // tessHeightMapShader->use();
+           // 2. render scene as normal using the generated depth/shadow map
+           // --------------------------------------------------------------
+           shaderMapping->use();
+           glm::mat4 projection = glm::perspective(glm::radians(cameras.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+           glm::mat4 view = cameras.GetViewMatrix();
+           shaderMapping->setMat4("projection", projection);
+           shaderMapping->setMat4("view", view);
+           // set light uniforms
+           shaderMapping->setVec3("viewPos", cameras.Position);
+           shaderMapping->setVec3("lightPos", lightPos);
+           shaderMapping->setMat4("lightSpaceMatrix", lightSpaceMatrix);
+           glActiveTexture(GL_TEXTURE0);
+           glBindTexture(GL_TEXTURE_2D, woodTexture);
+           glActiveTexture(GL_TEXTURE1);
+           glBindTexture(GL_TEXTURE_2D, depthMap);
+           renderScene(shaderMapping);
 
-        // view/projection transformations
-        // glm::mat4 projection = glm::perspective(glm::radians(cameras.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100000.0f);
-        // glm::mat4 view = cameras.GetViewMatrix();
-        // glm::mat4 proj=cam->getPerspectiveMatrix();
-        // glm::mat4 view=cam->getLookAtMatrix();
-        // glm::mat4 model = glm::mat4(1.0f);
-        // tessHeightMapShader->setMat4("proj", proj);
-        // tessHeightMapShader->setMat4("view", view);
-        // tessHeightMapShader->setMat4("matModel", model);
+           // render Depth map to quad for visual debugging
+           // ---------------------------------------------
+           debugDepthQuad->use();
+           debugDepthQuad->setFloat("near_plane", near_plane);
+           debugDepthQuad->setFloat("far_plane", far_plane);
+           glActiveTexture(GL_TEXTURE0);
+           glBindTexture(GL_TEXTURE_2D, depthMap);
+           //renderQuad();
 
-        heightObj->draw();
-        // render the terrain
-        // glBindVertexArray(terrainVAO);
-        // glDrawArrays(GL_PATCHES, 0, 4*rez*rez);
-
-        // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-        // -------------------------------------------------------------------------------
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
+           // glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
+           // -------------------------------------------------------------------------------
+           glfwSwapBuffers(window);
+           glfwPollEvents();
+       }
 
     // optional: de-allocate all resources once they've outlived their purpose:
     // ------------------------------------------------------------------------
@@ -899,7 +671,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 
 // utility function for loading a 2D texture from file
 // ---------------------------------------------------
-unsigned int loadTexture(char const * path)
+unsigned int loadTexture(char * path,bool gammaCorrection)
 {
     unsigned int textureID;
     glGenTextures(1, &textureID);
@@ -908,16 +680,25 @@ unsigned int loadTexture(char const * path)
     unsigned char *data = stbi_load(path, &width, &height, &nrComponents, 0);
     if (data)
     {
-        GLenum format;
+        GLenum internalFormat;
+        GLenum dataFormat;
         if (nrComponents == 1)
-            format = GL_RED;
+        {
+            internalFormat = dataFormat = GL_RED;
+        }
         else if (nrComponents == 3)
-            format = GL_RGB;
+        {
+            internalFormat = gammaCorrection ? GL_SRGB : GL_RGB;
+            dataFormat = GL_RGB;
+        }
         else if (nrComponents == 4)
-            format = GL_RGBA;
+        {
+            internalFormat = gammaCorrection ? GL_SRGB_ALPHA : GL_RGBA;
+            dataFormat = GL_RGBA;
+        }
 
         glBindTexture(GL_TEXTURE_2D, textureID);
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, dataFormat, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

@@ -1,9 +1,12 @@
 #version 410 core
 
+//specifying the number of vertices per patch
 layout(vertices=4) out;
 
-in vec2 TexCoord[];
-out vec2 TextureCoord[];
+//从vertex shader传递过来的输入
+in vec2 uvs[];
+//要传给evaluation shader的输出
+out vec2 uvsCoord[];
 
 uniform mat4 proj;
 uniform mat4 view;
@@ -12,7 +15,7 @@ uniform mat4 matModel;
 void main()
 {
     gl_out[gl_InvocationID].gl_Position = gl_in[gl_InvocationID].gl_Position;
-    TextureCoord[gl_InvocationID] = TexCoord[gl_InvocationID];
+    uvsCoord[gl_InvocationID] = uvs[gl_InvocationID];
 
     if(gl_InvocationID == 0)
     {
@@ -35,24 +38,27 @@ void main()
         
         //mix MAX_TESS_LEVEL*(1-v)+MIN_TESS_LEVEL*v;
         //距离相机近的，细分的等级就高
+        
         float tessLevel0 = mix( MAX_TESS_LEVEL, MIN_TESS_LEVEL, min(distance10, distance00) );
         float tessLevel1 = mix( MAX_TESS_LEVEL, MIN_TESS_LEVEL, min(distance00, distance01) );
         float tessLevel2 = mix( MAX_TESS_LEVEL, MIN_TESS_LEVEL, min(distance01, distance11) );
         float tessLevel3 = mix( MAX_TESS_LEVEL, MIN_TESS_LEVEL, min(distance11, distance10) );
         
+        
         /*
-         float tessLevel0 = mix( MIN_TESS_LEVEL, MAX_TESS_LEVEL, min(distance10, distance00) );
+        float tessLevel0 = mix( MIN_TESS_LEVEL, MAX_TESS_LEVEL, min(distance10, distance00) );
         float tessLevel1 = mix( MIN_TESS_LEVEL, MAX_TESS_LEVEL, min(distance00, distance01) );
         float tessLevel2 = mix( MIN_TESS_LEVEL, MAX_TESS_LEVEL, min(distance01, distance11) );
         float tessLevel3 = mix( MIN_TESS_LEVEL, MAX_TESS_LEVEL, min(distance11, distance10) );
         */
 
-
+        //设置4个边的细分粒度
         gl_TessLevelOuter[0] = tessLevel0;
         gl_TessLevelOuter[1] = tessLevel1;
         gl_TessLevelOuter[2] = tessLevel2;
         gl_TessLevelOuter[3] = tessLevel3;
 
+        //设置横向和纵向两个维度的细分粒度
         gl_TessLevelInner[0] = max(tessLevel1, tessLevel3);
         gl_TessLevelInner[1] = max(tessLevel0, tessLevel2);
     }

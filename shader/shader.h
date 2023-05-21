@@ -46,14 +46,22 @@ class shader : public glRef{
         void setMat4(const char* name,glm::mat4 v,bool debug=false);
         void setMat4(std::string name,glm::mat4 v,bool debug=false);
         void setMat4Multi(const char *name, float* v,int count,bool debug=false);
+    
+        void setVec2(const char* name,float* v,bool debug=false);
+        void setVec2(const char* name,float v1,float v2,bool debug=false);
+        void setVec2(const char* name,glm::vec2 vector2,bool debug=false);
+        void setVec2(std::string name,glm::vec2 vector2,bool debug=false);
+    
         void setVec3(const char* name,float* v,bool debug=false);
         void setVec3(const char* name,float v1,float v2,float v3,bool debug=false);
         void setVec3(const char* name,glm::vec3 vector3,bool debug=false);
         void setVec3(std::string name,glm::vec3 vector3,bool debug=false);
+    
         void setVec4(const char* name,float* v,bool debug=false);
         void setVec4(const char* name,float v1,float v2,float v3,float v4,bool debug=false);
         void setVec4(const char* name,glm::vec4 vector4,bool debug=false);
         void setVec4(std::string name,glm::vec4 vector4,bool debug=false);
+    
         bool bindGeometry(const char* szGeometry);//support on opengl 3.2+
         
         float getFloat(const char* name,bool debug=false);

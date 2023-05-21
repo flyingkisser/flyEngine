@@ -54,6 +54,6 @@ void quadColor::_reInitVertices(){
 
 void quadColor::draw(){
     _shaderObj->use();
-    _shaderObj->setVec4("color", _color,true);
+    _shaderObj->setVec4("color", _color);
     drawByType(GL_TRIANGLES, 6);
 }

@@ -33,10 +33,18 @@ void state::setShowVertices(bool s){
     else if(s && s_textVertices!=NULL)
         s_textVertices->setVisible(true);
 };
+void state::setShowTime(bool s){
+    s_bShowTime=s;
+    if(!s && s_textTime!=NULL)
+        s_textTime->setVisible(false);
+    else if(s && s_textTime!=NULL)
+        s_textTime->setVisible(true);
+};
 
 bool state::isShowFrameRate(){return s_bShowFrameRate;};
 bool state::isShowDrawCall(){return s_bShowDrawCall;};
 bool state::isShowVertices(){return s_bShowVertices;};
+bool state::isShowTime(){return s_bShowTime;};
 
 void state::displayFrameRate(){
     if(s_textRate==NULL){
@@ -81,6 +89,18 @@ void state::displayVertices(){
     s_strVertices="vertices:"+std::to_string(s_vertices);
     s_textVertices->setText(s_strVertices.c_str());
     s_textVertices->draw();
+}
+
+void state::displayTime(){
+    if(s_textTime==NULL){
+        s_textTime=new uiText("res/font/arial.ttf",20,"");
+        s_textTime->setPosition(glm::vec3(3,64,0));
+        s_textTime->setLogInStatebool(false);
+//        world::getInstance()->addChild(s_textVertices);
+    }
+    s_strTime="render_time:"+std::to_string(world::getInstance()->getRenderTimeMS())+"ms";
+    s_textTime->setText(s_strTime.c_str());
+    s_textTime->draw();
 }
 
 void state::reset(){

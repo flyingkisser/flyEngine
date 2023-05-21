@@ -128,3 +128,11 @@ void cubeTex::draw(){
     state::log(36);
 //    flylog("cubeTex::draw end");
 }
+
+void cubeTex::drawWithoutBindTex(){
+    setPipelineValue();
+    glEnable(GL_DEPTH_TEST);
+    glActiveTexture(GL_TEXTURE0);
+    glDrawArrays(GL_TRIANGLES,0,36);
+    state::log(36);
+}

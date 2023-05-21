@@ -20,7 +20,7 @@
 #include "light.h"
 #include "pointLight.h"
 #include "spotLight.h"
-
+#include "areaLight.h"
 
 
 USE_NS_FLYENGINE
@@ -244,8 +244,15 @@ void node::glUpdateLight(){
     i=0;
     std::vector<spotLight*> spotLightVector=world::getInstance()->getSpotLightVector();
     for(auto c : spotLightVector){
-       spotLight* lightObj=(spotLight*)c;
-       lightObj->update(i++);
+        spotLight* lightObj=(spotLight*)c;
+        lightObj->update(i++);
+    }
+    //区域光初始化
+    i=0;
+    std::vector<areaLight*> areaLightVector=world::getInstance()->getAreaLightVector();
+    for(auto c : areaLightVector){
+        areaLight* lightObj=(areaLight*)c;
+        lightObj->update(i++);
     }
 }
 

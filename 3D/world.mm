@@ -15,6 +15,7 @@
 #include "uiText.h"
 #include "timeUtil.h"
 #include "state.h"
+#include "logUtil.h"
 
 //#include "testWindow.h"
 
@@ -56,7 +57,9 @@ void world::addPointLight(pointLight *node){
 void world::addSpotLight(spotLight *node){
     _vector_spot_light.push_back(node);
 }
-
+void world::addAreaLight(areaLight *node){
+    _vector_area_light.push_back(node);
+}
 
 
 void world::setCamera(camera* c){
@@ -103,6 +106,14 @@ void world::_drawAllChild(shader* sh){
         nodeObj->draw();
     }
     for(auto c : _vector_spot_light){
+        node* nodeObj=(node*)c;
+        if(!nodeObj->visible())
+            continue;
+        if(sh!=NULL)
+            nodeObj->setShader(sh);
+        nodeObj->draw();
+    }
+    for(auto c : _vector_area_light){
         node* nodeObj=(node*)c;
         if(!nodeObj->visible())
             continue;
@@ -164,9 +175,14 @@ void world::_renderOnce(){
         state::displayDrawCall();
     if(state::isShowVertices())
         state::displayVertices();
+    if(state::isShowTime())
+        state::displayTime();
 }
 
 void world::_main_loop(){
+    unsigned int timeQuery;
+    GLuint64 renderNS=0;
+    glGenQueries(1,&timeQuery);
 #ifdef BUILD_MAC
 //    flyEngine::camera* cameraObj=new flyEngine::camera();
     flyEngine::world* worldObj=flyEngine::world::getInstance();
@@ -176,7 +192,12 @@ void world::_main_loop(){
 //        if(glfwGetKey(g_window,GLFW_KEY_ESCAPE)==GLFW_PRESS)
 //            glfwSetWindowShouldClose(g_window,true);
         threadUtil::sleepMS(CONST_FRAME_RATE*1000);   //1000 means 1ms
+        glBeginQuery(GL_TIME_ELAPSED,timeQuery);
         _renderOnce();
+        glEndQuery(GL_TIME_ELAPSED);
+        glGetQueryObjectui64v(timeQuery,GL_QUERY_RESULT,&renderNS);
+        _totalRenderLoops++;
+        _totalRenderNS+=renderNS;
         glfwSwapBuffers(g_window);
         glfwPollEvents();
    }
@@ -190,6 +211,17 @@ void world::start_rendering(){
     _main_loop();
 }
 
+void world::printRenderTime(){
+    double ns=(double)_totalRenderNS/(double)_totalRenderLoops;
+    double ms=ns/double(1000000.0);
+    flylog("total average render time ms %f",ms);
+}
+
+double world::getRenderTimeMS(){
+    double ns=(double)_totalRenderNS/(double)_totalRenderLoops;
+    double ms=ns/double(1000000.0);
+    return ms;
+}
 
 
 //void world::drawPass(){

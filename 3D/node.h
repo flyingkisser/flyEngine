@@ -92,6 +92,8 @@ public:
     glm::vec3& getRotation(){return _rotate;};
     glm::vec3 getSize();
     
+    unsigned int getVAO(){return _gl_vao;};
+    
     void setRotation(glm::vec3 v);
     void setScale(glm::vec3 v);
     void setScale(float v);

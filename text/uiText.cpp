@@ -122,6 +122,8 @@ void uiText::draw(){
             {x+w,y+h,1,0}
         };
         
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+        
         glBindTexture(GL_TEXTURE_2D,st.texID);
         glBindBuffer(GL_ARRAY_BUFFER,_vbo);
         glBufferSubData(GL_ARRAY_BUFFER,0,sizeof(vertices),vertices);

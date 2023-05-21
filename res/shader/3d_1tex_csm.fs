@@ -110,7 +110,7 @@ float isInShadowPCF(vec3 fragPosWorldSpace,vec3 light_dir){
     int layer=-1;
     for(int i=0;i<shadowLevelCount;i++){
         if(depthValue<shadowLevelDistance[i]){
-            layer=-1;
+            layer=i;
             break;
         }
     }

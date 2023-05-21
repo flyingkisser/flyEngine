@@ -22,7 +22,7 @@ NS_FLYENGINE_BEGIN
 
 class cubeColor: public node
 {
-private:
+protected:
     glm::vec3 m_vec3Color;
     bool _dirtyColor=false;
     

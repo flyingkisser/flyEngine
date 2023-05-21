@@ -38,14 +38,14 @@ struct fboBloomMip{
     glm::vec2 floatSize;
     glm::ivec2 intSize;
     unsigned int tex;
-}
+};
 
 struct fboHDRBloomPhysicalStruct{
-    unsigned int fboHDR;   //frame buffer id for hdr
+    unsigned int fboChain;   //frame buffer id for hdr
     std::vector<fboBloomMip> mips;   //frame buffer arr for bloom
+    unsigned int fboHDR;   //frame buffer id for hdr
     unsigned int rbo;   //render buffer id
     unsigned int texHDRArr[2]; //texture id arr1 for hdr color and brightness
-    unsigned int texGaussianArr[2]; //texture id arr2 for bloom pingpong blur
 };
 
 struct fboSSAOStruct{
@@ -76,12 +76,23 @@ struct fboCsmStruct{
     unsigned int texDepthArr;
 };
 
+struct fboWater{
+    unsigned int fbo1;   //frame buffer id
+    unsigned int fbo2;   //frame buffer
+    unsigned int fbo3;  //fbo for depth
+    unsigned int rbo;   //render buffer id
+    unsigned int tex1;
+    unsigned int tex2;
+    unsigned int texDepth;
+};
+
 
 class fbo{
 public:
     static fboStruct createFBO();
     static fboStruct createFBOMSAA();
     static fboStruct createFBOForDepth();
+    static fboStruct createFBOForDepthSampler2DArray(int texNum);
     static fboStruct createFBOForDepthWithCubemap();
     static fboStruct createFBOForIBLWithCubemap();
     static fboStruct createFBOHDR();
@@ -90,7 +101,8 @@ public:
     static fboDeferredShadingStruct createFBODeferredShading();
     static fboSSAOStruct createFBOSSAO();
     static fboOitStruct createFBOOit();
-    static fboCsmStruct createFBOCsm(int depthLevel);
+    static fboStruct createFBOCsm(int depthLevel);
+    static fboWater createFBOWater();
     
 };
 

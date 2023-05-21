@@ -16,8 +16,11 @@ layout (std140) uniform mat3d{
 };
 
 uniform mat4 matModel;
+vec4 plane=vec4(0,-1,0,0.5);
 
 void main(){
+    //所有在平面之上的点都会抛弃掉，即点乘的值为负值的都会裁剪掉
+    gl_ClipDistance[0]=dot(matModel * vec4(aPos, 1),plane);
     gl_Position = proj * view * matModel * vec4(aPos, 1);
     posFrag=vec3(matModel * vec4(aPos, 1));
     texCoord=aTexCoord;

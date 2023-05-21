@@ -32,6 +32,8 @@
 #include "test_csm.h"
 #include "test_frustum_culling.h"
 #include "test_height_map.h"
+#include "test_areaLight.h"
+#include "test_water.h"
 
 void testMainBegin(){
     //code cube test
@@ -129,13 +131,17 @@ void testMainBegin(){
     
 //    test_gamma_1();
 //    test_gamma_2();
-//    test_shadow_mapping_1();
+   
 //    test_shadow_mapping_to_tex();
+
 //    test_shadow_mapping_normal();
-//    test_shadow_mapping_use_pass();
-//    test_shadow_mapping_shadow_static();
+
+//    test_shadow_mapping_normal_multi_shadow();
+//    test_shadow_mapping_normal_multi_shadow_sampler2DArray();
+    //    test_shadow_by_cubemap();
+    
 //    test_shadow_mapping_light_move();
-//    test_shadow_cubemap_light_move();
+
     
 //    test_normal_mapping_1();
 //    test_normal_mapping_2();
@@ -145,7 +151,9 @@ void testMainBegin(){
 //    test_HDR_1();
 //    test_HDR_2();
 //    test_bloom_1();
-     test_bloom_2();
+    
+//    test_bloom_physical();
+    
 //    test_deferred_shading();
 //    test_deferred_shading_2();
 //    test_deferred_shading_volumn();
@@ -162,15 +170,25 @@ void testMainBegin(){
 //    test_PBR_ibl_diffuse_model_fbx_gun();
     
 //    test_quad_color();
-//    test_quad_color2();
+//    test_quad_size();
 //    test_oit_quad_color();
 //    test_ani1();
-//    test_csm_old();
+//    test_csm_0();
 //    test_csm_1();
     
 //    test_frustum_culling_sphere();
 //    test_frustum_culling_aabb();
     
 //    test_height_map_by_cpu();
+//    test_height_map_by_gpu_simple();
 //    test_height_map_by_gpu();
+//    test_height_terrain();
+//    test_height_hainan();
+//    test_height_hainan_light();
+//    test_height_hainan_light_pbr();
+    
+//    test_areaLight_multi();
+//    test_water1();
+    test_water2();
+//    test_water3();
 }

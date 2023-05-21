@@ -138,10 +138,10 @@ float isInShadowPCF(vec4 fragPosLightSpace){
     return shadow;
 }  
 
-bool isInShadowByCube(vec3 fragPos,vec3 lightPos){
+float isInShadowByCube(vec3 fragPos,vec3 lightPos){
     vec3 light2frag = fragPos-lightPos;
     float depthValue=texture(texture_depth_cube,light2frag).r*far_plane;
-    return length(light2frag)-0.008 > depthValue;
+    return length(light2frag)-0.008 > depthValue ? 1.0 : 0.0;
 }
 
 float isInShadowByCubePCF(vec3 fragPos,vec3 lightPos){
@@ -378,7 +378,7 @@ void main(){
         shadowValue=isInShadowPCF(matLightSpace*vec4(posFrag,1));
     }
     else if(bCheckShadowByCubemap && light_point_arr[0].enabled){
-        shadowValue=isInShadowByCubePCF2(posFrag,light_point_arr[0].pos);
+        shadowValue=isInShadowByCube(posFrag,light_point_arr[0].pos);
     }
   
     //如果物体的材质启用了，要计算物体本身的材质对于光照的影响1

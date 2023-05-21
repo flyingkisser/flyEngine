@@ -134,6 +134,44 @@ fboStruct fbo::createFBOForDepth(){
     return st;
 }
 
+fboStruct fbo::createFBOForDepthSampler2DArray(int texNum){    
+    unsigned int fbo=0;
+    unsigned int texID=0;
+    unsigned int rbo=0;
+    //1.create fbo
+    glGenFramebuffers(1,&fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER,fbo);
+    //2.1 create texture
+    glGenTextures(1,&texID);
+    glBindTexture(GL_TEXTURE_2D_ARRAY,texID);
+#ifdef BUILD_IOS
+    
+#else
+    glTexImage3D(GL_TEXTURE_2D_ARRAY,0,GL_DEPTH_COMPONENT,g_shadowWidth,g_shadowHigh,texNum,0,GL_DEPTH_COMPONENT,GL_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    glTexParameterfv(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_BORDER_COLOR, borderColor);  //需要把边界及以外的地方，保证深度贴图的采样值为1.0
+    //2.2 bind texture to fbo
+    glFramebufferTexture(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,texID,0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+#endif
+    int status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboStruct st={0,0,0};
+        flylog("createFBOForDepthSampler2DArray: glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    fboStruct st={fbo,rbo,texID};
+    return st;
+}
+
+
+
 //球形深度纹理
 fboStruct fbo::createFBOForDepthWithCubemap(){
     unsigned int fbo=0;
@@ -317,16 +355,17 @@ fboHDRBloomGaussStruct fbo::createFBOHDRBloomGauss(){
 
 fboHDRBloomPhysicalStruct fbo::createFBOHDRBloomPhysical(int mipChainLen){
     fboHDRBloomPhysicalStruct st;
-    //create fbo for hdr with brightness
-    //一个fbo，两个纹理，分别用于写入颜色和亮度值
-    glGenFramebuffers(1,&st.fboHDR);
-    glBindFramebuffer(GL_FRAMEBUFFER,st.fboHDR);
+    int status=0;
+    //create fbo for downsample and upsample chain
+    //一个fbo，指定数量的纹理
+    glGenFramebuffers(1,&st.fboChain);
+    glBindFramebuffer(GL_FRAMEBUFFER,st.fboChain);
     
     glm::vec2 mipFloatSize=glm::vec2((float)g_winWidth,(float)g_winHigh);
     glm::ivec2 mipIntSize=glm::ivec2((int)g_winWidth,(int)g_winHigh);
 
     for(int i=0;i<mipChainLen;i++){
-        fboBloomMip mip={0};
+        fboBloomMip mip;
         mipFloatSize*=0.5f;
         mipIntSize/=2;
         mip.floatSize=mipFloatSize;
@@ -338,20 +377,50 @@ fboHDRBloomPhysicalStruct fbo::createFBOHDRBloomPhysical(int mipChainLen){
         glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        st.mips.emplace_back(mip);
+//        st.mips.emplace_back(mip);
+        st.mips.push_back(mip);
     }
     glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,st.mips[0].tex,0);
     
     unsigned int drawAttachArr[1]={GL_COLOR_ATTACHMENT0};
     glDrawBuffers(1,drawAttachArr);
-    glBindFramebuffer(GL_FRAMEBUFFER,0);
     
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
     status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if(status!=GL_FRAMEBUFFER_COMPLETE){
         fboHDRBloomPhysicalStruct st={0};
         flylog("createFBOHDRBloomPhysical: glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
         return st;
     }
+    
+    //create fbo for hdr with brightness
+    //一个fbo，两个纹理，分别用于写入颜色和亮度值
+    glGenFramebuffers(1,&st.fboHDR);
+    glBindFramebuffer(GL_FRAMEBUFFER,st.fboHDR);
+    glGenTextures(2,st.texHDRArr);
+    for(int i=0;i<2;i++){
+        glBindTexture(GL_TEXTURE_2D,st.texHDRArr[i]);
+        glTexImage2D(GL_TEXTURE_2D,0,GL_RGB16F,g_winWidth,g_winHigh,0,GL_RGB,GL_FLOAT,NULL);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0+i,GL_TEXTURE_2D,st.texHDRArr[i],0);
+    }
+ 
+    glGenRenderbuffers(1,&st.rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,st.rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH24_STENCIL8,g_winWidth,g_winHigh);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_STENCIL_ATTACHMENT,GL_RENDERBUFFER,st.rbo);
+    status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboHDRBloomPhysicalStruct st={0};
+        flylog("createFBOHDRBloomPhysical: glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+
+    unsigned int drawAttachArr2[2]={GL_COLOR_ATTACHMENT0,GL_COLOR_ATTACHMENT1};
+    glDrawBuffers(2,drawAttachArr2);
     glBindFramebuffer(GL_FRAMEBUFFER,0);
     return st;
 }
@@ -566,28 +635,112 @@ fboOitStruct fbo::createFBOOit(){
 }
 
 
-fboCsmStruct fbo::createFBOCsm(int depthLevel){
-    fboCsmStruct st;
-    glGenFramebuffers(1,&st.fboLight);
-    glGenTextures(1,&st.texDepthArr);
-    glBindTexture(GL_TEXTURE_2D_ARRAY,st.texDepthArr);
-    glTexImage3D(GL_TEXTURE_2D_ARRAY,0,GL_DEPTH_COMPONENT32F,g_winWidth,g_winHigh,depthLevel,0,GL_DEPTH_COMPONENT,GL_FLOAT,NULL);
+fboStruct fbo::createFBOCsm(int depthLevel){
+    fboStruct st;
+
+    glGenFramebuffers(1,&st.fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER,st.fbo);
+    
+    glGenTextures(1,&st.texID);
+    glBindTexture(GL_TEXTURE_2D_ARRAY,st.texID);
+//    glTexImage3D(GL_TEXTURE_2D_ARRAY,0,GL_DEPTH_COMPONENT,g_winWidth,g_winHigh,depthLevel,0,GL_DEPTH_COMPONENT,GL_FLOAT,NULL);
+    glTexImage3D(GL_TEXTURE_2D_ARRAY,0,GL_DEPTH_COMPONENT,g_shadowWidth,g_shadowHigh,depthLevel,0,GL_DEPTH_COMPONENT,GL_FLOAT,NULL);
     glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_BORDER);
     glTexParameteri(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_BORDER);
     float borderColor[]={1.0,1.0,1.0,1.0};
     glTexParameterfv(GL_TEXTURE_2D_ARRAY,GL_TEXTURE_BORDER_COLOR,borderColor);
-    glBindFramebuffer(GL_FRAMEBUFFER,st.fboLight);
-    glFramebufferTexture(GL_FRAMEBUFFER,GL_DEPTH_COMPONENT,st.texDepthArr,0);
+    
+    glFramebufferTexture(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,st.texID,0);
+    
     glDrawBuffer(GL_NONE);
     glReadBuffer(GL_NONE);
+    
     int status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
     if(status!=GL_FRAMEBUFFER_COMPLETE){
-        fboCsmStruct st={0};
+        fboStruct st={0};
         flylog("createFBOCSM:glStatus is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
         return st;
     }
     glBindFramebuffer(GL_FRAMEBUFFER,0);
+    return st;
+}
+
+fboWater fbo::createFBOWater(){
+    unsigned int fbo=0;
+    unsigned int texID=0;
+    unsigned int rbo=0;
+    //1.create fbo
+    glGenFramebuffers(1,&fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER,fbo);
+    //2.1 create texture
+    glGenTextures(1,&texID);
+    glBindTexture(GL_TEXTURE_2D,texID);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,g_winWidth,g_winHigh,0,GL_RGB,GL_UNSIGNED_BYTE,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    //2.2 bind texture to fbo
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,texID,0);
+    //3.1 create rbo(depth and stencil)
+    glGenRenderbuffers(1,&rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER,rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER,GL_DEPTH24_STENCIL8,g_winWidth,g_winHigh);
+    //3.2 bind rbo to fbo
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER,GL_DEPTH_STENCIL_ATTACHMENT,GL_RENDERBUFFER,rbo);
+    int status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboWater st={0,0,0,0,0,0,0};
+        flylog("createFBOWater: glStatus1 is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+    
+    unsigned int fbo2=0;
+    unsigned int texID2=0;
+    //1.create fbo
+    glGenFramebuffers(1,&fbo2);
+    glBindFramebuffer(GL_FRAMEBUFFER,fbo2);
+    //2.1 create texture
+    glGenTextures(1,&texID2);
+    glBindTexture(GL_TEXTURE_2D,texID2);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_RGB,g_winWidth,g_winHigh,0,GL_RGB,GL_UNSIGNED_BYTE,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    //2.2 bind texture to fbo
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_COLOR_ATTACHMENT0,GL_TEXTURE_2D,texID2,0);
+    status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboWater st={0,0,0,0,0,0,0};
+        flylog("createFBOWater: glStatus2 is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+    
+    unsigned int fbo3=0;
+    unsigned int texDepth=0;
+    //1.create fbo
+    glGenFramebuffers(1,&fbo3);
+    glBindFramebuffer(GL_FRAMEBUFFER,fbo3);
+    glGenTextures(1,&texDepth);
+    glBindTexture(GL_TEXTURE_2D,texDepth);
+    glTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,g_shadowWidth,g_shadowHigh,0,GL_DEPTH_COMPONENT,GL_FLOAT,NULL);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
+    float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);  //需要把边界及以外的地方，保证深度贴图的采样值为1.0
+    //2.2 bind texture to fbo
+    glFramebufferTexture2D(GL_FRAMEBUFFER,GL_DEPTH_ATTACHMENT,GL_TEXTURE_2D,texDepth,0);
+    glDrawBuffer(GL_NONE);
+    glReadBuffer(GL_NONE);
+    status=glCheckFramebufferStatus(GL_FRAMEBUFFER);
+    if(status!=GL_FRAMEBUFFER_COMPLETE){
+        fboWater st={0,0,0,0,0,0,0};
+        flylog("createFBOWater: glStatus3 is 0x%x!failed!！！！！！！！！！！！！！！---------------------",status);
+        return st;
+    }
+    
+    glBindFramebuffer(GL_FRAMEBUFFER,0);
+    fboWater st={fbo,fbo2,fbo3,rbo,texID,texID2,texDepth};
     return st;
 }
